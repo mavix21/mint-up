@@ -47,7 +47,9 @@
     "gen": "yarn generate",
     "add:font": "yarn workspace tamagui-fonts-and-icons run add:font",
     "add:icon": "yarn workspace tamagui-fonts-and-icons run add:icon",
-    "get-local-ip-mac": "ifconfig | grep 'inet ' | grep -v '127.0.0.1' | awk '{ print $2 }'"
+    "get-local-ip-mac": "ifconfig | grep 'inet ' | grep -v '127.0.0.1' | awk '{ print $2 }'",
+    "clean": "git clean -xdf .cache .next .turbo node_modules",
+    "clean:workspaces": "turbo run clean"
   },
   "resolutions": {
     "react": "19.0.0",
