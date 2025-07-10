@@ -32,6 +32,8 @@
     "react-dom": "19.0.0",
     "react-native": "0.79.2",
     "vercel": "latest",
+    "viem": "^2.31.7",
+    "wagmi": "^2.15.6",
     "zod": "^3.22.2"
   },
   "devDependencies": {

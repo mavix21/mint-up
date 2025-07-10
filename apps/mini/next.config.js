@@ -1,14 +1,14 @@
 /** @type {import('next').NextConfig} */
-const { withTamagui } = require('@tamagui/next-plugin')
-const { join } = require('path')
+const { withTamagui } = require('@tamagui/next-plugin');
+const { join } = require('path');
 
 const boolVals = {
   true: true,
   false: false,
-}
+};
 
 const disableExtraction =
-  boolVals[process.env.DISABLE_EXTRACTION] ?? process.env.NODE_ENV === 'development'
+  boolVals[process.env.DISABLE_EXTRACTION] ?? process.env.NODE_ENV === 'development';
 
 const plugins = [
   withTamagui({
@@ -25,7 +25,7 @@ const plugins = [
     disableExtraction,
     shouldExtract: (path) => {
       if (path.includes(join('packages', 'app'))) {
-        return true
+        return true;
       }
     },
   }),
@@ -35,15 +35,15 @@ const plugins = [
         webpackConfig.resolve.alias = {
           ...webpackConfig.resolve.alias,
           'react-native-svg': '@tamagui/react-native-svg',
-        }
+        };
         if (typeof nextConfig.webpack === 'function') {
-          return nextConfig.webpack(webpackConfig, options)
+          return nextConfig.webpack(webpackConfig, options);
         }
-        return webpackConfig
+        return webpackConfig;
       },
-    }
+    };
   },
-]
+];
 
 module.exports = () => {
   /** @type {import('next').NextConfig} */
@@ -94,14 +94,18 @@ module.exports = () => {
         permanent: false,
       },
     ],
-  }
+  };
 
   for (const plugin of plugins) {
     config = {
       ...config,
       ...plugin(config),
-    }
+    };
   }
 
-  return { ...config, typescript: { ignoreBuildErrors: true }, images: { unoptimized: true } }
-}
+  return {
+    ...config,
+    typescript: { ignoreBuildErrors: true },
+    images: { unoptimized: true },
+  };
+};

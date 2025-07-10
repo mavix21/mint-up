@@ -1,6 +1,6 @@
-'use client'
+'use client';
 
-import { Button, YStack } from '@my/ui'
+import { Button, YStack } from '@my/ui';
 
 export default function Home() {
   return (
@@ -16,5 +16,5 @@ export default function Home() {
         <Button>Click me</Button>
       </YStack>
     </YStack>
-  )
+  );
 }

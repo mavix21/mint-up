@@ -1,19 +1,19 @@
-'use client'
+'use client';
 
-import '@tamagui/core/reset.css'
-import '@tamagui/polyfill-dev'
+import '@tamagui/core/reset.css';
+import '@tamagui/polyfill-dev';
 
-import { config } from '@my/ui'
-import { NextThemeProvider } from '@tamagui/next-theme'
-import { useServerInsertedHTML } from 'next/navigation'
-import { ReactNode } from 'react'
-import { StyleSheet } from 'react-native'
-import { TamaguiProvider } from 'tamagui'
+import { config } from '@my/ui';
+import { NextThemeProvider } from '@tamagui/next-theme';
+import { useServerInsertedHTML } from 'next/navigation';
+import { ReactNode } from 'react';
+import { StyleSheet } from 'react-native';
+import { TamaguiProvider } from 'tamagui';
 
 export const NextTamaguiProvider = ({ children }: { children: ReactNode }) => {
   useServerInsertedHTML(() => {
     // @ts-ignore
-    const rnwStyle = StyleSheet.getSheet()
+    const rnwStyle = StyleSheet.getSheet();
     return (
       <>
         <style dangerouslySetInnerHTML={{ __html: rnwStyle.textContent }} id={rnwStyle.id} />
@@ -25,8 +25,8 @@ export const NextTamaguiProvider = ({ children }: { children: ReactNode }) => {
           }}
         />
       </>
-    )
-  })
+    );
+  });
 
   return (
     <NextThemeProvider skipNextHead>
@@ -34,5 +34,5 @@ export const NextTamaguiProvider = ({ children }: { children: ReactNode }) => {
         {children}
       </TamaguiProvider>
     </NextThemeProvider>
-  )
-}
+  );
+};
