@@ -32,6 +32,8 @@ const plugins = [
   (nextConfig) => {
     return {
       webpack: (webpackConfig, options) => {
+        webpackConfig.externals.push('pino-pretty', 'lokijs', 'encoding');
+
         webpackConfig.resolve.alias = {
           ...webpackConfig.resolve.alias,
           'react-native-svg': '@tamagui/react-native-svg',

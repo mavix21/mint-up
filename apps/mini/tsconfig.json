@@ -3,9 +3,12 @@
     "target": "es5",
     "baseUrl": ".",
     "paths": {
+      "@/*": ["./*"],
       "app/*": ["../../packages/app/*"],
       "ui/*": ["../../packages/ui/*"]
     },
+    "module": "ESNext",
+    "moduleResolution": "bundler",
     "allowJs": true,
     "noEmit": true,
     "isolatedModules": true,
