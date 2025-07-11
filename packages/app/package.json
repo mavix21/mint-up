@@ -42,7 +42,7 @@
     "expo-secure-store": "~14.2.3",
     "react-dropzone": "^14.2.3",
     "react-hook-form": "^7.46.1",
-    "react-native": "0.79.2",
+    "react-native": "0.79.5",
     "react-native-safe-area-context": "5.4.0",
     "solito": "4.3.0",
     "superjson": "^1.13.1",

@@ -30,7 +30,7 @@
     "raf": "^3.4.1",
     "react": "19.0.0",
     "react-dom": "19.0.0",
-    "react-native": "0.79.2",
+    "react-native": "0.79.5",
     "vercel": "latest",
     "viem": "^2.31.7",
     "wagmi": "^2.15.6",
