@@ -1,6 +1,6 @@
-import { useSafeAreaInsets } from 'app/utils/useSafeAreaInsets'
-import React, { useEffect, useState, useCallback } from 'react'
-import { PanResponder } from 'react-native'
+import { useSafeAreaInsets } from 'app/utils/useSafeAreaInsets';
+import React, { useEffect, useState, useCallback } from 'react';
+import { PanResponder } from 'react-native';
 import {
   AnimatePresence,
   Circle,
@@ -9,76 +9,76 @@ import {
   XStack,
   YStack,
   useWindowDimensions,
-} from 'tamagui'
+} from 'tamagui';
 
-import { OnboardingControls } from './OnboardingControls'
+import { OnboardingControls } from './OnboardingControls';
 
 export type OnboardingStepInfo = {
-  theme: ThemeName
-  Content: React.FC
-}
+  theme: ThemeName;
+  Content: React.FC;
+};
 
 export type OnboardingProps = {
   /**
    * native only
    */
-  onOnboarded?: () => void
+  onOnboarded?: () => void;
   /**
    * web only
    */
-  autoSwipe?: boolean
-  steps: OnboardingStepInfo[]
-}
+  autoSwipe?: boolean;
+  steps: OnboardingStepInfo[];
+};
 
-const AUTO_SWIPE_THRESHOLD = 15_000 // ms
+const AUTO_SWIPE_THRESHOLD = 15_000; // ms
 export const Onboarding = ({ onOnboarded, autoSwipe, steps }: OnboardingProps) => {
-  const [stepIdx, _setStepIdx] = useState(0)
+  const [stepIdx, _setStepIdx] = useState(0);
   // prevent a background to ever "continue" animation / try to continue where it left off - cause looks weird
 
-  const [key, setKey] = useState(0)
-  const currentStep = steps[stepIdx]!
-  const stepsCount = steps.length
+  const [key, setKey] = useState(0);
+  const currentStep = steps[stepIdx]!;
+  const stepsCount = steps.length;
 
   const setStepIdx = useCallback(
     (newIdx: number) => {
       if (stepIdx !== newIdx) {
-        _setStepIdx(newIdx)
-        setKey(key + 1)
+        _setStepIdx(newIdx);
+        setKey(key + 1);
       }
     },
     [key, stepIdx]
-  )
+  );
 
   useEffect(() => {
     if (autoSwipe) {
       const interval = setTimeout(() => {
         if (stepIdx >= stepsCount - 1) {
-          setStepIdx(0)
+          setStepIdx(0);
         } else {
-          setStepIdx(stepIdx + 1)
+          setStepIdx(stepIdx + 1);
         }
-      }, AUTO_SWIPE_THRESHOLD)
-      return () => clearTimeout(interval)
+      }, AUTO_SWIPE_THRESHOLD);
+      return () => clearTimeout(interval);
     }
-  }, [stepIdx, autoSwipe, stepsCount, setStepIdx])
+  }, [stepIdx, autoSwipe, stepsCount, setStepIdx]);
 
   const panResponder = React.useMemo(() => {
     return PanResponder.create({
       onMoveShouldSetPanResponderCapture: (_event, gesture) => {
-        const THRESHOLD = 100
+        const THRESHOLD = 100;
         if (gesture.dx > THRESHOLD) {
-          setStepIdx(Math.max(0, stepIdx - 1))
-          return true
+          setStepIdx(Math.max(0, stepIdx - 1));
+          return true;
         } else if (gesture.dx < -THRESHOLD) {
-          setStepIdx(Math.min(stepsCount - 1, stepIdx + 1))
-          return true
+          setStepIdx(Math.min(stepsCount - 1, stepIdx + 1));
+          return true;
         }
-        return false
+        return false;
       },
-    })
-  }, [setStepIdx, stepIdx, stepsCount])
+    });
+  }, [setStepIdx, stepIdx, stepsCount]);
 
-  const safeAreaInsets = useSafeAreaInsets()
+  const safeAreaInsets = useSafeAreaInsets();
 
   return (
     <Theme name={currentStep.theme as ThemeName}>
@@ -103,8 +103,8 @@ export const Onboarding = ({ onOnboarded, autoSwipe, steps }: OnboardingProps) =
 
         <XStack gap={10} jc="center" my="$4">
           {Array.from(Array(stepsCount)).map((_, idx) => {
-            const isActive = idx === stepIdx
-            return <Point key={idx} active={isActive} onPress={() => setStepIdx(idx)} />
+            const isActive = idx === stepIdx;
+            return <Point key={idx} active={isActive} onPress={() => setStepIdx(idx)} />;
           })}
         </XStack>
         <OnboardingControls
@@ -115,8 +115,8 @@ export const Onboarding = ({ onOnboarded, autoSwipe, steps }: OnboardingProps) =
         />
       </YStack>
     </Theme>
-  )
-}
+  );
+};
 
 const Point = ({ active, onPress }: { active: boolean; onPress: () => void }) => {
   return (
@@ -127,11 +127,11 @@ const Point = ({ active, onPress }: { active: boolean; onPress: () => void }) =>
       onPress={onPress}
       bg={active ? '$color7' : '$color6'}
     />
-  )
-}
+  );
+};
 
 export const Background = () => {
-  const { height } = useWindowDimensions()
+  const { height } = useWindowDimensions();
   return (
     <YStack fullscreen jc="center" ai="center">
       <Circle
@@ -152,5 +152,5 @@ export const Background = () => {
         h={height * 3}
       />
     </YStack>
-  )
-}
+  );
+};

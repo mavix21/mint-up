@@ -13,16 +13,16 @@ import {
   TextAreaField,
   TextField,
   Theme,
-} from '@my/ui'
-import { DateField, DateSchema } from '@my/ui/src/components/FormFields/DateField'
+} from '@my/ui';
+import { DateField, DateSchema } from '@my/ui/src/components/FormFields/DateField';
 import {
   ImagePickerField,
   ImagePickerSchema,
-} from '@my/ui/src/components/FormFields/ImagePickerField'
-import { createTsForm, createUniqueFieldSchema } from '@ts-react/form'
-import type { ComponentProps } from 'react'
-import { useFormContext } from 'react-hook-form'
-import { z } from 'zod'
+} from '@my/ui/src/components/FormFields/ImagePickerField';
+import { createTsForm, createUniqueFieldSchema } from '@ts-react/form';
+import type { ComponentProps } from 'react';
+import { useFormContext } from 'react-hook-form';
+import { z } from 'zod';
 
 export const formFields = {
   text: z.string(),
@@ -53,7 +53,7 @@ export const formFields = {
   address: createUniqueFieldSchema(AddressSchema, 'address'),
   date: createUniqueFieldSchema(DateSchema, 'date'),
   image: createUniqueFieldSchema(ImagePickerSchema, 'image'),
-}
+};
 
 // function createFormSchema<T extends ZodRawShape>(getData: (fields: typeof formFields) => T) {
 //   return z.object(getData(formFields))
@@ -70,19 +70,19 @@ const mapping = [
   [formFields.address, AddressField] as const,
   [formFields.date, DateField] as const,
   [formFields.image, ImagePickerField] as const,
-] as const
+] as const;
 
 const FormComponent = (props: FormProps) => {
   return (
     <Form asChild {...props} minWidth="100%">
       <FormWrapper tag="form">{props.children}</FormWrapper>
     </Form>
-  )
-}
+  );
+};
 
 const _SchemaForm = createTsForm(mapping, {
   FormComponent,
-})
+});
 
 // SchemaForm is a higher-order component that wraps around the _SchemaForm component.
 // It provides additional functionality for rendering a form with custom fields and a footer.
@@ -91,7 +91,7 @@ const _SchemaForm = createTsForm(mapping, {
 export const SchemaForm: typeof _SchemaForm = ({ ...props }) => {
   const renderAfter: ComponentProps<typeof _SchemaForm>['renderAfter'] = props.renderAfter
     ? (vars) => <FormWrapper.Footer>{props.renderAfter?.(vars)}</FormWrapper.Footer>
-    : undefined
+    : undefined;
 
   return (
     <_SchemaForm {...props} renderAfter={renderAfter}>
@@ -101,18 +101,18 @@ export const SchemaForm: typeof _SchemaForm = ({ ...props }) => {
         </FormWrapper.Body>
       )}
     </_SchemaForm>
-  )
-}
+  );
+};
 
 // handle manual errors (most commonly coming from a server) for cases where it's not for a specific field - make sure to wrap inside a provider first
 // stopped using it cause of state issues it introduced - set the errors to specific fields instead of root for now
 export const RootError = () => {
-  const context = useFormContext()
-  const errorMessage = context?.formState?.errors?.root?.message
+  const context = useFormContext();
+  const errorMessage = context?.formState?.errors?.root?.message;
 
   return (
     <Theme name="red">
       <FieldError message={errorMessage} />
     </Theme>
-  )
-}
+  );
+};

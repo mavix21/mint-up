@@ -1,9 +1,9 @@
-import type { AppRouter } from '@my/api'
-import { httpBatchLink } from '@trpc/client'
-import { createTRPCNext } from '@trpc/next'
-import SuperJSON from 'superjson'
+import type { AppRouter } from '@my/api';
+import { httpBatchLink } from '@trpc/client';
+import { createTRPCNext } from '@trpc/next';
+import SuperJSON from 'superjson';
 
-import { getBaseUrl } from './getBaseUrl'
+import { getBaseUrl } from './getBaseUrl';
 
 export const api = createTRPCNext<AppRouter>({
   config() {
@@ -22,14 +22,14 @@ export const api = createTRPCNext<AppRouter>({
 
           // You can pass any HTTP headers you wish here
           async headers() {
-            return {}
+            return {};
           },
         }),
       ],
-    }
+    };
   },
   /**
    * @link https://trpc.io/docs/ssr
    **/
   ssr: false,
-})
+});

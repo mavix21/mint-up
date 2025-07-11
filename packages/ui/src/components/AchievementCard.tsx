@@ -1,23 +1,23 @@
-import { IconProps } from '@tamagui/helpers-icon'
-import { LinearGradient } from '@tamagui/linear-gradient'
-import { ChevronRight } from '@tamagui/lucide-icons'
-import React from 'react'
-import { useLink } from 'solito/link'
-import { Button, Card, CardProps, H4, Progress, SizableText, XStack, YStack } from 'tamagui'
+import { IconProps } from '@tamagui/helpers-icon';
+import { LinearGradient } from '@tamagui/linear-gradient';
+import { ChevronRight } from '@tamagui/lucide-icons';
+import React from 'react';
+import { useLink } from 'solito/link';
+import { Button, Card, CardProps, H4, Progress, SizableText, XStack, YStack } from 'tamagui';
 
 export type AchievementCardProps = {
-  icon: React.FC<IconProps>
-  title?: string
+  icon: React.FC<IconProps>;
+  title?: string;
   progress: {
-    current: number
-    full: number
-    label?: string
-  }
+    current: number;
+    full: number;
+    label?: string;
+  };
   action?: {
-    props: ReturnType<typeof useLink>
-    text: string
-  }
-} & CardProps
+    props: ReturnType<typeof useLink>;
+    text: string;
+  };
+} & CardProps;
 
 export const AchievementCard = ({
   title,
@@ -67,5 +67,5 @@ export const AchievementCard = ({
         />
       </Card.Background>
     </Card>
-  )
-}
+  );
+};

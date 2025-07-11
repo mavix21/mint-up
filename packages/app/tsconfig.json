@@ -1,6 +1,15 @@
 {
   "extends": "../../tsconfig.base",
-  "include": ["features", "provider", "utils", "index.ts", "types.d.ts", "../ui/src", "../api/src"],
+  "include": [
+    "features",
+    "provider",
+    "utils",
+    "index.ts",
+    "types.d.ts",
+    "../ui/src",
+    "../api/src",
+    "screens/my-events"
+  ],
   "compilerOptions": {
     "noEmit": true,
     "composite": true,
