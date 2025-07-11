@@ -8,7 +8,7 @@ import {
   WalletDropdown,
   WalletDropdownDisconnect,
 } from '@coinbase/onchainkit/wallet';
-import { Button, YStack } from '@my/ui';
+import { Button, Text, View, XStack, YStack } from '@my/ui';
 import { useEffect } from 'react';
 
 export default function HomePage() {
@@ -29,9 +29,11 @@ export default function HomePage() {
       alignItems="center"
       height={'100vh' as any}
       gap={20}
+      bg="$background"
     >
-      <YStack bg="$background">
+      <XStack gap="$4">
         <Button>Click me</Button>
+
         <Wallet className="z-10">
           <ConnectWallet>
             <Name className="text-inherit" />
@@ -46,7 +48,7 @@ export default function HomePage() {
             <WalletDropdownDisconnect />
           </WalletDropdown>
         </Wallet>
-      </YStack>
+      </XStack>
     </YStack>
   );
 }
