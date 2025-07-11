@@ -1,3 +1,4 @@
+import '@coinbase/onchainkit/styles.css';
 import type { Metadata } from 'next';
 
 import { MiniKitContextProvider } from '@/providers/MiniKitProvider';
