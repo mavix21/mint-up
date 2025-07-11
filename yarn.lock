@@ -4195,25 +4195,25 @@ __metadata:
   dependencies:
     "@babel/runtime": "npm:^7.18.9"
     "@hookform/resolvers": "npm:^3.1.0"
-    "@tamagui/animations-moti": "npm:^1.126.12"
-    "@tamagui/animations-react-native": "npm:^1.126.12"
-    "@tamagui/build": "npm:^1.126.12"
-    "@tamagui/cli": "npm:^1.126.12"
-    "@tamagui/config": "npm:^1.126.12"
-    "@tamagui/create-theme": "npm:^1.126.12"
-    "@tamagui/font-inter": "npm:^1.126.12"
-    "@tamagui/helpers-icon": "npm:^1.126.12"
-    "@tamagui/react-native-media-driver": "npm:^1.126.12"
-    "@tamagui/shorthands": "npm:^1.126.12"
-    "@tamagui/theme-builder": "npm:^1.126.12"
-    "@tamagui/themes": "npm:^1.126.12"
-    "@tamagui/toast": "npm:^1.126.12"
+    "@tamagui/animations-moti": "npm:^1.131.3"
+    "@tamagui/animations-react-native": "npm:^1.131.3"
+    "@tamagui/build": "npm:^1.131.3"
+    "@tamagui/cli": "npm:^1.131.3"
+    "@tamagui/config": "npm:^1.131.3"
+    "@tamagui/create-theme": "npm:^1.131.3"
+    "@tamagui/font-inter": "npm:^1.131.3"
+    "@tamagui/helpers-icon": "npm:^1.131.3"
+    "@tamagui/react-native-media-driver": "npm:^1.131.3"
+    "@tamagui/shorthands": "npm:^1.131.3"
+    "@tamagui/theme-builder": "npm:^1.131.3"
+    "@tamagui/themes": "npm:^1.131.3"
+    "@tamagui/toast": "npm:^1.131.3"
     "@ts-react/form": "npm:1.6.4"
     eslint: "npm:^8.46.0"
     eslint-config-custom: "npm:*"
     moti: "npm:^0.25.3"
     react-hook-form: "npm:^7.46.1"
-    tamagui: "npm:^1.126.12"
+    tamagui: "npm:^1.131.3"
     typescript: "npm:~5.8.3"
     zod: "npm:^3.22.2"
   languageName: unknown
@@ -8045,7 +8045,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tamagui/animations-moti@npm:1.131.3, @tamagui/animations-moti@npm:^1.126.12":
+"@tamagui/animations-moti@npm:1.131.3, @tamagui/animations-moti@npm:^1.131.3":
   version: 1.131.3
   resolution: "@tamagui/animations-moti@npm:1.131.3"
   dependencies:
@@ -8059,7 +8059,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tamagui/animations-react-native@npm:1.131.3, @tamagui/animations-react-native@npm:^1.126.12":
+"@tamagui/animations-react-native@npm:1.131.3, @tamagui/animations-react-native@npm:^1.131.3":
   version: 1.131.3
   resolution: "@tamagui/animations-react-native@npm:1.131.3"
   dependencies:
@@ -8111,7 +8111,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tamagui/babel-plugin@npm:^1.126.12":
+"@tamagui/babel-plugin@npm:^1.131.3":
   version: 1.131.3
   resolution: "@tamagui/babel-plugin@npm:1.131.3"
   dependencies:
@@ -8125,7 +8125,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tamagui/build@npm:^1.126.12":
+"@tamagui/build@npm:^1.131.3":
   version: 1.131.3
   resolution: "@tamagui/build@npm:1.131.3"
   dependencies:
@@ -8236,7 +8236,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tamagui/cli@npm:^1.126.12":
+"@tamagui/cli@npm:^1.131.3":
   version: 1.131.3
   resolution: "@tamagui/cli@npm:1.131.3"
   dependencies:
@@ -8305,7 +8305,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tamagui/colors@npm:1.131.3, @tamagui/colors@npm:^1.126.12":
+"@tamagui/colors@npm:1.131.3, @tamagui/colors@npm:^1.131.3":
   version: 1.131.3
   resolution: "@tamagui/colors@npm:1.131.3"
   checksum: 10/3f5d423cd78f951c2c1811ac9842976de3ff81c995f993d09e4f08e14f979eead75653e5a35de22021f496b3881f370db13fa72c7419520634040e259511a2da
@@ -8334,7 +8334,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tamagui/config@npm:^1.126.12":
+"@tamagui/config@npm:^1.131.3":
   version: 1.131.3
   resolution: "@tamagui/config@npm:1.131.3"
   dependencies:
@@ -8364,7 +8364,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tamagui/core@npm:1.131.3, @tamagui/core@npm:^1.126.12":
+"@tamagui/core@npm:1.131.3, @tamagui/core@npm:^1.131.3":
   version: 1.131.3
   resolution: "@tamagui/core@npm:1.131.3"
   dependencies:
@@ -8391,7 +8391,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tamagui/create-theme@npm:1.131.3, @tamagui/create-theme@npm:^1.126.12":
+"@tamagui/create-theme@npm:1.131.3, @tamagui/create-theme@npm:^1.131.3":
   version: 1.131.3
   resolution: "@tamagui/create-theme@npm:1.131.3"
   dependencies:
@@ -8511,7 +8511,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tamagui/font-inter@npm:1.131.3, @tamagui/font-inter@npm:^1.126.12":
+"@tamagui/font-inter@npm:1.131.3, @tamagui/font-inter@npm:^1.131.3":
   version: 1.131.3
   resolution: "@tamagui/font-inter@npm:1.131.3"
   dependencies:
@@ -8622,7 +8622,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tamagui/helpers-icon@npm:1.131.3, @tamagui/helpers-icon@npm:^1.126.12":
+"@tamagui/helpers-icon@npm:1.131.3, @tamagui/helpers-icon@npm:^1.131.3":
   version: 1.131.3
   resolution: "@tamagui/helpers-icon@npm:1.131.3"
   dependencies:
@@ -8740,7 +8740,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tamagui/lucide-icons@npm:^1.126.12":
+"@tamagui/lucide-icons@npm:^1.131.3":
   version: 1.131.3
   resolution: "@tamagui/lucide-icons@npm:1.131.3"
   dependencies:
@@ -8753,7 +8753,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tamagui/next-plugin@npm:^1.126.12":
+"@tamagui/next-plugin@npm:^1.131.3":
   version: 1.131.3
   resolution: "@tamagui/next-plugin@npm:1.131.3"
   dependencies:
@@ -8775,7 +8775,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tamagui/next-theme@npm:^1.126.12":
+"@tamagui/next-theme@npm:^1.131.3":
   version: 1.131.3
   resolution: "@tamagui/next-theme@npm:1.131.3"
   dependencies:
@@ -8941,7 +8941,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tamagui/react-native-media-driver@npm:1.131.3, @tamagui/react-native-media-driver@npm:^1.126.12":
+"@tamagui/react-native-media-driver@npm:1.131.3, @tamagui/react-native-media-driver@npm:^1.131.3":
   version: 1.131.3
   resolution: "@tamagui/react-native-media-driver@npm:1.131.3"
   dependencies:
@@ -8952,7 +8952,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tamagui/react-native-svg@npm:1.131.3, @tamagui/react-native-svg@npm:^1.126.12":
+"@tamagui/react-native-svg@npm:1.131.3, @tamagui/react-native-svg@npm:^1.131.3":
   version: 1.131.3
   resolution: "@tamagui/react-native-svg@npm:1.131.3"
   checksum: 10/2e3586ac1485e7ddaddf7fa592eb95af6e707cda972226817fd37dba364bc33ea700df25d5ceb30cb7600810d3dc53ffb9c1fef7ac328048b401129175d10260
@@ -9142,7 +9142,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tamagui/shorthands@npm:1.131.3, @tamagui/shorthands@npm:^1.126.12":
+"@tamagui/shorthands@npm:1.131.3, @tamagui/shorthands@npm:^1.131.3":
   version: 1.131.3
   resolution: "@tamagui/shorthands@npm:1.131.3"
   dependencies:
@@ -9319,7 +9319,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tamagui/theme-builder@npm:1.131.3, @tamagui/theme-builder@npm:^1.126.12":
+"@tamagui/theme-builder@npm:1.131.3, @tamagui/theme-builder@npm:^1.131.3":
   version: 1.131.3
   resolution: "@tamagui/theme-builder@npm:1.131.3"
   dependencies:
@@ -9343,7 +9343,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tamagui/themes@npm:1.131.3, @tamagui/themes@npm:^1.126.12":
+"@tamagui/themes@npm:1.131.3, @tamagui/themes@npm:^1.131.3":
   version: 1.131.3
   resolution: "@tamagui/themes@npm:1.131.3"
   dependencies:
@@ -9363,7 +9363,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tamagui/toast@npm:^1.126.12":
+"@tamagui/toast@npm:^1.131.3":
   version: 1.131.3
   resolution: "@tamagui/toast@npm:1.131.3"
   dependencies:
@@ -12213,13 +12213,13 @@ __metadata:
     "@supabase/auth-helpers-nextjs": "npm:^0.10.0"
     "@supabase/auth-helpers-react": "npm:^0.5.0"
     "@supabase/supabase-js": "npm:^2.48.1"
-    "@tamagui/animations-react-native": "npm:^1.126.12"
-    "@tamagui/colors": "npm:^1.126.12"
-    "@tamagui/font-inter": "npm:^1.126.12"
-    "@tamagui/helpers-icon": "npm:^1.126.12"
-    "@tamagui/lucide-icons": "npm:^1.126.12"
-    "@tamagui/shorthands": "npm:^1.126.12"
-    "@tamagui/themes": "npm:^1.126.12"
+    "@tamagui/animations-react-native": "npm:^1.131.3"
+    "@tamagui/colors": "npm:^1.131.3"
+    "@tamagui/font-inter": "npm:^1.131.3"
+    "@tamagui/helpers-icon": "npm:^1.131.3"
+    "@tamagui/lucide-icons": "npm:^1.131.3"
+    "@tamagui/shorthands": "npm:^1.131.3"
+    "@tamagui/themes": "npm:^1.131.3"
     "@tanstack/react-query": "npm:4.18.0"
     "@trpc/client": "npm:^10.45.2"
     "@trpc/react-query": "npm:^10.45.2"
@@ -17035,7 +17035,7 @@ __metadata:
     "@react-native-async-storage/async-storage": "npm:2.1.2"
     "@react-native-community/netinfo": "npm:11.4.1"
     "@react-native-google-signin/google-signin": "npm:^13.1.0"
-    "@tamagui/babel-plugin": "npm:^1.126.12"
+    "@tamagui/babel-plugin": "npm:^1.131.3"
     app: "npm:*"
     babel-plugin-module-resolver: "npm:^4.1.0"
     babel-plugin-transform-inline-environment-variables: "npm:^0.4.4"
@@ -21867,9 +21867,9 @@ __metadata:
     "@supabase/auth-helpers-nextjs": "npm:^0.10.0"
     "@supabase/auth-helpers-react": "npm:^0.5.0"
     "@supabase/supabase-js": "npm:^2.48.1"
-    "@tamagui/next-plugin": "npm:^1.126.12"
-    "@tamagui/next-theme": "npm:^1.126.12"
-    "@tamagui/react-native-svg": "npm:^1.126.12"
+    "@tamagui/next-plugin": "npm:^1.131.3"
+    "@tamagui/next-theme": "npm:^1.131.3"
+    "@tamagui/react-native-svg": "npm:^1.131.3"
     "@tanstack/react-query": "npm:4.18.0"
     "@trpc/server": "npm:^10.45.2"
     "@types/node": "npm:^18.6.4"
@@ -22073,8 +22073,8 @@ __metadata:
     "@svgr/plugin-jsx": "npm:^8.1.0"
     "@svgr/plugin-prettier": "npm:^8.1.0"
     "@svgr/plugin-svgo": "npm:^8.1.0"
-    "@tamagui/cli": "npm:^1.126.12"
-    "@tamagui/config": "npm:^1.126.12"
+    "@tamagui/cli": "npm:^1.131.3"
+    "@tamagui/config": "npm:^1.131.3"
     "@turbo/gen": "npm:^2.5.3"
     "@types/fs-extra": "npm:^11"
     axios: "npm:^1.7.2"
@@ -22354,9 +22354,9 @@ __metadata:
     "@supabase/auth-helpers-nextjs": "npm:^0.10.0"
     "@supabase/auth-helpers-react": "npm:^0.5.0"
     "@supabase/supabase-js": "npm:^2.48.1"
-    "@tamagui/next-plugin": "npm:^1.126.12"
-    "@tamagui/next-theme": "npm:^1.126.12"
-    "@tamagui/react-native-svg": "npm:^1.126.12"
+    "@tamagui/next-plugin": "npm:^1.131.3"
+    "@tamagui/next-theme": "npm:^1.131.3"
+    "@tamagui/react-native-svg": "npm:^1.131.3"
     "@tanstack/react-query": "npm:4.18.0"
     "@trpc/server": "npm:^10.45.2"
     "@types/node": "npm:^18.6.4"
@@ -27909,8 +27909,8 @@ __metadata:
     "@svgr/plugin-jsx": "npm:^8.1.0"
     "@svgr/plugin-prettier": "npm:^8.1.0"
     "@svgr/plugin-svgo": "npm:^8.1.0"
-    "@tamagui/build": "npm:^1.126.12"
-    "@tamagui/core": "npm:^1.126.12"
+    "@tamagui/build": "npm:^1.131.3"
+    "@tamagui/core": "npm:^1.131.3"
     "@types/fs-extra": "npm:^11"
     axios: "npm:^1.7.2"
     chalk: "npm:^5.3.0"
@@ -27945,7 +27945,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tamagui@npm:^1.126.12":
+"tamagui@npm:^1.131.3":
   version: 1.131.3
   resolution: "tamagui@npm:1.131.3"
   dependencies:
