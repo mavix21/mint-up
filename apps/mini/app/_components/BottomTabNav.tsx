@@ -1,9 +1,51 @@
-import { Text, YStack } from '@my/ui';
+import { XStack, YStack } from '@my/ui';
+import { Home, Plus, Search } from '@tamagui/lucide-icons';
 
-export function BottomTabNav() {
+import { BottomTab } from './BottomTab';
+
+interface BottomTabNavProps {
+  activeTab: string;
+  setActiveTab: (tab: string) => void;
+}
+
+export function BottomTabNav({ activeTab, setActiveTab }: BottomTabNavProps) {
   return (
-    <YStack>
-      <Text>Hello</Text>
+    <YStack
+      bg="$color2"
+      position="absolute"
+      insetInline={0}
+      bottom={0}
+      borderTopWidth={1}
+      borderColor="$borderColor"
+      zIndex={50}
+    >
+      <XStack flex={1} alignItems="center" justifyContent="space-around" py="$2">
+        <BottomTab
+          onClick={() => setActiveTab('home')}
+          isActive={activeTab === 'home'}
+          Icon={<Home />}
+          label="Home"
+        />
+        {/* <BottomTab
+        onClick={() => setActiveTab(Tab.Actions)}
+        isActive={activeTab === Tab.Actions}
+        Icon={Zap}
+        label="Actions"
+      /> */}
+        <BottomTab
+          onClick={() => setActiveTab('create')}
+          isActive={activeTab === 'create'}
+          Icon={<Plus />}
+          isCenter
+          label="Create"
+        />
+        <BottomTab
+          onClick={() => setActiveTab('explore')}
+          isActive={activeTab === 'explore'}
+          Icon={<Search />}
+          label="Explore"
+        />
+      </XStack>
     </YStack>
   );
 }
