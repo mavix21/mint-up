@@ -8,7 +8,7 @@
     "types.d.ts",
     "../ui/src",
     "../api/src",
-    "screens/my-events"
+    "screens"
   ],
   "compilerOptions": {
     "noEmit": true,
