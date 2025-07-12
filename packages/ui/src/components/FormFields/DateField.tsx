@@ -1,30 +1,30 @@
-import { useFieldInfo, useTsController } from '@ts-react/form'
-import { useId, useImperativeHandle, useRef } from 'react'
-import { Fieldset, type InputProps, Label, Theme, XStack } from 'tamagui'
-import { z } from 'zod'
+import { useFieldInfo, useTsController } from '@ts-react/form';
+import { useId, useImperativeHandle, useRef } from 'react';
+import { Fieldset, type InputProps, Label, Theme, XStack } from 'tamagui';
+import { z } from 'zod';
 
-import { FieldError } from '../FieldError'
-import { Shake } from '../Shake'
-import { DatePickerExample } from '../elements/datepicker/DatePicker'
+import { FieldError } from '../FieldError';
+import { Shake } from '../Shake';
+import { DatePickerExample } from '../elements/datepicker/DatePicker';
 
 export const DateSchema = z.object({
   dateValue: z.coerce.date(),
-})
+});
 
 export const DateField = (props: Pick<InputProps, 'size'>) => {
   const {
     field,
     error,
     formState: { isSubmitting },
-  } = useTsController<z.infer<typeof DateSchema>>()
+  } = useTsController<z.infer<typeof DateSchema>>();
 
-  const { label } = useFieldInfo()
-  const id = useId()
-  const disabled = isSubmitting
+  const { label } = useFieldInfo();
+  const id = useId();
+  const disabled = isSubmitting;
 
-  const inputRef = useRef<HTMLInputElement>(null) // Initialize with null
+  const inputRef = useRef<HTMLInputElement>(null); // Initialize with null
 
-  useImperativeHandle(field.ref, () => inputRef.current) // Access the current value
+  useImperativeHandle(field.ref, () => inputRef.current); // Access the current value
 
   return (
     <Fieldset gap="$2">
@@ -55,5 +55,5 @@ export const DateField = (props: Pick<InputProps, 'size'>) => {
         </Theme>
       </XStack>
     </Fieldset>
-  )
-}
+  );
+};

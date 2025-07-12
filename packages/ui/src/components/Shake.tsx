@@ -1,5 +1,5 @@
-import { useConfiguration } from '@tamagui/web'
-import { useEffect } from 'react'
+import { useConfiguration } from '@tamagui/web';
+import { useEffect } from 'react';
 
 export const Shake = ({
   shakeKey,
@@ -11,25 +11,25 @@ export const Shake = ({
    * animated the container when this value changes and reset when it's undefined
    * one great use-case is the error message of a field
    */
-  shakeKey?: string
+  shakeKey?: string;
   /**
    * @default 4
    */
-  shakeTimes?: number
+  shakeTimes?: number;
   /**
    * @default 5
    */
-  shakeDistance?: number
-  children: React.ReactNode
+  shakeDistance?: number;
+  children: React.ReactNode;
 }) => {
-  const { animationDriver } = useConfiguration()
-  if (!animationDriver) throw new Error('No animation driver found.')
-  const { useAnimatedNumber, useAnimatedNumberStyle, View: AnimatedView } = animationDriver
-  const animatedNumber = useAnimatedNumber(0)
+  const { animationDriver } = useConfiguration();
+  if (!animationDriver) throw new Error('No animation driver found.');
+  const { useAnimatedNumber, useAnimatedNumberStyle, View: AnimatedView } = animationDriver;
+  const animatedNumber = useAnimatedNumber(0);
 
   useEffect(() => {
     if (!shakeKey) {
-      animatedNumber.setValue(0)
+      animatedNumber.setValue(0);
     } else {
       const timeouts = Array.from(Array(shakeTimes)).map((_, idx, arr) =>
         setTimeout(
@@ -39,21 +39,21 @@ export const Shake = ({
             ),
           100 * idx
         )
-      )
+      );
       return () => {
         for (const timeout of timeouts) {
-          clearTimeout(timeout)
+          clearTimeout(timeout);
         }
-      }
+      };
     }
-  }, [animatedNumber, shakeDistance, shakeKey, shakeTimes])
+  }, [animatedNumber, shakeDistance, shakeKey, shakeTimes]);
 
   const animatedStyle = useAnimatedNumberStyle(animatedNumber, (val) => {
-    'worklet'
+    'worklet';
     return {
       transform: [{ translateX: val }],
-    }
-  })
+    };
+  });
 
-  return <AnimatedView style={animatedStyle}>{children}</AnimatedView>
-}
+  return <AnimatedView style={animatedStyle}>{children}</AnimatedView>;
+};
