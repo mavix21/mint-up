@@ -1,56 +1,56 @@
-import { FullscreenSpinner, SubmitButton, Theme, YStack, useToastController } from '@my/ui'
-import { useMutation } from '@tanstack/react-query'
-import { SchemaForm, formFields } from 'app/utils/SchemaForm'
-import { useSupabase } from 'app/utils/supabase/useSupabase'
-import { useUser } from 'app/utils/useUser'
-import { z } from 'zod'
+import { FullscreenSpinner, SubmitButton, Theme, YStack, useToastController } from '@my/ui';
+import { useMutation } from '@tanstack/react-query';
+import { SchemaForm, formFields } from 'app/utils/SchemaForm';
+import { useSupabase } from 'app/utils/supabase/useSupabase';
+import { useUser } from 'app/utils/useUser';
+import { z } from 'zod';
 
 const CreatePostSchema = z.object({
   title: formFields.text.min(10).describe('Name // Your post title'),
   content: formFields.textarea.describe('Description // Content of your post'),
   category_id: formFields.select.describe('Category // Category of your post'),
   image_url: formFields.image.describe('Image URL // Image URL of your post'),
-})
+});
 
 export const CreatePostForm = ({ onSuccess }: { onSuccess: () => void }) => {
-  const { profile, user } = useUser()
-  const toast = useToastController()
-  const supabase = useSupabase()
+  const { profile, user } = useUser();
+  const toast = useToastController();
+  const supabase = useSupabase();
 
   const uploadImageAndGetUrl = async (imageSource: { fileURL: string; path: string }) => {
-    console.log('imageSource', imageSource)
+    console.log('imageSource', imageSource);
     const { data: uploadData, error: uploadError } = await supabase.storage
       .from('post-images')
       .upload(
         `public/${Date.now()}_image${imageSource.path}`,
         await fetch(imageSource.fileURL).then((res) => res.blob())
-      )
+      );
 
-    console.log('uploadData', uploadData)
+    console.log('uploadData', uploadData);
     if (uploadError) {
       // throw uploadError
-      console.log('error', uploadError)
+      console.log('error', uploadError);
     }
 
     const { data: publicUrlData } = supabase.storage
       .from('post-images')
-      .getPublicUrl(uploadData?.path as string)
-    return publicUrlData.publicUrl
-  }
+      .getPublicUrl(uploadData?.path as string);
+    return publicUrlData.publicUrl;
+  };
 
   const mutation = useMutation({
     async onError(error) {
-      console.error(error)
-      toast.show('Error creating post')
+      console.error(error);
+      toast.show('Error creating post');
     },
 
     async mutationFn(data: z.infer<typeof CreatePostSchema>) {
       const imageUrl = await uploadImageAndGetUrl(
         data.image_url as {
-          fileURL: string
-          path: string
+          fileURL: string;
+          path: string;
         }
-      )
+      );
 
       // Insert post with the image URL
       await supabase.from('posts').insert({
@@ -59,16 +59,16 @@ export const CreatePostForm = ({ onSuccess }: { onSuccess: () => void }) => {
         category_id: data.category_id,
         image_url: imageUrl,
         profile_id: user?.id,
-      })
+      });
     },
 
     async onSuccess() {
-      onSuccess()
+      onSuccess();
     },
-  })
+  });
 
   if (!profile || !user?.id) {
-    return <FullscreenSpinner />
+    return <FullscreenSpinner />;
   }
 
   return (
@@ -109,5 +109,5 @@ export const CreatePostForm = ({ onSuccess }: { onSuccess: () => void }) => {
         )}
       </SchemaForm>
     </>
-  )
-}
+  );
+};
