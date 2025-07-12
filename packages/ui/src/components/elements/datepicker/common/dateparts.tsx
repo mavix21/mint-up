@@ -74,6 +74,7 @@ const DatePickerContent = styled(Popover.Content, {
       },
     },
   ],
+  zIndex: 100_000 + 1,
   variants: {
     unstyled: {
       false: {
