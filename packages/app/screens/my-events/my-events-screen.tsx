@@ -1,7 +1,22 @@
-import { H3, Card, Tabs, Text, View, YStack, Button, Image } from '@my/ui';
+import {
+  H3,
+  Card,
+  Tabs,
+  Text,
+  View,
+  YStack,
+  Button,
+  Image,
+  Paragraph,
+  XStack,
+  Stack,
+  H2,
+  Anchor,
+} from '@my/ui';
 import { Award, Clock, MapPin, Users } from '@tamagui/lucide-icons';
 import React, { useState } from 'react';
-import type { TabLayout } from 'tamagui';
+
+const Link = Anchor;
 
 interface EventStats {
   mints?: number;
@@ -130,23 +145,23 @@ export const MyEventsScreen = () => {
     return (
       <Card mb="$4" p="$6">
         <View display="flex" gap="$6">
-          <View flex={1}>
-            <View mb="$2" display="flex" ai="center" gap="$2">
-              <Clock size="$4" />
+          <View flex={1} gap="$4">
+            <XStack display="flex" ai="center" gap="$3">
+              <Clock size="$1" />
               <Text>{formatTime(event.startTime)}</Text>
-            </View>
+            </XStack>
 
             <H3>{event.name}</H3>
 
-            <View mb="$4" display="flex" ai="center" gap="$2">
-              <MapPin size="$4" />
+            <XStack display="flex" ai="center" gap="$3">
+              <MapPin size="$1" />
               <Text>{event.location}</Text>
-            </View>
+            </XStack>
 
             {/* Status/Stats Row */}
             <View mb="$4">
               {event.userRole === 'host' && event.stats && (
-                <View display="flex" ai="center" gap="$4">
+                <View display="flex" gap="$3">
                   {isPast ? (
                     <>
                       {event.stats.attendees && (
@@ -163,13 +178,13 @@ export const MyEventsScreen = () => {
                       )}
                     </>
                   ) : (
-                    <View display="flex" ai="center" gap="$1">
-                      <Users size="$4" />
+                    <XStack display="flex" ai="center" gap="$3">
+                      <Users size="$1" />
                       <Text>
                         Mints: {event.stats.mints ?? 0}
                         {event.stats.capacity ? ` / ${event.stats.capacity}` : ''}
                       </Text>
-                    </View>
+                    </XStack>
                   )}
                 </View>
               )}
@@ -231,7 +246,7 @@ export const MyEventsScreen = () => {
     <YStack bg="$background" fullscreen>
       {/* <Navigation /> */}
 
-      <View px="$4" py="$8" marginInline="auto">
+      <View px="$4" py="$8">
         <View mb="$8">
           <H3 mb="$2">My Events</H3>
           <Text>Your digital experiences collection</Text>
@@ -250,10 +265,10 @@ export const MyEventsScreen = () => {
           <Tabs.Content value="upcoming">
             {groupEventsByDate(upcomingEvents).map(([dateKey, events]) => (
               <View key={dateKey} pos="relative">
-                <View pos="absolute" bottom={0} left={4} top={16} w="$0.25" bg="$black10" />
+                <View pos="absolute" bottom={0} left={4} top={16} w="$0.25" bg="$borderColor" />
 
                 <View mb="$9">
-                  <View pos="relative" pl="$8">
+                  <View pos="relative" pl="$5">
                     <View
                       bg="$green10"
                       pos="absolute"
@@ -264,7 +279,7 @@ export const MyEventsScreen = () => {
                       borderRadius="$5"
                     />
                     <View mb="$4">
-                      <Text fontSize="$2">{formatDate(events[0]?.startTime ?? '')}</Text>
+                      <Paragraph fontSize="$4">{formatDate(events[0]?.startTime ?? '')}</Paragraph>
                       <Text fontSize="$2">{getDayOfWeek(events[0]?.startTime ?? '')}</Text>
                     </View>
                     {events.map((event) => (
