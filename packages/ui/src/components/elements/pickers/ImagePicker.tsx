@@ -1,8 +1,8 @@
-import { X } from '@tamagui/lucide-icons'
-import { useId, useState, forwardRef } from 'react'
-import { Button, Image, Label, ScrollView, View, XStack } from 'tamagui'
+import { X } from '@tamagui/lucide-icons';
+import { useId, useState, forwardRef } from 'react';
+import { Button, Image, Label, ScrollView, View, XStack } from 'tamagui';
 
-import { useFilePicker } from './hooks/useFilePicker'
+import { useFilePicker } from './hooks/useFilePicker';
 
 enum MediaTypeOptions {
   /**
@@ -23,16 +23,16 @@ enum MediaTypeOptions {
 export const ImagePicker = forwardRef<
   HTMLInputElement,
   {
-    disabled: boolean
-    value: { fileURL: string; path: string } | undefined
-    onChangeText: (imageSource: { fileURL: string; path: string }) => void
-    onBlur: () => void
-    placeholder?: string
-    [key: string]: any
+    disabled: boolean;
+    value: { fileURL: string; path: string } | undefined;
+    onChangeText: (imageSource: { fileURL: string; path: string }) => void;
+    onBlur: () => void;
+    placeholder?: string;
+    [key: string]: any;
   }
 >(({ disabled, value, onChangeText, onBlur, placeholder, ...props }, ref) => {
-  const id = useId()
-  const [images, setImages] = useState<string[]>([])
+  const id = useId();
+  const [images, setImages] = useState<string[]>([]);
   const { open, getInputProps, getRootProps, dragStatus } = useFilePicker({
     typeOfPicker: 'image',
     mediaTypes: [MediaTypeOptions.Images],
@@ -44,17 +44,17 @@ export const ImagePicker = forwardRef<
           return {
             fileURL: URL.createObjectURL(file),
             path: (file as any)?.path, // Type assertion to bypass the TypeScript error
-          }
-        })
-        onChangeText(pickedImages[0])
-        setImages((images) => [...images, pickedImages[0].fileURL])
+          };
+        });
+        onChangeText(pickedImages[0]);
+        setImages((images) => [...images, pickedImages[0].fileURL]);
       } else if (nativeFiles?.length) {
         // setImages((images) => [...images, pickedImages[0]])
       }
     },
-  })
+  });
 
-  const { isDragActive } = dragStatus
+  const { isDragActive } = dragStatus;
 
   return (
     // @ts-ignore reason: getRootProps() which is web specific return some react-native incompatible props, but it's fine
@@ -115,17 +115,11 @@ export const ImagePicker = forwardRef<
       >
         <XStack gap="$4" flexWrap="nowrap" minWidth="100%" maxHeight={110} px="$4" pt={10}>
           {[images[0]]?.map((image, i) => (
-            <View key={image} maxHeight={110}>
-              <Image
-                borderRadius={10}
-                key={image}
-                width={400}
-                height={200}
-                source={{ uri: image }}
-              />
+            <View key={i} maxHeight={110}>
+              <Image borderRadius={10} key={i} width={400} height={200} source={{ uri: image }} />
               <Button
                 onPress={() => {
-                  setImages(images.filter((_, index) => index !== i))
+                  setImages(images.filter((_, index) => index !== i));
                 }}
                 right={0}
                 y={-6}
@@ -141,5 +135,5 @@ export const ImagePicker = forwardRef<
         </XStack>
       </ScrollView>
     </View>
-  )
-})
+  );
+});
