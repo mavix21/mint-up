@@ -12,8 +12,10 @@ import {
   Stack,
   H2,
   Anchor,
+  useMedia,
+  Separator,
 } from '@my/ui';
-import { Award, Clock, MapPin, Users } from '@tamagui/lucide-icons';
+import { Award, Clock, Heart, MapPin, Trash, Users } from '@tamagui/lucide-icons';
 import React, { useState } from 'react';
 
 const Link = Anchor;
@@ -48,7 +50,7 @@ export const MyEventsScreen = () => {
       startTime: '2025-07-25T12:30:00Z',
       location: 'UPC - Campus San Miguel',
       userRole: 'host',
-      nftTicketImageUrl: '/placeholder.svg',
+      nftTicketImageUrl: 'https://tamagui.dev/bento/images/bag/bag3.webp',
       stats: { mints: 0, capacity: null },
     },
     {
@@ -57,7 +59,7 @@ export const MyEventsScreen = () => {
       startTime: '2025-07-28T18:00:00Z',
       location: 'Virtual',
       userRole: 'attendee',
-      nftTicketImageUrl: '/placeholder.svg',
+      nftTicketImageUrl: 'https://tamagui.dev/bento/images/bag/bag3.webp',
       stats: {},
     },
   ];
@@ -70,16 +72,16 @@ export const MyEventsScreen = () => {
       location: 'Virtual',
       userRole: 'attendee',
       status: 'POAP_COLLECTED',
-      poapImageUrl: '/placeholder.svg',
+      poapImageUrl: 'https://tamagui.dev/bento/images/bag/bag3.webp',
     },
     {
       id: 'evt-004',
-      name: 'Trazabilidad digital Blockchain',
+      name: 'Blockchain',
       startTime: '2025-06-04T18:30:00Z',
-      location: 'Home for the Elderly Santa Cruz',
+      location: 'Home',
       userRole: 'attendee',
       status: 'MISSED',
-      poapImageUrl: null,
+      poapImageUrl: 'https://tamagui.dev/bento/images/bag/bag3.webp',
     },
     {
       id: 'evt-005',
@@ -88,7 +90,7 @@ export const MyEventsScreen = () => {
       location: 'Lima, Peru',
       userRole: 'host',
       status: 'COMPLETED',
-      poapImageUrl: '/placeholder.svg',
+      poapImageUrl: 'https://tamagui.dev/bento/images/bag/bag3.webp',
       stats: { attendees: 112, poapsClaimed: 105 },
     },
   ];
@@ -142,104 +144,194 @@ export const MyEventsScreen = () => {
     const imageUrl = isPast ? event.poapImageUrl : event.nftTicketImageUrl;
     const showDimmed = isPast && !event.poapImageUrl;
 
+    // return (
+    //   <Card mb="$4" p="$6">
+    //     <View display="flex" gap="$6">
+    //       <View flex={1} gap="$4">
+    //         <XStack display="flex" ai="center" gap="$3">
+    //           <Clock size="$1" />
+    //           <Text>{formatTime(event.startTime)}</Text>
+    //         </XStack>
+
+    //         <H3>{event.name}</H3>
+
+    //         <XStack display="flex" ai="center" gap="$3">
+    //           <MapPin size="$1" />
+    //           <Text>{event.location}</Text>
+    //         </XStack>
+
+    //         {/* Status/Stats Row */}
+    //         <View mb="$4">
+    //           {event.userRole === 'host' && event.stats && (
+    //             <View display="flex" gap="$3">
+    //               {isPast ? (
+    //                 <>
+    //                   {event.stats.attendees && (
+    //                     <View display="flex" ai="center" gap="$1">
+    //                       <Users size="$4" />
+    //                       <Text>Attendees: {event.stats.attendees}</Text>
+    //                     </View>
+    //                   )}
+    //                   {event.stats.poapsClaimed && (
+    //                     <View display="flex" ai="center" gap="$1">
+    //                       <Award size="$4" />
+    //                       <Text>POAPs: {event.stats.poapsClaimed}</Text>
+    //                     </View>
+    //                   )}
+    //                 </>
+    //               ) : (
+    //                 <XStack display="flex" ai="center" gap="$3">
+    //                   <Users size="$1" />
+    //                   <Text>
+    //                     Mints: {event.stats.mints ?? 0}
+    //                     {event.stats.capacity ? ` / ${event.stats.capacity}` : ''}
+    //                   </Text>
+    //                 </XStack>
+    //               )}
+    //             </View>
+    //           )}
+
+    //           {event.userRole === 'attendee' && isPast && (
+    //             <View>
+    //               {event.status === 'POAP_COLLECTED' && <Text fontSize="$4">POAP Collected</Text>}
+    //               {event.status === 'MISSED' && <Text fontSize="$4">Event Missed</Text>}
+    //             </View>
+    //           )}
+    //         </View>
+
+    //         <Button
+    //           size="$2"
+    //           onPress={() => {
+    //             if (event.userRole === 'host') {
+    //               setManagedEventId(event.id);
+    //             }
+    //           }}
+    //         >
+    //           {event.userRole === 'host' ? 'Manage Event' : 'View Ticket'}
+    //         </Button>
+    //       </View>
+
+    //       {/* Visual */}
+    //       <View
+    //         bg="$accentColor"
+    //         dsp="flex"
+    //         h="$4"
+    //         w="$4"
+    //         ai="center"
+    //         jc="center"
+    //         ov="hidden"
+    //         borderRadius="$4"
+    //       >
+    //         {imageUrl ? (
+    //           <Image
+    //             source={{
+    //               uri: imageUrl,
+    //               width: 100,
+    //               height: 100,
+    //             }}
+    //             width="100%"
+    //             height="100%"
+    //             objectFit="cover"
+    //           />
+    //         ) : (
+    //           <View dsp="flex" h="100%" w="100%" ai="center" jc="center">
+    //             {isPast ? <Award size="$5" /> : <Text fontSize="$2">NFT</Text>}
+    //           </View>
+    //         )}
+    //       </View>
+    //     </View>
+    //   </Card>
+    // );
+
     return (
-      <Card mb="$4" p="$6">
-        <View display="flex" gap="$6">
-          <View flex={1} gap="$4">
-            <XStack display="flex" ai="center" gap="$3">
-              <Clock size="$1" />
-              <Text>{formatTime(event.startTime)}</Text>
-            </XStack>
-
-            <H3>{event.name}</H3>
-
-            <XStack display="flex" ai="center" gap="$3">
-              <MapPin size="$1" />
-              <Text>{event.location}</Text>
-            </XStack>
-
-            {/* Status/Stats Row */}
-            <View mb="$4">
-              {event.userRole === 'host' && event.stats && (
-                <View display="flex" gap="$3">
-                  {isPast ? (
-                    <>
-                      {event.stats.attendees && (
-                        <View display="flex" ai="center" gap="$1">
-                          <Users size="$4" />
-                          <Text>Attendees: {event.stats.attendees}</Text>
-                        </View>
-                      )}
-                      {event.stats.poapsClaimed && (
-                        <View display="flex" ai="center" gap="$1">
-                          <Award size="$4" />
-                          <Text>POAPs: {event.stats.poapsClaimed}</Text>
-                        </View>
-                      )}
-                    </>
-                  ) : (
-                    <XStack display="flex" ai="center" gap="$3">
-                      <Users size="$1" />
-                      <Text>
-                        Mints: {event.stats.mints ?? 0}
-                        {event.stats.capacity ? ` / ${event.stats.capacity}` : ''}
-                      </Text>
-                    </XStack>
-                  )}
-                </View>
-              )}
-
-              {event.userRole === 'attendee' && isPast && (
-                <View>
-                  {event.status === 'POAP_COLLECTED' && <Text fontSize="$4">POAP Collected</Text>}
-                  {event.status === 'MISSED' && <Text fontSize="$4">Event Missed</Text>}
-                </View>
-              )}
-            </View>
-
-            <Button
-              size="$2"
-              onPress={() => {
-                if (event.userRole === 'host') {
-                  setManagedEventId(event.id);
-                }
-              }}
-            >
-              {event.userRole === 'host' ? 'Manage Event' : 'View Ticket'}
-            </Button>
-          </View>
-
-          {/* Visual */}
-          <View
-            bg="$accentColor"
-            dsp="flex"
-            h="$4"
-            w="$4"
-            ai="center"
-            jc="center"
-            ov="hidden"
-            borderRadius="$4"
-          >
-            {imageUrl ? (
-              <Image
-                source={{
-                  uri: imageUrl,
-                  width: 100,
-                  height: 100,
-                }}
-                width="100%"
-                height="100%"
-                objectFit="cover"
-              />
-            ) : (
-              <View dsp="flex" h="100%" w="100%" ai="center" jc="center">
-                {isPast ? <Award size="$5" /> : <Text fontSize="$2">NFT</Text>}
-              </View>
-            )}
-          </View>
+      <View
+        flexDirection="row"
+        flexWrap="wrap"
+        gap="$6"
+        $group-window-sm={{
+          gap: '$3',
+          paddingBottom: '$4',
+          borderWidth: 1,
+          borderColor: '$borderColor',
+          borderRadius: 15,
+        }}
+        onLayout={onLayout}
+      >
+        <View
+          flexGrow={sm ? 1 : 0}
+          flexBasis={125}
+          gap="$4"
+          flexDirection="column"
+          borderRadius="$4"
+        >
+          <Image
+            borderRadius={10}
+            backgroundColor="$color1"
+            objectFit="cover"
+            height={150}
+            $platform-native={{
+              minWidth: layoutWidth,
+            }}
+            $group-window-gtMd={{
+              minWidth: 'inherit',
+            }}
+            source={{ uri: imageUrl ?? '' }}
+          />
         </View>
-      </Card>
+
+        <View flex={1} flexBasis={240} justifyContent="center" gap="$2">
+          <View
+            flexDirection="row"
+            alignItems="center"
+            gap="$2"
+            $group-window-xs={{
+              justifyContent: 'space-between',
+              width: '100%',
+            }}
+          >
+            <Text
+              fontSize="$5"
+              $gtMd={{
+                fontSize: '$7',
+              }}
+              fontWeight="600"
+            >
+              {event.name}
+            </Text>
+          </View>
+
+          <XStack display="flex" ai="center" gap="$2">
+            <Clock size={15} />
+            <Text fontSize="$1">{formatTime(event.startTime)}</Text>
+          </XStack>
+
+          <XStack display="flex" ai="center" gap="$2">
+            <MapPin size={15} />
+            <Text fontSize="$1">{event.location}</Text>
+          </XStack>
+        </View>
+
+        <View justifyContent="center" gap="$5">
+          <Button
+            onPress={() => {
+              if (event.userRole === 'host') {
+                setManagedEventId(event.id);
+              }
+            }}
+          >
+            {event.userRole === 'host' ? 'Manage Event' : 'View Ticket'}
+          </Button>
+        </View>
+      </View>
     );
+  };
+
+  const { sm, xs, gtSm, gtXs } = useMedia();
+  const [layoutWidth, setLayoutWidth] = useState(0);
+
+  const onLayout = (event) => {
+    const { width } = event.nativeEvent.layout;
+    setLayoutWidth(width);
   };
 
   return (
@@ -263,12 +355,12 @@ export const MyEventsScreen = () => {
           </Tabs.List>
 
           <Tabs.Content value="upcoming">
-            {groupEventsByDate(upcomingEvents).map(([dateKey, events]) => (
+            {groupEventsByDate(pastEvents).map(([dateKey, events]) => (
               <View key={dateKey} pos="relative">
-                <View pos="absolute" bottom={0} left={4} top={16} w="$0.25" bg="$borderColor" />
+                <View pos="absolute" bottom={0} left={4} top={16} w="$0.25" bg="$gray6" />
 
                 <View mb="$9">
-                  <View pos="relative" pl="$5">
+                  <View pos="relative" pl="$8">
                     <View
                       bg="$green10"
                       pos="absolute"
@@ -279,22 +371,16 @@ export const MyEventsScreen = () => {
                       borderRadius="$5"
                     />
                     <View mb="$4">
-                      <Paragraph fontSize="$4">{formatDate(events[0]?.startTime ?? '')}</Paragraph>
+                      <Text fontSize="$2">{formatDate(events[0]?.startTime ?? '')}</Text>
                       <Text fontSize="$2">{getDayOfWeek(events[0]?.startTime ?? '')}</Text>
                     </View>
                     {events.map((event) => (
-                      <EventCard key={event.id} event={event} />
+                      <EventCard key={event.id} event={event} isPast />
                     ))}
                   </View>
                 </View>
               </View>
             ))}
-
-            {upcomingEvents.length === 0 && (
-              <Text py="$12" ai="center">
-                No upcoming events
-              </Text>
-            )}
           </Tabs.Content>
 
           <Tabs.Content value="past" className="space-y-0">
