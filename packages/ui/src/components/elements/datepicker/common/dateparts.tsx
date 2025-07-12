@@ -1,11 +1,11 @@
-import type { DatePickerProviderProps } from '@rehookify/datepicker'
+import type { DatePickerProviderProps } from '@rehookify/datepicker';
 import {
   DatePickerProvider as _DatePickerProvider,
   useDatePickerContext,
-} from '@rehookify/datepicker'
-import { Calendar, ChevronLeft, ChevronRight, X } from '@tamagui/lucide-icons'
-import type { GestureReponderEvent } from '@tamagui/web'
-import type { PopoverProps } from 'tamagui'
+} from '@rehookify/datepicker';
+import { Calendar, ChevronLeft, ChevronRight, X } from '@tamagui/lucide-icons';
+import type { GestureReponderEvent } from '@tamagui/web';
+import type { PopoverProps } from 'tamagui';
 import {
   Adapt,
   AnimatePresence,
@@ -16,28 +16,28 @@ import {
   createStyledContext,
   styled,
   withStaticProperties,
-} from 'tamagui'
+} from 'tamagui';
 
-import { useDateAnimation } from './datePickerUtils'
-import { Input } from '../../../forms/inputs/components/inputsParts'
+import { useDateAnimation } from './datePickerUtils';
+import { Input } from '../../../forms/inputs/components/inputsParts';
 
 /** rehookify internally return `onClick` and that's incompatible with native */
 
 export function swapOnClick<D>(d: D) {
   //@ts-ignore
-  d.onPress = d.onClick
-  return d
+  d.onPress = d.onClick;
+  return d;
 }
 
-const DatePickerProvider = _DatePickerProvider as React.ComponentType<DatePickerProviderProps>
+const DatePickerProvider = _DatePickerProvider as React.ComponentType<DatePickerProviderProps>;
 
-type DatePickerProps = PopoverProps & { config: DatePickerProviderProps['config'] }
+type DatePickerProps = PopoverProps & { config: DatePickerProviderProps['config'] };
 
 export const { Provider: HeaderTypeProvider, useStyledContext: useHeaderType } =
-  createStyledContext({ type: 'day', setHeader: (_: 'day' | 'month' | 'year') => {} })
+  createStyledContext({ type: 'day', setHeader: (_: 'day' | 'month' | 'year') => {} });
 
 const DatePickerImpl = (props: DatePickerProps) => {
-  const { children, config, ...rest } = props
+  const { children, config, ...rest } = props;
 
   return (
     <Popover keepChildrenMounted size="$5" allowFlip {...rest}>
@@ -60,10 +60,10 @@ const DatePickerImpl = (props: DatePickerProps) => {
       {/* for desktop view */}
       <DatePickerProvider config={config}>{children}</DatePickerProvider>
     </Popover>
-  )
-}
+  );
+};
 
-const Trigger = Popover.Trigger
+const Trigger = Popover.Trigger;
 
 const DatePickerContent = styled(Popover.Content, {
   animation: [
@@ -74,7 +74,7 @@ const DatePickerContent = styled(Popover.Content, {
       },
     },
   ],
-  zIndex: 100_000 + 1,
+  zIndex: 200_000, // So it shows up above the sheet
   variants: {
     unstyled: {
       false: {
@@ -90,7 +90,7 @@ const DatePickerContent = styled(Popover.Content, {
   defaultVariants: {
     unstyled: process.env.TAMAGUI_HEADLESS === '1',
   },
-})
+});
 
 export const DatePicker = withStaticProperties(DatePickerImpl, {
   Trigger,
@@ -100,14 +100,14 @@ export const DatePicker = withStaticProperties(DatePickerImpl, {
       borderColor: '$borderColor',
     }),
   }),
-}) as any
+}) as any;
 
 type DatePickerInputProps = {
-  onReset: () => void
-  onButtonPress?: (e: GestureReponderEvent) => void
-}
+  onReset: () => void;
+  onButtonPress?: (e: GestureReponderEvent) => void;
+};
 export const DatePickerInput = Input.Area.styleable<DatePickerInputProps>((props, ref) => {
-  const { value, onButtonPress, size = '$3', onReset, ...rest } = props
+  const { value, onButtonPress, size = '$3', onReset, ...rest } = props;
   return (
     <View $platform-native={{ minWidth: '100%' }}>
       <Input size={size}>
@@ -119,10 +119,10 @@ export const DatePickerInput = Input.Area.styleable<DatePickerInputProps>((props
             <Input.Button
               onPress={(e) => {
                 if (value) {
-                  e.stopPropagation()
-                  onReset()
+                  e.stopPropagation();
+                  onReset();
                 } else {
-                  onButtonPress?.(e)
+                  onButtonPress?.(e);
                 }
               }}
             >
@@ -140,22 +140,22 @@ export const DatePickerInput = Input.Area.styleable<DatePickerInputProps>((props
         </Input.Box>
       </Input>
     </View>
-  )
-})
+  );
+});
 
 export function MonthPicker({
   onChange = (e, date) => {},
 }: {
-  onChange?: (e: MouseEvent, date: Date) => void
+  onChange?: (e: MouseEvent, date: Date) => void;
 }) {
   const {
     data: { months },
     propGetters: { monthButton },
-  } = useDatePickerContext()
+  } = useDatePickerContext();
 
   const { prevNextAnimation, prevNextAnimationKey } = useDateAnimation({
     listenTo: 'year',
-  })
+  });
 
   return (
     <AnimatePresence key={prevNextAnimationKey}>
@@ -193,23 +193,23 @@ export function MonthPicker({
         ))}
       </View>
     </AnimatePresence>
-  )
+  );
 }
 
 export function YearPicker({
   onChange = () => {},
 }: {
-  onChange?: (e: MouseEvent, date: Date) => void
+  onChange?: (e: MouseEvent, date: Date) => void;
 }) {
   const {
     data: { years, calendars },
     propGetters: { yearButton },
-  } = useDatePickerContext()
-  const selectedYear = calendars[0].year
+  } = useDatePickerContext();
+  const selectedYear = calendars[0].year;
 
   const { prevNextAnimation, prevNextAnimationKey } = useDateAnimation({
     listenTo: 'years',
-  })
+  });
 
   return (
     <AnimatePresence key={prevNextAnimationKey}>
@@ -246,13 +246,13 @@ export function YearPicker({
         ))}
       </View>
     </AnimatePresence>
-  )
+  );
 }
 export function YearRangeSlider() {
   const {
     data: { years },
     propGetters: { previousYearsButton, nextYearsButton },
-  } = useDatePickerContext()
+  } = useDatePickerContext();
 
   return (
     <View flexDirection="row" width="100%" alignItems="center" justifyContent="space-between">
@@ -270,16 +270,16 @@ export function YearRangeSlider() {
         </Button.Icon>
       </Button>
     </View>
-  )
+  );
 }
 
 export function YearSlider() {
   const {
     data: { calendars },
     propGetters: { subtractOffset },
-  } = useDatePickerContext()
-  const { setHeader } = useHeaderType()
-  const { year } = calendars[0]
+  } = useDatePickerContext();
+  const { setHeader } = useHeaderType();
+  const { year } = calendars[0];
 
   return (
     <View
@@ -313,5 +313,5 @@ export function YearSlider() {
         </Button.Icon>
       </Button>
     </View>
-  )
+  );
 }
