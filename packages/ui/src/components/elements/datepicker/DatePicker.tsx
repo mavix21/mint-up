@@ -1,11 +1,11 @@
 // tamagui-ignore
-import { useDatePickerContext } from '@rehookify/datepicker'
-import type { DPDay, DPDayInteger } from '@rehookify/datepicker'
-import { ChevronLeft, ChevronRight } from '@tamagui/lucide-icons'
-import { useEffect, useMemo, useState, forwardRef } from 'react'
-import { AnimatePresence, Button, View, SizableText, XStack, YStack } from 'tamagui'
+import { useDatePickerContext } from '@rehookify/datepicker';
+import type { DPDay, DPDayInteger } from '@rehookify/datepicker';
+import { ChevronLeft, ChevronRight } from '@tamagui/lucide-icons';
+import { useEffect, useMemo, useState, forwardRef } from 'react';
+import { AnimatePresence, Button, View, SizableText, XStack, YStack } from 'tamagui';
 
-import { useDateAnimation } from './common/datePickerUtils'
+import { useDateAnimation } from './common/datePickerUtils';
 import {
   DatePicker,
   DatePickerInput,
@@ -15,18 +15,18 @@ import {
   useHeaderType,
   HeaderTypeProvider,
   MonthPicker,
-} from './common/dateparts'
+} from './common/dateparts';
 
 function CalendarHeader() {
   const {
     data: { calendars } = { calendars: [] },
     propGetters: { subtractOffset },
-  } = useDatePickerContext()
-  const { type: header, setHeader } = useHeaderType()
-  const { year, month } = calendars?.[0] || {}
+  } = useDatePickerContext();
+  const { type: header, setHeader } = useHeaderType();
+  const { year, month } = calendars?.[0] || {};
 
   if (header === 'year') {
-    return <YearRangeSlider />
+    return <YearRangeSlider />;
   }
 
   if (header === 'month') {
@@ -34,7 +34,7 @@ function CalendarHeader() {
       <SizableText width="100%" ta="center" userSelect="auto" tabIndex={0} size="$8">
         Select a month
       </SizableText>
-    )
+    );
   }
 
   return (
@@ -85,33 +85,33 @@ function CalendarHeader() {
         </Button.Icon>
       </Button>
     </XStack>
-  )
+  );
 }
 
 function DayPicker() {
   const {
     data: { calendars, weekDays },
     propGetters: { dayButton },
-  } = useDatePickerContext()
+  } = useDatePickerContext();
 
-  const { days } = calendars[0]
+  const { days } = calendars[0];
 
   const { prevNextAnimation, prevNextAnimationKey } = useDateAnimation({
     listenTo: 'month',
-  })
+  });
 
   // divide days array into sub arrays that each has 7 days, for better stylings
   const subDays = useMemo(
     () =>
       days.reduce((acc, day, i) => {
         if (i % 7 === 0) {
-          acc.push([])
+          acc.push([]);
         }
-        acc[acc.length - 1].push(day)
-        return acc
+        acc[acc.length - 1].push(day);
+        return acc;
       }, [] as DPDay[][]),
     [days]
-  )
+  );
 
   return (
     <AnimatePresence key={prevNextAnimationKey}>
@@ -147,16 +147,16 @@ function DayPicker() {
                   </Button>
                 ))}
               </View>
-            )
+            );
           })}
         </View>
       </View>
     </AnimatePresence>
-  )
+  );
 }
 
 function DatePickerBody() {
-  const [header, setHeader] = useState<'day' | 'month' | 'year'>('day')
+  const [header, setHeader] = useState<'day' | 'month' | 'year'>('day');
 
   return (
     <HeaderTypeProvider type={header} setHeader={setHeader}>
@@ -167,7 +167,7 @@ function DatePickerBody() {
         {header === 'day' && <DayPicker />}
       </YStack>
     </HeaderTypeProvider>
-  )
+  );
 }
 
 /** ------ EXAMPLE ------ */
@@ -183,40 +183,40 @@ export const DatePickerExample = forwardRef(
       id,
       ...props
     }: {
-      disabled: boolean
-      placeholderTextColor?: string
-      value: string | undefined
-      onChangeText: (dateValue: string) => void
-      onBlur: () => void
-      placeholder?: string
-      id: string
-      [key: string]: any
+      disabled: boolean;
+      placeholderTextColor?: string;
+      value: string | undefined;
+      onChangeText: (dateValue: string) => void;
+      onBlur: () => void;
+      placeholder?: string;
+      id: string;
+      [key: string]: any;
     },
     ref: React.Ref<HTMLInputElement>
   ) => {
-    const [selectedDates, onDatesChange] = useState<Date[]>([])
-    const [open, setOpen] = useState(false)
+    const [selectedDates, onDatesChange] = useState<Date[]>([]);
+    const [open, setOpen] = useState(false);
 
     useEffect(() => {
-      setOpen(false)
-    }, [selectedDates])
+      setOpen(false);
+    }, [selectedDates]);
 
     const datePickerConfig: {
-      selectedDates: Date[]
-      onDatesChange: (dates: Date[]) => void
+      selectedDates: Date[];
+      onDatesChange: (dates: Date[]) => void;
       calendar: {
-        startDay: DPDayInteger
-      }
+        startDay: DPDayInteger;
+      };
     } = {
       selectedDates,
       onDatesChange: (dates) => {
-        onDatesChange(dates)
-        onChangeText(dates[0]?.toISOString().split('T')[0] || '')
+        onDatesChange(dates);
+        onChangeText(dates[0]?.toISOString().split('T')[0] || '');
       },
       calendar: {
         startDay: 1,
       },
-    }
+    };
 
     return (
       <DatePicker keepChildrenMounted open={open} onOpenChange={setOpen} config={datePickerConfig}>
@@ -233,6 +233,6 @@ export const DatePickerExample = forwardRef(
           <DatePickerBody />
         </DatePicker.Content>
       </DatePicker>
-    )
+    );
   }
-)
+);
