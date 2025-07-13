@@ -19,10 +19,15 @@ import {
   ImagePickerField,
   ImagePickerSchema,
 } from '@my/ui/src/components/FormFields/ImagePickerField';
+import { TimePickerField } from '@my/ui/src/components/FormFields/TimePickerField';
 import { createTsForm, createUniqueFieldSchema } from '@ts-react/form';
 import type { ComponentProps } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { z } from 'zod';
+
+export const TimeSchema = z.object({
+  timeValue: z.string().regex(/^([01]\d|2[0-3]):([0-5]\d)$/), // HH:mm format
+});
 
 export const formFields = {
   text: z.string(),
@@ -52,6 +57,7 @@ export const formFields = {
    */
   address: createUniqueFieldSchema(AddressSchema, 'address'),
   date: createUniqueFieldSchema(DateSchema, 'date'),
+  time: createUniqueFieldSchema(TimeSchema, 'time'),
   image: createUniqueFieldSchema(ImagePickerSchema, 'image'),
 };
 
@@ -69,6 +75,7 @@ const mapping = [
   [formFields.select, SelectField] as const,
   [formFields.address, AddressField] as const,
   [formFields.date, DateField] as const,
+  [formFields.time, TimePickerField] as const,
   [formFields.image, ImagePickerField] as const,
 ] as const;
 
