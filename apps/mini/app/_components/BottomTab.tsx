@@ -14,7 +14,7 @@ export const BottomTab = ({ isCenter, Icon, label, isActive, onClick }: BottomTa
       {isCenter ? (
         // Center button with special styling
         <YStack position="absolute" bottom={0}>
-          <Button circular={isCenter} icon={Icon} onPress={onClick} size="$6" />
+          <Button theme="green" circular={isCenter} icon={Icon} onPress={onClick} size="$6" />
         </YStack>
       ) : (
         // Regular tabs
