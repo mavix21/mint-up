@@ -8,6 +8,7 @@ import { z } from 'zod';
 const CreatePostSchema = z.object({
   title: formFields.text.min(10).describe('Name // Your post title'),
   content: formFields.textarea.describe('Description // Content of your post'),
+  start_time: formFields.time.describe('Start Time // Start time of your post'),
   category_id: formFields.select.describe('Category // Category of your post'),
   image_url: formFields.image.describe('Image URL // Image URL of your post'),
 });
