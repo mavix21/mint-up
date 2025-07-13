@@ -35,8 +35,9 @@ export default function HomePage() {
           setActiveTab={(tab) => {
             if (tab === 'create') {
               setOpen(true);
+            } else {
+              setActiveTab(tab);
             }
-            setActiveTab(tab);
           }}
         />
         {activeTab === 'my-events' && <MyEventsScreen />}
