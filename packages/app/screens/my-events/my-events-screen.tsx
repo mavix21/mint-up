@@ -311,7 +311,13 @@ export const MyEventsScreen = () => {
           </XStack>
         </View>
 
-        <View justifyContent="center" gap="$5">
+        <View
+          justifyContent="center"
+          gap="$5"
+          $xs={{
+            width: '100%',
+          }}
+        >
           <Button
             onPress={() => {
               if (event.userRole === 'host') {

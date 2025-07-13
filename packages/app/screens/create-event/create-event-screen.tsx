@@ -22,6 +22,7 @@ export function CreateEventScreen() {
         defaultValues={{
           title: '',
           description: '',
+          location: '',
         }}
         props={{
           date: {

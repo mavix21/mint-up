@@ -1,5 +1,5 @@
 import { XStack, YStack } from '@my/ui';
-import { Home, Plus, Search } from '@tamagui/lucide-icons';
+import { Calendar, Home, Plus, Search } from '@tamagui/lucide-icons';
 
 import { BottomTab } from './BottomTab';
 
@@ -12,7 +12,7 @@ export function BottomTabNav({ activeTab, setActiveTab }: BottomTabNavProps) {
   return (
     <YStack
       bg="$color2"
-      position="absolute"
+      position={'fixed' as any}
       insetInline={0}
       bottom={0}
       borderTopWidth={1}
@@ -21,17 +21,11 @@ export function BottomTabNav({ activeTab, setActiveTab }: BottomTabNavProps) {
     >
       <XStack flex={1} alignItems="center" justifyContent="space-around" py="$2">
         <BottomTab
-          onClick={() => setActiveTab('home')}
-          isActive={activeTab === 'home'}
-          Icon={<Home />}
-          label="Home"
+          onClick={() => setActiveTab('my-events')}
+          isActive={activeTab === 'my-events'}
+          Icon={<Calendar />}
+          label="My Events"
         />
-        {/* <BottomTab
-        onClick={() => setActiveTab(Tab.Actions)}
-        isActive={activeTab === Tab.Actions}
-        Icon={Zap}
-        label="Actions"
-      /> */}
         <BottomTab
           onClick={() => setActiveTab('create')}
           isActive={activeTab === 'create'}

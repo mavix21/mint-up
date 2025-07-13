@@ -1,41 +1,57 @@
-import * as DocumentPicker from 'expo-document-picker'
-import * as ImagePicker from 'expo-image-picker'
-import type { DropzoneInputProps, DropzoneRootProps } from 'react-dropzone'
-import { useEvent } from 'tamagui'
+import * as DocumentPicker from 'expo-document-picker';
+import * as ImagePicker from 'expo-image-picker';
+import type { DropzoneInputProps, DropzoneRootProps } from 'react-dropzone';
+import { useEvent } from 'tamagui';
 
-import { useDropZone } from '../useDropZone'
+import { useDropZone } from '../useDropZone';
+import { validateNativeFiles } from '../validationUtils';
 
-export type MediaTypeOptions = 'All' | 'Videos' | 'Images' | 'Audios'
+export type MediaTypeOptions = 'All' | 'Videos' | 'Images' | 'Audios';
 export type UseFilePickerControl = {
-  open: () => void
-  getInputProps: <T extends DropzoneInputProps>(props?: T | undefined) => T
-  getRootProps: <T extends DropzoneRootProps>(props?: T | undefined) => T
+  open: () => void;
+  getInputProps: <T extends DropzoneInputProps>(props?: T | undefined) => T;
+  getRootProps: <T extends DropzoneRootProps>(props?: T | undefined) => T;
   dragStatus?: {
-    isDragAccept: boolean
-    isDragActive: boolean
-    isDragReject: boolean
-  }
-  typeOfPicker: 'file' | 'image'
-}
+    isDragAccept: boolean;
+    isDragActive: boolean;
+    isDragReject: boolean;
+  };
+  typeOfPicker: 'file' | 'image';
+};
 
 type NativeFiles<MT extends MediaTypeOptions[]> = MT[number] extends 'Images'
   ? ImagePicker.ImagePickerResult['assets']
-  : //@ts-ignore
-    DocumentPicker.DocumentResult[]
+  : //@ts-expect-error reason: DocumentPicker.DocumentResult is not defined in the types
+    DocumentPicker.DocumentResult[];
 export type OnPickType<MT extends MediaTypeOptions[]> = (param: {
-  webFiles: File[] | null
-  nativeFiles: NativeFiles<MT> | null
-}) => void | Promise<void>
+  webFiles: File[] | null;
+  nativeFiles: NativeFiles<MT> | null;
+}) => void | Promise<void>;
 type UseFilePickerProps<MT extends MediaTypeOptions> = {
-  mediaTypes: MT[]
-  onPick: OnPickType<MT[]>
+  mediaTypes: MT[];
+  onPick: OnPickType<MT[]>;
   /** multiple only works for image only types on native, but on web it works regarding the media types */
-  multiple: boolean
-  typeOfPicker: 'file' | 'image'
-}
+  multiple: boolean;
+  typeOfPicker: 'file' | 'image';
+  onError?: (error: Error) => void;
+  maxFileSize?: number; // in bytes, per file
+  maxFiles?: number; // max number of files
+  allowedExtensions?: string[]; // e.g., ['jpg', 'png']
+  validateFile?: (file: File) => boolean | string; // custom validation
+};
 
 export function useFilePicker<MT extends MediaTypeOptions>(props?: UseFilePickerProps<MT>) {
-  const { mediaTypes, onPick, typeOfPicker, ...rest } = props || {}
+  const {
+    mediaTypes,
+    onPick,
+    typeOfPicker,
+    onError,
+    maxFileSize,
+    maxFiles,
+    allowedExtensions,
+    validateFile,
+    ...rest
+  } = props || {};
 
   // const _onDrop = useEvent((webFiles) => {
   //   if (onPick) {
@@ -55,33 +71,56 @@ export function useFilePicker<MT extends MediaTypeOptions>(props?: UseFilePicker
   // })
 
   const _onOpenNative = useEvent((nativeFiles) => {
-    if (onPick) {
-      onPick({ webFiles: null, nativeFiles })
+    try {
+      if (nativeFiles) {
+        validateNativeFiles(nativeFiles, {
+          maxFileSize,
+          maxFiles,
+          allowedExtensions,
+          validateFile,
+        } as UseFilePickerProps<any>);
+      }
+      if (onPick) {
+        onPick({ webFiles: null, nativeFiles });
+      }
+    } catch (error) {
+      if (onError && error instanceof Error) {
+        onError(error);
+      } else {
+        console.error('useFilePicker.native: Error in onPick (native):', error);
+      }
     }
-  })
+  });
 
   const { open, getInputProps, getRootProps, isDragAccept, isDragActive, isDragReject } =
     useDropZone({
       onOpen: _onOpenNative,
-      // @ts-ignore
       mediaTypes,
       noClick: true,
       ...rest,
-    })
+    });
 
   const _handleOpenNative = async () => {
-    // No permissions request is necessary for launching the image or document library
-    if (typeOfPicker === 'image') {
-      const result = await ImagePicker.launchImageLibraryAsync({
-        quality: 1,
-        allowsMultipleSelection: true,
-      })
-      _onOpenNative(result.assets)
-    } else {
-      const result = await DocumentPicker.getDocumentAsync()
-      _onOpenNative(result.assets)
+    try {
+      if (typeOfPicker === 'image') {
+        const result = await ImagePicker.launchImageLibraryAsync({
+          quality: 1,
+          allowsEditing: true,
+          aspect: [1, 1],
+        });
+        _onOpenNative(result.assets?.map((asset) => asset));
+      } else {
+        const result = await DocumentPicker.getDocumentAsync();
+        _onOpenNative(result.assets);
+      }
+    } catch (error) {
+      if (onError && error instanceof Error) {
+        onError(error);
+      } else {
+        console.error('useFilePicker.native: Error in _handleOpenNative:', error);
+      }
     }
-  }
+  };
 
   const control = {
     dragStatus: {
@@ -92,7 +131,7 @@ export function useFilePicker<MT extends MediaTypeOptions>(props?: UseFilePicker
     getInputProps: () => null,
     getRootProps: () => null,
     open: _handleOpenNative,
-  }
+  };
 
-  return { control, ...control }
+  return { control, ...control };
 }
