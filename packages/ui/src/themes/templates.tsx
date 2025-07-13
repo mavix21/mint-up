@@ -1,14 +1,14 @@
-import { objectFromEntries, objectKeys } from './helpers'
+import { objectFromEntries, objectKeys } from './helpers';
 
 export const getTemplates = (scheme: 'dark' | 'light') => {
-  const isLight = scheme === 'light'
+  const isLight = scheme === 'light';
 
   // our palettes have 4 things padding each end until you get to bg/color:
   // [accentBg, transparent1, transparent2, transparent3, transparent4, background, ...]
-  const bgIndex = 5
-  const lighten = isLight ? -1 : 1
-  const darken = -lighten
-  const borderColor = bgIndex + 3
+  const bgIndex = 5;
+  const lighten = isLight ? -1 : 1;
+  const darken = -lighten;
+  const borderColor = bgIndex + 3;
 
   // templates use the palette and specify index
   // negative goes backwards from end so -1 is the last item
@@ -55,7 +55,7 @@ export const getTemplates = (scheme: 'dark' | 'light') => {
     colorTransparent: -1,
     placeholderColor: -bgIndex - 3,
     outlineColor: -2,
-  }
+  };
 
   const surface1 = {
     background: base.background + 1,
@@ -66,7 +66,7 @@ export const getTemplates = (scheme: 'dark' | 'light') => {
     borderColorHover: base.borderColorHover + 1,
     borderColorFocus: base.borderColorFocus + 1,
     borderColorPress: base.borderColorPress + 1,
-  }
+  };
 
   const surface2 = {
     background: base.background + 2,
@@ -77,7 +77,7 @@ export const getTemplates = (scheme: 'dark' | 'light') => {
     borderColorHover: base.borderColorHover + 2,
     borderColorFocus: base.borderColorFocus + 2,
     borderColorPress: base.borderColorPress + 2,
-  }
+  };
 
   const surface3 = {
     background: base.background + 3,
@@ -88,14 +88,14 @@ export const getTemplates = (scheme: 'dark' | 'light') => {
     borderColorHover: base.borderColorHover + 3,
     borderColorFocus: base.borderColorFocus + 3,
     borderColorPress: base.borderColorPress + 3,
-  }
+  };
 
   const surfaceActiveBg = {
     background: base.background + 5,
     backgroundHover: base.background + 5,
     backgroundPress: base.backgroundPress + 5,
     backgroundFocus: base.backgroundFocus + 5,
-  }
+  };
 
   const surfaceActive = {
     ...surfaceActiveBg,
@@ -104,7 +104,7 @@ export const getTemplates = (scheme: 'dark' | 'light') => {
     borderColorHover: surfaceActiveBg.backgroundHover,
     borderColorFocus: surfaceActiveBg.backgroundFocus,
     borderColorPress: surfaceActiveBg.backgroundPress,
-  }
+  };
 
   const inverseSurface1 = {
     color: surface1.background,
@@ -119,7 +119,7 @@ export const getTemplates = (scheme: 'dark' | 'light') => {
     borderColorHover: base.color - 3,
     borderColorFocus: base.color - 4,
     borderColorPress: base.color - 5,
-  }
+  };
 
   const inverseActive = {
     ...inverseSurface1,
@@ -131,21 +131,21 @@ export const getTemplates = (scheme: 'dark' | 'light') => {
     borderColorHover: base.color - 3 - 2,
     borderColorFocus: base.color - 4 - 2,
     borderColorPress: base.color - 5 - 2,
-  }
+  };
 
   const alt1 = {
     color: base.color - 1,
     colorHover: base.colorHover - 1,
     colorPress: base.colorPress - 1,
     colorFocus: base.colorFocus - 1,
-  }
+  };
 
   const alt2 = {
     color: base.color - 2,
     colorHover: base.colorHover - 2,
     colorPress: base.colorPress - 2,
     colorFocus: base.colorFocus - 2,
-  }
+  };
 
   return {
     base,
@@ -157,11 +157,11 @@ export const getTemplates = (scheme: 'dark' | 'light') => {
     inverseSurface1,
     inverseActive,
     surfaceActive,
-  }
-}
+  };
+};
 
-export const lightTemplates = getTemplates('light')
-export const darkTemplates = getTemplates('dark')
+export const lightTemplates = getTemplates('light');
+export const darkTemplates = getTemplates('dark');
 export const templates = {
   ...objectFromEntries(
     objectKeys(lightTemplates).map((name) => [`light_${name}`, lightTemplates[name]] as const)
@@ -169,4 +169,4 @@ export const templates = {
   ...objectFromEntries(
     objectKeys(darkTemplates).map((name) => [`dark_${name}`, darkTemplates[name]] as const)
   ),
-}
+};
