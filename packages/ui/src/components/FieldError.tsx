@@ -1,11 +1,11 @@
-import { AnimatePresence, Paragraph } from 'tamagui'
+import { AnimatePresence, Paragraph } from 'tamagui';
 
 type FieldErrorProps = {
   /**
    * error will be hidden if undefined
    */
-  message?: string
-}
+  message?: string;
+};
 
 export const FieldError = ({ message }: FieldErrorProps) => {
   return (
@@ -34,5 +34,5 @@ export const FieldError = ({ message }: FieldErrorProps) => {
         </Paragraph>
       )}
     </AnimatePresence>
-  )
-}
+  );
+};
