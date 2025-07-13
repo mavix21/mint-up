@@ -9,7 +9,7 @@ interface CreateEventSheetWrapperProps {
 
 export function CreateEventSheetWrapper({ open, setOpen }: CreateEventSheetWrapperProps) {
   const [position, setPosition] = useState(0);
-  const snapPoints = [95, 50, 25];
+  const snapPoints = [98, 50, 25];
 
   return (
     <Sheet
