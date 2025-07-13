@@ -1,6 +1,6 @@
-import { useHeaderHeight as useHeaderHeightOG } from '@react-navigation/elements'
-import { createContext, forwardRef, useContext, useState } from 'react'
-import { KeyboardAvoidingView, Platform } from 'react-native'
+import { useHeaderHeight as useHeaderHeightOG } from '@react-navigation/elements';
+import { createContext, forwardRef, useContext, useState } from 'react';
+import { KeyboardAvoidingView, Platform } from 'react-native';
 import {
   ScrollView,
   TamaguiElement,
@@ -8,18 +8,18 @@ import {
   YStackProps,
   useWindowDimensions,
   withStaticProperties,
-} from 'tamagui'
+} from 'tamagui';
 
 const useHeaderHeight = () => {
   try {
-    return useHeaderHeightOG()
+    return useHeaderHeightOG();
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (_error) {
-    return 0
+    return 0;
   }
-}
+};
 
-const FormWrapperContext = createContext<{ height: number } | null>(null)
+const FormWrapperContext = createContext<{ height: number } | null>(null);
 /**
  * this utility component is for creating forms where we want to
  * push the action button to the bottom of the screen on native
@@ -30,13 +30,13 @@ const FormWrapperContext = createContext<{ height: number } | null>(null)
  * you may use asChild on the wrapper as well
  */
 const Wrapper = forwardRef<TamaguiElement, YStackProps>(function Wrapper(props, ref) {
-  const [height, setHeight] = useState(0)
+  const [height, setHeight] = useState(0);
 
   return (
     <FormWrapperContext.Provider value={{ height }}>
       <YStack
         onLayout={(event) => {
-          setHeight(event.nativeEvent.layout.height)
+          setHeight(event.nativeEvent.layout.height);
         }}
         ref={ref}
         gap="$4"
@@ -51,27 +51,27 @@ const Wrapper = forwardRef<TamaguiElement, YStackProps>(function Wrapper(props, 
         {...props}
       />
     </FormWrapperContext.Provider>
-  )
-})
+  );
+});
 
 const Body = forwardRef<TamaguiElement, YStackProps>(function Body(props, ref) {
   return (
     <ScrollView>
       <YStack p="$4" ref={ref} gap="$2" pb="$8" {...props} />
     </ScrollView>
-  )
-})
+  );
+});
 
 /**
  * on native, this will be pushed to the bottom of the screen
  */
 const Footer = forwardRef<TamaguiElement, YStackProps>(function Footer(props, ref) {
-  const dimensions = useWindowDimensions()
-  const headerHeight = useHeaderHeight()
-  const formWrapperContext = useContext(FormWrapperContext)
+  const dimensions = useWindowDimensions();
+  const headerHeight = useHeaderHeight();
+  const formWrapperContext = useContext(FormWrapperContext);
   const modalOffsetFromTop = formWrapperContext
     ? dimensions.height - formWrapperContext.height
-    : headerHeight
+    : headerHeight;
 
   return (
     <KeyboardAvoidingView
@@ -88,10 +88,10 @@ const Footer = forwardRef<TamaguiElement, YStackProps>(function Footer(props, re
         {...props}
       />
     </KeyboardAvoidingView>
-  )
-})
+  );
+});
 
 export const FormWrapper = withStaticProperties(Wrapper, {
   Body,
   Footer,
-})
+});
