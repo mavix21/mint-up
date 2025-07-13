@@ -366,7 +366,7 @@ export const MyEventsScreen = () => {
                 <View pos="absolute" bottom={0} left={4} top={16} w="$0.25" bg="$gray6" />
 
                 <View mb="$9">
-                  <View pos="relative" pl="$8">
+                  <View pos="relative" pl="$6">
                     <View
                       bg="$green10"
                       pos="absolute"
@@ -392,10 +392,10 @@ export const MyEventsScreen = () => {
           <Tabs.Content value="past" className="space-y-0">
             {groupEventsByDate(pastEvents).map(([dateKey, events]) => (
               <View key={dateKey} pos="relative">
-                <View pos="absolute" bottom={0} left={4} top={16} w="$0.25" bg="$black10" />
+                <View pos="absolute" bottom={0} left={4} top={16} w="$0.25" bg="$gray6" />
 
                 <View mb="$9">
-                  <View pos="relative" pl="$8">
+                  <View pos="relative" pl="$6">
                     <View
                       bg="$green10"
                       pos="absolute"
