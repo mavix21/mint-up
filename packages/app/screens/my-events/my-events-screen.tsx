@@ -144,118 +144,17 @@ export const MyEventsScreen = () => {
     const imageUrl = isPast ? event.poapImageUrl : event.nftTicketImageUrl;
     const showDimmed = isPast && !event.poapImageUrl;
 
-    // return (
-    //   <Card mb="$4" p="$6">
-    //     <View display="flex" gap="$6">
-    //       <View flex={1} gap="$4">
-    //         <XStack display="flex" ai="center" gap="$3">
-    //           <Clock size="$1" />
-    //           <Text>{formatTime(event.startTime)}</Text>
-    //         </XStack>
-
-    //         <H3>{event.name}</H3>
-
-    //         <XStack display="flex" ai="center" gap="$3">
-    //           <MapPin size="$1" />
-    //           <Text>{event.location}</Text>
-    //         </XStack>
-
-    //         {/* Status/Stats Row */}
-    //         <View mb="$4">
-    //           {event.userRole === 'host' && event.stats && (
-    //             <View display="flex" gap="$3">
-    //               {isPast ? (
-    //                 <>
-    //                   {event.stats.attendees && (
-    //                     <View display="flex" ai="center" gap="$1">
-    //                       <Users size="$4" />
-    //                       <Text>Attendees: {event.stats.attendees}</Text>
-    //                     </View>
-    //                   )}
-    //                   {event.stats.poapsClaimed && (
-    //                     <View display="flex" ai="center" gap="$1">
-    //                       <Award size="$4" />
-    //                       <Text>POAPs: {event.stats.poapsClaimed}</Text>
-    //                     </View>
-    //                   )}
-    //                 </>
-    //               ) : (
-    //                 <XStack display="flex" ai="center" gap="$3">
-    //                   <Users size="$1" />
-    //                   <Text>
-    //                     Mints: {event.stats.mints ?? 0}
-    //                     {event.stats.capacity ? ` / ${event.stats.capacity}` : ''}
-    //                   </Text>
-    //                 </XStack>
-    //               )}
-    //             </View>
-    //           )}
-
-    //           {event.userRole === 'attendee' && isPast && (
-    //             <View>
-    //               {event.status === 'POAP_COLLECTED' && <Text fontSize="$4">POAP Collected</Text>}
-    //               {event.status === 'MISSED' && <Text fontSize="$4">Event Missed</Text>}
-    //             </View>
-    //           )}
-    //         </View>
-
-    //         <Button
-    //           size="$2"
-    //           onPress={() => {
-    //             if (event.userRole === 'host') {
-    //               setManagedEventId(event.id);
-    //             }
-    //           }}
-    //         >
-    //           {event.userRole === 'host' ? 'Manage Event' : 'View Ticket'}
-    //         </Button>
-    //       </View>
-
-    //       {/* Visual */}
-    //       <View
-    //         bg="$accentColor"
-    //         dsp="flex"
-    //         h="$4"
-    //         w="$4"
-    //         ai="center"
-    //         jc="center"
-    //         ov="hidden"
-    //         borderRadius="$4"
-    //       >
-    //         {imageUrl ? (
-    //           <Image
-    //             source={{
-    //               uri: imageUrl,
-    //               width: 100,
-    //               height: 100,
-    //             }}
-    //             width="100%"
-    //             height="100%"
-    //             objectFit="cover"
-    //           />
-    //         ) : (
-    //           <View dsp="flex" h="100%" w="100%" ai="center" jc="center">
-    //             {isPast ? <Award size="$5" /> : <Text fontSize="$2">NFT</Text>}
-    //           </View>
-    //         )}
-    //       </View>
-    //     </View>
-    //   </Card>
-    // );
-
     return (
-      <View
+      <YStack
         flexDirection="row"
         flexWrap="wrap"
         gap="$6"
-        $group-window-sm={{
-          gap: '$3',
-          paddingBottom: '$4',
-          borderWidth: 1,
-          borderColor: '$borderColor',
-          borderRadius: 15,
+        $sm={{
+          gap: '$4',
         }}
         onLayout={onLayout}
+        elevation="$4"
+        borderRadius="$5"
       >
         <View
           flexGrow={sm ? 1 : 0}
@@ -279,7 +178,15 @@ export const MyEventsScreen = () => {
           />
         </View>
 
-        <View flex={1} flexBasis={240} justifyContent="center" gap="$2">
+        <View
+          flex={1}
+          flexBasis={240}
+          justifyContent="center"
+          gap="$2"
+          $xs={{
+            px: '$4',
+          }}
+        >
           <View
             flexDirection="row"
             alignItems="center"
@@ -314,8 +221,11 @@ export const MyEventsScreen = () => {
         <View
           justifyContent="center"
           gap="$5"
+          mr="$4"
           $xs={{
             width: '100%',
+            px: '$2',
+            pb: '$4',
           }}
         >
           <Button
@@ -328,7 +238,7 @@ export const MyEventsScreen = () => {
             {event.userRole === 'host' ? 'Manage Event' : 'View Ticket'}
           </Button>
         </View>
-      </View>
+      </YStack>
     );
   };
 
