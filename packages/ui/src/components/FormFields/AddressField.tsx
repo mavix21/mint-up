@@ -1,25 +1,25 @@
-import { useFieldInfo, useTsController } from '@ts-react/form'
-import { useId } from 'react'
-import { Fieldset, Input, InputProps, Label, Theme, XStack } from 'tamagui'
-import { z } from 'zod'
+import { useFieldInfo, useTsController } from '@ts-react/form';
+import { useId } from 'react';
+import { Fieldset, Input, InputProps, Label, Theme, XStack } from 'tamagui';
+import { z } from 'zod';
 
-import { FieldError } from '../FieldError'
-import { Shake } from '../Shake'
+import { FieldError } from '../FieldError';
+import { Shake } from '../Shake';
 
 export const AddressSchema = z.object({
   street: z.string().min(4),
   zipCode: z.string().regex(/\d{5}/, 'ZIP code should contain only 5 integers'),
-})
+});
 
 export const AddressField = (props: Pick<InputProps, 'size'>) => {
   const {
     field,
     error,
     formState: { isSubmitting },
-  } = useTsController<z.infer<typeof AddressSchema>>()
-  const { label } = useFieldInfo()
-  const id = useId()
-  const disabled = isSubmitting
+  } = useTsController<z.infer<typeof AddressSchema>>();
+  const { label } = useFieldInfo();
+  const id = useId();
+  const disabled = isSubmitting;
 
   return (
     <Fieldset gap="$2">
@@ -73,5 +73,5 @@ export const AddressField = (props: Pick<InputProps, 'size'>) => {
         </Theme>
       </XStack>
     </Fieldset>
-  )
-}
+  );
+};
