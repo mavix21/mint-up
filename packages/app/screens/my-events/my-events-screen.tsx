@@ -1,5 +1,3 @@
-import React from 'react';
-import { Clock, MapPin } from '@tamagui/lucide-icons';
 import {
   H3,
   Tabs,
@@ -13,6 +11,9 @@ import {
   Theme,
   Sheet,
 } from '@my/ui';
+import { Clock, MapPin } from '@tamagui/lucide-icons';
+import React from 'react';
+
 import { MyEventScreen } from '../my-event/my-event-screen';
 
 interface EventStats {
