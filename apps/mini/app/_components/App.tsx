@@ -9,8 +9,8 @@ export default function App() {
       flex={1}
       justifyContent="center"
       alignItems="center"
-      height={'100vh' as any}
       position="relative"
+      minHeight={'100vh' as any}
       gap={20}
       bg="$background"
     >
