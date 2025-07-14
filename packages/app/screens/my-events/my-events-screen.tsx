@@ -1,17 +1,5 @@
-import {
-  H3,
-  Tabs,
-  Text,
-  View,
-  YStack,
-  Button,
-  Image,
-  XStack,
-  useMedia,
-  Theme,
-  Sheet,
-} from '@my/ui';
-import { Clock, MapPin } from '@tamagui/lucide-icons';
+import { H3, Tabs, Text, View, YStack, Button, Image, XStack, Theme, Sheet } from '@my/ui';
+import { ArrowRight, Clock, MapPin } from '@tamagui/lucide-icons';
 import React from 'react';
 
 import { MyEventScreen } from '../my-event/my-event-screen';
@@ -149,95 +137,95 @@ export const MyEventsScreen = () => {
     isPast?: boolean;
     index: number;
   }) => {
-    const imageUrl = isPast ? event.poapImageUrl : event.nftTicketImageUrl;
+    // const imageUrl = isPast ? event.poapImageUrl : event.nftTicketImageUrl;
+    const imageUrl = event.poapImageUrl ?? event.nftTicketImageUrl;
     const showDimmed = isPast && !event.poapImageUrl;
     console.log(index);
     return (
       <>
         <YStack
-          flexDirection="row"
-          flexWrap="wrap"
-          gap="$6"
-          $sm={{
+          gap="$2"
+          $xxs={{
+            padding: '$0',
+            paddingBlockEnd: '$4',
             gap: '$4',
           }}
-          onLayout={onLayout}
+          padding="$4"
           elevation="$2"
           borderRadius="$5"
+          borderColor="$color6"
+          borderWidth={1}
+          borderStyle="solid"
+          backgroundColor="$color2"
         >
-          <View
-            flexGrow={sm ? 1 : 0}
-            flexBasis={125}
+          <XStack
+            flexDirection="row-reverse"
+            $xxs={{ flexDirection: 'column', alignItems: 'stretch' }}
+            alignItems="center"
             gap="$4"
-            flexDirection="column"
-            borderRadius="$4"
-          >
-            <Image
-              borderRadius={10}
-              backgroundColor="$color1"
-              objectFit="cover"
-              height={150}
-              $platform-native={{
-                minWidth: layoutWidth,
-              }}
-              $group-window-gtMd={{
-                minWidth: 'inherit',
-              }}
-              source={{ uri: imageUrl ?? '' }}
-            />
-          </View>
-
-          <View
-            flex={1}
-            flexBasis={240}
-            justifyContent="center"
-            gap="$2"
-            $xs={{
-              px: '$4',
-            }}
           >
             <View
-              flexDirection="row"
-              alignItems="center"
-              gap="$2"
-              $group-window-xs={{
-                justifyContent: 'space-between',
+              flexDirection="column"
+              borderRadius="$4"
+              $xxs={{
                 width: '100%',
               }}
             >
-              <Text
-                fontSize="$5"
-                $gtMd={{
-                  fontSize: '$7',
+              <Image
+                borderRadius={10}
+                backgroundColor="$color5"
+                objectFit="cover"
+                height={120}
+                aspectRatio={1}
+                $xxs={{
+                  height: 140,
+                  width: '100%',
                 }}
-                fontWeight="600"
-              >
-                {event.name}
-              </Text>
+                $group-window-gtMd={{
+                  minWidth: 'inherit',
+                }}
+                source={{ uri: imageUrl ?? '' }}
+              />
             </View>
-
-            <XStack display="flex" ai="center" gap="$2">
-              <Clock size={15} />
-              <Text fontSize="$1">{formatTime(event.startTime)}</Text>
-            </XStack>
-
-            <XStack display="flex" ai="center" gap="$2">
-              <MapPin size={15} />
-              <Text fontSize="$1">{event.location}</Text>
-            </XStack>
-          </View>
+            <View flex={1} justifyContent="flex-start" gap="$2" $xxs={{ paddingInline: '$4' }}>
+              <View
+                flexDirection="row"
+                alignItems="center"
+                gap="$2"
+                $group-window-xs={{
+                  justifyContent: 'space-between',
+                  width: '100%',
+                }}
+              >
+                <Text
+                  fontSize="$5"
+                  $gtMd={{
+                    fontSize: '$7',
+                  }}
+                  fontWeight="600"
+                >
+                  {event.name}
+                </Text>
+              </View>
+              <XStack display="flex" ai="center" gap="$2">
+                <Clock size={15} />
+                <Text fontSize="$1">{formatTime(event.startTime)}</Text>
+              </XStack>
+              <XStack display="flex" ai="center" gap="$2">
+                <MapPin size={15} />
+                <Text fontSize="$1">{event.location}</Text>
+              </XStack>
+            </View>
+          </XStack>
 
           <View
+            alignSelf="flex-start"
             justifyContent="center"
             gap="$5"
-            mr="$4"
-            $xs={{
-              width: '100%',
-              px: '$4',
-              pb: '$4',
-            }}
+            $xxs={{ paddingInline: '$4' }}
           >
             <Button
+              size="$2"
               onPress={() => {
                 if (event.userRole === 'host') {
                   setManagedEventId(event.id);
@@ -245,6 +233,7 @@ export const MyEventsScreen = () => {
                   setId(index);
                 }
               }}
+              icon={ArrowRight}
             >
               {event.userRole === 'host' ? 'Manage Event' : 'View Ticket'}
             </Button>
@@ -254,21 +243,13 @@ export const MyEventsScreen = () => {
     );
   };
 
-  const { sm, xs, gtSm, gtXs } = useMedia();
-  const [layoutWidth, setLayoutWidth] = React.useState(0);
-
-  const [id, setId] = React.useState(0);
+  const [, setId] = React.useState(0);
   const [open, setOpen] = React.useState(false);
   const [position, setPosition] = React.useState(0);
 
-  const onLayout = (event) => {
-    const { width } = event.nativeEvent.layout;
-    setLayoutWidth(width);
-  };
-
   return (
     <>
-      <YStack bg="$background" fullscreen>
+      <YStack flex={1} fullscreen maxWidth={600} marginInline="auto">
         {/* <Navigation /> */}
 
         <View px="$4" py="$8">
@@ -276,7 +257,7 @@ export const MyEventsScreen = () => {
             <H3 mb="$2">My Events</H3>
             <Text>Your digital experiences collection</Text>
           </View>
-          <Theme name="green">
+          <Theme name="green_surface1">
             <Tabs value={activeTab} onValueChange={setActiveTab} flexDirection="column">
               <Tabs.List mb="$6">
                 <Tabs.Tab value="upcoming" $xs={{ width: '50%' }}>
