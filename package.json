@@ -15,7 +15,7 @@
     "expo:prebuild": "cd apps/expo && yarn expo:prebuild",
     "watch": "npm-run-all --parallel check:type:watch watch:packages",
     "watch:packages": "ultra -r --no-pretty --concurrency 400 watch",
-    "mini": "yarn workspace mini dev",
+    "mini": "turbo watch dev -F mini...",
     "web": "yarn workspace next-app dev",
     "web:extract": "DISABLE_EXTRACTION=false yarn workspace next-app dev",
     "web:prod": "yarn workspace next-app build",

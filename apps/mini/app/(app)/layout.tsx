@@ -1,8 +1,8 @@
-import '@coinbase/onchainkit/styles.css';
 import type { Metadata } from 'next';
 
-import { MiniKitContextProvider } from '@/providers/MiniKitProvider';
-import { NextTamaguiProvider } from '@/providers/NextTamaguiProvider';
+import { Providers } from '@/providers';
+
+import '@coinbase/onchainkit/styles.css';
 
 export const metadata: Metadata = {
   title: 'Mini',
@@ -17,9 +17,7 @@ export default async function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body>
-        <NextTamaguiProvider>
-          <MiniKitContextProvider>{children}</MiniKitContextProvider>
-        </NextTamaguiProvider>
+        <Providers session={null}>{children}</Providers>
       </body>
     </html>
   );

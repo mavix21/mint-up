@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@coinbase/onchainkit": "^0.38.16",
+    "@farcaster/auth-client": "0.7.0",
     "@my/ui": "*",
     "@supabase/auth-helpers-nextjs": "^0.10.0",
     "@supabase/auth-helpers-react": "^0.5.0",
@@ -27,6 +28,7 @@
     "@trpc/server": "^10.45.2",
     "app": "*",
     "next": "15.3.2",
+    "next-auth": "^4.24.11",
     "raf": "^3.4.1",
     "react": "19.0.0",
     "react-dom": "19.0.0",
