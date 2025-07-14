@@ -85,6 +85,7 @@ module.exports = () => {
       */
     experimental: {
       scrollRestoration: true,
+      viewTransition: true,
       // optimizeCss: true,
     },
     redirects: async () => [
