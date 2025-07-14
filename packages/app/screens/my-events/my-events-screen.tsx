@@ -105,16 +105,22 @@ export const MyEventsScreen = () => {
 
   return (
     <>
-      <YStack flex={1} fullscreen maxWidth={600} marginInline="auto">
+      <YStack flex={1} fullscreen maxWidth={600} marginInline="auto" overflowBlock="hidden">
         {/* <Navigation /> */}
 
-        <View px="$4" py="$8">
+        <View px="$4" py="$8" height="100%" overflowBlock="hidden">
           <View mb="$5">
             <H3 mb="$2">My Events</H3>
             <Text>Your digital experiences collection</Text>
           </View>
           <Theme name="green_surface1">
-            <Tabs value={activeTab} onValueChange={setActiveTab} flexDirection="column">
+            <Tabs
+              value={activeTab}
+              onValueChange={setActiveTab}
+              flexDirection="column"
+              overflowBlock="hidden"
+              height="100%"
+            >
               <Tabs.List mb="$6">
                 <Tabs.Tab value="upcoming" $xs={{ width: '50%' }}>
                   <Text>Upcoming</Text>
@@ -124,7 +130,13 @@ export const MyEventsScreen = () => {
                 </Tabs.Tab>
               </Tabs.List>
 
-              <Tabs.Content value="upcoming">
+              <Tabs.Content
+                value="upcoming"
+                overflowBlock="scroll"
+                height="100%"
+                paddingInlineEnd="$4"
+                paddingBottom={160}
+              >
                 {groupEventsByDate(upcomingEvents).map(([dateKey, events], index) => (
                   <View key={dateKey} pos="relative">
                     <View pos="absolute" bottom={0} left={4} top={16} w="$0.25" bg="$gray6" />
@@ -132,7 +144,8 @@ export const MyEventsScreen = () => {
                     <View mb="$9">
                       <View pos="relative" pl="$6">
                         <View
-                          bg="$green8"
+                          theme="green"
+                          bg="$color8"
                           pos="absolute"
                           left={1}
                           top={3}
@@ -141,7 +154,7 @@ export const MyEventsScreen = () => {
                           borderRadius="$5"
                         />
                         <View mb="$4">
-                          <Text fontSize="$2" color="$green9Light">
+                          <Text fontSize="$2" color="$color11">
                             {formatDate(events[0]?.startTime ?? '')}
                           </Text>
                           <Text fontSize="$2">{getDayOfWeek(events[0]?.startTime ?? '')}</Text>
@@ -155,7 +168,14 @@ export const MyEventsScreen = () => {
                 ))}
               </Tabs.Content>
 
-              <Tabs.Content value="past" className="space-y-0">
+              <Tabs.Content
+                value="past"
+                className="space-y-0"
+                overflowBlock="scroll"
+                height="100%"
+                paddingInlineEnd="$4"
+                paddingBottom={160}
+              >
                 {groupEventsByDate(pastEvents).map(([dateKey, events], index) => (
                   <View key={dateKey} pos="relative">
                     <View pos="absolute" bottom={0} left={4} top={16} w="$0.25" bg="$gray6" />
@@ -163,8 +183,9 @@ export const MyEventsScreen = () => {
                     <View mb="$9">
                       <View pos="relative" pl="$6">
                         <View
-                          bg="$green8"
+                          bg="$color8"
                           pos="absolute"
+                          theme="green"
                           left={1}
                           top={3}
                           h="$0.75"
@@ -172,7 +193,7 @@ export const MyEventsScreen = () => {
                           borderRadius="$5"
                         />
                         <View mb="$4">
-                          <Text fontSize="$2" color="$green9Light">
+                          <Text fontSize="$2" color="$color11">
                             {formatDate(events[0]?.startTime ?? '')}
                           </Text>
                           <Text fontSize="$2">{getDayOfWeek(events[0]?.startTime ?? '')}</Text>
