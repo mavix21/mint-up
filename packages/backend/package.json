@@ -15,7 +15,7 @@
     "convex": "^1.25.2"
   },
   "devDependencies": {
-    "typescript": "catalog:"
+    "typescript": "~5.8.3"
   },
   "exports": {
     "./_generated/*": {
