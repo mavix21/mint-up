@@ -1,0 +1,35 @@
+{
+  "name": "@mint-up/convex",
+  "version": "0.0.0",
+  "description": "Convex backend",
+  "scripts": {
+    "dev": "convex dev",
+    "clean": "git clean -xdf .cache .turbo dist node_modules",
+    "format": "prettier --check . --ignore-path ../../.gitignore",
+    "setup": "convex dev --until-success",
+    "typecheck": "tsc --noEmit"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "convex": "^1.25.2"
+  },
+  "devDependencies": {
+    "typescript": "catalog:"
+  },
+  "exports": {
+    "./_generated/*": {
+      "types": "./convex/_generated/*.d.ts",
+      "default": "./convex/_generated/*.js"
+    },
+    "./nextjs": {
+      "types": "./convex/nextjs.ts",
+      "default": "./convex/nextjs.ts"
+    },
+    "./react": {
+      "types": "./convex/react.ts",
+      "default": "./convex/react.ts"
+    }
+  },
+  "prettier": "@mint-up/prettier-config"
+}
