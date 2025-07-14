@@ -1,6 +1,5 @@
 'use client';
 
-import { MyEventsScreen } from 'app/screens/my-events/my-events-screen';
 import { memo, useState } from 'react';
 
 import { BottomTabNav } from './BottomTabNav';
