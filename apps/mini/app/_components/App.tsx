@@ -11,7 +11,6 @@ export default function App() {
       alignItems="center"
       position="relative"
       minHeight={'100vh' as any}
-      gap={20}
       bg="$background"
     >
       <Navigator />
