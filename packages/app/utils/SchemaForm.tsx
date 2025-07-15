@@ -81,7 +81,7 @@ const mapping = [
 
 const FormComponent = (props: FormProps) => {
   return (
-    <Form asChild {...props} minWidth="100%">
+    <Form asChild {...props} minWidth="100%" width="100%">
       <FormWrapper tag="form">{props.children}</FormWrapper>
     </Form>
   );
