@@ -11,6 +11,7 @@ const upcomingEvents: Event[] = [
     startTime: '2025-07-25T12:30:00Z',
     location: 'UPC - Campus San Miguel',
     userRole: 'host',
+    description: 'This is a test event',
     nftTicketImageUrl:
       'https://img.freepik.com/foto-gratis/amigos-felices-tiro-medio-bebidas_23-2149481210.jpg?t=st=1752373680~exp=1752377280~hmac=ace42efe105abfcfe521907355f9c2de530d2ee3863027e943f58bb1f3eac887&w=360',
     stats: { mints: 0, capacity: null },
@@ -21,6 +22,7 @@ const upcomingEvents: Event[] = [
     startTime: '2025-07-28T18:00:00Z',
     location: 'Virtual',
     userRole: 'attendee',
+    description: 'Founders and builders',
     nftTicketImageUrl:
       'https://img.freepik.com/foto-gratis/familia-tiro-completo-celebrando-4-julio_23-2149383081.jpg?t=st=1752373560~exp=1752377160~hmac=0fa153a9d0dd5604ee8cc4ba5580a4999c3a809c9459bfcdd2603ecb8b115730&w=740',
     stats: {},
@@ -35,6 +37,7 @@ const pastEvents: Event[] = [
     location: 'Virtual',
     userRole: 'attendee',
     status: 'POAP_COLLECTED',
+    description: 'This is a test event',
     poapImageUrl: 'https://tamagui.dev/bento/images/bag/bag3.webp',
   },
   {
@@ -44,6 +47,7 @@ const pastEvents: Event[] = [
     location: 'Home',
     userRole: 'attendee',
     status: 'MISSED',
+    description: 'This is a test event',
     poapImageUrl:
       'https://img.freepik.com/foto-gratis/amigos-felices-tiro-medio-bebidas_23-2149481210.jpg?t=st=1752373680~exp=1752377280~hmac=ace42efe105abfcfe521907355f9c2de530d2ee3863027e943f58bb1f3eac887&w=360',
   },
@@ -54,6 +58,7 @@ const pastEvents: Event[] = [
     location: 'Lima, Peru',
     userRole: 'host',
     status: 'COMPLETED',
+    description: 'This is a test event',
     poapImageUrl:
       'https://img.freepik.com/foto-gratis/familia-tiro-completo-celebrando-4-julio_23-2149383081.jpg?t=st=1752373560~exp=1752377160~hmac=0fa153a9d0dd5604ee8cc4ba5580a4999c3a809c9459bfcdd2603ecb8b115730&w=740',
     stats: { attendees: 112, poapsClaimed: 105 },
