@@ -3,6 +3,7 @@ import { ArrowRight, Clock, MapPin } from '@tamagui/lucide-icons';
 import { useState } from 'react';
 import { Link } from 'solito/link';
 
+import { EventModal } from './event-modal';
 import { Event } from '../model/Event';
 
 export function EventCard({
@@ -15,6 +16,7 @@ export function EventCard({
   index: number;
 }) {
   const [managedEventId, setManagedEventId] = useState<string | null>(null);
+  const [toggleEvent, setToggleEvent] = useState(false);
   // const imageUrl = isPast ? event.poapImageUrl : event.nftTicketImageUrl;
   const imageUrl = event.poapImageUrl ?? event.nftTicketImageUrl;
   const showDimmed = isPast && !event.poapImageUrl;
@@ -35,7 +37,10 @@ export function EventCard({
         borderWidth={1}
         borderStyle="solid"
         backgroundColor="$color2"
+        onPress={() => setToggleEvent(true)}
       >
+        <EventModal toggleEvent={toggleEvent} setToggleEvent={setToggleEvent} eventData={event} />
+
         <XStack
           flexDirection="row-reverse"
           $xxs={{ flexDirection: 'column', alignItems: 'stretch' }}
