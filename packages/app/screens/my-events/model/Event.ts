@@ -1,6 +1,7 @@
 export interface Event {
   id: string;
   name: string;
+  description: string;
   startTime: string;
   location: string;
   userRole: 'host' | 'attendee';
