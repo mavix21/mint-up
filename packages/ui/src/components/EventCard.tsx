@@ -1,22 +1,31 @@
-import { useState } from 'react'
-import type { useLink } from 'solito/link'
-import { Button, Card, type CardProps, H6, Paragraph, Theme, type ThemeName, XStack } from 'tamagui'
+import { useState } from 'react';
+import type { useLink } from 'solito/link';
+import {
+  Button,
+  Card,
+  type CardProps,
+  H6,
+  Paragraph,
+  Theme,
+  type ThemeName,
+  XStack,
+} from 'tamagui';
 
-import { EventModal } from './EventModal'
+import { EventModal } from './EventModal';
 
 export type EventCardTypes = {
-  title?: string
-  description?: string
+  title?: string;
+  description?: string;
   action?: {
-    props: ReturnType<typeof useLink>
-    text: string
-  }
-  tags?: { text: string; theme: ThemeName }[]
-} & CardProps
+    props: ReturnType<typeof useLink>;
+    text: string;
+  };
+  tags?: { text: string; theme: ThemeName }[];
+} & CardProps;
 
 export const EventCard = ({ title, description, action, tags = [], ...props }: EventCardTypes) => {
-  const [toggleEvent, setToggleEvent] = useState(false)
-  const [hover, setHover] = useState(false)
+  const [toggleEvent, setToggleEvent] = useState(false);
+  const [hover, setHover] = useState(false);
   return (
     <Card
       cursor="pointer"
@@ -59,5 +68,5 @@ export const EventCard = ({ title, description, action, tags = [], ...props }: E
         </Button>
       )} */}
     </Card>
-  )
-}
+  );
+};

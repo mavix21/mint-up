@@ -1,12 +1,12 @@
-import { X } from '@tamagui/lucide-icons'
-import { Button, Dialog, Theme, ThemeName, Unspaced, XStack } from 'tamagui'
+import { X } from '@tamagui/lucide-icons';
+import { Button, Dialog, Theme, ThemeName, Unspaced, XStack } from 'tamagui';
 
 export function EventModal({
   toggleEvent,
   eventData,
 }: {
-  toggleEvent: boolean
-  eventData: { title?: string; tags: { text: string; theme: string }[]; description?: string }
+  toggleEvent: boolean;
+  eventData: { title?: string; tags: { text: string; theme: string }[]; description?: string };
 }) {
   return (
     <Dialog modal open={toggleEvent}>
@@ -70,5 +70,5 @@ export function EventModal({
         </Dialog.Content>
       </Dialog.Portal>
     </Dialog>
-  )
+  );
 }
