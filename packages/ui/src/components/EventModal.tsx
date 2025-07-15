@@ -1,27 +1,26 @@
 import { X } from '@tamagui/lucide-icons';
-import { Button, Dialog, Theme, ThemeName, Unspaced, XStack } from 'tamagui';
+import { Adapt, Button, Dialog, Sheet, Theme, ThemeName, Unspaced, XStack } from 'tamagui';
 
 export function EventModal({
   toggleEvent,
+  setToggleEvent,
   eventData,
 }: {
   toggleEvent: boolean;
+  setToggleEvent: (e: boolean) => void;
   eventData: { title?: string; tags: { text: string; theme: string }[]; description?: string };
 }) {
   return (
-    <Dialog modal open={toggleEvent}>
-      {/* <Dialog.Trigger asChild>
-        <Button>Show Dialog</Button>
-      </Dialog.Trigger> */}
-      {/* <Adapt when="sm" platform="touch">
-        <Sheet animation="medium" zIndex={200000} modal dismissOnSnapToBottom>
+    <Dialog modal open={toggleEvent} onOpenChange={setToggleEvent}>
+      <Adapt when="sm" platform="touch">
+        <Sheet animation="medium" zIndex={200_000} modal dismissOnSnapToBottom>
           <Sheet.Frame padding="$4" gap="$4">
             <Adapt.Contents />
           </Sheet.Frame>
 
           <Sheet.Overlay animation="lazy" enterStyle={{ opacity: 0 }} exitStyle={{ opacity: 0 }} />
         </Sheet>
-      </Adapt> */}
+      </Adapt>
       <Dialog.Portal>
         <Dialog.Overlay
           key="overlay"
@@ -46,7 +45,6 @@ export function EventModal({
           enterStyle={{ x: 0, y: -20, o: 0, scale: 0.9 }}
           exitStyle={{ x: 0, y: 10, o: 0, scale: 0.95 }}
           gap="$4"
-          style={{ maxWidth: 650, minWidth: 650 }}
         >
           <Dialog.Title>{eventData?.title}</Dialog.Title>
 

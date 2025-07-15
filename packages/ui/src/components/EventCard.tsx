@@ -38,7 +38,11 @@ export const EventCard = ({ title, description, action, tags = [], ...props }: E
       {...props}
       onPress={() => setToggleEvent((prev) => !prev)}
     >
-      <EventModal toggleEvent={toggleEvent} eventData={{ title, tags, description }} />
+      <EventModal
+        toggleEvent={toggleEvent}
+        setToggleEvent={setToggleEvent}
+        eventData={{ title, tags, description }}
+      />
       <XStack gap="$3" flexDirection="column">
         <H6 size="$5" tt="capitalize">
           {title}
