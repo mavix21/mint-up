@@ -1,13 +1,13 @@
-import { X } from '@tamagui/lucide-icons'
-import { CreateScreen } from 'app/features/create/screen'
-import { Button, Dialog, Unspaced } from 'tamagui'
+import { X } from '@tamagui/lucide-icons';
+import { CreateScreen } from 'app/features/create/screen';
+import { Button, Dialog, Unspaced } from 'tamagui';
 
 export function CreateModal({
   toggleEvent,
   setToggleEvent,
 }: {
-  toggleEvent: boolean
-  setToggleEvent: (e: boolean) => void
+  toggleEvent: boolean;
+  setToggleEvent: (e: boolean) => void;
 }) {
   return (
     <Dialog modal open={toggleEvent} onOpenChange={setToggleEvent}>
@@ -65,5 +65,5 @@ export function CreateModal({
         </Dialog.Content>
       </Dialog.Portal>
     </Dialog>
-  )
+  );
 }
