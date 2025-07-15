@@ -124,7 +124,7 @@ export const MyEventsScreen = () => {
             overflowBlock="hidden"
             height="100%"
           >
-            <Tabs.List mb="$6">
+            <Tabs.List mb="$6" borderColor="$borderColor" borderWidth={1}>
               <Tabs.Tab value="upcoming" $xs={{ width: '50%' }}>
                 <Text>Upcoming</Text>
               </Tabs.Tab>

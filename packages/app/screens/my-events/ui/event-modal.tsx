@@ -16,7 +16,7 @@ export function EventModal({
     <Dialog modal open={toggleEvent} onOpenChange={setToggleEvent}>
       <Adapt when="sm" platform="touch">
         <Sheet animation="medium" zIndex={200_000} modal dismissOnSnapToBottom>
-          <Sheet.Frame padding="$4" gap="$4">
+          <Sheet.Frame padding="$4" gap="$4" backgroundColor="$color2">
             <Adapt.Contents />
           </Sheet.Frame>
 
