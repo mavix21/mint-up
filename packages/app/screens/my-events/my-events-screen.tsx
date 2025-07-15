@@ -117,107 +117,105 @@ export const MyEventsScreen = () => {
             <H3 mb="$2">My Events</H3>
             <Text>Your digital experiences collection</Text>
           </View>
-          <Theme name="green_surface1">
-            <Tabs
-              value={activeTab}
-              onValueChange={setActiveTab}
-              flexDirection="column"
-              overflowBlock="hidden"
+          <Tabs
+            value={activeTab}
+            onValueChange={setActiveTab}
+            flexDirection="column"
+            overflowBlock="hidden"
+            height="100%"
+          >
+            <Tabs.List mb="$6">
+              <Tabs.Tab value="upcoming" $xs={{ width: '50%' }}>
+                <Text>Upcoming</Text>
+              </Tabs.Tab>
+              <Tabs.Tab value="past" $xs={{ width: '50%' }}>
+                <Text>Past</Text>
+              </Tabs.Tab>
+            </Tabs.List>
+
+            <Tabs.Content
+              value="upcoming"
+              overflowBlock="scroll"
               height="100%"
+              paddingInlineEnd="$4"
+              paddingBottom={160}
             >
-              <Tabs.List mb="$6">
-                <Tabs.Tab value="upcoming" $xs={{ width: '50%' }}>
-                  <Text>Upcoming</Text>
-                </Tabs.Tab>
-                <Tabs.Tab value="past" $xs={{ width: '50%' }}>
-                  <Text>Past</Text>
-                </Tabs.Tab>
-              </Tabs.List>
+              {groupEventsByDate(upcomingEvents, activeTab).map(([dateKey, events], index) => (
+                <View key={dateKey} pos="relative">
+                  <View pos="absolute" bottom={0} left={4} top={16} w="$0.25" bg="$gray6" />
 
-              <Tabs.Content
-                value="upcoming"
-                overflowBlock="scroll"
-                height="100%"
-                paddingInlineEnd="$4"
-                paddingBottom={160}
-              >
-                {groupEventsByDate(upcomingEvents, activeTab).map(([dateKey, events], index) => (
-                  <View key={dateKey} pos="relative">
-                    <View pos="absolute" bottom={0} left={4} top={16} w="$0.25" bg="$gray6" />
-
-                    <View mb="$9">
-                      <View pos="relative" pl="$6">
-                        <View
-                          theme="green"
-                          bg="$color8"
-                          pos="absolute"
-                          left={1}
-                          top={3}
-                          h="$0.75"
-                          w="$0.75"
-                          borderRadius="$5"
-                        />
-                        <View mb="$4">
-                          <Text fontSize="$2" color="$color11">
-                            {formatDate(events[0]?.startTime ?? '')}
-                          </Text>
-                          <Text fontSize="$2">{getDayOfWeek(events[0]?.startTime ?? '')}</Text>
-                        </View>
-                        {events.map((event) => (
-                          <EventCard key={event.id} event={event} isPast index={index} />
-                        ))}
+                  <View mb="$9">
+                    <View pos="relative" pl="$6">
+                      <View
+                        theme="green"
+                        bg="$color8"
+                        pos="absolute"
+                        left={1}
+                        top={3}
+                        h="$0.75"
+                        w="$0.75"
+                        borderRadius="$5"
+                      />
+                      <View mb="$4">
+                        <Text fontSize="$2" color="$color11">
+                          {formatDate(events[0]?.startTime ?? '')}
+                        </Text>
+                        <Text fontSize="$2">{getDayOfWeek(events[0]?.startTime ?? '')}</Text>
                       </View>
+                      {events.map((event) => (
+                        <EventCard key={event.id} event={event} isPast index={index} />
+                      ))}
                     </View>
                   </View>
-                ))}
-              </Tabs.Content>
+                </View>
+              ))}
+            </Tabs.Content>
 
-              <Tabs.Content
-                value="past"
-                className="space-y-0"
-                overflowBlock="scroll"
-                height="100%"
-                paddingInlineEnd="$4"
-                paddingBottom={160}
-              >
-                {groupEventsByDate(pastEvents, activeTab).map(([dateKey, events], index) => (
-                  <View key={dateKey} pos="relative">
-                    <View pos="absolute" bottom={0} left={4} top={16} w="$0.25" bg="$gray6" />
+            <Tabs.Content
+              value="past"
+              className="space-y-0"
+              overflowBlock="scroll"
+              height="100%"
+              paddingInlineEnd="$4"
+              paddingBottom={160}
+            >
+              {groupEventsByDate(pastEvents, activeTab).map(([dateKey, events], index) => (
+                <View key={dateKey} pos="relative">
+                  <View pos="absolute" bottom={0} left={4} top={16} w="$0.25" bg="$gray6" />
 
-                    <View mb="$9">
-                      <View pos="relative" pl="$6">
-                        <View
-                          bg="$color8"
-                          pos="absolute"
-                          theme="green"
-                          left={1}
-                          top={3}
-                          h="$0.75"
-                          w="$0.75"
-                          borderRadius="$5"
-                        />
-                        <View mb="$4">
-                          <Text fontSize="$2" color="$color11">
-                            {formatDate(events[0]?.startTime ?? '')}
-                          </Text>
-                          <Text fontSize="$2">{getDayOfWeek(events[0]?.startTime ?? '')}</Text>
-                        </View>
-                        {events.map((event) => (
-                          <EventCard key={event.id} event={event} isPast index={index} />
-                        ))}
+                  <View mb="$9">
+                    <View pos="relative" pl="$6">
+                      <View
+                        bg="$color8"
+                        pos="absolute"
+                        theme="green"
+                        left={1}
+                        top={3}
+                        h="$0.75"
+                        w="$0.75"
+                        borderRadius="$5"
+                      />
+                      <View mb="$4">
+                        <Text fontSize="$2" color="$color11">
+                          {formatDate(events[0]?.startTime ?? '')}
+                        </Text>
+                        <Text fontSize="$2">{getDayOfWeek(events[0]?.startTime ?? '')}</Text>
                       </View>
+                      {events.map((event) => (
+                        <EventCard key={event.id} event={event} isPast index={index} />
+                      ))}
                     </View>
                   </View>
-                ))}
+                </View>
+              ))}
 
-                {pastEvents.length === 0 && (
-                  <Text py="$12" ai="center">
-                    No past events
-                  </Text>
-                )}
-              </Tabs.Content>
-            </Tabs>
-          </Theme>
+              {pastEvents.length === 0 && (
+                <Text py="$12" ai="center">
+                  No past events
+                </Text>
+              )}
+            </Tabs.Content>
+          </Tabs>
         </View>
       </YStack>
       <Sheet
