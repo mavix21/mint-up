@@ -12,24 +12,24 @@ import {
   YStack,
   getTokens,
   validToken,
-} from '@my/ui'
-import { CreateModal } from '@my/ui/src/components/CreateModal'
-import { Menu, Plus } from '@tamagui/lucide-icons'
-import { useGlobalStore } from 'app/utils/global-store'
-import { usePathname } from 'app/utils/usePathname'
-import { useUser } from 'app/utils/useUser'
-import { useRouter as useNextRouter } from 'next/router'
-import { useEffect, useState } from 'react'
-import { SolitoImage } from 'solito/image'
-import { Link, useLink } from 'solito/link'
+} from '@my/ui';
+import { CreateModal } from '@my/ui/src/components/CreateModal';
+import { Menu, Plus } from '@tamagui/lucide-icons';
+import { useGlobalStore } from 'app/utils/global-store';
+import { usePathname } from 'app/utils/usePathname';
+import { useUser } from 'app/utils/useUser';
+import { useRouter as useNextRouter } from 'next/router';
+import { useEffect, useState } from 'react';
+import { SolitoImage } from 'solito/image';
+import { Link, useLink } from 'solito/link';
 
-import { NavTabs } from './components/nav-tabs.web'
+import { NavTabs } from './components/nav-tabs.web';
 
 export type HomeLayoutProps = {
-  children?: React.ReactNode
-  padded?: boolean
-  fullPage?: boolean
-}
+  children?: React.ReactNode;
+  padded?: boolean;
+  fullPage?: boolean;
+};
 
 export const HomeLayout = ({ children, fullPage = false, padded = false }: HomeLayoutProps) => {
   return (
@@ -80,11 +80,11 @@ export const HomeLayout = ({ children, fullPage = false, padded = false }: HomeL
         {children}
       </YStack>
     </YStack>
-  )
-}
+  );
+};
 
 const UserAvatar = () => {
-  const { avatarUrl } = useUser()
+  const { avatarUrl } = useUser();
 
   return (
     <Avatar size="$2" circular>
@@ -95,21 +95,21 @@ const UserAvatar = () => {
         height={getTokens().size['2'].val}
       />
     </Avatar>
-  )
-}
+  );
+};
 
 export const MobileNavbar = ({ children }: { children: React.ReactNode }) => {
-  const [open, setOpen] = useState(false)
-  const router = useNextRouter()
+  const [open, setOpen] = useState(false);
+  const router = useNextRouter();
   useEffect(() => {
     const handleRouteChange = () => {
-      setOpen(false)
-    }
-    router.events.on('routeChangeStart', handleRouteChange)
+      setOpen(false);
+    };
+    router.events.on('routeChangeStart', handleRouteChange);
     return () => {
-      router.events.off('routeChangeStart', handleRouteChange)
-    }
-  }, [router.events])
+      router.events.off('routeChangeStart', handleRouteChange);
+    };
+  }, [router.events]);
   return (
     <Popover open={open} onOpenChange={setOpen} size="$5" stayInFrame={{ padding: 20 }}>
       <Popover.Trigger asChild>
@@ -163,12 +163,12 @@ export const MobileNavbar = ({ children }: { children: React.ReactNode }) => {
         </Popover.ScrollView>
       </Popover.Content>
     </Popover>
-  )
-}
+  );
+};
 
 const CtaButton = (props: ButtonProps) => {
-  const { toggleCreateModal, setToggleCreateModal } = useGlobalStore()
-  const pathName = usePathname()
+  const { toggleCreateModal, setToggleCreateModal } = useGlobalStore();
+  const pathName = usePathname();
 
   return (
     <>
@@ -190,7 +190,7 @@ const CtaButton = (props: ButtonProps) => {
         <Adapt when="gtSm">
           <Button
             onPress={() => {
-              if (pathName !== '/create') setToggleCreateModal()
+              if (pathName !== '/create') setToggleCreateModal();
             }}
             size="$3"
             space="$1.5"
@@ -204,17 +204,17 @@ const CtaButton = (props: ButtonProps) => {
         </Adapt>
       </Theme>
     </>
-  )
-}
+  );
+};
 
 const ProfileButton = () => (
   <Link href="/profile">
     <UserAvatar />
   </Link>
-)
+);
 
 const WithUserDetail = ({ children, ...props }: StackProps) => {
-  const { user, profile } = useUser()
+  const { user, profile } = useUser();
 
   return (
     <XStack gap="$2" {...props}>
@@ -224,5 +224,5 @@ const WithUserDetail = ({ children, ...props }: StackProps) => {
       </YStack>
       {children}
     </XStack>
-  )
-}
+  );
+};
