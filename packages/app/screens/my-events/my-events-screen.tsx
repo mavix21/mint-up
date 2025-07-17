@@ -124,11 +124,17 @@ export const MyEventsScreen = () => {
             overflowBlock="hidden"
             height="100%"
           >
-            <Tabs.List mb="$6" borderColor="$borderColor" borderWidth={1}>
-              <Tabs.Tab value="upcoming" $xs={{ width: '50%' }}>
+            <Tabs.List
+              mb="$6"
+              borderColor="$borderColor"
+              borderWidth={1}
+              width="100%"
+              $gtSm={{ width: 'fit-content' as any }}
+            >
+              <Tabs.Tab value="upcoming" $sm={{ width: '50%' }}>
                 <Text>Upcoming</Text>
               </Tabs.Tab>
-              <Tabs.Tab value="past" $xs={{ width: '50%' }}>
+              <Tabs.Tab value="past" $sm={{ width: '50%' }}>
                 <Text>Past</Text>
               </Tabs.Tab>
             </Tabs.List>
