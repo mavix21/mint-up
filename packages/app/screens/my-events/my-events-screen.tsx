@@ -11,7 +11,8 @@ const upcomingEvents: Event[] = [
     startTime: '2025-07-25T12:30:00Z',
     location: 'UPC - Campus San Miguel',
     userRole: 'host',
-    description: 'This is a test event',
+    description:
+      'This is a test event. This is a test event. This is a test event. This is a test event. This is a test event. This is a test event. This is a test event. This is a test event. This is a test event. This is a test event. This is a test event. This is a test event. This is a test event. This is a test event. This is a test event. This is a test event. This is a test event. This is a test event. This is a test event. This is a test event. This is a test event. This is a test event. This is a test event. This is a test event.',
     nftTicketImageUrl:
       'https://img.freepik.com/foto-gratis/amigos-felices-tiro-medio-bebidas_23-2149481210.jpg?t=st=1752373680~exp=1752377280~hmac=ace42efe105abfcfe521907355f9c2de530d2ee3863027e943f58bb1f3eac887&w=360',
     stats: { mints: 0, capacity: null },
