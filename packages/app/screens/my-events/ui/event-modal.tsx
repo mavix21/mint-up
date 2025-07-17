@@ -1,6 +1,6 @@
-import { View, H3, H2, H5, Text, Image, ScrollView } from '@my/ui';
-import { X, ArrowRight, Clock, MapPin } from '@tamagui/lucide-icons';
-import { Adapt, Button, Dialog, Sheet, Theme, ThemeName, Unspaced, XStack, YStack } from 'tamagui';
+import { View, H3, Text, Image, ScrollView } from '@my/ui';
+import { X, Clock, MapPin } from '@tamagui/lucide-icons';
+import { Adapt, Button, Dialog, Paragraph, Sheet, Unspaced, XStack, YStack } from 'tamagui';
 
 import { Event } from '../model/Event';
 
@@ -27,7 +27,14 @@ export function EventModal({
   return (
     <Dialog modal open={toggleEvent} onOpenChange={setToggleEvent}>
       <Adapt when="sm" platform="touch">
-        <Sheet animation="medium" zIndex={200_000} modal dismissOnSnapToBottom>
+        <Sheet animation="medium" zIndex={200_000} modal dismissOnSnapToBottom snapPoints={[98]}>
+          <Sheet.Overlay
+            animation="lazy"
+            backgroundColor="$shadowColor"
+            enterStyle={{ opacity: 0 }}
+            exitStyle={{ opacity: 0 }}
+          />
+          <Sheet.Handle backgroundColor="$color2" />
           <Sheet.Frame gap="$3" backgroundColor="$color2" padding="$0">
             <Adapt.Contents />
           </Sheet.Frame>
@@ -62,55 +69,57 @@ export function EventModal({
           gap="$0" // Remove gap between scroll and button
           padding="$0"
         >
-          <Dialog.Title>
-            <View>
-              <Image height={200} source={{ uri: imageUrl ?? '' }} />
-              <H3 mt="$3" px="$4">
-                {eventData?.name}
-              </H3>
-            </View>
-          </Dialog.Title>
-
-          <ScrollView style={{ maxHeight: 400, paddingHorizontal: 16 }}>
-            <Dialog.Description px="$0">
+          <YStack flex={1} pb="$4">
+            <Dialog.Title>
               <View>
-                <YStack>
-                  <XStack display="flex" gap="$2.5">
-                    <Clock size={15} mt="$1.5" color="$gray10" />
-                    <YStack>
-                      <Text fontSize="$1" fontWeight="bold">
-                        Wed 16, 2025
-                      </Text>
-                      <Text fontSize="$1" color="$gray11">
-                        {formatTime(eventData.startTime)}
-                      </Text>
-                    </YStack>
-                  </XStack>
-                  <XStack display="flex" gap="$2.5">
-                    <MapPin size={15} mt="$1.5" color="$gray10" />
-                    <YStack>
-                      <Text fontSize="$1" fontWeight="bold">
-                        {eventData.location}
-                      </Text>
-                      <Text fontSize="$1" color="$gray11">
-                        San Miguel, Lima, Perú
-                      </Text>
-                    </YStack>
-                  </XStack>
-                </YStack>
-                <View mt="$3">
-                  <Text fontWeight="bold">About</Text>
-                  <Text mt="$2">{eventData?.description}</Text>
-                </View>
+                <Image height={200} source={{ uri: imageUrl ?? '' }} />
+                <H3 mt="$3" px="$4">
+                  {eventData?.name}
+                </H3>
               </View>
-            </Dialog.Description>
-          </ScrollView>
+            </Dialog.Title>
 
-          <View padding="$4" borderTopWidth={1} borderColor="$color3" bg="$color2">
-            <Button theme="green" width="100%">
-              Buy tickets
-            </Button>
-          </View>
+            <ScrollView flex={1} style={{ paddingHorizontal: 16 }}>
+              <Dialog.Description asChild px="$0">
+                <View>
+                  <YStack>
+                    <XStack display="flex" gap="$2.5">
+                      <Clock size={15} mt="$1.5" color="$gray10" />
+                      <YStack>
+                        <Paragraph fontSize="$1" fontWeight="bold">
+                          Wed 16, 2025
+                        </Paragraph>
+                        <Paragraph fontSize="$1" color="$gray11">
+                          {formatTime(eventData.startTime)}
+                        </Paragraph>
+                      </YStack>
+                    </XStack>
+                    <XStack display="flex" gap="$2.5">
+                      <MapPin size={15} mt="$1.5" color="$gray10" />
+                      <YStack>
+                        <Text fontSize="$1" fontWeight="bold">
+                          {eventData.location}
+                        </Text>
+                        <Text fontSize="$1" color="$gray11">
+                          San Miguel, Lima, Perú
+                        </Text>
+                      </YStack>
+                    </XStack>
+                  </YStack>
+                  <View mt="$3">
+                    <Text fontWeight="bold">About</Text>
+                    <Text mt="$2">{eventData?.description}</Text>
+                  </View>
+                </View>
+              </Dialog.Description>
+            </ScrollView>
+
+            <View padding="$4" borderTopWidth={1} borderColor="$color3" bg="$color2">
+              <Button theme="green" width="100%">
+                Buy tickets
+              </Button>
+            </View>
+          </YStack>
 
           {/* <XStack gap="$1">
             {eventData.tags.map((tag) => (
