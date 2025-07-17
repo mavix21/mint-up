@@ -31,7 +31,7 @@ export function CreateEventSheetWrapper({ open, setOpen }: CreateEventSheetWrapp
         exitStyle={{ opacity: 0 }}
       />
       <Sheet.Handle backgroundColor="$color2" />
-      <Sheet.Frame alignItems="center" bg="$color2" pt="$4">
+      <Sheet.Frame alignItems="center" bg="$color2">
         <SheetContents />
       </Sheet.Frame>
     </Sheet>
