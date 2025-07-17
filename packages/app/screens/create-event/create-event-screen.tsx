@@ -33,7 +33,7 @@ export function CreateEventScreen() {
   ];
   return (
     <Theme name={theme as ThemeName}>
-      <ScrollView flex={1} width="100%" backgroundColor="$color1">
+      <ScrollView flex={1} width="100%" backgroundColor="$color2">
         <YStack gap="$4" px="$4" py="$4" maxWidth={480} marginHorizontal="auto">
           {/* Event Image */}
           <Card
@@ -58,7 +58,6 @@ export function CreateEventScreen() {
               size="$3"
               borderRadius={12}
               onPress={() => setShowThemeSheet(true)}
-              backgroundColor="$color2"
             >
               <XStack alignItems="center" gap="$2">
                 <Text fontWeight="500">Theme</Text>
@@ -135,7 +134,12 @@ export function CreateEventScreen() {
             <Text fontWeight="700" mb="$2">
               Event Options
             </Text>
-            <YGroup borderRadius="$6" borderCurve="circular" size="$4" backgroundColor="$color3">
+            <YGroup
+              borderRadius="$6"
+              $platform-native={{ borderCurve: 'circular' }}
+              size="$4"
+              backgroundColor="$color3"
+            >
               <YGroup.Item>
                 <XStack alignItems="center" justifyContent="space-between" px="$4" py="$3">
                   <XStack alignItems="center" space="$2">
@@ -172,13 +176,7 @@ export function CreateEventScreen() {
             </YGroup>
           </YStack>
           {/* Create Event Button */}
-          <Button
-            size="$5"
-            backgroundColor="$color12"
-            color="$color1"
-            borderRadius={16}
-            fontWeight="700"
-          >
+          <Button size="$5" themeInverse borderRadius={16} fontWeight="600">
             Create Event
           </Button>
         </YStack>
@@ -191,7 +189,12 @@ export function CreateEventScreen() {
         defaultPosition={0}
         modal
       >
-        <Sheet.Overlay />
+        <Sheet.Overlay
+          animation="lazy"
+          backgroundColor="$shadowColor"
+          enterStyle={{ opacity: 0 }}
+          exitStyle={{ opacity: 0 }}
+        />
         <Sheet.Handle />
         <Sheet.Frame padding="$4" alignItems="center" backgroundColor="$color2">
           <ToggleGroup
@@ -199,7 +202,6 @@ export function CreateEventScreen() {
             value={theme}
             onValueChange={(val) => {
               setTheme(val);
-              setShowThemeSheet(false);
             }}
             orientation="horizontal"
             gap="$3"
