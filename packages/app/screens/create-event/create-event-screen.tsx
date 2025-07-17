@@ -5,33 +5,32 @@ import {
   Label,
   Switch,
   Text,
-  TextArea,
   XStack,
   YStack,
   Card,
   Avatar,
-  Separator,
   Sheet,
-  Select,
   Theme,
-  View,
-  SizableText,
-  H4,
-  H5,
-  H6,
-  Paragraph,
-  Checkbox,
-  ListItem,
   ScrollView,
-  Spacer,
-  Group,
-  XGroup,
   YGroup,
   ThemeName,
+  ToggleGroup,
+  Stack,
 } from 'tamagui';
 
 export function CreateEventScreen() {
-  const [theme, setTheme] = useState<string>('alt1');
+  const [theme, setTheme] = useState<string>('');
+  const [showThemeSheet, setShowThemeSheet] = useState(false);
+  const themeOptions = [
+    { label: 'Default', value: '', color: '$color4' },
+    { label: 'Pink', value: 'pink', color: '$pink10' },
+    { label: 'Purple', value: 'purple', color: '$purple10' },
+    { label: 'Blue', value: 'blue', color: '$blue10' },
+    { label: 'Green', value: 'green', color: '$green10' },
+    { label: 'Yellow', value: 'yellow', color: '$yellow10' },
+    { label: 'Orange', value: 'orange', color: '$orange10' },
+    { label: 'Red', value: 'red', color: '$red10' },
+  ];
   return (
     <Theme name={theme as ThemeName}>
       <ScrollView flex={1} width="100%" backgroundColor="$color1">
@@ -52,22 +51,31 @@ export function CreateEventScreen() {
               </Avatar>
             </YStack>
           </Card>
-          {/* Theme Selector */}
-          <XGroup size="$3">
-            <XGroup.Item>
-              <Button iconAfter={<Text>⟳</Text>} size="$3">
-                <XStack alignItems="center" gap="$2">
-                  <Text fontWeight="600">Theme</Text>
-                  <Text color="$color11">Minimal</Text>
-                </XStack>
-              </Button>
-            </XGroup.Item>
-            <XGroup.Item>
-              <Button size="$3">
-                <Text>⇅</Text>
-              </Button>
-            </XGroup.Item>
-          </XGroup>
+          {/* Theme Selector (at the top) */}
+          <XStack space="$2">
+            <Button
+              iconAfter={<Text>⟳</Text>}
+              size="$3"
+              borderRadius={12}
+              onPress={() => setShowThemeSheet(true)}
+              backgroundColor="$color2"
+            >
+              <XStack alignItems="center" gap="$2">
+                <Text fontWeight="500">Theme</Text>
+                <Stack
+                  width={20}
+                  height={20}
+                  borderRadius={4}
+                  backgroundColor={
+                    (themeOptions.find((t) => t.value === theme)?.color as any) || '$color4'
+                  }
+                />
+              </XStack>
+            </Button>
+            <Button size="$3" borderRadius={12}>
+              <Text>⇅</Text>
+            </Button>
+          </XStack>
           {/* Event Name */}
           <YStack>
             <Label htmlFor="event-name" fontSize={18} fontWeight="700" mb="$2">
@@ -175,6 +183,45 @@ export function CreateEventScreen() {
           </Button>
         </YStack>
       </ScrollView>
+      {/* Theme Selector Sheet (minimalistic, toggle group) */}
+      <Sheet
+        open={showThemeSheet}
+        onOpenChange={setShowThemeSheet}
+        snapPoints={[15]}
+        defaultPosition={0}
+        modal
+      >
+        <Sheet.Overlay />
+        <Sheet.Handle />
+        <Sheet.Frame padding="$4" alignItems="center" backgroundColor="$color2">
+          <ToggleGroup
+            type="single"
+            value={theme}
+            onValueChange={(val) => {
+              setTheme(val);
+              setShowThemeSheet(false);
+            }}
+            orientation="horizontal"
+            gap="$3"
+          >
+            {themeOptions.map((option) => (
+              <ToggleGroup.Item
+                key={option.value}
+                value={option.value}
+                unstyled
+                width={32}
+                height={32}
+                borderRadius={16}
+                backgroundColor={option.color as any}
+                alignItems="center"
+                justifyContent="center"
+              >
+                {/* Empty, just colored circle */}
+              </ToggleGroup.Item>
+            ))}
+          </ToggleGroup>
+        </Sheet.Frame>
+      </Sheet>
     </Theme>
   );
 }
