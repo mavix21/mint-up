@@ -1,21 +1,21 @@
-import { useFormState } from 'react-hook-form'
-import { AnimatePresence, Button, ButtonProps, Spinner } from 'tamagui'
+import { useFormState } from 'react-hook-form';
+import { AnimatePresence, Button, ButtonProps, Spinner } from 'tamagui';
 
 // hack to prevent it from breaking on the server
 const useIsSubmitting = () => {
   try {
-    return useFormState().isSubmitting
+    return useFormState().isSubmitting;
   } catch (error) {
-    console.error(error)
-    return false
+    console.error(error);
+    return false;
   }
-}
+};
 /**
  * created to be used in forms
  * will show loading spinners and disable submission when already submitting
  */
 export const SubmitButton = (props: ButtonProps) => {
-  const isSubmitting = useIsSubmitting()
+  const isSubmitting = useIsSubmitting();
 
   return (
     <Button
@@ -43,5 +43,5 @@ export const SubmitButton = (props: ButtonProps) => {
       disabled={isSubmitting}
       {...props}
     />
-  )
-}
+  );
+};
