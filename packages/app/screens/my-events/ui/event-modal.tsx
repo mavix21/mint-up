@@ -2,7 +2,8 @@ import { View, H3, Text, Image, ScrollView } from '@my/ui';
 import { X, Clock, MapPin } from '@tamagui/lucide-icons';
 import { Adapt, Button, Dialog, Paragraph, Sheet, Unspaced, XStack, YStack } from 'tamagui';
 
-import { Event } from '../model/Event';
+import { ConvexEventWithExtras } from '../my-events-screen';
+import { formatRelativeDate } from '@my/ui/src/lib/dates';
 
 export function EventModal({
   toggleEvent,
@@ -11,9 +12,9 @@ export function EventModal({
 }: {
   toggleEvent: boolean;
   setToggleEvent: (e: boolean) => void;
-  eventData: Event;
+  eventData: ConvexEventWithExtras;
 }) {
-  const imageUrl = eventData.poapImageUrl ?? eventData.nftTicketImageUrl;
+  //const imageUrl = eventData.poapImageUrl ?? eventData.nftTicketImageUrl;
 
   const formatTime = (dateString: string) => {
     const date = new Date(dateString);
@@ -72,7 +73,7 @@ export function EventModal({
           <YStack flex={1} pb="$4">
             <Dialog.Title>
               <View>
-                <Image height={200} source={{ uri: imageUrl ?? '' }} />
+                <Image height={200} source={{ uri: eventData.imageUrl ?? '' }} />
                 <H3 mt="$3" px="$4">
                   {eventData?.name}
                 </H3>
@@ -90,7 +91,7 @@ export function EventModal({
                           Wed 16, 2025
                         </Paragraph>
                         <Paragraph fontSize="$1" color="$gray11">
-                          {formatTime(eventData.startTime)}
+                          {formatTime(formatRelativeDate(eventData.startDate))}
                         </Paragraph>
                       </YStack>
                     </XStack>

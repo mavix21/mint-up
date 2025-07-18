@@ -1,25 +1,26 @@
+import { Doc } from '@my/backend/convex/_generated/dataModel';
 import { View, YStack, XStack, Image, Text, Button } from '@my/ui';
 import { ArrowRight, Clock, MapPin } from '@tamagui/lucide-icons';
 import { useState } from 'react';
 import { Link } from 'solito/link';
 
 import { EventModal } from './event-modal';
-import { Event } from '../model/Event';
+import { ConvexEventWithExtras } from '../my-events-screen';
+import { formatRelativeDate } from '@my/ui/src/lib/dates';
 
 export function EventCard({
   event,
   isPast = false,
   index = 0,
 }: {
-  event: Event;
+  event: ConvexEventWithExtras;
   isPast?: boolean;
   index: number;
 }) {
-  const [managedEventId, setManagedEventId] = useState<string | null>(null);
+  //const [managedEventId, setManagedEventId] = useState<string | null>(null);
   const [toggleEvent, setToggleEvent] = useState(false);
-  // const imageUrl = isPast ? event.poapImageUrl : event.nftTicketImageUrl;
-  const imageUrl = event.poapImageUrl ?? event.nftTicketImageUrl;
-  const showDimmed = isPast && !event.poapImageUrl;
+  //const imageUrl = event.poapImageUrl ?? event.nftTicketImageUrl;
+  //const showDimmed = isPast && !event.poapImageUrl;
   console.log(index);
   return (
     <>
@@ -67,7 +68,7 @@ export function EventCard({
               $group-window-gtMd={{
                 minWidth: 'inherit',
               }}
-              source={{ uri: imageUrl ?? '' }}
+              source={{ uri: event.imageUrl ?? '' }}
             />
           </View>
           <View flex={1} justifyContent="flex-start" gap="$2" $xxs={{ paddingInline: '$4' }}>
@@ -92,7 +93,7 @@ export function EventCard({
             </View>
             <XStack display="flex" ai="center" gap="$2">
               <Clock size={15} />
-              <Text fontSize="$1">{formatTime(event.startTime)}</Text>
+              <Text fontSize="$1">{formatTime(formatRelativeDate(event.startDate))}</Text>
             </XStack>
             <XStack display="flex" ai="center" gap="$2">
               <MapPin size={15} />
@@ -120,9 +121,10 @@ export function EventCard({
           >
             {event.userRole === 'host' ? 'Manage Event' : 'View Ticket'}
           </Button> */}
-          <Link href={`/events/manage/${event.id}`}>
+          <Link href={`/events/manage/${event._id}`}>
             <Button size="$2" icon={ArrowRight}>
-              {event.userRole === 'host' ? 'Manage Event' : 'View Ticket'}
+              {/* {event.userRole === 'host' ? 'Manage Event' : 'View Ticket'} */}
+              Manage Event
             </Button>
           </Link>
         </View>

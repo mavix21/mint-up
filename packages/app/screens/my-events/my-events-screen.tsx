@@ -1,70 +1,79 @@
-import { H3, Tabs, Text, View, YStack, Theme, Sheet } from '@my/ui';
+import { api } from '@my/backend/convex/_generated/api';
+import { H3, Tabs, Text, View, YStack } from '@my/ui';
+import { useQuery } from 'convex/react';
 import React from 'react';
 
-import type { Event } from './model/Event';
 import { EventCard } from './ui/event-card';
+import { Doc } from '@my/backend/convex/_generated/dataModel';
+import { formatRelativeDate } from '@my/ui/src/lib/dates';
 
-const upcomingEvents: Event[] = [
-  {
-    id: 'evt-001',
-    name: '_Test_',
-    startTime: '2025-07-25T12:30:00Z',
-    location: 'UPC - Campus San Miguel',
-    userRole: 'host',
-    description:
-      'This is a test event. This is a test event. This is a test event. This is a test event. This is a test event. This is a test event. This is a test event. This is a test event. This is a test event. This is a test event. This is a test event. This is a test event. This is a test event. This is a test event. This is a test event. This is a test event. This is a test event. This is a test event. This is a test event. This is a test event. This is a test event. This is a test event. This is a test event. This is a test event.',
-    nftTicketImageUrl:
-      'https://img.freepik.com/foto-gratis/amigos-felices-tiro-medio-bebidas_23-2149481210.jpg?t=st=1752373680~exp=1752377280~hmac=ace42efe105abfcfe521907355f9c2de530d2ee3863027e943f58bb1f3eac887&w=360',
-    stats: { mints: 0, capacity: null },
-  },
-  {
-    id: 'evt-002',
-    name: 'Web3 Founders Meetup',
-    startTime: '2025-07-28T18:00:00Z',
-    location: 'Virtual',
-    userRole: 'attendee',
-    description: 'Founders and builders',
-    nftTicketImageUrl:
-      'https://img.freepik.com/foto-gratis/familia-tiro-completo-celebrando-4-julio_23-2149383081.jpg?t=st=1752373560~exp=1752377160~hmac=0fa153a9d0dd5604ee8cc4ba5580a4999c3a809c9459bfcdd2603ecb8b115730&w=740',
-    stats: {},
-  },
-];
+// Define the type for events returned by getUpcomingEvents
+export type ConvexEventWithExtras = Doc<'events'> & {
+  creatorName: string;
+  imageUrl: string | null;
+};
 
-const pastEvents: Event[] = [
-  {
-    id: 'evt-003',
-    name: 'ROAST 02',
-    startTime: '2025-06-09T08:00:00Z',
-    location: 'Virtual',
-    userRole: 'attendee',
-    status: 'POAP_COLLECTED',
-    description: 'This is a test event',
-    poapImageUrl: 'https://tamagui.dev/bento/images/bag/bag3.webp',
-  },
-  {
-    id: 'evt-004',
-    name: 'Blockchain',
-    startTime: '2025-06-04T18:30:00Z',
-    location: 'Home',
-    userRole: 'attendee',
-    status: 'MISSED',
-    description: 'This is a test event',
-    poapImageUrl:
-      'https://img.freepik.com/foto-gratis/amigos-felices-tiro-medio-bebidas_23-2149481210.jpg?t=st=1752373680~exp=1752377280~hmac=ace42efe105abfcfe521907355f9c2de530d2ee3863027e943f58bb1f3eac887&w=360',
-  },
-  {
-    id: 'evt-005',
-    name: 'My First Hosted Event',
-    startTime: '2025-06-02T18:00:00Z',
-    location: 'Lima, Peru',
-    userRole: 'host',
-    status: 'COMPLETED',
-    description: 'This is a test event',
-    poapImageUrl:
-      'https://img.freepik.com/foto-gratis/familia-tiro-completo-celebrando-4-julio_23-2149383081.jpg?t=st=1752373560~exp=1752377160~hmac=0fa153a9d0dd5604ee8cc4ba5580a4999c3a809c9459bfcdd2603ecb8b115730&w=740',
-    stats: { attendees: 112, poapsClaimed: 105 },
-  },
-];
+// const upcomingEvents: Event[] = [
+//   {
+//     id: 'evt-001',
+//     name: '_Test_',
+//     startTime: '2025-07-25T12:30:00Z',
+//     location: 'UPC - Campus San Miguel',
+//     userRole: 'host',
+//     description:
+//       'This is a test event. This is a test event. This is a test event. This is a test event. This is a test event. This is a test event. This is a test event. This is a test event. This is a test event. This is a test event. This is a test event. This is a test event. This is a test event. This is a test event. This is a test event. This is a test event. This is a test event. This is a test event. This is a test event. This is a test event. This is a test event. This is a test event. This is a test event. This is a test event.',
+//     nftTicketImageUrl:
+//       'https://img.freepik.com/foto-gratis/amigos-felices-tiro-medio-bebidas_23-2149481210.jpg?t=st=1752373680~exp=1752377280~hmac=ace42efe105abfcfe521907355f9c2de530d2ee3863027e943f58bb1f3eac887&w=360',
+//     stats: { mints: 0, capacity: null },
+//   },
+//   {
+//     id: 'evt-002',
+//     name: 'Web3 Founders Meetup',
+//     startTime: '2025-07-28T18:00:00Z',
+//     location: 'Virtual',
+//     userRole: 'attendee',
+//     description: 'Founders and builders',
+//     nftTicketImageUrl:
+//       'https://img.freepik.com/foto-gratis/familia-tiro-completo-celebrando-4-julio_23-2149383081.jpg?t=st=1752373560~exp=1752377160~hmac=0fa153a9d0dd5604ee8cc4ba5580a4999c3a809c9459bfcdd2603ecb8b115730&w=740',
+//     stats: {},
+//   },
+// ];
+
+// const pastEvents: Event[] = [
+//   {
+//     id: 'evt-003',
+//     name: 'ROAST 02',
+//     startTime: '2025-06-09T08:00:00Z',
+//     location: 'Virtual',
+//     userRole: 'attendee',
+//     status: 'POAP_COLLECTED',
+//     description: 'This is a test event',
+//     poapImageUrl: 'https://tamagui.dev/bento/images/bag/bag3.webp',
+//   },
+//   {
+//     id: 'evt-004',
+//     name: 'Blockchain',
+//     startTime: '2025-06-04T18:30:00Z',
+//     location: 'Home',
+//     userRole: 'attendee',
+//     status: 'MISSED',
+//     description: 'This is a test event',
+//     poapImageUrl:
+//       'https://img.freepik.com/foto-gratis/amigos-felices-tiro-medio-bebidas_23-2149481210.jpg?t=st=1752373680~exp=1752377280~hmac=ace42efe105abfcfe521907355f9c2de530d2ee3863027e943f58bb1f3eac887&w=360',
+//   },
+//   {
+//     id: 'evt-005',
+//     name: 'My First Hosted Event',
+//     startTime: '2025-06-02T18:00:00Z',
+//     location: 'Lima, Peru',
+//     userRole: 'host',
+//     status: 'COMPLETED',
+//     description: 'This is a test event',
+//     poapImageUrl:
+//       'https://img.freepik.com/foto-gratis/familia-tiro-completo-celebrando-4-julio_23-2149383081.jpg?t=st=1752373560~exp=1752377160~hmac=0fa153a9d0dd5604ee8cc4ba5580a4999c3a809c9459bfcdd2603ecb8b115730&w=740',
+//     stats: { attendees: 112, poapsClaimed: 105 },
+//   },
+// ];
 
 const formatDate = (dateString: string) => {
   const date = new Date(dateString);
@@ -89,13 +98,14 @@ const getDayOfWeek = (dateString: string) => {
   return date.toLocaleDateString('en-US', { weekday: 'long' });
 };
 
-const groupEventsByDate = (events: Event[], activeTab: string) => {
+const groupEventsByDate = (events: ConvexEventWithExtras[], activeTab: string) => {
   const grouped = events.reduce((acc, event) => {
-    const dateKey = event.startTime.split('T')[0] ?? event.startTime;
+    const dateKey =
+      formatRelativeDate(event.startDate).split('T')[0] ?? formatRelativeDate(event.startDate);
     acc[dateKey] ??= [];
     acc[dateKey].push(event);
     return acc;
-  }, {} as Record<string, Event[]>);
+  }, {} as Record<string, ConvexEventWithExtras[]>);
 
   return Object.entries(grouped).sort(([a], [b]) =>
     activeTab === 'upcoming' ? a.localeCompare(b) : b.localeCompare(a)
@@ -103,6 +113,7 @@ const groupEventsByDate = (events: Event[], activeTab: string) => {
 };
 
 export const MyEventsScreen = () => {
+  const upcomingEvents = useQuery(api.events.getUpcomingEvents);
   const [activeTab, setActiveTab] = React.useState('upcoming');
   const [, setId] = React.useState(0);
   const [open, setOpen] = React.useState(false);
@@ -147,7 +158,7 @@ export const MyEventsScreen = () => {
               paddingInlineEnd="$4"
               paddingBottom={160}
             >
-              {groupEventsByDate(upcomingEvents, activeTab).map(([dateKey, events], index) => (
+              {groupEventsByDate(upcomingEvents!, activeTab).map(([dateKey, events], index) => (
                 <View key={dateKey} pos="relative">
                   <View pos="absolute" bottom={0} left={4} top={16} w="$0.25" bg="$gray6" />
 
@@ -165,12 +176,14 @@ export const MyEventsScreen = () => {
                       />
                       <View mb="$4">
                         <Text fontSize="$2" color="$color11">
-                          {formatDate(events[0]?.startTime ?? '')}
+                          {formatDate(formatRelativeDate(events[0]?.startDate) ?? '')}
                         </Text>
-                        <Text fontSize="$2">{getDayOfWeek(events[0]?.startTime ?? '')}</Text>
+                        <Text fontSize="$2">
+                          {getDayOfWeek(formatRelativeDate(events[0]?.startDate) ?? '')}
+                        </Text>
                       </View>
                       {events.map((event) => (
-                        <EventCard key={event.id} event={event} isPast index={index} />
+                        <EventCard key={event._id} event={event} isPast index={index} />
                       ))}
                     </View>
                   </View>
@@ -186,7 +199,7 @@ export const MyEventsScreen = () => {
               paddingInlineEnd="$4"
               paddingBottom={160}
             >
-              {groupEventsByDate(pastEvents, activeTab).map(([dateKey, events], index) => (
+              {/* {groupEventsByDate(pastEvents, activeTab).map(([dateKey, events], index) => (
                 <View key={dateKey} pos="relative">
                   <View pos="absolute" bottom={0} left={4} top={16} w="$0.25" bg="$gray6" />
 
@@ -214,29 +227,17 @@ export const MyEventsScreen = () => {
                     </View>
                   </View>
                 </View>
-              ))}
+              ))} */}
 
-              {pastEvents.length === 0 && (
+              {/* {pastEvents.length === 0 && (
                 <Text py="$12" ai="center">
                   No past events
                 </Text>
-              )}
+              )} */}
             </Tabs.Content>
           </Tabs>
         </View>
       </YStack>
-      <Sheet
-        position={position}
-        onPositionChange={setPosition}
-        zIndex={100_000}
-        open={open}
-        onOpenChange={setOpen}
-        modal
-      >
-        <Sheet.Overlay />
-        <Sheet.Handle />
-        <Sheet.Frame>{/* ...inner contents */}</Sheet.Frame>
-      </Sheet>
     </>
   );
 };
