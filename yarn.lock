@@ -4228,11 +4228,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mint-up/convex@workspace:packages/backend":
+"@mint-up/convex@npm:*, @mint-up/convex@workspace:packages/backend":
   version: 0.0.0-use.local
   resolution: "@mint-up/convex@workspace:packages/backend"
   dependencies:
-    convex: "npm:^1.25.2"
+    convex: "npm:^1.25.4"
     typescript: "npm:~5.8.3"
   languageName: unknown
   linkType: soft
@@ -14599,9 +14599,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"convex@npm:^1.25.2":
-  version: 1.25.2
-  resolution: "convex@npm:1.25.2"
+"convex@npm:^1.25.4":
+  version: 1.25.4
+  resolution: "convex@npm:1.25.4"
   dependencies:
     esbuild: "npm:0.25.4"
     jwt-decode: "npm:^4.0.0"
@@ -14619,7 +14619,7 @@ __metadata:
       optional: true
   bin:
     convex: bin/main.js
-  checksum: 10/1bf295b76e5cf3965a595b62f7697f402f0488cc1b7691fd4a4fa5870395957f4f5f73c02e5912a08702d68a9be9d193aeb1220897b9113172ee291a74eae534
+  checksum: 10/2d7564963352e8b39f457a85ca55a66bf4cbae58823495f6770fe6db601f9cc6665aee095cd5f02d1baa1196e9d4f447b4e92af48d4148c059d317d666cb4df1
   languageName: node
   linkType: hard
 
@@ -22106,6 +22106,7 @@ __metadata:
   dependencies:
     "@coinbase/onchainkit": "npm:^0.38.16"
     "@farcaster/auth-client": "npm:0.7.0"
+    "@mint-up/convex": "npm:*"
     "@my/ui": "npm:*"
     "@next/bundle-analyzer": "npm:15.3.2"
     "@next/eslint-plugin-next": "npm:15.3.2"
