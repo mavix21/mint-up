@@ -1,11 +1,11 @@
-import { api } from '@my/backend/convex/_generated/api';
-import { H3, Tabs, Text, View, YStack } from '@my/ui';
+import { api } from '@my/backend/_generated/api';
+import { Doc } from '@my/backend/_generated/dataModel';
+import { FullscreenSpinner, H3, Tabs, Text, View, YStack } from '@my/ui';
+import { formatRelativeDate } from '@my/ui/src/lib/dates';
 import { useQuery } from 'convex/react';
 import React from 'react';
 
 import { EventCard } from './ui/event-card';
-import { Doc } from '@my/backend/convex/_generated/dataModel';
-import { formatRelativeDate } from '@my/ui/src/lib/dates';
 
 // Define the type for events returned by getUpcomingEvents
 export type ConvexEventWithExtras = Doc<'events'> & {
@@ -119,6 +119,8 @@ export const MyEventsScreen = () => {
   const [open, setOpen] = React.useState(false);
   const [position, setPosition] = React.useState(0);
 
+  if (!upcomingEvents) return <FullscreenSpinner />; // TODO: improve skeleton
+
   return (
     <>
       <YStack flex={1} fullscreen maxWidth={600} marginInline="auto" overflowBlock="hidden">
@@ -158,7 +160,7 @@ export const MyEventsScreen = () => {
               paddingInlineEnd="$4"
               paddingBottom={160}
             >
-              {groupEventsByDate(upcomingEvents!, activeTab).map(([dateKey, events], index) => (
+              {groupEventsByDate(upcomingEvents, activeTab).map(([dateKey, events], index) => (
                 <View key={dateKey} pos="relative">
                   <View pos="absolute" bottom={0} left={4} top={16} w="$0.25" bg="$gray6" />
 

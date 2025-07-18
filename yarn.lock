@@ -4228,15 +4228,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mint-up/convex@npm:*, @mint-up/convex@workspace:packages/backend":
-  version: 0.0.0-use.local
-  resolution: "@mint-up/convex@workspace:packages/backend"
-  dependencies:
-    convex: "npm:^1.25.4"
-    typescript: "npm:~5.8.3"
-  languageName: unknown
-  linkType: soft
-
 "@motionone/animation@npm:^10.12.0":
   version: 10.18.0
   resolution: "@motionone/animation@npm:10.18.0"
@@ -4320,6 +4311,15 @@ __metadata:
     superjson: "npm:^1.13.1"
     typescript: "npm:~5.8.3"
     zod: "npm:^3.22.2"
+  languageName: unknown
+  linkType: soft
+
+"@my/backend@npm:*, @my/backend@workspace:packages/backend":
+  version: 0.0.0-use.local
+  resolution: "@my/backend@workspace:packages/backend"
+  dependencies:
+    convex: "npm:^1.25.4"
+    typescript: "npm:~5.8.3"
   languageName: unknown
   linkType: soft
 
@@ -12331,6 +12331,7 @@ __metadata:
   resolution: "app@workspace:packages/app"
   dependencies:
     "@my/api": "npm:*"
+    "@my/backend": "npm:*"
     "@my/supabase": "npm:*"
     "@my/ui": "npm:*"
     "@react-native-async-storage/async-storage": "npm:2.1.2"
@@ -22106,7 +22107,7 @@ __metadata:
   dependencies:
     "@coinbase/onchainkit": "npm:^0.38.16"
     "@farcaster/auth-client": "npm:0.7.0"
-    "@mint-up/convex": "npm:*"
+    "@my/backend": "npm:*"
     "@my/ui": "npm:*"
     "@next/bundle-analyzer": "npm:15.3.2"
     "@next/eslint-plugin-next": "npm:15.3.2"

@@ -14,6 +14,8 @@
     "noEmit": true,
     "composite": true,
     "baseUrl": ".",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
     "paths": {
       "app/*": ["./*"],
       "@my/*": ["../*"]
