@@ -22,8 +22,10 @@ import type * as tables_events from "../tables/events.js";
 import type * as tables_linkedAccounts from "../tables/linkedAccounts.js";
 import type * as tables_organizationMembers from "../tables/organizationMembers.js";
 import type * as tables_organizations from "../tables/organizations.js";
+import type * as tables_poapTemplates from "../tables/poapTemplates.js";
 import type * as tables_registrations from "../tables/registrations.js";
 import type * as tables_sessions from "../tables/sessions.js";
+import type * as tables_ticketTemplates from "../tables/ticketTemplates.js";
 import type * as tables_user from "../tables/user.js";
 
 /**
@@ -44,8 +46,10 @@ declare const fullApi: ApiFromModules<{
   "tables/linkedAccounts": typeof tables_linkedAccounts;
   "tables/organizationMembers": typeof tables_organizationMembers;
   "tables/organizations": typeof tables_organizations;
+  "tables/poapTemplates": typeof tables_poapTemplates;
   "tables/registrations": typeof tables_registrations;
   "tables/sessions": typeof tables_sessions;
+  "tables/ticketTemplates": typeof tables_ticketTemplates;
   "tables/user": typeof tables_user;
 }>;
 export declare const api: FilterApi<
