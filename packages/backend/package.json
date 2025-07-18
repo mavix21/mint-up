@@ -30,6 +30,5 @@
       "types": "./convex/react.ts",
       "default": "./convex/react.ts"
     }
-  },
-  "prettier": "@mint-up/prettier-config"
+  }
 }
