@@ -1,9 +1,9 @@
 import { View, H3, Text, Image, ScrollView } from '@my/ui';
+import { formatDate, formatRelativeDate } from '@my/ui/src/lib/dates';
 import { X, Clock, MapPin } from '@tamagui/lucide-icons';
 import { Adapt, Button, Dialog, Paragraph, Sheet, Unspaced, XStack, YStack } from 'tamagui';
 
 import { ConvexEventWithExtras } from '../my-events-screen';
-import { formatRelativeDate } from '@my/ui/src/lib/dates';
 
 export function EventModal({
   toggleEvent,
@@ -73,7 +73,7 @@ export function EventModal({
           <YStack flex={1} pb="$4">
             <Dialog.Title>
               <View>
-                <Image height={200} source={{ uri: eventData.imageUrl ?? '' }} />
+                <Image height={200} source={{ uri: eventData.imageUrl ?? '' }} borderRadius="$3" />
                 <H3 mt="$3" px="$4">
                   {eventData?.name}
                 </H3>
@@ -88,24 +88,52 @@ export function EventModal({
                       <Clock size={15} mt="$1.5" color="$gray10" />
                       <YStack>
                         <Paragraph fontSize="$1" fontWeight="bold">
-                          Wed 16, 2025
+                          {formatDate(formatRelativeDate(eventData.startDate))}
                         </Paragraph>
                         <Paragraph fontSize="$1" color="$gray11">
                           {formatTime(formatRelativeDate(eventData.startDate))}
                         </Paragraph>
                       </YStack>
                     </XStack>
-                    <XStack display="flex" gap="$2.5">
-                      <MapPin size={15} mt="$1.5" color="$gray10" />
-                      <YStack>
-                        <Text fontSize="$1" fontWeight="bold">
-                          {eventData.location}
-                        </Text>
-                        <Text fontSize="$1" color="$gray11">
+                    {typeof eventData.location === 'string' ? (
+                      <XStack display="flex" gap="$2.5">
+                        <MapPin size={15} mt="$1.5" color="$gray10" />
+                        <YStack>
+                          <Text fontSize="$1" fontWeight="bold">
+                            {eventData.location}
+                          </Text>
+                          {/* <Text fontSize="$1" color="$gray11">
                           San Miguel, Lima, Perú
-                        </Text>
-                      </YStack>
-                    </XStack>
+                        </Text> */}
+                        </YStack>
+                      </XStack>
+                    ) : eventData.location?.type === 'online' ? (
+                      <XStack display="flex" gap="$2.5">
+                        <MapPin size={15} mt="$1.5" color="$gray10" />
+                        <YStack>
+                          <Text fontSize="$1" fontWeight="bold">
+                            {eventData.location.url}
+                          </Text>
+                          {/* <Text fontSize="$1" color="$gray11">
+                          San Miguel, Lima, Perú
+                        </Text> */}
+                        </YStack>
+                      </XStack>
+                    ) : eventData.location?.type === 'in-person' ? (
+                      <XStack display="flex" gap="$2.5">
+                        <MapPin size={15} mt="$1.5" color="$gray10" />
+                        <YStack>
+                          <Text fontSize="$1" fontWeight="bold">
+                            {eventData.location.address}
+                          </Text>
+                          {/* <Text fontSize="$1" color="$gray11">
+                          San Miguel, Lima, Perú
+                        </Text> */}
+                        </YStack>
+                      </XStack>
+                    ) : (
+                      <Text>Unknown location</Text>
+                    )}
                   </YStack>
                   <View mt="$3">
                     <Text fontWeight="bold">About</Text>

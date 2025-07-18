@@ -95,10 +95,25 @@ export function EventCard({
               <Clock size={15} />
               <Text fontSize="$1">{formatTime(formatRelativeDate(event.startDate))}</Text>
             </XStack>
-            <XStack display="flex" ai="center" gap="$2">
-              <MapPin size={15} />
-              <Text fontSize="$1">{event.location}</Text>
-            </XStack>
+
+            {typeof event.location === 'string' ? (
+              <XStack display="flex" ai="center" gap="$2">
+                <MapPin size={15} />
+                <Text>{event.location}</Text>
+              </XStack>
+            ) : event.location?.type === 'online' ? (
+              <XStack display="flex" ai="center" gap="$2">
+                <MapPin size={15} />
+                <Text fontSize="$1">{event.location.url}</Text>
+              </XStack>
+            ) : event.location?.type === 'in-person' ? (
+              <XStack display="flex" ai="center" gap="$2">
+                <MapPin size={15} />
+                <Text fontSize="$1">{event.location.address}</Text>
+              </XStack>
+            ) : (
+              <Text>Unknown location</Text>
+            )}
           </View>
         </XStack>
 
