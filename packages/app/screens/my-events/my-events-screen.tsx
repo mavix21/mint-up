@@ -125,7 +125,7 @@ export const MyEventsScreen = () => {
     <YStack fullscreen maxWidth={600} marginInline="auto" height="100%">
       {/* <Navigation /> */}
 
-      <View px="$4" py="$8" overflowBlock="hidden">
+      <View px="$4" py="$8" overflowBlock="hidden" height="100%">
         <View mb="$5">
           <H3 mb="$2">My Events</H3>
           <Text>Your digital experiences collection</Text>
