@@ -1,4 +1,4 @@
-import { MyEventsScreen } from 'app/features/events/my-events-screen';
+import { MyEventsScreen } from 'app/screens/my-events/my-events-screen';
 import Head from 'next/head';
 import { NextPageWithLayout } from 'pages/_app';
 
