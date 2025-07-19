@@ -16,7 +16,7 @@ export function BottomTabNav({ activeTab, setActiveTab }: BottomTabNavProps) {
       borderColor="$borderColor"
       width="100%"
       py="$3"
-      position="absolute"
+      position={'fixed' as any}
       zIndex={10}
       bottom={0}
       left={0}
