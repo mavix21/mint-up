@@ -21,7 +21,7 @@ export const Navigator = memo(function Navigator() {
         style={{ overflowY: 'hidden', overflowBlock: 'hidden' }}
       >
         <YStack flex={1} width="100%" height="100%">
-          <TabSelector activeTab={activeTab} />
+          {/* <TabSelector activeTab={activeTab} /> */}
         </YStack>
         <BottomTabNav
           activeTab={activeTab}
