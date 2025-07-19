@@ -1,4 +1,4 @@
-import { Sheet } from '@my/ui';
+import { Sheet, Button, XStack, YStack } from '@my/ui';
 import { CreateEventScreen } from 'app/screens/create-event/create-event-screen';
 import { memo } from 'react';
 
@@ -16,7 +16,7 @@ export function CreateEventSheetWrapper({ open, setOpen }: CreateEventSheetWrapp
       open={open}
       onOpenChange={setOpen}
       zIndex={100_000}
-      snapPoints={[98, 50]}
+      snapPoints={[98]}
       snapPointsMode="percent"
       animation="medium"
     >
@@ -28,16 +28,38 @@ export function CreateEventSheetWrapper({ open, setOpen }: CreateEventSheetWrapp
       />
       <Sheet.Handle backgroundColor="$color2" />
       <Sheet.Frame alignItems="center" bg="$color2">
-        <SheetContents />
+        <SheetContents onClose={() => setOpen(false)} />
       </Sheet.Frame>
     </Sheet>
   );
 }
 
-const SheetContents = memo(() => {
+const SheetContents = memo(({ onClose }: { onClose: () => void }) => {
   return (
-    <>
+    <YStack flex={1} width="100%">
+      {/* Close Button */}
+      <XStack
+        position="absolute"
+        top="$2"
+        right="$2"
+        zIndex={1000}
+        alignItems="center"
+        justifyContent="center"
+      >
+        <Button
+          size="$2"
+          circular
+          backgroundColor="$color4"
+          borderColor="$color6"
+          borderWidth={1}
+          onPress={onClose}
+          pressStyle={{ backgroundColor: '$color5' }}
+        >
+          ✕
+        </Button>
+      </XStack>
+
       <CreateEventScreen />
-    </>
+    </YStack>
   );
 });
