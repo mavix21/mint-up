@@ -88,15 +88,6 @@ module.exports = () => {
       viewTransition: true,
       // optimizeCss: true,
     },
-    redirects: async () => [
-      // we have /onboarding on native but don't have a standalone page for /onboarding on web
-      // it's included as a sidebar of auth pages, so we just redirect the user there
-      {
-        source: '/onboarding',
-        destination: '/sign-in',
-        permanent: false,
-      },
-    ],
   };
 
   for (const plugin of plugins) {
