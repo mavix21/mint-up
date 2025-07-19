@@ -1,1 +1,1 @@
-export { usePathname } from 'expo-router'
+export { usePathname } from 'expo-router';

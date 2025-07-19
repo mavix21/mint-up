@@ -1,18 +1,18 @@
-import { useTheme, Button } from '@my/ui'
-import { DrawerActions } from '@react-navigation/native'
-import { Home, Menu, Plus, User } from '@tamagui/lucide-icons'
+import { useTheme, Button } from '@my/ui';
+import { DrawerActions } from '@react-navigation/native';
+import { Home, Menu, Plus, User } from '@tamagui/lucide-icons';
 // import { IconGearFill, IconGear, IconHouse, IconHouseFill } from '@tamagui-icons/icon-ph'
-import { router, Stack, Tabs, useNavigation, usePathname } from 'expo-router'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { router, Stack, Tabs, useNavigation, usePathname } from 'expo-router';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function Layout() {
-  const { accentColor } = useTheme()
-  const navigation = useNavigation()
-  const pathname = usePathname()
-  const insets = useSafeAreaInsets()
+  const { accentColor } = useTheme();
+  const navigation = useNavigation();
+  const pathname = usePathname();
+  const insets = useSafeAreaInsets();
 
   if (__DEV__) {
-    console.log('pathname', pathname)
+    console.log('pathname', pathname);
   }
   return (
     <>
@@ -29,7 +29,7 @@ export default function Layout() {
               marginLeft="$-1"
               paddingHorizontal="$4"
               onPress={() => {
-                navigation.dispatch(DrawerActions.openDrawer())
+                navigation.dispatch(DrawerActions.openDrawer());
               }}
             >
               <Menu size={24} />
@@ -42,7 +42,7 @@ export default function Layout() {
               marginRight="$-1"
               backgroundColor="transparent"
               onPress={() => {
-                router.navigate('create')
+                router.navigate('create');
               }}
             >
               <Plus size={24} />
@@ -91,5 +91,5 @@ export default function Layout() {
         />
       </Tabs>
     </>
-  )
+  );
 }

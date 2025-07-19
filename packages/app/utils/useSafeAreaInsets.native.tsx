@@ -1,1 +1,1 @@
-export { useSafeAreaInsets } from 'react-native-safe-area-context'
+export { useSafeAreaInsets } from 'react-native-safe-area-context';

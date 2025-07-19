@@ -76,4 +76,4 @@ export default {
     },
     owner: 'tamagui-team',
   },
-}
+};

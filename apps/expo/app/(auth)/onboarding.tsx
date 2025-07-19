@@ -1,5 +1,6 @@
-import { OnboardingScreen } from 'app/features/auth/onboarding-screen'
-import { Stack } from 'expo-router'
+// import { OnboardingScreen } from 'app/features/auth/onboarding-screen'
+import { Paragraph, YStack } from '@my/ui';
+import { Stack } from 'expo-router';
 
 export default function Screen() {
   return (
@@ -10,7 +11,10 @@ export default function Screen() {
           title: 'Onboarding',
         }}
       />
-      <OnboardingScreen />
+      {/* <OnboardingScreen /> */}
+      <YStack>
+        <Paragraph>Onboarding</Paragraph>
+      </YStack>
     </>
-  )
+  );
 }

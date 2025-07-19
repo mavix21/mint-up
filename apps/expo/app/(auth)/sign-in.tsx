@@ -1,6 +1,7 @@
-import { SignInScreen } from 'app/features/auth/sign-in-screen'
-import { Stack } from 'expo-router'
-import { SafeAreaView } from 'react-native-safe-area-context'
+// import { SignInScreen } from 'app/features/auth/sign-in-screen'
+import { Paragraph, YStack } from '@my/ui';
+import { Stack } from 'expo-router';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function Screen() {
   return (
@@ -10,7 +11,10 @@ export default function Screen() {
           title: 'Sign In',
         }}
       />
-      <SignInScreen />
+      {/* <SignInScreen /> */}
+      <YStack>
+        <Paragraph>Sign In</Paragraph>
+      </YStack>
     </SafeAreaView>
-  )
+  );
 }

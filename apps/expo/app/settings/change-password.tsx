@@ -1,6 +1,7 @@
-import { ChangePasswordScreen } from 'app/features/settings/change-password-screen'
-import { Stack } from 'expo-router'
-import { SafeAreaView } from 'react-native-safe-area-context'
+// import { ChangePasswordScreen } from 'app/features/settings/change-password-screen'
+import { Paragraph, YStack } from '@my/ui';
+import { Stack } from 'expo-router';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function Screen() {
   return (
@@ -11,7 +12,10 @@ export default function Screen() {
           headerShown: true,
         }}
       />
-      <ChangePasswordScreen />
+      {/* <ChangePasswordScreen /> */}
+      <YStack>
+        <Paragraph>Change Password</Paragraph>
+      </YStack>
     </SafeAreaView>
-  )
+  );
 }

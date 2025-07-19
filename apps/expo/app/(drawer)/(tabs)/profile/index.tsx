@@ -1,5 +1,6 @@
-import { DrawerMenu } from '@my/app/features/drawer-menu'
-import { Stack } from 'expo-router'
+// import { DrawerMenu } from '@my/app/features/drawer-menu'
+import { Paragraph, YStack } from '@my/ui';
+import { Stack } from 'expo-router';
 
 export default function Screen() {
   return (
@@ -10,7 +11,10 @@ export default function Screen() {
           headerShown: false,
         }}
       />
-      <DrawerMenu />
+      {/* <DrawerMenu /> */}
+      <YStack>
+        <Paragraph>Profile</Paragraph>
+      </YStack>
     </>
-  )
+  );
 }

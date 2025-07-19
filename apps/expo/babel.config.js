@@ -1,8 +1,8 @@
 // temp: ignore bundle error
-process.env.TAMAGUI_IGNORE_BUNDLE_ERRORS = 'solito/link,moti'
+process.env.TAMAGUI_IGNORE_BUNDLE_ERRORS = 'solito/link,moti';
 
 module.exports = (api) => {
-  api.cache(false)
+  api.cache(false);
   return {
     presets: [['babel-preset-expo', { jsxRuntime: 'automatic' }]],
     plugins: [
@@ -46,5 +46,5 @@ module.exports = (api) => {
           ]),
       ['transform-inline-environment-variables', {}],
     ],
-  }
-}
+  };
+};

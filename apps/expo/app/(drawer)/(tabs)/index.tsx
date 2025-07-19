@@ -1,5 +1,10 @@
-import { HomeScreen } from 'app/features/home/screen'
+// import { HomeScreen } from 'app/features/home/screen'
+import { Paragraph, YStack } from '@my/ui';
 
 export default function Screen() {
-  return <HomeScreen />
+  return (
+    <YStack>
+      <Paragraph>Home</Paragraph>
+    </YStack>
+  );
 }

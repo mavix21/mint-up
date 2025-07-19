@@ -1,6 +1,7 @@
-import { EditProfileScreen } from '@my/app/features/profile/edit-screen'
-import { Stack } from 'expo-router'
-import { SafeAreaView } from 'react-native-safe-area-context'
+// import { EditProfileScreen } from '@my/app/features/profile/edit-screen';
+import { Paragraph, YStack } from '@my/ui';
+import { Stack } from 'expo-router';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function Screen() {
   return (
@@ -12,8 +13,11 @@ export default function Screen() {
         }}
       />
       <SafeAreaView style={{ flex: 1 }} edges={['top', 'bottom', 'left', 'right']}>
-        <EditProfileScreen />
+        {/* <EditProfileScreen /> */}
+        <YStack>
+          <Paragraph>Edit Profile</Paragraph>
+        </YStack>
       </SafeAreaView>
     </>
-  )
+  );
 }

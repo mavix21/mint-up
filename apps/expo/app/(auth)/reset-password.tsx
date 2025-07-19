@@ -1,6 +1,7 @@
-import { ResetPasswordScreen } from 'app/features/auth/reset-password-screen'
-import { Stack } from 'expo-router'
-import { SafeAreaView } from 'react-native-safe-area-context'
+// import { ResetPasswordScreen } from 'app/features/auth/reset-password-screen'
+import { Paragraph, YStack } from '@my/ui';
+import { Stack } from 'expo-router';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function Screen() {
   return (
@@ -10,7 +11,10 @@ export default function Screen() {
           title: 'Reset Password',
         }}
       />
-      <ResetPasswordScreen />
+      {/* <ResetPasswordScreen /> */}
+      <YStack>
+        <Paragraph>Reset Password</Paragraph>
+      </YStack>
     </SafeAreaView>
-  )
+  );
 }

@@ -1,6 +1,6 @@
-import { CustomToast, ToastProvider as ToastProviderOG } from '@my/ui'
+import { CustomToast, ToastProvider as ToastProviderOG } from '@my/ui';
 
-import { ToastViewport, ToastViewportProps } from './ToastViewport'
+import { ToastViewport, ToastViewportProps } from './ToastViewport';
 
 export const ToastProvider = ({
   children,
@@ -22,5 +22,5 @@ export const ToastProvider = ({
       <ToastViewport {...viewportProps} />
       <CustomToast />
     </ToastProviderOG>
-  )
-}
+  );
+};

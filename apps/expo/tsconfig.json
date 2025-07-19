@@ -1,6 +1,6 @@
 {
   "extends": "../../tsconfig.base",
-  "include": ["app", "types.d.ts", "../../packages/ui", "../../packages/api", "../../packages/app"],
+  "include": ["app", "types.d.ts", "../../packages/ui", "../../packages/app"],
   "compilerOptions": {
     "noEmit": true,
     "composite": true,

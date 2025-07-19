@@ -1,2 +1,2 @@
 // noop
-export const SafeAreaProvider = ({ children }: { children: React.ReactNode }) => <>{children}</>
+export const SafeAreaProvider = ({ children }: { children: React.ReactNode }) => <>{children}</>;

@@ -1,6 +1,7 @@
-import { ChangeEmailScreen } from 'app/features/settings/change-email-screen'
-import { Stack } from 'expo-router'
-import { SafeAreaView } from 'react-native-safe-area-context'
+// import { ChangeEmailScreen } from 'app/features/settings/change-email-screen'
+import { Paragraph, YStack } from '@my/ui';
+import { Stack } from 'expo-router';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function Screen() {
   return (
@@ -11,7 +12,10 @@ export default function Screen() {
           headerShown: true,
         }}
       />
-      <ChangeEmailScreen />
+      {/* <ChangeEmailScreen /> */}
+      <YStack>
+        <Paragraph>Change Email</Paragraph>
+      </YStack>
     </SafeAreaView>
-  )
+  );
 }

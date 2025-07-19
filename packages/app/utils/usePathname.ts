@@ -1,5 +1,5 @@
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/router';
 
 export const usePathname = () => {
-  return useRouter().pathname
-}
+  return useRouter().pathname;
+};

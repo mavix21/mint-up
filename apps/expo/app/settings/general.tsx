@@ -1,6 +1,7 @@
-import { GeneralSettingsScreen } from 'app/features/settings/general-screen'
-import { Stack } from 'expo-router'
-import { SafeAreaView } from 'react-native-safe-area-context'
+// import { GeneralSettingsScreen } from 'app/features/settings/general-screen'
+import { Paragraph, YStack } from '@my/ui';
+import { Stack } from 'expo-router';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function Screen() {
   return (
@@ -11,7 +12,10 @@ export default function Screen() {
           headerShown: true,
         }}
       />
-      <GeneralSettingsScreen />
+      {/* <GeneralSettingsScreen /> */}
+      <YStack>
+        <Paragraph>General</Paragraph>
+      </YStack>
     </SafeAreaView>
-  )
+  );
 }

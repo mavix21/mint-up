@@ -4,4 +4,4 @@ export const useSafeAreaInsets = () => ({
   left: 0,
   bottom: 0,
   right: 0,
-})
+});
