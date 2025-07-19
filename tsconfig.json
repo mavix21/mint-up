@@ -2,9 +2,7 @@
   "files": [],
   "compilerOptions": {
     "outDir": "/tmp",
-    "typeRoots": [
-      "node_modules/@types"
-    ],
+    "typeRoots": ["node_modules/@types"],
     "skipDefaultLibCheck": true,
     "skipLibCheck": true,
     "noEmit": true
@@ -14,16 +12,10 @@
       "path": "apps/expo"
     },
     {
-      "path": "apps/next"
-    },
-    {
       "path": "packages/app"
     },
     {
       "path": "packages/ui"
-    },
-    {
-      "path": "packages/api"
     }
   ],
   "extends": "expo/tsconfig.base"
