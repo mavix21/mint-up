@@ -106,15 +106,6 @@ export function CreateEventScreen() {
                     Event Name
                   </Label>
                 </VisuallyHidden>
-                {/* <Input
-                  id="event-name"
-                  placeholder="Event Name"
-                  borderRadius={12}
-                  borderWidth={0}
-                  fontSize="$8"
-                  py="$3"
-                  px="$4"
-                /> */}
                 <TextArea
                   id="event-name"
                   placeholder="Event Name"
@@ -134,7 +125,15 @@ export function CreateEventScreen() {
               {/* Start/End DateTime */}
               <YStack gap="$2">
                 <YStack justifyContent="center" gap="$2">
-                  <XStack flex={1} alignItems="center" gap="$2">
+                  <XStack
+                    flex={1}
+                    alignItems="center"
+                    gap="$2"
+                    px="$2"
+                    py="$1"
+                    borderRadius="$true"
+                    backgroundColor="$color4"
+                  >
                     <Label flex={1} fontWeight="600">
                       Start
                     </Label>
@@ -150,7 +149,15 @@ export function CreateEventScreen() {
                       />
                     </XStack>
                   </XStack>
-                  <XStack flex={1} alignItems="center" gap="$2">
+                  <XStack
+                    flex={1}
+                    alignItems="center"
+                    gap="$2"
+                    px="$2"
+                    py="$1"
+                    borderRadius="$true"
+                    backgroundColor="$color4"
+                  >
                     <Label flex={1} fontWeight="600">
                       End
                     </Label>
@@ -190,7 +197,7 @@ export function CreateEventScreen() {
                 </Button>
               </YStack>
               {/* Event Options */}
-              <YStack space="$2">
+              <YStack gap="$2">
                 <Text fontWeight="700" mb="$2">
                   Event Options
                 </Text>

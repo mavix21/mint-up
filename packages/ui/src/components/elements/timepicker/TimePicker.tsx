@@ -33,7 +33,7 @@ const TimeInput = React.forwardRef<HTMLInputElement, TimeInputProps>(
           padding: tokens.space.$2.val,
           fontSize: '14px',
           color: theme.color.val,
-          backgroundColor: theme.color4.val,
+          backgroundColor: theme.color6.val,
           borderRadius: tokens.radius.$4.val,
           appearance: 'none',
           fontVariantNumeric: 'tabular-nums',
@@ -98,12 +98,12 @@ const TimeOptionsList = ({
         borderRadius="$2"
         cursor="pointer"
         hoverStyle={{
-          backgroundColor: '$color3',
-        }}
-        pressStyle={{
           backgroundColor: '$color4',
         }}
-        backgroundColor={timeValue === option.value ? '$color4' : 'transparent'}
+        pressStyle={{
+          backgroundColor: '$color5',
+        }}
+        backgroundColor={timeValue === option.value ? '$color5' : 'transparent'}
         onPress={() => handleTimeOptionSelect(option.value)}
       >
         <XStack alignItems="center" justifyContent="center" gap="$2" position="relative">
