@@ -6,7 +6,6 @@ import { useQuery } from 'convex/react';
 import React from 'react';
 
 import { EventCard } from './ui/event-card';
-import { CreateEventScreen } from '../create-event/create-event-screen';
 
 // Define the type for events returned by getUpcomingEvents
 export type ConvexEventWithExtras = Doc<'events'> & {
@@ -247,7 +246,6 @@ export const MyEventsScreen = () => {
               )} */}
         </Tabs.Content>
       </Tabs>
-      <CreateEventScreen />
     </YStack>
   );
 };
