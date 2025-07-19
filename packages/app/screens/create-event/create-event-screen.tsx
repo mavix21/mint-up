@@ -129,15 +129,15 @@ export function CreateEventScreen() {
                     flex={1}
                     alignItems="center"
                     gap="$2"
-                    px="$2"
-                    py="$1"
+                    px="$3"
+                    py="$1.5"
                     borderRadius="$true"
                     backgroundColor="$color4"
                   >
                     <Label flex={1} fontWeight="600">
                       Start
                     </Label>
-                    <XStack gap="$2">
+                    <XStack gap="$2" alignItems="center">
                       <Button size="$3" borderRadius={12} justifyContent="space-between">
                         <Text>Wed, Jul 16</Text>
                       </Button>
@@ -153,15 +153,15 @@ export function CreateEventScreen() {
                     flex={1}
                     alignItems="center"
                     gap="$2"
-                    px="$2"
-                    py="$1"
+                    px="$3"
+                    py="$1.5"
                     borderRadius="$true"
                     backgroundColor="$color4"
                   >
                     <Label flex={1} fontWeight="600">
                       End
                     </Label>
-                    <XStack gap="$2">
+                    <XStack gap="$2" alignItems="center">
                       <Button size="$3" borderRadius={12} justifyContent="space-between">
                         <Text>Thu, Jul 17</Text>
                       </Button>
