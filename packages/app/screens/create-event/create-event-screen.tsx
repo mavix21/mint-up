@@ -242,27 +242,28 @@ export function CreateEventScreen() {
                   </YGroup.Item>
                 </YGroup>
               </YStack>
+              {/* Create Event Button - Now part of the scrollable content */}
+              <YStack
+                px="$4"
+                py="$4"
+                backgroundColor="$color2"
+                borderTopWidth={1}
+                borderColor="$color3"
+                marginTop="$4"
+              >
+                <Button
+                  size="$4"
+                  themeInverse
+                  fontWeight="600"
+                  width="100%"
+                  maxWidth={496}
+                  marginHorizontal="auto"
+                >
+                  Create Event
+                </Button>
+              </YStack>
             </YStack>
           </ScrollView>
-          {/* Create Event Button - Fixed at bottom */}
-          <YStack
-            px="$4"
-            py="$4"
-            backgroundColor="$color2"
-            borderTopWidth={1}
-            borderColor="$color3"
-          >
-            <Button
-              size="$4"
-              themeInverse
-              fontWeight="600"
-              width="100%"
-              maxWidth={496}
-              marginHorizontal="auto"
-            >
-              Create Event
-            </Button>
-          </YStack>
         </YStack>
       </YStack>
 
