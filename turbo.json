@@ -18,5 +18,6 @@
       "cache": false
     },
     "check-circular-deps": {}
-  }
+  },
+  "globalEnv": ["NEXT_PUBLIC_CONVEX_URL"]
 }
