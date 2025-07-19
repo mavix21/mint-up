@@ -14,8 +14,8 @@ export const Navigator = memo(function Navigator() {
 
   return (
     <>
-      <YStack flex={1} height="100%" width="100%">
-        <YStack flex={1} height="100%" width="100%">
+      <YStack width="100%" height={'100svh' as any}>
+        <YStack flex={1} width="100%" height="100%">
           <TabSelector activeTab={activeTab} />
         </YStack>
         <BottomTabNav
