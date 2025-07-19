@@ -1,4 +1,4 @@
-import type { Metadata, Viewport } from 'next';
+import type { Metadata } from 'next';
 
 import { Providers } from '@/providers';
 
@@ -8,12 +8,6 @@ import './app.css';
 export const metadata: Metadata = {
   title: 'Mini',
   description: 'Mini',
-};
-
-export const viewport: Viewport = {
-  width: 'device-width',
-  initialScale: 1.0,
-  interactiveWidget: 'resizes-content',
 };
 
 export default async function RootLayout({
