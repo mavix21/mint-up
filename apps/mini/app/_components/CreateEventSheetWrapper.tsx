@@ -12,11 +12,13 @@ export function CreateEventSheetWrapper({ open, setOpen }: CreateEventSheetWrapp
     <Sheet
       dismissOnSnapToBottom
       disableDrag
+      moveOnKeyboardChange
+      forceRemoveScrollEnabled
       modal
       open={open}
       onOpenChange={setOpen}
       zIndex={100_000}
-      snapPoints={[98]}
+      snapPoints={[99]}
       snapPointsMode="percent"
       animation="medium"
     >
