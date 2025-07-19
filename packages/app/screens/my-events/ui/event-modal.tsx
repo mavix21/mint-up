@@ -83,7 +83,7 @@ export function EventModal({
             <ScrollView flex={1} style={{ paddingHorizontal: 16 }}>
               <Dialog.Description asChild px="$0">
                 <View>
-                  <YStack>
+                  <YStack mt="$3">
                     <XStack display="flex" gap="$2.5">
                       <Clock size={15} mt="$1.5" color="$gray10" />
                       <YStack>

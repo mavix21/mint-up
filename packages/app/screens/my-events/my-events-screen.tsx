@@ -114,6 +114,8 @@ const groupEventsByDate = (events: ConvexEventWithExtras[], activeTab: string) =
 
 export const MyEventsScreen = () => {
   const upcomingEvents = useQuery(api.events.getUpcomingEvents);
+  const pastEvents = useQuery(api.events.getPastEvents);
+
   const [activeTab, setActiveTab] = React.useState('upcoming');
   const [, setId] = React.useState(0);
   const [open, setOpen] = React.useState(false);
@@ -201,7 +203,7 @@ export const MyEventsScreen = () => {
               paddingInlineEnd="$4"
               paddingBottom={160}
             >
-              {/* {groupEventsByDate(pastEvents, activeTab).map(([dateKey, events], index) => (
+              {groupEventsByDate(pastEvents!, activeTab).map(([dateKey, events], index) => (
                 <View key={dateKey} pos="relative">
                   <View pos="absolute" bottom={0} left={4} top={16} w="$0.25" bg="$gray6" />
 
@@ -219,17 +221,19 @@ export const MyEventsScreen = () => {
                       />
                       <View mb="$4">
                         <Text fontSize="$2" color="$color11">
-                          {formatDate(events[0]?.startTime ?? '')}
+                          {formatDate(formatRelativeDate(events[0]?.startDate) ?? '')}
                         </Text>
-                        <Text fontSize="$2">{getDayOfWeek(events[0]?.startTime ?? '')}</Text>
+                        <Text fontSize="$2">
+                          {getDayOfWeek(formatRelativeDate(events[0]?.startDate) ?? '')}
+                        </Text>
                       </View>
                       {events.map((event) => (
-                        <EventCard key={event.id} event={event} isPast index={index} />
+                        <EventCard key={event._id} event={event} isPast index={index} />
                       ))}
                     </View>
                   </View>
                 </View>
-              ))} */}
+              ))}
 
               {/* {pastEvents.length === 0 && (
                 <Text py="$12" ai="center">
