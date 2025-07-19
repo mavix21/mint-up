@@ -1,5 +1,5 @@
 import { TimePicker } from '@my/ui/src/components/elements/timepicker/TimePicker';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import {
   Button,
   Label,
@@ -25,6 +25,31 @@ export function CreateEventScreen() {
   const tamaguiTokens = getTokens();
   const [theme, setTheme] = useState<string>('');
   const [showThemeSheet, setShowThemeSheet] = useState(false);
+
+  // Calculate closest time and default end time
+  const { startTime, endTime } = useMemo(() => {
+    const now = new Date();
+    const currentHour = now.getHours();
+    const currentMinute = now.getMinutes();
+
+    // Round to nearest 30-minute interval
+    const roundedMinute = Math.round(currentMinute / 30) * 30;
+    const adjustedHour = roundedMinute === 60 ? currentHour + 1 : currentHour;
+    const finalMinute = roundedMinute === 60 ? 0 : roundedMinute;
+
+    // Format start time (HH:mm)
+    const startTime = `${adjustedHour.toString().padStart(2, '0')}:${finalMinute
+      .toString()
+      .padStart(2, '0')}`;
+
+    // End time is 1 hour after start time
+    const endHour = (adjustedHour + 1) % 24;
+    const endTime = `${endHour.toString().padStart(2, '0')}:${finalMinute
+      .toString()
+      .padStart(2, '0')}`;
+
+    return { startTime, endTime };
+  }, []);
   const themeOptions = [
     { label: 'Default', value: '', color: '$color4' },
     { label: 'Pink', value: 'pink', color: '$pink10' },
@@ -126,7 +151,7 @@ export function CreateEventScreen() {
                         <Text>Wed, Jul 16</Text>
                       </Button>
                       <TimePicker
-                        value="21:00"
+                        value={startTime}
                         onChangeText={(value) => {
                           console.log(value);
                         }}
@@ -142,7 +167,7 @@ export function CreateEventScreen() {
                         <Text>Thu, Jul 17</Text>
                       </Button>
                       <TimePicker
-                        value="11:30"
+                        value={endTime}
                         onChangeText={(value) => {
                           console.log(value);
                         }}
