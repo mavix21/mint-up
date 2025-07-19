@@ -51,7 +51,7 @@ export function CreateEventScreen() {
     return { startTime, endTime };
   }, []);
   const themeOptions = [
-    { label: 'Default', value: '', color: '$color4' },
+    { label: 'Default', value: '', color: '$color' },
     { label: 'Pink', value: 'pink', color: '$pink10' },
     { label: 'Purple', value: 'purple', color: '$purple10' },
     { label: 'Blue', value: 'blue', color: '$blue10' },
