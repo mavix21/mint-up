@@ -85,12 +85,7 @@ export function CreateEventScreen() {
               </Card>
               {/* Theme Selector (at the top) */}
               <XStack gap="$2">
-                <Button
-                  iconAfter={<Text>⟳</Text>}
-                  size="$3"
-                  borderRadius={12}
-                  onPress={() => setShowThemeSheet(true)}
-                >
+                <Button size="$3" borderRadius={12} onPress={() => setShowThemeSheet(true)}>
                   <XStack alignItems="center" gap="$2">
                     <Text fontWeight="500">Theme</Text>
                     <Stack
@@ -102,9 +97,6 @@ export function CreateEventScreen() {
                       }
                     />
                   </XStack>
-                </Button>
-                <Button size="$3" borderRadius={12}>
-                  <Text>⇅</Text>
                 </Button>
               </XStack>
               {/* Event Name */}
