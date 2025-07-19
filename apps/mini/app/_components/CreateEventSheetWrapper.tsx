@@ -1,6 +1,6 @@
 import { Sheet } from '@my/ui';
 import { CreateEventScreen } from 'app/screens/create-event/create-event-screen';
-import { memo, useState } from 'react';
+import { memo } from 'react';
 
 interface CreateEventSheetWrapperProps {
   open: boolean;
@@ -8,19 +8,15 @@ interface CreateEventSheetWrapperProps {
 }
 
 export function CreateEventSheetWrapper({ open, setOpen }: CreateEventSheetWrapperProps) {
-  const [position, setPosition] = useState(0);
-  const snapPoints = [98, 50, 25];
-
   return (
     <Sheet
       dismissOnSnapToBottom
+      disableDrag
       modal
       open={open}
       onOpenChange={setOpen}
-      position={position}
-      onPositionChange={setPosition}
       zIndex={100_000}
-      snapPoints={snapPoints}
+      snapPoints={[98, 50]}
       snapPointsMode="percent"
       animation="medium"
     >

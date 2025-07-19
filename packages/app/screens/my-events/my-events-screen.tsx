@@ -122,6 +122,7 @@ export const MyEventsScreen = () => {
   const [position, setPosition] = React.useState(0);
 
   if (!upcomingEvents) return <FullscreenSpinner />; // TODO: improve skeleton
+  if (!pastEvents) return <FullscreenSpinner />; // TODO: improve skeleton
 
   return (
     <>
@@ -203,7 +204,7 @@ export const MyEventsScreen = () => {
               paddingInlineEnd="$4"
               paddingBottom={160}
             >
-              {groupEventsByDate(pastEvents!, activeTab).map(([dateKey, events], index) => (
+              {groupEventsByDate(pastEvents, activeTab).map(([dateKey, events], index) => (
                 <View key={dateKey} pos="relative">
                   <View pos="absolute" bottom={0} left={4} top={16} w="$0.25" bg="$gray6" />
 
