@@ -16,7 +16,7 @@ export const Navigator = memo(function Navigator() {
     <>
       <YStack
         width="100%"
-        height={'100svh' as any}
+        height={'100dvh' as any}
         overflowBlock="hidden"
         style={{ overflowY: 'hidden', overflowBlock: 'hidden' }}
       >
