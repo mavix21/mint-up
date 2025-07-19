@@ -274,14 +274,15 @@ export function CreateEventScreen() {
           enterStyle={{ opacity: 0 }}
           exitStyle={{ opacity: 0 }}
         />
-        <Sheet.Handle />
-        <Sheet.Frame padding="$4" alignItems="center" backgroundColor="$color2">
+        <Sheet.Handle backgroundColor="$color4" />
+        <Sheet.Frame padding="$4" alignItems="center" backgroundColor="$color4">
           <ToggleGroup
             type="single"
             value={theme}
             onValueChange={(val) => {
               setTheme(val);
             }}
+            backgroundColor="$color4"
             orientation="horizontal"
             gap="$3"
           >

@@ -19,7 +19,7 @@ export function CreateEventSheetWrapper({ open, setOpen }: CreateEventSheetWrapp
       zIndex={100_000}
       snapPoints={[98]}
       snapPointsMode="percent"
-      animation="quick"
+      animation="medium"
     >
       <Sheet.Overlay
         animation="lazy"
