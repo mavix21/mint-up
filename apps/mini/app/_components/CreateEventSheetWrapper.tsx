@@ -17,7 +17,7 @@ export function CreateEventSheetWrapper({ open, setOpen }: CreateEventSheetWrapp
       open={open}
       onOpenChange={setOpen}
       zIndex={100_000}
-      snapPoints={[98]}
+      snapPoints={[96]}
       snapPointsMode="percent"
       animation="medium"
     >
