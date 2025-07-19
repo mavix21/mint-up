@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import { Providers } from '@/providers';
 
 import '@coinbase/onchainkit/styles.css';
+import './app.css';
 
 export const metadata: Metadata = {
   title: 'Mini',
