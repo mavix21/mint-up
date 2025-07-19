@@ -73,13 +73,13 @@ export function CreateEventScreen() {
                 size="$6"
                 width="100%"
                 height={180}
-                backgroundColor="$color4"
+                backgroundColor="$color5"
                 borderRadius={24}
                 overflow="hidden"
               >
                 <YStack flex={1} alignItems="flex-end" justifyContent="flex-end" p="$3">
-                  <Avatar circular size="$4" backgroundColor="$color5">
-                    <Avatar.Fallback bc="$color4" />
+                  <Avatar circular size="$4" backgroundColor="$color3">
+                    <Avatar.Fallback bc="$color3" />
                   </Avatar>
                 </YStack>
               </Card>
