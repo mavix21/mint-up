@@ -36,6 +36,7 @@ export default function HomePage() {
     return (
       <View>
         <p>Loading user session or please sign in with Farcaster.</p>
+
         {/* You might display a "Sign In" button here if authentication is not automatic */}
         {/* The signIn function is also available from useMiniKit if you need to trigger it manually */}
         {/* <button onClick={() => signIn()}>Sign In</button> */}
