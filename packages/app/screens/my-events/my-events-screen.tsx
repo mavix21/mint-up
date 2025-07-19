@@ -117,16 +117,20 @@ export const MyEventsScreen = () => {
   const pastEvents = useQuery(api.events.getPastEvents);
 
   const [activeTab, setActiveTab] = React.useState('upcoming');
-  const [, setId] = React.useState(0);
-  const [open, setOpen] = React.useState(false);
-  const [position, setPosition] = React.useState(0);
 
   if (!upcomingEvents) return <FullscreenSpinner />; // TODO: improve skeleton
   if (!pastEvents) return <FullscreenSpinner />; // TODO: improve skeleton
 
   return (
     <>
-      <YStack flex={1} fullscreen maxWidth={600} marginInline="auto" overflowBlock="hidden">
+      <YStack
+        flex={1}
+        fullscreen
+        maxWidth={600}
+        marginInline="auto"
+        overflowBlock="hidden"
+        height="100%"
+      >
         {/* <Navigation /> */}
 
         <View px="$4" py="$8" height="100%" overflowBlock="hidden">

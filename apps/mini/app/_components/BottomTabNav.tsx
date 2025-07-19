@@ -10,15 +10,7 @@ interface BottomTabNavProps {
 
 export function BottomTabNav({ activeTab, setActiveTab }: BottomTabNavProps) {
   return (
-    <YStack
-      bg="$color2"
-      position={'fixed' as any}
-      insetInline={0}
-      bottom={0}
-      borderTopWidth={1}
-      borderColor="$borderColor"
-      zIndex={50}
-    >
+    <YStack bg="$color2" borderTopWidth={1} borderColor="$borderColor" width="100%">
       <XStack flex={1} alignItems="center" justifyContent="space-around" py="$2">
         <BottomTab
           onClick={() => setActiveTab('my-events')}
