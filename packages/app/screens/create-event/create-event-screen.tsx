@@ -243,14 +243,7 @@ export function CreateEventScreen() {
                 </YGroup>
               </YStack>
               {/* Create Event Button - Now part of the scrollable content */}
-              <YStack
-                px="$4"
-                py="$4"
-                backgroundColor="$color2"
-                borderTopWidth={1}
-                borderColor="$color3"
-                marginTop="$4"
-              >
+              <YStack px="$4" py="$4" backgroundColor="$color2" borderColor="$color3">
                 <Button
                   size="$4"
                   themeInverse
