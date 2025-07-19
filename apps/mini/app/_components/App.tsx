@@ -10,7 +10,7 @@ export default function App() {
       justifyContent="center"
       alignItems="center"
       position="relative"
-      minHeight={'100vh' as any}
+      height={'100svh' as any}
       bg="$background"
     >
       <Navigator />
