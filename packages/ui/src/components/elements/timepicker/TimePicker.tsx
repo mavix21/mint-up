@@ -67,7 +67,7 @@ const generateTimeOptions = (): TimeOption[] => {
       date.setHours(hour, minute, 0, 0);
 
       const timeString = date.toLocaleTimeString('en-US', {
-        hour: 'numeric',
+        hour: '2-digit',
         minute: '2-digit',
         hour12: true,
       });
@@ -108,7 +108,6 @@ const TimeOptionsList = ({
       >
         <XStack alignItems="center" justifyContent="center" gap="$2" position="relative">
           <Paragraph textAlign="center">{option.label}</Paragraph>
-          {timeValue === option.value && <Check size={16} position="absolute" right={0} />}
         </XStack>
       </YStack>
     ))}
