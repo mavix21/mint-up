@@ -1,6 +1,7 @@
 'use client';
 
 import { useMiniKit } from '@coinbase/onchainkit/minikit';
+import { Text, View } from '@my/ui';
 import { useEffect } from 'react';
 
 import App from './app';
@@ -33,12 +34,18 @@ export default function HomePage() {
   if (!fid) {
     // User is not authenticated or context is not yet loaded
     return (
-      <div>
+      <View>
         <p>Loading user session or please sign in with Farcaster.</p>
         {/* You might display a "Sign In" button here if authentication is not automatic */}
         {/* The signIn function is also available from useMiniKit if you need to trigger it manually */}
         {/* <button onClick={() => signIn()}>Sign In</button> */}
-      </div>
+        <Text>Test</Text>
+        <Text>FID: {fid}</Text>
+        <Text>Username: {username}</Text>
+        <Text>Display Name: {displayName}</Text>
+        <Text>PFP URL: {pfpUrl}</Text>
+        <Text>Client Added: {clientAdded}</Text>
+      </View>
     );
   }
 
