@@ -2,7 +2,6 @@ import { TimePicker } from '@my/ui/src/components/elements/timepicker/TimePicker
 import { useState } from 'react';
 import {
   Button,
-  Input,
   Label,
   Switch,
   Text,
@@ -19,6 +18,7 @@ import {
   Stack,
   VisuallyHidden,
   getTokens,
+  TextArea,
 } from 'tamagui';
 
 export function CreateEventScreen() {
@@ -98,16 +98,20 @@ export function CreateEventScreen() {
                   py="$3"
                   px="$4"
                 /> */}
-                <Input
+                <TextArea
                   id="event-name"
                   placeholder="Event Name"
+                  flexGrow={1}
                   unstyled
                   borderWidth={0}
                   fontWeight="700"
                   placeholderTextColor="$color8"
-                  style={{
-                    fontSize: tamaguiTokens.size.$3.val,
-                  }}
+                  style={
+                    {
+                      fontSize: tamaguiTokens.size.$3.val,
+                      fieldSizing: 'content',
+                    } as any
+                  }
                 />
               </YStack>
               {/* Start/End DateTime */}
