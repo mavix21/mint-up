@@ -12,15 +12,14 @@ export function CreateEventSheetWrapper({ open, setOpen }: CreateEventSheetWrapp
     <Sheet
       dismissOnSnapToBottom
       disableDrag
-      moveOnKeyboardChange
-      forceRemoveScrollEnabled
+      forceRemoveScrollEnabled={open}
       modal
       open={open}
       onOpenChange={setOpen}
       zIndex={100_000}
-      snapPoints={[99]}
+      snapPoints={[98]}
       snapPointsMode="percent"
-      animation="medium"
+      animation="quick"
     >
       <Sheet.Overlay
         animation="lazy"
