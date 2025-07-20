@@ -88,6 +88,16 @@ module.exports = () => {
       viewTransition: true,
       // optimizeCss: true,
     },
+    async redirects() {
+      return [
+        {
+          source: '/.well-known/farcaster.json',
+          destination:
+            'https://api.farcaster.xyz/miniapps/hosted-manifest/0198252e-3b15-5ed3-9b5a-47a4982d80a1',
+          permanent: true,
+        },
+      ];
+    },
   };
 
   for (const plugin of plugins) {
