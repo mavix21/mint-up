@@ -143,6 +143,7 @@ export const MyEventsScreen = () => {
         flexDirection="column"
         overflowBlock="hidden"
         height="100%"
+        size="$3"
       >
         <Tabs.List
           mb="$6"
