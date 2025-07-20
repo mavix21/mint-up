@@ -7,4 +7,15 @@ body {
 
 input[type='time']::-webkit-calendar-picker-indicator {
   display: none !important;
+  -webkit-appearance: none;
+}
+
+input[type='date']::-webkit-inner-spin-button,
+input[type='date']::-webkit-calendar-picker-indicator {
+  display: none !important;
+  -webkit-appearance: none;
+}
+
+input[type='date'] {
+  position: relative;
 }
