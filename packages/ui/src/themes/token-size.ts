@@ -20,9 +20,9 @@ export const size = {
   $2: 28,
   '$2.5': 32,
   $3: 36,
+  $true: 36,
   '$3.5': 40,
   $4: 44,
-  $true: 44,
   '$4.5': 48,
   $5: 52,
   $6: 64,
@@ -40,10 +40,10 @@ export const size = {
   $18: 244,
   $19: 264,
   $20: 284,
-}
+};
 
-export type SizeKeysIn = keyof typeof size
+export type SizeKeysIn = keyof typeof size;
 export type Sizes = {
-  [Key in SizeKeysIn extends `$${infer Key}` ? Key : SizeKeysIn]: number
-}
-export type SizeKeys = `${keyof Sizes extends `${infer K}` ? K : never}`
+  [Key in SizeKeysIn extends `$${infer Key}` ? Key : SizeKeysIn]: number;
+};
+export type SizeKeys = `${keyof Sizes extends `${infer K}` ? K : never}`;
