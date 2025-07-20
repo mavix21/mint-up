@@ -11,7 +11,6 @@ interface CreateEventSheetWrapperProps {
 
 export function CreateEventSheetWrapper({ open, setOpen }: CreateEventSheetWrapperProps) {
   const visualViewportHeight = useVisualViewportHeight();
-  console.log('CreateEventSheetWrapper', { visualViewportHeight });
 
   return (
     <Sheet
