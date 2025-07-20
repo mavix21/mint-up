@@ -1,6 +1,14 @@
-import { Check } from '@tamagui/lucide-icons';
 import React, { useState } from 'react';
-import { Popover, YStack, Adapt, Button, Paragraph, useTheme, getTokens, XStack } from 'tamagui';
+import {
+  Popover,
+  YStack,
+  Button,
+  Paragraph,
+  useTheme,
+  getTokens,
+  XStack,
+  isWebTouchable,
+} from 'tamagui';
 
 interface TimeInputProps {
   value: string;
@@ -152,6 +160,20 @@ export function TimePicker({
     }
   };
 
+  // On mobile browsers, just render the native time input without the popover
+  if (isWebTouchable) {
+    return (
+      <TimeInput
+        value={timeValue}
+        onChange={handleInputChange}
+        disabled={disabled}
+        id={id}
+        ref={inputRef}
+        onBlur={onBlur}
+      />
+    );
+  }
+
   return (
     <Popover open={open} onOpenChange={handleOpenChange}>
       <Popover.Trigger asChild>
@@ -167,7 +189,13 @@ export function TimePicker({
         </Button>
       </Popover.Trigger>
 
-      <Adapt when="md" platform="touch">
+      <Popover.Content zIndex={200000} p="$2" backgroundColor="$color1">
+        <Popover.ScrollView>
+          <TimeOptionsList timeValue={timeValue} handleTimeOptionSelect={handleTimeOptionSelect} />
+        </Popover.ScrollView>
+      </Popover.Content>
+
+      {/* <Adapt when="md" platform="touch">
         <Popover.Sheet modal dismissOnSnapToBottom snapPoints={[35]} position={0} zIndex={200000}>
           <Popover.Sheet.Frame>
             <Popover.Sheet.ScrollView backgroundColor="$color2">
@@ -190,13 +218,7 @@ export function TimePicker({
           </Popover.Sheet.Frame>
           <Popover.Sheet.Overlay />
         </Popover.Sheet>
-      </Adapt>
-
-      <Popover.Content zIndex={200000} p="$2" backgroundColor="$color1">
-        <Popover.ScrollView>
-          <TimeOptionsList timeValue={timeValue} handleTimeOptionSelect={handleTimeOptionSelect} />
-        </Popover.ScrollView>
-      </Popover.Content>
+      </Adapt> */}
     </Popover>
   );
 }
