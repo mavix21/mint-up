@@ -1,3 +1,4 @@
+import { isChrome } from '@my/ui';
 import { useEffect, useState } from 'react';
 
 export function useVisualViewportHeight() {
@@ -6,7 +7,7 @@ export function useVisualViewportHeight() {
   useEffect(() => {
     let initialHeight = '100%';
 
-    if (typeof window !== 'undefined' && window.visualViewport) {
+    if (typeof window !== 'undefined' && !isChrome && window.visualViewport) {
       initialHeight = `${window.visualViewport.height}px`;
 
       const handleResize = () => {
