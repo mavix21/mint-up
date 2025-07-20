@@ -7,6 +7,7 @@ export function useVisualViewportHeight() {
   useEffect(() => {
     let initialHeight = '100%';
 
+    // Exclude Chrome because keyboard height is not included in the visual viewport height
     if (typeof window !== 'undefined' && !isChrome && window.visualViewport) {
       initialHeight = `${window.visualViewport.height}px`;
 
