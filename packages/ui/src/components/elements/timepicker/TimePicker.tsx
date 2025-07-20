@@ -35,8 +35,7 @@ const TimeInput = React.forwardRef<HTMLInputElement, TimeInputProps>(
         ref={ref}
         onBlur={onBlur}
         style={{
-          width: fill ? '100%' : 'fit-content',
-          minWidth: tokens.size.$4.val,
+          minWidth: tokens.size.$8.val,
           textAlign: fill ? 'center' : 'left',
           padding: tokens.space.$2.val,
           fontSize: '14px',
