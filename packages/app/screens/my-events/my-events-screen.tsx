@@ -1,6 +1,6 @@
 import { api } from '@my/backend/_generated/api';
 import { Doc } from '@my/backend/_generated/dataModel';
-import { FullscreenSpinner, H3, Tabs, Text, View, YStack } from '@my/ui';
+import { FullscreenSpinner, H3, SizableText, Tabs, Text, View, YStack } from '@my/ui';
 import { formatRelativeDate } from '@my/ui/src/lib/dates';
 import { useQuery } from 'convex/react';
 import React from 'react';
@@ -152,11 +152,11 @@ export const MyEventsScreen = () => {
           width="100%"
           $gtSm={{ width: 'fit-content' as any }}
         >
-          <Tabs.Tab value="upcoming" $sm={{ width: '50%' }}>
-            <Text>Upcoming</Text>
+          <Tabs.Tab value="upcoming" $sm={{ flexBasis: '50%' }}>
+            <SizableText>Upcoming</SizableText>
           </Tabs.Tab>
-          <Tabs.Tab value="past" $sm={{ width: '50%' }}>
-            <Text>Past</Text>
+          <Tabs.Tab value="past" $sm={{ flexBasis: '50%' }}>
+            <SizableText>Past</SizableText>
           </Tabs.Tab>
         </Tabs.List>
 
