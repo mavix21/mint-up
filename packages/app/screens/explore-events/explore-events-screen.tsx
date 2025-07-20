@@ -12,6 +12,7 @@ import {
 } from '@my/ui';
 import { ListFilter } from '@tamagui/lucide-icons';
 import { AnimationProp } from '@tamagui/web';
+import React from 'react';
 
 const data = [
   {
@@ -25,10 +26,21 @@ const data = [
   { uri: 'HLIST_6.jpg', title: 'Malang' },
 ];
 
+const categories = [
+  { id: 'all', label: 'All', color: '$green12' },
+  { id: 'art', label: 'Art', color: '$green11' },
+  { id: 'music', label: 'Music', color: '$green10' },
+  { id: 'sport', label: 'Sport', color: '$green9' },
+  { id: 'tech', label: 'Tech', color: '$green8' },
+  { id: 'food', label: 'Food', color: '$green7' },
+];
+
 export const ExploreEventsScreen = () => {
+  const [selectedCategory, setSelectedCategory] = React.useState('All');
+
   return (
     <YStack>
-      <XStack alignItems="center" space="$2" px="$4" pt="$4">
+      <XStack alignItems="center" space="$2" px="$4" pt="$5">
         <Input flex={1} size="$2" placeholder="Search" />
         <Button size="$2">
           <ListFilter size="$1" />
@@ -51,6 +63,50 @@ export const ExploreEventsScreen = () => {
           </View>
         </ScrollView>
       </View>
+      <YStack px="$4">
+        <View>
+          <Text fontSize="$3">Trending</Text>
+        </View>
+      </YStack>
+      <ScrollView
+        pl="$4"
+        pt="$2"
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={{ paddingRight: 20 }}
+      >
+        <XStack space="$2">
+          {categories.map((category) => {
+            const isSelected = selectedCategory === category.label;
+            return (
+              <Button
+                key={category.id}
+                size="$3"
+                paddingHorizontal="$4"
+                paddingVertical="$2"
+                borderRadius="$10"
+                backgroundColor={isSelected ? category.color : '$background'}
+                borderWidth={1}
+                borderColor={isSelected ? category.color : '$borderColor'}
+                hoverStyle={{ backgroundColor: isSelected ? category.color : '$borderColor' }}
+                pressStyle={{
+                  scale: 0.98,
+                  backgroundColor: isSelected ? category.color : '$backgroundPress',
+                }}
+                onPress={() => setSelectedCategory(category.label)}
+              >
+                <Text
+                  color={isSelected ? 'white' : '$color'}
+                  fontWeight={isSelected ? '600' : '400'}
+                  fontSize="$3"
+                >
+                  {category.label}
+                </Text>
+              </Button>
+            );
+          })}
+        </XStack>
+      </ScrollView>
     </YStack>
   );
 };
