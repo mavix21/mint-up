@@ -1,4 +1,4 @@
-import { PlopTypes } from '@turbo/gen'
+import { PlopTypes } from '@turbo/gen';
 
 export default function generator(plop: PlopTypes.NodePlopAPI): void {
   plop.setGenerator('component', {
@@ -10,15 +10,15 @@ export default function generator(plop: PlopTypes.NodePlopAPI): void {
         message: 'What is the name of the new component to create?',
         validate: (input: string) => {
           if (input.includes('.')) {
-            return 'name cannot include an extension'
+            return 'name cannot include an extension';
           }
           if (input.includes(' ')) {
-            return 'name cannot include spaces'
+            return 'name cannot include spaces';
           }
           if (!input) {
-            return 'name is required'
+            return 'name is required';
           }
-          return true
+          return true;
         },
       },
       {
@@ -45,26 +45,26 @@ export default function generator(plop: PlopTypes.NodePlopAPI): void {
           pattern: /(\n\n*)$/g, // removes newline at the end of the file
           template: "\nexport * from './{{ pascalCase name }}'\n", // newline before and after
         },
-      ]
+      ];
       if (prompts?.createStory) {
         actions.push({
           type: 'add',
           path: '{{ turbo.paths.root }}/packages/ui/src/components/{{ pascalCase name }}.stories.tsx',
           templateFile: 'templates/story.hbs',
-        })
+        });
       }
       if (prompts?.createNativeFile) {
         actions.push({
           type: 'add',
           path: '{{ turbo.paths.root }}/packages/ui/src/components/{{ pascalCase name }}.native.tsx',
           templateFile: 'templates/component-native.hbs',
-        })
+        });
       }
-      return actions
+      return actions;
     },
-  })
+  });
   plop.setGenerator('screen', {
-    description: 'Generates a feature directory, a screen and Next.js and Expo routes',
+    description: 'Generates a feature directory, a screen and Next.js app router and Expo routes',
     prompts: async (inquirer) => {
       const { path } = await inquirer.prompt({
         type: 'input',
@@ -72,17 +72,17 @@ export default function generator(plop: PlopTypes.NodePlopAPI): void {
         message: "What's the path for this screen? (e.g. /settings/two-factor-auth)",
         validate: (input: string) => {
           if (!input.startsWith('/')) {
-            return 'path should start with /'
+            return 'path should start with /';
           }
           if (input.includes(' ')) {
-            return 'path cannot include spaces'
+            return 'path cannot include spaces';
           }
           if (!input) {
-            return 'path is required'
+            return 'path is required';
           }
-          return true
+          return true;
         },
-      })
+      });
       const { featureName } = await inquirer.prompt({
         default: path.split('/')[1],
         type: 'input',
@@ -91,14 +91,14 @@ export default function generator(plop: PlopTypes.NodePlopAPI): void {
           'What feature does this screen belong to? This could be existing or new. e.g. auth, feed, chat)',
         validate: (input: string) => {
           if (input.includes(' ')) {
-            return 'feature name cannot include spaces'
+            return 'feature name cannot include spaces';
           }
           if (!input) {
-            return 'feature name is required'
+            return 'feature name is required';
           }
-          return true
+          return true;
         },
-      })
+      });
       const { screenName } = await inquirer.prompt({
         default: path.split('/').pop(),
         type: 'input',
@@ -106,19 +106,19 @@ export default function generator(plop: PlopTypes.NodePlopAPI): void {
         message: "What's the name of this screen? (e.g. index, create, list)",
         validate: (input: string) => {
           if (input.includes(' ')) {
-            return 'feature name cannot include spaces'
+            return 'feature name cannot include spaces';
           }
           if (!input) {
-            return 'feature name is required'
+            return 'feature name is required';
           }
-          return true
+          return true;
         },
-      })
+      });
       return {
         featureName,
         path,
         screenName,
-      }
+      };
     },
     actions: (prompts) => {
       const actions: PlopTypes.ActionType[] = [
@@ -129,7 +129,7 @@ export default function generator(plop: PlopTypes.NodePlopAPI): void {
         },
         {
           type: 'add',
-          path: `{{ turbo.paths.root }}/apps/next/pages{{ path }}/index.tsx`,
+          path: `{{ turbo.paths.root }}/apps/mini/app{{ path }}/page.tsx`,
           templateFile: 'templates/nextjs-page.hbs',
         },
         {
@@ -137,10 +137,10 @@ export default function generator(plop: PlopTypes.NodePlopAPI): void {
           path: `{{ turbo.paths.root }}/apps/expo/app{{ path }}/index.tsx`,
           templateFile: 'templates/expo-page.hbs',
         },
-      ]
-      return actions
+      ];
+      return actions;
     },
-  })
+  });
   plop.setGenerator('router', {
     description: 'Generates a tRPC router and registers it',
     prompts: async (inquirer) => {
@@ -150,15 +150,15 @@ export default function generator(plop: PlopTypes.NodePlopAPI): void {
         message: "What's the name of the new router to create? (e.g. user, post, comment)",
         validate: (input: string) => {
           if (!input) {
-            return 'name is required'
+            return 'name is required';
           }
-          return true
+          return true;
         },
-      })
+      });
 
       return {
         name,
-      }
+      };
     },
     actions: (prompts) => {
       const actions: PlopTypes.ActionType[] = [
@@ -179,8 +179,8 @@ export default function generator(plop: PlopTypes.NodePlopAPI): void {
           pattern: 'createTRPCRouter({',
           template: '  {{ camelCase name }}: {{ camelCase name }}Router,',
         },
-      ]
-      return actions
+      ];
+      return actions;
     },
-  })
+  });
 }
