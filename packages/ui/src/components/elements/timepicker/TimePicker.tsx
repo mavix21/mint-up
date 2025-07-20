@@ -40,7 +40,7 @@ const TimeInput = React.forwardRef<HTMLInputElement, TimeInputProps>(
           padding: tokens.space.$2.val,
           fontSize: '14px',
           color: theme.color.val,
-          backgroundColor: theme.color6.val,
+          backgroundColor: theme.color5.val,
           borderRadius: tokens.radius.$4.val,
           appearance: 'none',
           fontVariantNumeric: 'tabular-nums',

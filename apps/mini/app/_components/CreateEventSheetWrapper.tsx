@@ -35,7 +35,6 @@ export function CreateEventSheetWrapper({ open, setOpen }: CreateEventSheetWrapp
       <Sheet.Frame
         key={visualViewportHeight}
         alignItems="center"
-        bg="$color2"
         style={{ height: visualViewportHeight }}
       >
         <SheetContents onClose={() => setOpen(false)} />
