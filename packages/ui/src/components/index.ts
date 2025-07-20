@@ -21,3 +21,4 @@ export * from './LoadingOverlay';
 export * from './elements/datepicker/DatePicker';
 export * from './elements/timepicker/TimePicker';
 export * from './atoms';
+export * from './Drawer';

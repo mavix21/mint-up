@@ -1,6 +1,6 @@
-import { TimePicker, Chip } from '@my/ui';
+import { TimePicker, Chip, Drawer } from '@my/ui';
 import { Globe, MapPin } from '@tamagui/lucide-icons';
-import { useState, useMemo } from 'react';
+import { useState } from 'react';
 import {
   Button,
   Label,
@@ -23,7 +23,18 @@ import {
   Group,
   Separator,
   SizableText,
+  useWindowDimensions,
+  View,
+  isWeb,
 } from 'tamagui';
+
+import {
+  getClientTimezone,
+  calculateDefaultEventTimes,
+  getTodayDateString,
+  getThemeOptions,
+  getThemeColor,
+} from '../../utils';
 
 export function CreateEventScreen() {
   const tamaguiTokens = getTokens();
@@ -31,66 +42,14 @@ export function CreateEventScreen() {
   const [showThemeSheet, setShowThemeSheet] = useState(false);
 
   // Get client timezone
-  const clientTimezone = useMemo(() => {
-    try {
-      const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-      const offset = new Date().getTimezoneOffset();
-      const offsetHours = Math.abs(Math.floor(offset / 60));
-      const offsetMinutes = Math.abs(offset % 60);
-      const sign = offset <= 0 ? '+' : '-';
-      const offsetString = `${sign}${offsetHours.toString().padStart(2, '0')}:${offsetMinutes
-        .toString()
-        .padStart(2, '0')}`;
-
-      return {
-        name: timezone,
-        offset: offsetString,
-        city: timezone.split('/').pop()?.replace('_', ' ') || timezone,
-      };
-    } catch (error) {
-      // Fallback to UTC
-      return {
-        name: 'UTC',
-        offset: '+00:00',
-        city: 'UTC',
-      };
-    }
-  }, []);
+  const clientTimezone = getClientTimezone();
 
   // Calculate closest time and default end time
-  const { startTime, endTime } = useMemo(() => {
-    const now = new Date();
-    const currentHour = now.getHours();
-    const currentMinute = now.getMinutes();
+  const { startTime, endTime } = calculateDefaultEventTimes();
+  const themeOptions = getThemeOptions();
+  const todayDateString = getTodayDateString();
 
-    // Round to nearest 30-minute interval
-    const roundedMinute = Math.round(currentMinute / 30) * 30;
-    const adjustedHour = roundedMinute === 60 ? currentHour + 1 : currentHour;
-    const finalMinute = roundedMinute === 60 ? 0 : roundedMinute;
-
-    // Format start time (HH:mm)
-    const startTime = `${adjustedHour.toString().padStart(2, '0')}:${finalMinute
-      .toString()
-      .padStart(2, '0')}`;
-
-    // End time is 1 hour after start time
-    const endHour = (adjustedHour + 1) % 24;
-    const endTime = `${endHour.toString().padStart(2, '0')}:${finalMinute
-      .toString()
-      .padStart(2, '0')}`;
-
-    return { startTime, endTime };
-  }, []);
-  const themeOptions = [
-    { label: 'Default', value: '', color: '$color' },
-    { label: 'Pink', value: 'pink', color: '$pink10' },
-    { label: 'Purple', value: 'purple', color: '$purple10' },
-    { label: 'Blue', value: 'blue', color: '$blue10' },
-    { label: 'Green', value: 'green', color: '$green10' },
-    { label: 'Yellow', value: 'yellow', color: '$yellow10' },
-    { label: 'Orange', value: 'orange', color: '$orange10' },
-    { label: 'Red', value: 'red', color: '$red10' },
-  ];
+  const [showLocationDrawer, setShowLocationDrawer] = useState(false);
 
   return (
     <Theme name={theme as ThemeName}>
@@ -122,9 +81,7 @@ export function CreateEventScreen() {
                       width={20}
                       height={20}
                       borderRadius={4}
-                      backgroundColor={
-                        (themeOptions.find((t) => t.value === theme)?.color as any) || '$color4'
-                      }
+                      backgroundColor={getThemeColor(theme) as any}
                     />
                   </XStack>
                 </Button>
@@ -174,8 +131,8 @@ export function CreateEventScreen() {
                           id="start"
                           type="date"
                           style={{ textAlign: 'center' }}
-                          min={new Date().toISOString().split('T')[0]}
-                          defaultValue={new Date().toISOString().split('T')[0]}
+                          min={todayDateString}
+                          defaultValue={todayDateString}
                         />
                         <TimePicker
                           value={startTime}
@@ -204,8 +161,8 @@ export function CreateEventScreen() {
                           id="end"
                           type="date"
                           style={{ textAlign: 'center' }}
-                          min={new Date().toISOString().split('T')[0]}
-                          defaultValue={new Date().toISOString().split('T')[0]}
+                          min={todayDateString}
+                          defaultValue={todayDateString}
                         />
                         <TimePicker
                           value={endTime}
@@ -256,11 +213,12 @@ export function CreateEventScreen() {
               {/* Location */}
               <YStack>
                 <Button
+                  onPress={() => setShowLocationDrawer(true)}
                   justifyContent="space-between"
                   backgroundColor="$color3"
                   iconAfter={<MapPin size={16} />}
                 >
-                  <Text>Add Event Location</Text>
+                  <Text>Location</Text>
                   <Text color="$color11" ml="$2">
                     Offline location or virtual link
                   </Text>
@@ -382,6 +340,60 @@ export function CreateEventScreen() {
           </ToggleGroup>
         </Sheet.Frame>
       </Sheet>
+
+      <LocationDrawer open={showLocationDrawer} setOpen={setShowLocationDrawer} />
     </Theme>
+  );
+}
+
+function LocationDrawer({ open, setOpen }: { open: boolean; setOpen: (open: boolean) => void }) {
+  const { height, width } = useWindowDimensions();
+
+  return (
+    <View
+      flexDirection="column"
+      {...(isWeb && {
+        onKeyDown: (e: KeyboardEvent) => {
+          if (e.key === 'Escape') {
+            setOpen(false);
+          }
+        },
+      })}
+      marginVertical="$-2"
+      position="absolute"
+    >
+      <Drawer open={open} onOpenChange={setOpen} portalToRoot>
+        <Drawer.Overlay
+          animation="lazy"
+          height={height + 12}
+          width={width + 12}
+          enterStyle={{ opacity: 0 }}
+          exitStyle={{ opacity: 0 }}
+        />
+        <Drawer.Swipeable>
+          <Drawer.Content
+            x={-30}
+            paddingLeft={30}
+            width={240}
+            height={height + 12}
+            backgroundColor="$color3"
+          >
+            <YStack p="$4">
+              <Text fontWeight="600" mb="$4">
+                Location
+              </Text>
+              <YStack gap="$3">
+                <Button backgroundColor="$color4" justifyContent="flex-start">
+                  <Text>📍 Offline Location</Text>
+                </Button>
+                <Button backgroundColor="$color4" justifyContent="flex-start">
+                  <Text>🌐 Virtual Link</Text>
+                </Button>
+              </YStack>
+            </YStack>
+          </Drawer.Content>
+        </Drawer.Swipeable>
+      </Drawer>
+    </View>
   );
 }
