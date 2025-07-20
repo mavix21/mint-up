@@ -18,7 +18,8 @@ export function Topbar() {
       width="100%"
       justifyContent="space-between"
       alignItems="center"
-      p="$4"
+      px="$4"
+      py="$3"
       maxInlineSize={600}
       marginInline="auto"
     >
