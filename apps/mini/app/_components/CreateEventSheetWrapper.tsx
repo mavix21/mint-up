@@ -2,12 +2,17 @@ import { Sheet, Button, XStack, YStack } from '@my/ui';
 import { CreateEventScreen } from 'app/screens/create-event/create-event-screen';
 import { memo } from 'react';
 
+import { useVisualViewportHeight } from '@/lib/hooks/useVisualViewportHeight';
+
 interface CreateEventSheetWrapperProps {
   open: boolean;
   setOpen: (open: boolean) => void;
 }
 
 export function CreateEventSheetWrapper({ open, setOpen }: CreateEventSheetWrapperProps) {
+  const visualViewportHeight = useVisualViewportHeight();
+  console.log('CreateEventSheetWrapper', { visualViewportHeight });
+
   return (
     <Sheet
       dismissOnSnapToBottom
@@ -28,7 +33,12 @@ export function CreateEventSheetWrapper({ open, setOpen }: CreateEventSheetWrapp
         exitStyle={{ opacity: 0 }}
       />
       <Sheet.Handle backgroundColor="$color2" />
-      <Sheet.Frame alignItems="center" bg="$color2">
+      <Sheet.Frame
+        key={visualViewportHeight}
+        alignItems="center"
+        bg="$color2"
+        style={{ height: visualViewportHeight }}
+      >
         <SheetContents onClose={() => setOpen(false)} />
       </Sheet.Frame>
     </Sheet>
