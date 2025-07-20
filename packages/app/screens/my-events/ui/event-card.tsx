@@ -37,7 +37,7 @@ export function EventCard({
         borderColor="$color6"
         borderWidth={1}
         borderStyle="solid"
-        backgroundColor="$color2"
+        backgroundColor="$color1"
         onPress={() => setToggleEvent(true)}
       >
         <EventModal toggleEvent={toggleEvent} setToggleEvent={setToggleEvent} eventData={event} />

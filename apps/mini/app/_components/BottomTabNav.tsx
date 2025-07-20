@@ -32,8 +32,8 @@ export function BottomTabNav({ activeTab, setActiveTab }: BottomTabNavProps) {
           Icon={Plus}
         />
         <BottomTab
-          onClick={() => setActiveTab('explore')}
-          isActive={activeTab === 'explore'}
+          onClick={() => setActiveTab('explore-events')}
+          isActive={activeTab === 'explore-events'}
           label="Explore"
           Icon={Search}
         />
