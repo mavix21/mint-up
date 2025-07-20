@@ -15,7 +15,6 @@ export function CreateEventSheetWrapper({ open, setOpen }: CreateEventSheetWrapp
   return (
     <Sheet
       dismissOnSnapToBottom
-      disableDrag
       forceRemoveScrollEnabled={open}
       modal
       open={open}
