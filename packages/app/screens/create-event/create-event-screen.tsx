@@ -23,12 +23,10 @@ import {
   Group,
   Separator,
   SizableText,
-  useTheme,
 } from 'tamagui';
 
 export function CreateEventScreen() {
   const tamaguiTokens = getTokens();
-  const tamaguiTheme = useTheme();
   const [theme, setTheme] = useState<string>('');
   const [showThemeSheet, setShowThemeSheet] = useState(false);
 
@@ -154,6 +152,7 @@ export function CreateEventScreen() {
                   }
                 />
               </YStack>
+
               {/* Start/End DateTime */}
               <YStack gap="$2">
                 <Group orientation="vertical" size="$2" separator={<Separator />} borderRadius="$4">
@@ -176,6 +175,7 @@ export function CreateEventScreen() {
                           type="date"
                           style={{ textAlign: 'center' }}
                           min={new Date().toISOString().split('T')[0]}
+                          defaultValue={new Date().toISOString().split('T')[0]}
                         />
                         <TimePicker
                           value={startTime}
@@ -205,6 +205,7 @@ export function CreateEventScreen() {
                           type="date"
                           style={{ textAlign: 'center' }}
                           min={new Date().toISOString().split('T')[0]}
+                          defaultValue={new Date().toISOString().split('T')[0]}
                         />
                         <TimePicker
                           value={endTime}
