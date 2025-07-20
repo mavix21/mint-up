@@ -127,8 +127,7 @@ export const MyEventsScreen = () => {
       maxWidth={600}
       marginInline="auto"
       height="100%"
-      px="$4"
-      py="$8"
+      p="$4"
       overflowBlock="hidden"
     >
       {/* <Navigation /> */}
