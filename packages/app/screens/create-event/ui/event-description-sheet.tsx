@@ -1,3 +1,4 @@
+import { useVisualViewportHeight } from '@my/ui';
 import { X } from '@tamagui/lucide-icons';
 import { useState } from 'react';
 import { Sheet, Button, XStack, YStack, Text, TextArea, getTokens } from 'tamagui';
@@ -16,7 +17,7 @@ export function EventDescriptionSheet({
   onDescriptionChange,
 }: EventDescriptionSheetProps) {
   const [localDescription, setLocalDescription] = useState(description);
-  const tamaguiTokens = getTokens();
+  const visualViewportHeight = useVisualViewportHeight();
 
   const handleSave = () => {
     onDescriptionChange(localDescription);
@@ -53,7 +54,12 @@ export function EventDescriptionSheet({
         enterStyle={{ opacity: 0 }}
         exitStyle={{ opacity: 0 }}
       />
-      <Sheet.Frame py="$4" backgroundColor="$color2">
+      <Sheet.Frame
+        py="$4"
+        backgroundColor="$color2"
+        key={visualViewportHeight}
+        style={{ height: visualViewportHeight }}
+      >
         <YStack flex={1}>
           {/* Header */}
           <XStack alignItems="center" justifyContent="flex-end" px="$4" py="$3">
