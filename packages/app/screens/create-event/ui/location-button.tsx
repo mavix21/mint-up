@@ -30,7 +30,7 @@ export function LocationButton({ location, onPress }: LocationButtonProps) {
 
   const getLocationColor = () => {
     if (!location) {
-      return '$color11';
+      return '$color8';
     }
 
     if (location.type === 'in-person' && location.address) {
@@ -41,7 +41,7 @@ export function LocationButton({ location, onPress }: LocationButtonProps) {
       return '$color12';
     }
 
-    return '$color11';
+    return '$color8';
   };
 
   return (
