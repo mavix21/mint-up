@@ -52,15 +52,7 @@ const SheetContents = memo(({ onClose }: { onClose: () => void }) => {
         alignItems="center"
         justifyContent="center"
       >
-        <Button
-          size="$2"
-          circular
-          backgroundColor="$color4"
-          borderColor="$color6"
-          borderWidth={1}
-          onPress={onClose}
-          pressStyle={{ backgroundColor: '$color5' }}
-        >
+        <Button size="$2" circular backgroundColor="transparent" borderWidth={1} onPress={onClose}>
           ✕
         </Button>
       </XStack>

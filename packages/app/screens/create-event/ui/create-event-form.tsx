@@ -21,6 +21,8 @@ import {
   LocationButton,
   EventLocationSheet,
   ThemeSelector,
+  EventDescriptionSheet,
+  DescriptionButton,
   type EventLocation,
 } from './index';
 import { getClientTimezone, calculateDefaultEventTimes, getTodayDateString } from '../../../utils';
@@ -45,6 +47,8 @@ export function CreateEventForm({
   const tamaguiTokens = getTokens();
   const [location, setLocation] = useState<EventLocation | undefined>();
   const [showLocationSheet, setShowLocationSheet] = useState(false);
+  const [description, setDescription] = useState<string>('');
+  const [showDescriptionSheet, setShowDescriptionSheet] = useState(false);
 
   // Get client timezone
   const clientTimezone = getClientTimezone();
@@ -55,7 +59,7 @@ export function CreateEventForm({
 
   const handleSubmit = () => {
     // TODO: Collect form data and call onSubmit
-    onSubmit?.({ location });
+    onSubmit?.({ location, description });
   };
 
   return (
@@ -81,9 +85,8 @@ export function CreateEventForm({
           placeholder="Event Name"
           flexGrow={1}
           unstyled
-          borderWidth={0}
           fontWeight="700"
-          placeholderTextColor="$color8"
+          placeholderTextColor="$color7"
           style={
             {
               fontSize: tamaguiTokens.size.$3.val,
@@ -200,9 +203,10 @@ export function CreateEventForm({
 
       {/* Description */}
       <YStack>
-        <Button justifyContent="flex-start" backgroundColor="$color3">
-          <Text>Add Description</Text>
-        </Button>
+        <DescriptionButton
+          description={description}
+          onPress={() => setShowDescriptionSheet(true)}
+        />
       </YStack>
 
       {/* Event Options */}
@@ -229,6 +233,14 @@ export function CreateEventForm({
         onOpenChange={setShowLocationSheet}
         location={location}
         onLocationChange={setLocation}
+      />
+
+      {/* Description Sheet */}
+      <EventDescriptionSheet
+        open={showDescriptionSheet}
+        onOpenChange={setShowDescriptionSheet}
+        description={description}
+        onDescriptionChange={setDescription}
       />
     </YStack>
   );

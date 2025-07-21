@@ -74,7 +74,7 @@ export function EventLocationSheet({
         enterStyle={{ opacity: 0 }}
         exitStyle={{ opacity: 0 }}
       />
-      <Sheet.Handle backgroundColor="$color3" />
+      <Sheet.Handle backgroundColor="$color2" />
       <Sheet.Frame
         padding="$4"
         backgroundColor="$color2"
@@ -192,7 +192,7 @@ export function EventLocationSheet({
 
           {/* Action Buttons */}
           <XStack gap="$3" py="$4">
-            <Button flex={1} backgroundColor="$color5" color="$color11" onPress={handleCancel}>
+            <Button flex={1} theme="red" onPress={handleCancel}>
               Cancel
             </Button>
             <Button

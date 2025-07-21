@@ -8,3 +8,5 @@ export {
   type EventLocationType,
 } from './event-location-sheet';
 export { LocationButton } from './location-button';
+export { EventDescriptionSheet } from './event-description-sheet';
+export { DescriptionButton } from './description-button';

@@ -60,10 +60,29 @@ A button component that displays the current location status:
 - Color-coded status (filled vs empty)
 - Opens the location sheet when pressed
 
+### `EventDescriptionSheet`
+
+A full-screen description editor component:
+
+- Full-screen textarea for detailed event descriptions
+- Fixed bottom action buttons (Save/Cancel)
+- Placeholder text with helpful guidance
+- Local state management with save/cancel functionality
+- Ready for future markdown integration
+
+### `DescriptionButton`
+
+A button component that displays the current description status:
+
+- Shows "Add Description" when empty
+- Displays preview of existing description (first 50 characters)
+- Color-coded status (filled vs empty)
+- Opens the description sheet when pressed
+
 ## Usage
 
 ```tsx
-import { CreateEventForm, EventLocationSheet, LocationButton } from './ui';
+import { CreateEventForm, EventLocationSheet, LocationButton, EventDescriptionSheet, DescriptionButton } from './ui';
 
 // In your screen component
 <CreateEventForm
@@ -75,13 +94,21 @@ import { CreateEventForm, EventLocationSheet, LocationButton } from './ui';
   onShowThemeSheetChange={setShowThemeSheet}
 />
 
-// Or use location components individually
+// Or use components individually
 <LocationButton location={location} onPress={() => setShowLocationSheet(true)} />
 <EventLocationSheet
   open={showLocationSheet}
   onOpenChange={setShowLocationSheet}
   location={location}
   onLocationChange={setLocation}
+/>
+
+<DescriptionButton description={description} onPress={() => setShowDescriptionSheet(true)} />
+<EventDescriptionSheet
+  open={showDescriptionSheet}
+  onOpenChange={setShowDescriptionSheet}
+  description={description}
+  onDescriptionChange={setDescription}
 />
 ```
 
