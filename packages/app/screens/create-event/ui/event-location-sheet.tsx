@@ -81,7 +81,7 @@ export function EventLocationSheet({
         key={visualViewportHeight}
         style={{ height: visualViewportHeight }}
       >
-        <YStack gap="$4" flex={1} maxWidth={496} marginInline="auto">
+        <YStack gap="$4" width="100%" flex={1} maxWidth={496} marginInline="auto">
           {/* Event Type Selection */}
           <YStack gap="$3">
             <Text fontSize="$4" fontWeight="500">
