@@ -62,14 +62,14 @@ export function EventDescriptionSheet({
       >
         <YStack flex={1}>
           {/* Header */}
-          <XStack alignItems="center" justifyContent="flex-end" px="$4" py="$3">
+          <XStack alignItems="center" justifyContent="flex-end" px="$4">
             <Button size="$2" circular backgroundColor="transparent" onPress={handleCancel}>
               <X size={16} />
             </Button>
           </XStack>
 
           {/* TextArea - Takes up most of the space */}
-          <YStack flex={1} px="$2" py="$3">
+          <YStack flex={1} px="$2">
             <TextArea
               placeholder="Describe your event... What will attendees learn, experience, or participate in?"
               value={localDescription}
