@@ -4,3 +4,4 @@ export * from './components';
 export * from './validToken';
 // export * from './src/comoponents/'
 export { config } from './tamagui.config';
+export * from './lib';

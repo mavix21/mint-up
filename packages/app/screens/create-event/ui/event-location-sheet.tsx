@@ -1,4 +1,5 @@
-import { MapPin, Globe, X } from '@tamagui/lucide-icons';
+import { useVisualViewportHeight } from '@my/ui';
+import { MapPin, Globe } from '@tamagui/lucide-icons';
 import { useState } from 'react';
 import {
   Sheet,
@@ -35,6 +36,8 @@ export function EventLocationSheet({
   location,
   onLocationChange,
 }: EventLocationSheetProps) {
+  const visualViewportHeight = useVisualViewportHeight();
+
   const [localLocation, setLocalLocation] = useState<EventLocation>(
     location || { type: 'in-person' }
   );
@@ -54,7 +57,16 @@ export function EventLocationSheet({
   };
 
   return (
-    <Sheet open={open} onOpenChange={onOpenChange} snapPoints={[85]} defaultPosition={0} modal>
+    <Sheet
+      open={open}
+      forceRemoveScrollEnabled={open}
+      onOpenChange={onOpenChange}
+      snapPoints={[85]}
+      defaultPosition={0}
+      modal
+      dismissOnOverlayPress
+      dismissOnSnapToBottom
+    >
       <Sheet.Overlay
         animation="lazy"
         backgroundColor="$shadowColor"
@@ -62,7 +74,12 @@ export function EventLocationSheet({
         exitStyle={{ opacity: 0 }}
       />
       <Sheet.Handle backgroundColor="$color3" />
-      <Sheet.Frame padding="$4" backgroundColor="$color3">
+      <Sheet.Frame
+        padding="$4"
+        backgroundColor="$color3"
+        key={visualViewportHeight}
+        style={{ height: visualViewportHeight }}
+      >
         <YStack gap="$4" flex={1}>
           {/* Event Type Selection */}
           <YStack gap="$3">

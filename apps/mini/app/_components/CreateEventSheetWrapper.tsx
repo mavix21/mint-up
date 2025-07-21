@@ -1,8 +1,6 @@
-import { Sheet, Button, XStack, YStack } from '@my/ui';
+import { Sheet, Button, XStack, YStack, useVisualViewportHeight } from '@my/ui';
 import { CreateEventScreen } from 'app/screens/create-event/create-event-screen';
 import { memo } from 'react';
-
-import { useVisualViewportHeight } from '@/lib/hooks/useVisualViewportHeight';
 
 interface CreateEventSheetWrapperProps {
   open: boolean;

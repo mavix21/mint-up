@@ -12,6 +12,7 @@ import {
   Separator,
   SizableText,
   getTokens,
+  VisuallyHidden,
 } from 'tamagui';
 
 import {
@@ -52,9 +53,9 @@ export function CreateEventForm({ onSubmit, isLoading }: CreateEventFormProps) {
 
       {/* Event Name */}
       <YStack>
-        <Label htmlFor="event-name" fontSize={18} fontWeight="700" mb="$2">
-          Event Name
-        </Label>
+        <VisuallyHidden>
+          <Label htmlFor="event-name">Event Name</Label>
+        </VisuallyHidden>
         <TextArea
           id="event-name"
           placeholder="Event Name"
