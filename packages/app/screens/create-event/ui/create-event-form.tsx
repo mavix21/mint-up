@@ -4,7 +4,6 @@ import { useState } from 'react';
 import {
   Button,
   Label,
-  Text,
   XStack,
   YStack,
   TextArea,
