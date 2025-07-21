@@ -11,7 +11,6 @@ import {
   Label,
   ToggleGroup,
   Separator,
-  getTokens,
 } from 'tamagui';
 
 export type EventLocationType = 'in-person' | 'virtual';
@@ -39,7 +38,6 @@ export function EventLocationSheet({
   const [localLocation, setLocalLocation] = useState<EventLocation>(
     location || { type: 'in-person' }
   );
-  const tamaguiTokens = getTokens();
 
   const handleSave = () => {
     onLocationChange(localLocation);
