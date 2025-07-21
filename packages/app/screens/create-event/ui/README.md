@@ -9,6 +9,7 @@ This directory contains the UI components for the create event screen. The compo
 The main form component that contains all the event creation fields. It handles:
 
 - Event image upload
+- Theme selection
 - Event name input
 - Date and time selection
 - Location and description
@@ -62,16 +63,17 @@ A button component that displays the current location status:
 ## Usage
 
 ```tsx
-import { CreateEventForm, ThemeSelector, EventLocationSheet, LocationButton } from './ui';
+import { CreateEventForm, EventLocationSheet, LocationButton } from './ui';
 
 // In your screen component
-<ThemeSelector
+<CreateEventForm
+  onSubmit={handleSubmit}
+  isLoading={isLoading}
   theme={theme}
   onThemeChange={setTheme}
   showThemeSheet={showThemeSheet}
   onShowThemeSheetChange={setShowThemeSheet}
 />
-<CreateEventForm onSubmit={handleSubmit} isLoading={isLoading} />
 
 // Or use location components individually
 <LocationButton location={location} onPress={() => setShowLocationSheet(true)} />

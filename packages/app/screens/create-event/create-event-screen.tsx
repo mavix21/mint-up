@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { YStack, Theme, ScrollView, ThemeName } from 'tamagui';
 
-import { CreateEventForm, ThemeSelector } from './ui';
+import { CreateEventForm } from './ui';
 
 export function CreateEventScreen() {
   const [theme, setTheme] = useState<string>('');
@@ -28,13 +28,14 @@ export function CreateEventScreen() {
         <YStack flex={1} py="$4">
           <ScrollView flex={1} width="100%">
             <YStack gap="$4" px="$4" py="$4" marginHorizontal="auto" width="100%" maxWidth={496}>
-              <ThemeSelector
+              <CreateEventForm
+                onSubmit={handleSubmit}
+                isLoading={isLoading}
                 theme={theme}
                 onThemeChange={setTheme}
                 showThemeSheet={showThemeSheet}
                 onShowThemeSheetChange={setShowThemeSheet}
               />
-              <CreateEventForm onSubmit={handleSubmit} isLoading={isLoading} />
             </YStack>
           </ScrollView>
         </YStack>

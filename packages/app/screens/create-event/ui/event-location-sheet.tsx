@@ -66,6 +66,7 @@ export function EventLocationSheet({
       modal
       dismissOnOverlayPress
       dismissOnSnapToBottom
+      zIndex={1_000_000}
     >
       <Sheet.Overlay
         animation="lazy"
@@ -76,11 +77,11 @@ export function EventLocationSheet({
       <Sheet.Handle backgroundColor="$color3" />
       <Sheet.Frame
         padding="$4"
-        backgroundColor="$color3"
+        backgroundColor="$color2"
         key={visualViewportHeight}
         style={{ height: visualViewportHeight }}
       >
-        <YStack gap="$4" flex={1}>
+        <YStack gap="$4" flex={1} maxWidth={496} marginInline="auto">
           {/* Event Type Selection */}
           <YStack gap="$3">
             <Text fontSize="$4" fontWeight="500">

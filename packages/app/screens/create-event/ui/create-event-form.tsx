@@ -20,6 +20,7 @@ import {
   EventOptions,
   LocationButton,
   EventLocationSheet,
+  ThemeSelector,
   type EventLocation,
 } from './index';
 import { getClientTimezone, calculateDefaultEventTimes, getTodayDateString } from '../../../utils';
@@ -27,9 +28,20 @@ import { getClientTimezone, calculateDefaultEventTimes, getTodayDateString } fro
 export interface CreateEventFormProps {
   onSubmit?: (data: any) => void;
   isLoading?: boolean;
+  theme?: string;
+  onThemeChange?: (theme: string) => void;
+  showThemeSheet?: boolean;
+  onShowThemeSheetChange?: (show: boolean) => void;
 }
 
-export function CreateEventForm({ onSubmit, isLoading }: CreateEventFormProps) {
+export function CreateEventForm({
+  onSubmit,
+  isLoading,
+  theme = '',
+  onThemeChange,
+  showThemeSheet = false,
+  onShowThemeSheetChange,
+}: CreateEventFormProps) {
   const tamaguiTokens = getTokens();
   const [location, setLocation] = useState<EventLocation | undefined>();
   const [showLocationSheet, setShowLocationSheet] = useState(false);
@@ -50,6 +62,14 @@ export function CreateEventForm({ onSubmit, isLoading }: CreateEventFormProps) {
     <YStack gap="$4">
       {/* Event Image */}
       <EventImage />
+
+      {/* Theme Selector */}
+      <ThemeSelector
+        theme={theme}
+        onThemeChange={onThemeChange || (() => {})}
+        showThemeSheet={showThemeSheet}
+        onShowThemeSheetChange={onShowThemeSheetChange || (() => {})}
+      />
 
       {/* Event Name */}
       <YStack>
