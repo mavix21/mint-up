@@ -8,7 +8,7 @@ import {
   WalletDropdownLink,
   WalletDropdownDisconnect,
 } from '@coinbase/onchainkit/wallet';
-import { Button, Text, XStack } from '@my/ui';
+import { Button, XStack } from '@my/ui';
 import { Settings } from '@tamagui/lucide-icons';
 
 export function Topbar() {
