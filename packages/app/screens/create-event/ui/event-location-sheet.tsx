@@ -1,0 +1,199 @@
+import { MapPin, Globe, X } from '@tamagui/lucide-icons';
+import { useState } from 'react';
+import {
+  Sheet,
+  Button,
+  XStack,
+  YStack,
+  Text,
+  Input,
+  TextArea,
+  Label,
+  ToggleGroup,
+  Separator,
+  getTokens,
+} from 'tamagui';
+
+export type EventLocationType = 'in-person' | 'virtual';
+
+export interface EventLocation {
+  type: EventLocationType;
+  address?: string;
+  instructions?: string;
+  url?: string;
+}
+
+export interface EventLocationSheetProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  location?: EventLocation;
+  onLocationChange: (location: EventLocation) => void;
+}
+
+export function EventLocationSheet({
+  open,
+  onOpenChange,
+  location,
+  onLocationChange,
+}: EventLocationSheetProps) {
+  const [localLocation, setLocalLocation] = useState<EventLocation>(
+    location || { type: 'in-person' }
+  );
+  const tamaguiTokens = getTokens();
+
+  const handleSave = () => {
+    onLocationChange(localLocation);
+    onOpenChange(false);
+  };
+
+  const handleCancel = () => {
+    setLocalLocation(location || { type: 'in-person' });
+    onOpenChange(false);
+  };
+
+  const updateLocation = (updates: Partial<EventLocation>) => {
+    setLocalLocation((prev) => ({ ...prev, ...updates }));
+  };
+
+  return (
+    <Sheet open={open} onOpenChange={onOpenChange} snapPoints={[85]} defaultPosition={0} modal>
+      <Sheet.Overlay
+        animation="lazy"
+        backgroundColor="$shadowColor"
+        enterStyle={{ opacity: 0 }}
+        exitStyle={{ opacity: 0 }}
+      />
+      <Sheet.Handle backgroundColor="$color3" />
+      <Sheet.Frame padding="$4" backgroundColor="$color3">
+        <YStack gap="$4" flex={1}>
+          {/* Event Type Selection */}
+          <YStack gap="$3">
+            <Text fontSize="$4" fontWeight="500">
+              Event Type
+            </Text>
+            <ToggleGroup
+              type="single"
+              value={localLocation.type}
+              onValueChange={(value) => {
+                if (value) {
+                  updateLocation({ type: value as EventLocationType });
+                }
+              }}
+              backgroundColor="$color4"
+              borderRadius="$4"
+              orientation="horizontal"
+              size="$3"
+            >
+              <ToggleGroup.Item
+                value="in-person"
+                flex={1}
+                backgroundColor="transparent"
+                borderRadius="$4"
+              >
+                <XStack alignItems="center" gap="$2">
+                  <MapPin size={16} />
+                  <Text fontWeight="500">In Person</Text>
+                </XStack>
+              </ToggleGroup.Item>
+              <ToggleGroup.Item
+                value="virtual"
+                flex={1}
+                backgroundColor="transparent"
+                borderRadius="$4"
+              >
+                <XStack alignItems="center" gap="$2">
+                  <Globe size={16} />
+                  <Text fontWeight="500">Virtual</Text>
+                </XStack>
+              </ToggleGroup.Item>
+            </ToggleGroup>
+          </YStack>
+
+          <Separator />
+
+          {/* Location Details */}
+          <YStack gap="$4" flex={1}>
+            {localLocation.type === 'in-person' ? (
+              <>
+                <YStack gap="$1">
+                  <Label htmlFor="address" fontWeight="500">
+                    Address
+                  </Label>
+                  <Input
+                    id="address"
+                    placeholder="Enter event address"
+                    value={localLocation.address || ''}
+                    onChangeText={(text) => updateLocation({ address: text })}
+                    backgroundColor="$color4"
+                    borderColor="$color5"
+                    borderRadius="$4"
+                  />
+                </YStack>
+
+                <YStack gap="$1" flex={1}>
+                  <Label htmlFor="instructions" fontWeight="500">
+                    Additional Instructions
+                  </Label>
+                  <TextArea
+                    id="instructions"
+                    placeholder="Enter any additional instructions for attendees (e.g., building access, parking info)"
+                    value={localLocation.instructions || ''}
+                    onChangeText={(text) => updateLocation({ instructions: text })}
+                    backgroundColor="$color4"
+                    borderColor="$color5"
+                    borderRadius="$4"
+                    flex={1}
+                    minHeight={100}
+                    style={
+                      {
+                        fieldSizing: 'content',
+                      } as any
+                    }
+                  />
+                </YStack>
+              </>
+            ) : (
+              <YStack gap="$2">
+                <Label htmlFor="url" fontSize="$3" fontWeight="500">
+                  Event URL
+                </Label>
+                <Input
+                  id="url"
+                  keyboardType="url"
+                  placeholder="Enter meeting URL (Zoom, Google Meet, etc.)"
+                  value={localLocation.url || ''}
+                  onChangeText={(text) => updateLocation({ url: text })}
+                  backgroundColor="$color4"
+                  borderColor="$color5"
+                  borderRadius="$4"
+                />
+                <Text fontSize="$2" color="$color10" mt="$1">
+                  Share the link where attendees can join the virtual event
+                </Text>
+              </YStack>
+            )}
+          </YStack>
+
+          {/* Action Buttons */}
+          <XStack gap="$3" py="$4">
+            <Button flex={1} backgroundColor="$color5" color="$color11" onPress={handleCancel}>
+              Cancel
+            </Button>
+            <Button
+              flex={1}
+              themeInverse
+              onPress={handleSave}
+              disabled={
+                localLocation.type === 'in-person'
+                  ? !localLocation.address?.trim()
+                  : !localLocation.url?.trim()
+              }
+            >
+              Save Location
+            </Button>
+          </XStack>
+        </YStack>
+      </Sheet.Frame>
+    </Sheet>
+  );
+}
