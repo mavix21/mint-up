@@ -60,7 +60,7 @@ export function EventDescriptionSheet({
         key={visualViewportHeight}
         style={{ height: visualViewportHeight }}
       >
-        <YStack flex={1}>
+        <YStack flex={1} width="100%" maxWidth={496} marginHorizontal="auto">
           {/* Header */}
           <XStack alignItems="center" justifyContent="flex-end" px="$4">
             <Button size="$2" circular backgroundColor="transparent" onPress={handleCancel}>

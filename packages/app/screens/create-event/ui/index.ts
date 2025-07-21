@@ -10,3 +10,9 @@ export {
 export { LocationButton } from './location-button';
 export { EventDescriptionSheet } from './event-description-sheet';
 export { DescriptionButton } from './description-button';
+export {
+  EventTicketingSheet,
+  type TicketType,
+  type TicketPriceType,
+} from './event-ticketing-sheet';
+export { TicketingButton } from './ticketing-button';

@@ -1,4 +1,4 @@
-import { Button, Text } from 'tamagui';
+import { Button, SizableText } from 'tamagui';
 
 export interface DescriptionButtonProps {
   description?: string;
@@ -25,11 +25,17 @@ export function DescriptionButton({ description, onPress }: DescriptionButtonPro
 
   return (
     <Button justifyContent="flex-start" backgroundColor="$color3" onPress={onPress}>
-      <Text>Description</Text>
+      <SizableText>Description</SizableText>
       {description && description.trim() !== '' && (
-        <Text color={getDescriptionColor()} ml="$2" numberOfLines={1} flex={1} textAlign="right">
+        <SizableText
+          color={getDescriptionColor()}
+          ml="$2"
+          numberOfLines={1}
+          flex={1}
+          textAlign="right"
+        >
           {getDescriptionText()}
-        </Text>
+        </SizableText>
       )}
     </Button>
   );

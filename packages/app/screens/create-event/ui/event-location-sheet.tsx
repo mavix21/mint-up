@@ -6,12 +6,12 @@ import {
   Button,
   XStack,
   YStack,
-  Text,
   Input,
   TextArea,
   Label,
   ToggleGroup,
   Separator,
+  SizableText,
 } from 'tamagui';
 
 export type EventLocationType = 'in-person' | 'virtual';
@@ -61,12 +61,11 @@ export function EventLocationSheet({
       open={open}
       forceRemoveScrollEnabled={open}
       onOpenChange={onOpenChange}
-      snapPoints={[85]}
+      snapPoints={[90]}
       defaultPosition={0}
       modal
       dismissOnOverlayPress
       dismissOnSnapToBottom
-      zIndex={1_000_000}
     >
       <Sheet.Overlay
         animation="lazy"
@@ -84,9 +83,9 @@ export function EventLocationSheet({
         <YStack gap="$4" width="100%" flex={1} maxWidth={496} marginInline="auto">
           {/* Event Type Selection */}
           <YStack gap="$3">
-            <Text fontSize="$4" fontWeight="500">
+            <SizableText fontSize="$4" fontWeight="500">
               Event Type
-            </Text>
+            </SizableText>
             <ToggleGroup
               type="single"
               value={localLocation.type}
@@ -108,7 +107,7 @@ export function EventLocationSheet({
               >
                 <XStack alignItems="center" gap="$2">
                   <MapPin size={16} />
-                  <Text fontWeight="500">In Person</Text>
+                  <SizableText fontWeight="500">In Person</SizableText>
                 </XStack>
               </ToggleGroup.Item>
               <ToggleGroup.Item
@@ -119,7 +118,7 @@ export function EventLocationSheet({
               >
                 <XStack alignItems="center" gap="$2">
                   <Globe size={16} />
-                  <Text fontWeight="500">Virtual</Text>
+                  <SizableText fontWeight="500">Virtual</SizableText>
                 </XStack>
               </ToggleGroup.Item>
             </ToggleGroup>
@@ -160,11 +159,6 @@ export function EventLocationSheet({
                     borderRadius="$4"
                     flex={1}
                     minHeight={100}
-                    style={
-                      {
-                        fieldSizing: 'content',
-                      } as any
-                    }
                   />
                 </YStack>
               </>
@@ -183,9 +177,9 @@ export function EventLocationSheet({
                   borderColor="$color5"
                   borderRadius="$4"
                 />
-                <Text fontSize="$2" color="$color10" mt="$1">
+                <SizableText fontSize="$2" color="$color10" mt="$1">
                   Share the link where attendees can join the virtual event
-                </Text>
+                </SizableText>
               </YStack>
             )}
           </YStack>

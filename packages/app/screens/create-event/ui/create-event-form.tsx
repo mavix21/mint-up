@@ -12,17 +12,20 @@ import {
   SizableText,
   getTokens,
   VisuallyHidden,
+  YGroup,
 } from 'tamagui';
 
 import {
   EventImage,
-  EventOptions,
   LocationButton,
   EventLocationSheet,
   ThemeSelector,
   EventDescriptionSheet,
   DescriptionButton,
+  EventTicketingSheet,
+  TicketingButton,
   type EventLocation,
+  type TicketType,
 } from './index';
 import { getClientTimezone, calculateDefaultEventTimes, getTodayDateString } from '../../../utils';
 
@@ -48,6 +51,8 @@ export function CreateEventForm({
   const [showLocationSheet, setShowLocationSheet] = useState(false);
   const [description, setDescription] = useState<string>('');
   const [showDescriptionSheet, setShowDescriptionSheet] = useState(false);
+  const [tickets, setTickets] = useState<TicketType[]>([]);
+  const [showTicketingSheet, setShowTicketingSheet] = useState(false);
 
   // Get client timezone
   const clientTimezone = getClientTimezone();
@@ -58,7 +63,7 @@ export function CreateEventForm({
 
   const handleSubmit = () => {
     // TODO: Collect form data and call onSubmit
-    onSubmit?.({ location, description });
+    onSubmit?.({ location, description, tickets });
   };
 
   return (
@@ -195,21 +200,31 @@ export function CreateEventForm({
         </Group>
       </YStack>
 
-      {/* Location */}
       <YStack>
-        <LocationButton location={location} onPress={() => setShowLocationSheet(true)} />
+        <Label>Event Details</Label>
+        <YGroup
+          backgroundColor="$color3"
+          orientation="vertical"
+          separator={<Separator />}
+          borderRadius="$4"
+        >
+          <YGroup.Item>
+            <LocationButton location={location} onPress={() => setShowLocationSheet(true)} />
+          </YGroup.Item>
+          <YGroup.Item>
+            <DescriptionButton
+              description={description}
+              onPress={() => setShowDescriptionSheet(true)}
+            />
+          </YGroup.Item>
+        </YGroup>
       </YStack>
 
-      {/* Description */}
+      {/* Ticketing */}
       <YStack>
-        <DescriptionButton
-          description={description}
-          onPress={() => setShowDescriptionSheet(true)}
-        />
+        <Label>Ticketing</Label>
+        <TicketingButton tickets={tickets} onPress={() => setShowTicketingSheet(true)} />
       </YStack>
-
-      {/* Event Options */}
-      <EventOptions />
 
       {/* Submit Button */}
       <YStack py="$4" borderColor="$color3">
@@ -240,6 +255,14 @@ export function CreateEventForm({
         onOpenChange={setShowDescriptionSheet}
         description={description}
         onDescriptionChange={setDescription}
+      />
+
+      {/* Ticketing Sheet */}
+      <EventTicketingSheet
+        open={showTicketingSheet}
+        onOpenChange={setShowTicketingSheet}
+        tickets={tickets}
+        onTicketsChange={setTickets}
       />
     </YStack>
   );

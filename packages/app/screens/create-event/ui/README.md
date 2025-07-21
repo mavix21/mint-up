@@ -79,10 +79,31 @@ A button component that displays the current description status:
 - Color-coded status (filled vs empty)
 - Opens the description sheet when pressed
 
+### `EventTicketingSheet`
+
+A comprehensive ticketing management component:
+
+- Create multiple ticket types with different configurations
+- Each ticket includes: name, price type (free/paid), description, and supply
+- Dynamic price field for paid tickets
+- Add/remove ticket types with intuitive UI
+- Form validation ensures required fields are filled
+- Scrollable content for multiple tickets
+- Local state management with save/cancel functionality
+
+### `TicketingButton`
+
+A button component that displays the current ticketing status:
+
+- Shows ticket count and pricing summary
+- Displays "Free", "From $X.XX", or "Free & Paid" based on ticket types
+- Color-coded status (configured vs default)
+- Opens the ticketing sheet when pressed
+
 ## Usage
 
 ```tsx
-import { CreateEventForm, EventLocationSheet, LocationButton, EventDescriptionSheet, DescriptionButton } from './ui';
+import { CreateEventForm, EventLocationSheet, LocationButton, EventDescriptionSheet, DescriptionButton, EventTicketingSheet, TicketingButton } from './ui';
 
 // In your screen component
 <CreateEventForm
@@ -109,6 +130,14 @@ import { CreateEventForm, EventLocationSheet, LocationButton, EventDescriptionSh
   onOpenChange={setShowDescriptionSheet}
   description={description}
   onDescriptionChange={setDescription}
+/>
+
+<TicketingButton tickets={tickets} onPress={() => setShowTicketingSheet(true)} />
+<EventTicketingSheet
+  open={showTicketingSheet}
+  onOpenChange={setShowTicketingSheet}
+  tickets={tickets}
+  onTicketsChange={setTickets}
 />
 ```
 

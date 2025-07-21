@@ -1,5 +1,5 @@
 import { MapPin, Globe } from '@tamagui/lucide-icons';
-import { Button, Text, XStack } from 'tamagui';
+import { Button, SizableText } from 'tamagui';
 
 import { EventLocation } from './event-location-sheet';
 
@@ -51,10 +51,10 @@ export function LocationButton({ location, onPress }: LocationButtonProps) {
       iconAfter={getLocationIcon()}
       onPress={onPress}
     >
-      <Text>Location</Text>
-      <Text color={getLocationColor()} ml="$2" numberOfLines={1} flex={1} textAlign="right">
+      <SizableText>Location</SizableText>
+      <SizableText color={getLocationColor()} ml="$2" numberOfLines={1} flex={1} textAlign="right">
         {getLocationText()}
-      </Text>
+      </SizableText>
     </Button>
   );
 }
