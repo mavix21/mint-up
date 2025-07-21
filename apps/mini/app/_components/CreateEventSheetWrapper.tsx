@@ -29,7 +29,6 @@ export function CreateEventSheetWrapper({ open, setOpen }: CreateEventSheetWrapp
         enterStyle={{ opacity: 0 }}
         exitStyle={{ opacity: 0 }}
       />
-      <Sheet.Handle backgroundColor="$color2" />
       <Sheet.Frame
         key={visualViewportHeight}
         alignItems="center"
