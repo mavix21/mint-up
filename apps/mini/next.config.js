@@ -72,8 +72,6 @@ module.exports = () => {
       'expo-modules-core',
       'expo-image-picker',
       'react-native-gesture-handler',
-      '@ts-react/form',
-      'react-hook-form',
       'react-native-reanimated',
     ],
     /*
