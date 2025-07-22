@@ -19,6 +19,8 @@ import { ListFilter } from '@tamagui/lucide-icons';
 import { AnimationProp } from '@tamagui/web';
 import { useQuery } from 'convex/react';
 import React from 'react';
+import { Item } from './ui/Item';
+import { AvatarGroup } from './ui/AvatarGroup';
 
 const data = [
   {
@@ -44,6 +46,7 @@ const categories = [
 export const ExploreEventsScreen = () => {
   const [selectedCategory, setSelectedCategory] = React.useState('All');
   const events = useQuery(api.events.getAllEvents);
+  const items = [1, 2, 3];
 
   return (
     <YStack>
@@ -147,6 +150,16 @@ export const ExploreEventsScreen = () => {
                   <Text fontSize="$4" color="$color" numberOfLines={3}>
                     {event.name}
                   </Text>
+                  <AvatarGroup
+                    size="$3"
+                    items={items.map((index) => (
+                      <Item
+                        key={index}
+                        size="$2"
+                        imageUrl={`https://images.unsplash.com/photo-1736754079614-8b43bcba9926?w=100`}
+                      />
+                    ))}
+                  />
                 </YStack>
               </XStack>
             </Card>
