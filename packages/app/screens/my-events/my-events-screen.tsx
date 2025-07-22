@@ -13,68 +13,6 @@ export type ConvexEventWithExtras = Doc<'events'> & {
   imageUrl: string | null;
 };
 
-// const upcomingEvents: Event[] = [
-//   {
-//     id: 'evt-001',
-//     name: '_Test_',
-//     startTime: '2025-07-25T12:30:00Z',
-//     location: 'UPC - Campus San Miguel',
-//     userRole: 'host',
-//     description:
-//       'This is a test event. This is a test event. This is a test event. This is a test event. This is a test event. This is a test event. This is a test event. This is a test event. This is a test event. This is a test event. This is a test event. This is a test event. This is a test event. This is a test event. This is a test event. This is a test event. This is a test event. This is a test event. This is a test event. This is a test event. This is a test event. This is a test event. This is a test event. This is a test event.',
-//     nftTicketImageUrl:
-//       'https://img.freepik.com/foto-gratis/amigos-felices-tiro-medio-bebidas_23-2149481210.jpg?t=st=1752373680~exp=1752377280~hmac=ace42efe105abfcfe521907355f9c2de530d2ee3863027e943f58bb1f3eac887&w=360',
-//     stats: { mints: 0, capacity: null },
-//   },
-//   {
-//     id: 'evt-002',
-//     name: 'Web3 Founders Meetup',
-//     startTime: '2025-07-28T18:00:00Z',
-//     location: 'Virtual',
-//     userRole: 'attendee',
-//     description: 'Founders and builders',
-//     nftTicketImageUrl:
-//       'https://img.freepik.com/foto-gratis/familia-tiro-completo-celebrando-4-julio_23-2149383081.jpg?t=st=1752373560~exp=1752377160~hmac=0fa153a9d0dd5604ee8cc4ba5580a4999c3a809c9459bfcdd2603ecb8b115730&w=740',
-//     stats: {},
-//   },
-// ];
-
-// const pastEvents: Event[] = [
-//   {
-//     id: 'evt-003',
-//     name: 'ROAST 02',
-//     startTime: '2025-06-09T08:00:00Z',
-//     location: 'Virtual',
-//     userRole: 'attendee',
-//     status: 'POAP_COLLECTED',
-//     description: 'This is a test event',
-//     poapImageUrl: 'https://tamagui.dev/bento/images/bag/bag3.webp',
-//   },
-//   {
-//     id: 'evt-004',
-//     name: 'Blockchain',
-//     startTime: '2025-06-04T18:30:00Z',
-//     location: 'Home',
-//     userRole: 'attendee',
-//     status: 'MISSED',
-//     description: 'This is a test event',
-//     poapImageUrl:
-//       'https://img.freepik.com/foto-gratis/amigos-felices-tiro-medio-bebidas_23-2149481210.jpg?t=st=1752373680~exp=1752377280~hmac=ace42efe105abfcfe521907355f9c2de530d2ee3863027e943f58bb1f3eac887&w=360',
-//   },
-//   {
-//     id: 'evt-005',
-//     name: 'My First Hosted Event',
-//     startTime: '2025-06-02T18:00:00Z',
-//     location: 'Lima, Peru',
-//     userRole: 'host',
-//     status: 'COMPLETED',
-//     description: 'This is a test event',
-//     poapImageUrl:
-//       'https://img.freepik.com/foto-gratis/familia-tiro-completo-celebrando-4-julio_23-2149383081.jpg?t=st=1752373560~exp=1752377160~hmac=0fa153a9d0dd5604ee8cc4ba5580a4999c3a809c9459bfcdd2603ecb8b115730&w=740',
-//     stats: { attendees: 112, poapsClaimed: 105 },
-//   },
-// ];
-
 const formatDate = (dateString: string) => {
   const date = new Date(dateString);
   const today = new Date();

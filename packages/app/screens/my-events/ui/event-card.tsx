@@ -1,4 +1,3 @@
-import { Doc } from '@my/backend/convex/_generated/dataModel';
 import { View, YStack, XStack, Image, Text, Button } from '@my/ui';
 import { ArrowRight, Clock, MapPin } from '@tamagui/lucide-icons';
 import { useState } from 'react';

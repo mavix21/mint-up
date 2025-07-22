@@ -1,5 +1,9 @@
+import { api } from '@my/backend/_generated/api';
 import {
   Button,
+  formatRelativeDate,
+  formatDate,
+  Card,
   Image,
   Input,
   isWeb,
@@ -10,8 +14,10 @@ import {
   XStack,
   YStack,
 } from '@my/ui';
+import { formatDateTime } from '@my/ui/src/lib/dates';
 import { ListFilter } from '@tamagui/lucide-icons';
 import { AnimationProp } from '@tamagui/web';
+import { useQuery } from 'convex/react';
 import React from 'react';
 
 const data = [
@@ -37,6 +43,7 @@ const categories = [
 
 export const ExploreEventsScreen = () => {
   const [selectedCategory, setSelectedCategory] = React.useState('All');
+  const events = useQuery(api.events.getAllEvents);
 
   return (
     <YStack>
@@ -107,6 +114,45 @@ export const ExploreEventsScreen = () => {
           })}
         </XStack>
       </ScrollView>
+      <YStack>
+        {events?.map((event) => {
+          return (
+            <Card
+              key={event._id}
+              elevate
+              size="$4"
+              bordered
+              backgroundColor="$background"
+              margin="$4"
+              borderRadius="$4"
+              pressStyle={{ scale: 0.975 }}
+              hoverStyle={{ borderColor: '$borderColorHover' }}
+            >
+              <XStack space="$3" alignItems="center">
+                {/* App Icon */}
+                <Image
+                  width={100}
+                  height={100}
+                  borderRadius="$2"
+                  backgroundColor="white"
+                  src={event.imageUrl}
+                />
+
+                {/* App Info */}
+                <YStack flex={1} space="$1">
+                  <Text fontSize="$2" color="$color11" numberOfLines={1}>
+                    {formatDate(formatRelativeDate(event.startDate))} •{' '}
+                    {formatDateTime(formatRelativeDate(event.startDate))}
+                  </Text>
+                  <Text fontSize="$4" color="$color" numberOfLines={3}>
+                    {event.name}
+                  </Text>
+                </YStack>
+              </XStack>
+            </Card>
+          );
+        })}
+      </YStack>
     </YStack>
   );
 };

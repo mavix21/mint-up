@@ -1,5 +1,5 @@
 import { View, H3, Text, Image, ScrollView } from '@my/ui';
-import { formatDate, formatRelativeDate } from '@my/ui/src/lib/dates';
+import { formatDate, formatDateTime, formatRelativeDate } from '@my/ui/src/lib/dates';
 import { X, Clock, MapPin } from '@tamagui/lucide-icons';
 import { Adapt, Button, Dialog, Paragraph, Sheet, Unspaced, XStack, YStack } from 'tamagui';
 
@@ -15,15 +15,6 @@ export function EventModal({
   eventData: ConvexEventWithExtras;
 }) {
   //const imageUrl = eventData.poapImageUrl ?? eventData.nftTicketImageUrl;
-
-  const formatTime = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleTimeString('en-US', {
-      hour: 'numeric',
-      minute: '2-digit',
-      hour12: true,
-    });
-  };
 
   return (
     <Dialog modal open={toggleEvent} onOpenChange={setToggleEvent}>
@@ -91,7 +82,7 @@ export function EventModal({
                           {formatDate(formatRelativeDate(eventData.startDate))}
                         </Paragraph>
                         <Paragraph fontSize="$1" color="$gray11">
-                          {formatTime(formatRelativeDate(eventData.startDate))}
+                          {formatDateTime(formatRelativeDate(eventData.startDate))}
                         </Paragraph>
                       </YStack>
                     </XStack>

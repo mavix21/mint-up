@@ -20,3 +20,12 @@ export function formatDate(date: string) {
 
   return `${weekday}, ${month} ${day}, ${year}`;
 }
+
+export const formatDateTime = (dateString: string) => {
+  const date = new Date(dateString);
+  return date.toLocaleTimeString('en-US', {
+    hour: 'numeric',
+    minute: '2-digit',
+    hour12: true,
+  });
+};
