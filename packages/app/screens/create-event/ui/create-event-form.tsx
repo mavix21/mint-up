@@ -61,6 +61,8 @@ export function CreateEventForm({
   const { startTime, endTime } = calculateDefaultEventTimes();
   const todayDateString = getTodayDateString();
 
+  // form
+
   const handleSubmit = () => {
     // TODO: Collect form data and call onSubmit
     onSubmit?.({ location, description, tickets });

@@ -15,7 +15,6 @@ export * from './OnboardingStepContent';
 export * from './OverviewCard';
 export * from './Settings';
 export * from './Shake';
-export * from './SubmitButton';
 export * from './TodoCard';
 export * from './LoadingOverlay';
 export * from './elements/datepicker/DatePicker';

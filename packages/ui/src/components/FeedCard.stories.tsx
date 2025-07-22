@@ -1,14 +1,14 @@
-import { Meta, StoryObj } from '@storybook/react'
+import { Meta, StoryObj } from '@storybook/react';
 
-import { FeedCard } from './FeedCard'
+import { FeedCard } from './FeedCard';
 
 const meta: Meta<typeof FeedCard> = {
   title: 'ui/FeedCard',
   parameters: { layout: 'centered' },
   component: FeedCard,
-}
+};
 
-type Story = StoryObj<typeof FeedCard>
+type Story = StoryObj<typeof FeedCard>;
 
 export const Basic: Story = {
   args: {
@@ -31,6 +31,6 @@ export const Basic: Story = {
       },
     ],
   },
-}
+};
 
-export default meta
+export default meta;
