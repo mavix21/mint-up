@@ -99,6 +99,7 @@ export function CreateEventForm({
                 <TextArea
                   id={field.name}
                   value={field.state.value}
+                  onChangeText={field.handleChange}
                   placeholder="Event Name"
                   flexGrow={1}
                   unstyled
