@@ -147,7 +147,7 @@ export function CategorySelector({ value, onValueChange }: CategorySelectorProps
                         width={120}
                         height={100}
                         borderRadius="$4"
-                        padding="$3"
+                        padding="$2"
                         backgroundColor={isSelected ? '$color5' : '$color3'}
                         borderColor={isSelected ? '$color8' : '$color6'}
                         borderWidth={isSelected ? 2 : 1}
@@ -159,7 +159,7 @@ export function CategorySelector({ value, onValueChange }: CategorySelectorProps
                       >
                         <YStack flex={1} alignItems="center" justifyContent="center" gap="$2">
                           <Icon size={24} color={isSelected ? '$color12' : '$color10'} />
-                          <Text
+                          <SizableText
                             fontSize="$2"
                             fontWeight={isSelected ? '600' : '500'}
                             color={isSelected ? '$color12' : '$color10'}
@@ -167,7 +167,7 @@ export function CategorySelector({ value, onValueChange }: CategorySelectorProps
                             numberOfLines={2}
                           >
                             {category.label}
-                          </Text>
+                          </SizableText>
                         </YStack>
                       </Card>
                     </Theme>
