@@ -16,3 +16,4 @@ export {
   type TicketPriceType,
 } from './event-ticketing-sheet';
 export { TicketingButton } from './ticketing-button';
+export { CategorySelector, type EventCategory } from './category-selector';

@@ -26,6 +26,7 @@ import {
   DescriptionButton,
   EventTicketingSheet,
   TicketingButton,
+  CategorySelector,
   type EventLocation,
   type TicketType,
 } from './index';
@@ -55,6 +56,7 @@ export function CreateEventForm({
   const [showDescriptionSheet, setShowDescriptionSheet] = useState(false);
   const [tickets, setTickets] = useState<TicketType[]>([]);
   const [showTicketingSheet, setShowTicketingSheet] = useState(false);
+  const [category, setCategory] = useState<string | undefined>();
 
   // Get client timezone
   const clientTimezone = getClientTimezone();
@@ -72,8 +74,10 @@ export function CreateEventForm({
 
   const handleSubmit = () => {
     // TODO: Collect form data and call onSubmit
-    onSubmit?.({ location, description, tickets });
+    onSubmit?.({ location, description, tickets, category });
   };
+
+  console.log(category);
 
   return (
     <Form onSubmit={handleSubmit}>
@@ -116,107 +120,112 @@ export function CreateEventForm({
             );
           }}
         />
+        {/* Category Selector */}
+        <CategorySelector value={category} onValueChange={setCategory} />
         {/* Start/End DateTime */}
         <YStack gap="$2">
-          <Group orientation="vertical" size="$2" separator={<Separator />} borderRadius="$4">
-            <Group.Item>
-              <XStack
-                flex={1}
-                alignItems="center"
-                gap="$2"
-                px="$true"
-                py="$1.5"
-                borderRadius="$true"
-                backgroundColor="$color3"
-              >
-                <Label htmlFor="start" flex={1} fontWeight="500">
-                  Start
-                </Label>
-                <XStack gap="$4" alignItems="center">
-                  <input
-                    id="start"
-                    type="date"
-                    style={{ textAlign: 'center' }}
-                    min={todayDateString}
-                    defaultValue={todayDateString}
-                  />
-                  <TimePicker
-                    value={startTime}
-                    onChangeText={(value) => {
-                      console.log(value);
-                    }}
-                  />
+          <SizableText>Date & Time</SizableText>
+          <YStack gap="$2">
+            <Group orientation="vertical" size="$2" separator={<Separator />} borderRadius="$4">
+              <Group.Item>
+                <XStack
+                  flex={1}
+                  alignItems="center"
+                  gap="$2"
+                  px="$true"
+                  py="$1.5"
+                  borderRadius="$true"
+                  backgroundColor="$color3"
+                >
+                  <Label htmlFor="start" flex={1} fontWeight="500">
+                    Start
+                  </Label>
+                  <XStack gap="$4" alignItems="center">
+                    <input
+                      id="start"
+                      type="date"
+                      style={{ textAlign: 'center' }}
+                      min={todayDateString}
+                      defaultValue={todayDateString}
+                    />
+                    <TimePicker
+                      value={startTime}
+                      onChangeText={(value) => {
+                        console.log(value);
+                      }}
+                    />
+                  </XStack>
                 </XStack>
-              </XStack>
-            </Group.Item>
-            <Group.Item>
-              <XStack
-                flex={1}
-                alignItems="center"
-                gap="$2"
-                px="$true"
-                py="$1.5"
-                borderRadius="$true"
-                backgroundColor="$color3"
-              >
-                <Label htmlFor="end" flex={1} fontWeight="500">
-                  End
-                </Label>
-                <XStack gap="$4" alignItems="center">
-                  <input
-                    id="end"
-                    type="date"
-                    style={{ textAlign: 'center' }}
-                    min={todayDateString}
-                    defaultValue={todayDateString}
-                  />
-                  <TimePicker
-                    value={endTime}
-                    onChangeText={(value) => {
-                      console.log(value);
-                    }}
-                  />
+              </Group.Item>
+              <Group.Item>
+                <XStack
+                  flex={1}
+                  alignItems="center"
+                  gap="$2"
+                  px="$true"
+                  py="$1.5"
+                  borderRadius="$true"
+                  backgroundColor="$color3"
+                >
+                  <Label htmlFor="end" flex={1} fontWeight="500">
+                    End
+                  </Label>
+                  <XStack gap="$4" alignItems="center">
+                    <input
+                      id="end"
+                      type="date"
+                      style={{ textAlign: 'center' }}
+                      min={todayDateString}
+                      defaultValue={todayDateString}
+                    />
+                    <TimePicker
+                      value={endTime}
+                      onChangeText={(value) => {
+                        console.log(value);
+                      }}
+                    />
+                  </XStack>
                 </XStack>
-              </XStack>
-            </Group.Item>
-            <Group.Item>
-              <XStack
-                flex={1}
-                alignItems="center"
-                gap="$2"
-                px="$true"
-                py="$1.5"
-                borderRadius="$true"
-                backgroundColor="$color3"
-              >
-                <Label flex={1} fontWeight="500">
-                  Timezone
-                </Label>
-                <XStack gap="$4" alignItems="center">
-                  <Chip
-                    size="$4"
-                    py="$2"
-                    borderRadius="$4"
-                    backgroundColor="$color5"
-                    hoverStyle={{ backgroundColor: '$color6' }}
-                    pressStyle={{ backgroundColor: '$color7' }}
-                    focusStyle={{ backgroundColor: '$color8' }}
-                  >
-                    <Chip.Icon>
-                      <Globe size={16} />
-                    </Chip.Icon>
-                    <Chip.Text>
-                      <SizableText mr="$2">GMT{clientTimezone.offset}</SizableText>
-                      <SizableText>{clientTimezone.city}</SizableText>
-                    </Chip.Text>
-                  </Chip>
+              </Group.Item>
+              <Group.Item>
+                <XStack
+                  flex={1}
+                  alignItems="center"
+                  gap="$2"
+                  px="$true"
+                  py="$1.5"
+                  borderRadius="$true"
+                  backgroundColor="$color3"
+                >
+                  <Label flex={1} fontWeight="500">
+                    Timezone
+                  </Label>
+                  <XStack gap="$4" alignItems="center">
+                    <Chip
+                      size="$4"
+                      py="$2"
+                      borderRadius="$4"
+                      backgroundColor="$color5"
+                      hoverStyle={{ backgroundColor: '$color6' }}
+                      pressStyle={{ backgroundColor: '$color7' }}
+                      focusStyle={{ backgroundColor: '$color8' }}
+                    >
+                      <Chip.Icon>
+                        <Globe size={16} />
+                      </Chip.Icon>
+                      <Chip.Text>
+                        <SizableText mr="$2">GMT{clientTimezone.offset}</SizableText>
+                        <SizableText>{clientTimezone.city}</SizableText>
+                      </Chip.Text>
+                    </Chip>
+                  </XStack>
                 </XStack>
-              </XStack>
-            </Group.Item>
-          </Group>
+              </Group.Item>
+            </Group>
+          </YStack>
         </YStack>
-        <YStack>
-          <Label>Event Details</Label>
+        <YStack gap="$2">
+          <SizableText>Event Details</SizableText>
           <YGroup
             backgroundColor="$color3"
             orientation="vertical"
@@ -235,23 +244,24 @@ export function CreateEventForm({
           </YGroup>
         </YStack>
         {/* Ticketing */}
-        <YStack>
-          <Label>Ticketing</Label>
+        <YStack gap="$2">
+          <SizableText>Ticketing</SizableText>
           <TicketingButton tickets={tickets} onPress={() => setShowTicketingSheet(true)} />
         </YStack>
         {/* Submit Button */}
         <YStack py="$4" borderColor="$color3">
-          <Button
-            size="$4"
-            themeInverse
-            fontWeight="600"
-            width="100%"
-            marginHorizontal="auto"
-            onPress={handleSubmit}
-            disabled={isLoading}
-          >
-            {isLoading ? 'Creating...' : 'Create Event'}
-          </Button>
+          <Form.Trigger asChild>
+            <Button
+              size="$4"
+              themeInverse
+              fontWeight="600"
+              width="100%"
+              marginHorizontal="auto"
+              disabled={isLoading}
+            >
+              {isLoading ? 'Creating...' : 'Create Event'}
+            </Button>
+          </Form.Trigger>
         </YStack>
         {/* Location Sheet */}
         <EventLocationSheet
