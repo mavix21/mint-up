@@ -63,6 +63,38 @@ export const getPastEvents = query({
   },
 });
 
+export const getEventsByCategory = query({
+  args: {
+    category: v.optional(v.string()),
+  },
+  handler: async (ctx, args) => {
+    let q = ctx.db.query('events');
+    if (args.category && args.category !== 'All') {
+      q = q.filter((q) => q.eq(q.field('category'), args.category));
+    }
+    const events = await q.order('desc').collect();
+    return Promise.all(
+      events.map(async (event) => {
+        const user = await ctx.db.get(event.creatorId);
+        const imageUrl = (await ctx.storage.getUrl(event.image)) ?? null;
+        return {
+          ...event,
+          creatorName: user?.displayName ?? 'Anonymous',
+          imageUrl,
+        };
+      })
+    );
+  },
+});
+
+export const getEventCategories = query({
+  handler: async (ctx) => {
+    const events = await ctx.db.query('events').collect();
+    const categoriesSet = new Set(events.map((event) => event.category));
+    return Array.from(categoriesSet);
+  },
+});
+
 export const createEvent = mutation({
   args: {
     name: v.string(),

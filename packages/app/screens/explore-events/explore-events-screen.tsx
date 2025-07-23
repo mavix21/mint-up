@@ -34,19 +34,17 @@ const data = [
   { uri: 'HLIST_6.jpg', title: 'Malang' },
 ];
 
-const categories = [
-  { id: 'all', label: 'All', color: '$green12' },
-  { id: 'art', label: 'Art', color: '$green11' },
-  { id: 'music', label: 'Music', color: '$green10' },
-  { id: 'sport', label: 'Sport', color: '$green9' },
-  { id: 'tech', label: 'Tech', color: '$green8' },
-  { id: 'food', label: 'Food', color: '$green7' },
-];
-
 export const ExploreEventsScreen = () => {
   const [selectedCategory, setSelectedCategory] = React.useState('All');
-  const events = useQuery(api.events.getAllEvents);
+  const events = useQuery(api.events.getEventsByCategory, { category: selectedCategory });
+  const categories = useQuery(api.events.getEventCategories);
   const items = [1, 2, 3];
+
+  // Add 'All' at the start of the categories list
+  const categoryList = React.useMemo(() => {
+    if (!categories) return [{ label: 'All' }];
+    return [{ label: 'All' }, ...categories.map((cat) => ({ label: cat }))];
+  }, [categories]);
 
   return (
     <YStack>
@@ -86,22 +84,22 @@ export const ExploreEventsScreen = () => {
         contentContainerStyle={{ paddingRight: 20 }}
       >
         <XStack space="$2">
-          {categories.map((category) => {
+          {categoryList.map((category) => {
             const isSelected = selectedCategory === category.label;
             return (
               <Button
-                key={category.id}
+                key={category.label}
                 size="$3"
                 paddingHorizontal="$4"
                 paddingVertical="$2"
                 borderRadius="$10"
-                backgroundColor={isSelected ? category.color : '$background'}
+                backgroundColor={isSelected ? '$color1' : '$background'}
                 borderWidth={1}
-                borderColor={isSelected ? category.color : '$borderColor'}
-                hoverStyle={{ backgroundColor: isSelected ? category.color : '$borderColor' }}
+                borderColor={isSelected ? '$color1' : '$borderColor'}
+                hoverStyle={{ backgroundColor: isSelected ? '$color1' : '$borderColor' }}
                 pressStyle={{
                   scale: 0.98,
-                  backgroundColor: isSelected ? category.color : '$backgroundPress',
+                  backgroundColor: isSelected ? '$color1' : '$backgroundPress',
                 }}
                 onPress={() => setSelectedCategory(category.label)}
               >
