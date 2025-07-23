@@ -21,6 +21,7 @@ import { useQuery } from 'convex/react';
 import React from 'react';
 import { Item } from './ui/Item';
 import { AvatarGroup } from './ui/AvatarGroup';
+import { Chip } from '@my/ui';
 
 const data = [
   {
@@ -93,13 +94,13 @@ export const ExploreEventsScreen = () => {
                 paddingHorizontal="$4"
                 paddingVertical="$2"
                 borderRadius="$10"
-                backgroundColor={isSelected ? '$color1' : '$background'}
+                backgroundColor={isSelected ? '$color11' : '$background'}
                 borderWidth={1}
-                borderColor={isSelected ? '$color1' : '$borderColor'}
-                hoverStyle={{ backgroundColor: isSelected ? '$color1' : '$borderColor' }}
+                borderColor={isSelected ? '$color11' : '$borderColor'}
+                hoverStyle={{ backgroundColor: isSelected ? '$color11' : '$borderColor' }}
                 pressStyle={{
                   scale: 0.98,
-                  backgroundColor: isSelected ? '$color1' : '$backgroundPress',
+                  backgroundColor: isSelected ? '$color10' : '$backgroundPress',
                 }}
                 onPress={() => setSelectedCategory(category.label)}
               >
@@ -124,10 +125,12 @@ export const ExploreEventsScreen = () => {
               size="$4"
               bordered
               backgroundColor="$background"
-              margin="$4"
+              mx="$4"
+              mt="$3"
               borderRadius="$4"
               pressStyle={{ scale: 0.975 }}
               hoverStyle={{ borderColor: '$borderColorHover' }}
+              py="$3"
             >
               <XStack space="$3" alignItems="center">
                 {/* App Icon */}
@@ -148,16 +151,23 @@ export const ExploreEventsScreen = () => {
                   <Text fontSize="$4" color="$color" numberOfLines={3}>
                     {event.name}
                   </Text>
-                  <AvatarGroup
-                    size="$3"
-                    items={items.map((index) => (
-                      <Item
-                        key={index}
-                        size="$2"
-                        imageUrl={`https://images.unsplash.com/photo-1736754079614-8b43bcba9926?w=100`}
+                  <YStack>
+                    <Chip rounded theme="green_active" maxWidth="$14" mt="$1.5">
+                      <Chip.Text fontSize="$1">{event.category}</Chip.Text>
+                    </Chip>
+                    <View mt="$2.5">
+                      <AvatarGroup
+                        size="$3"
+                        items={items.map((index) => (
+                          <Item
+                            key={index}
+                            size="$2"
+                            imageUrl={`https://images.unsplash.com/photo-1736754079614-8b43bcba9926?w=100`}
+                          />
+                        ))}
                       />
-                    ))}
-                  />
+                    </View>
+                  </YStack>
                 </YStack>
               </XStack>
             </Card>
