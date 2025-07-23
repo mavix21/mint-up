@@ -56,7 +56,6 @@ export function CreateEventForm({
   const [showDescriptionSheet, setShowDescriptionSheet] = useState(false);
   const [tickets, setTickets] = useState<TicketType[]>([]);
   const [showTicketingSheet, setShowTicketingSheet] = useState(false);
-  const [category, setCategory] = useState<string | undefined>();
 
   // Get client timezone
   const clientTimezone = getClientTimezone();
@@ -69,15 +68,20 @@ export function CreateEventForm({
   const form = useForm({
     defaultValues: {
       name: '',
+      category: '',
     },
   });
 
   const handleSubmit = () => {
     // TODO: Collect form data and call onSubmit
-    onSubmit?.({ location, description, tickets, category });
+    onSubmit?.({
+      name: form.state.values.name,
+      location,
+      description,
+      tickets,
+      category: form.state.values.category,
+    });
   };
-
-  console.log(category);
 
   return (
     <Form onSubmit={handleSubmit}>
@@ -121,7 +125,19 @@ export function CreateEventForm({
           }}
         />
         {/* Category Selector */}
-        <CategorySelector value={category} onValueChange={setCategory} />
+        <form.Field
+          name="category"
+          children={(field) => {
+            return (
+              <CategorySelector
+                value={field.state.value}
+                onValueChange={(value) => {
+                  field.handleChange(value);
+                }}
+              />
+            );
+          }}
+        />
         {/* Start/End DateTime */}
         <YStack gap="$2">
           <SizableText>Date & Time</SizableText>
