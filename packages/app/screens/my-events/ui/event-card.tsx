@@ -1,11 +1,11 @@
 import { View, YStack, XStack, Image, Text, Button } from '@my/ui';
+import { formatRelativeDate } from '@my/ui/src/lib/dates';
 import { ArrowRight, Clock, MapPin } from '@tamagui/lucide-icons';
 import { useState } from 'react';
 import { Link } from 'solito/link';
 
 import { EventModal } from './event-modal';
 import { ConvexEventWithExtras } from '../my-events-screen';
-import { formatRelativeDate } from '@my/ui/src/lib/dates';
 
 export function EventCard({
   event,

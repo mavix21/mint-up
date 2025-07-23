@@ -13,16 +13,16 @@ import {
   View,
   XStack,
   YStack,
+  Chip,
 } from '@my/ui';
 import { formatDateTime } from '@my/ui/src/lib/dates';
 import { ListFilter } from '@tamagui/lucide-icons';
 import { AnimationProp } from '@tamagui/web';
 import { useQuery } from 'convex/react';
 import React from 'react';
-import { Item } from './ui/Item';
-import { AvatarGroup } from './ui/AvatarGroup';
-import { Chip } from '@my/ui';
+
 import { RegistersAvatar } from './ui/RegistersAvatar';
+import { useRouter } from 'solito/navigation';
 
 const data = [
   {
@@ -37,10 +37,10 @@ const data = [
 ];
 
 export const ExploreEventsScreen = () => {
+  const router = useRouter();
   const [selectedCategory, setSelectedCategory] = React.useState('All');
   const events = useQuery(api.events.getEventsByCategory, { category: selectedCategory });
   const categories = useQuery(api.events.getEventCategories);
-  const items = [1, 2, 3];
 
   // Add 'All' at the start of the categories list
   const categoryList = React.useMemo(() => {
@@ -132,6 +132,7 @@ export const ExploreEventsScreen = () => {
               pressStyle={{ scale: 0.975 }}
               hoverStyle={{ borderColor: '$borderColorHover' }}
               py="$3"
+              onPress={() => router.push(`/events/detail/${event._id}`)}
             >
               <XStack space="$3" alignItems="center">
                 {/* App Icon */}

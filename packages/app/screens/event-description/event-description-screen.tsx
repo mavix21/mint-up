@@ -1,0 +1,11 @@
+import { YStack, Text } from '@my/ui';
+import { useParams } from 'solito/navigation';
+
+export const EventDescriptionScreen = () => {
+  const { id } = useParams<{ id: string }>();
+  return (
+    <YStack>
+      <Text>Event description</Text>
+    </YStack>
+  );
+};
