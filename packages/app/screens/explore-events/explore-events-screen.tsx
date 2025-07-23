@@ -156,16 +156,18 @@ export const ExploreEventsScreen = () => {
                       <Chip.Text fontSize="$1">{event.category}</Chip.Text>
                     </Chip>
                     <View mt="$2.5">
-                      <AvatarGroup
-                        size="$3"
-                        items={items.map((index) => (
-                          <Item
-                            key={index}
-                            size="$2"
-                            imageUrl={`https://images.unsplash.com/photo-1736754079614-8b43bcba9926?w=100`}
-                          />
-                        ))}
-                      />
+                      {
+                        <AvatarGroup
+                          size="$3"
+                          items={items.map((index) => (
+                            <Item
+                              key={index}
+                              size="$2"
+                              imageUrl={`https://images.unsplash.com/photo-1736754079614-8b43bcba9926?w=100`}
+                            />
+                          ))}
+                        />
+                      }
                     </View>
                   </YStack>
                 </YStack>

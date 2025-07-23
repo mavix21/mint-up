@@ -16,6 +16,7 @@ import type {
 import type * as events from "../events.js";
 import type * as nextjs from "../nextjs.js";
 import type * as react from "../react.js";
+import type * as registrations from "../registrations.js";
 import type * as storage from "../storage.js";
 import type * as tables_eventCommunications from "../tables/eventCommunications.js";
 import type * as tables_events from "../tables/events.js";
@@ -40,6 +41,7 @@ declare const fullApi: ApiFromModules<{
   events: typeof events;
   nextjs: typeof nextjs;
   react: typeof react;
+  registrations: typeof registrations;
   storage: typeof storage;
   "tables/eventCommunications": typeof tables_eventCommunications;
   "tables/events": typeof tables_events;
