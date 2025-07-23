@@ -63,6 +63,27 @@ export const getPastEvents = query({
   },
 });
 
+export const getEventById = query({
+  args: {
+    eventId: v.id('events'),
+  },
+  handler: async (ctx, args) => {
+    //const events = await ctx.db.query('events').order('desc').collect();
+    const event = await ctx.db
+      .query('events')
+      .filter((q) => q.eq(q.field('_id'), args.eventId))
+      .first();
+    const imageUrl = (await ctx.storage.getUrl(event!.image)) ?? null;
+    const user = await ctx.db.get(event!.creatorId);
+
+    return {
+      ...event,
+      creatorName: user?.displayName ?? 'Anonymous',
+      imageUrl,
+    };
+  },
+});
+
 export const getEventsByCategory = query({
   args: {
     category: v.optional(v.string()),
