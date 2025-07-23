@@ -9,6 +9,6 @@ export const getRegistrationsByEventId = query({
     return await ctx.db
       .query('registrations')
       .filter((q) => q.eq(q.field('eventId'), args.eventId))
-      .collect();
+      .take(5);
   },
 });
