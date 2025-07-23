@@ -210,6 +210,7 @@ export function CategorySelector({ value, onValueChange }: CategorySelectorProps
           onContentSizeChange={handleContentSizeChange}
           onLayout={handleLayout}
           scrollEventThrottle={16} // Limit to ~60fps
+          showsHorizontalScrollIndicator={false}
         >
           <XStack gap="$3" flex={1} flexWrap="nowrap">
             <RadioGroup
