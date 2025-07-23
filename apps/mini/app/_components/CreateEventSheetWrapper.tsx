@@ -52,7 +52,7 @@ const SheetContents = memo(({ onClose }: { onClose: () => void }) => {
         alignItems="center"
         justifyContent="center"
       >
-        <Button size="$2" circular backgroundColor="transparent" borderWidth={1} onPress={onClose}>
+        <Button size="$2" circular borderWidth={1} onPress={onClose}>
           ✕
         </Button>
       </XStack>
