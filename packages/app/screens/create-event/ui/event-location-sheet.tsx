@@ -14,7 +14,7 @@ import {
   SizableText,
 } from 'tamagui';
 
-import { EventLocation, EventLocationType } from '../../../entities';
+import { EventLocation } from '../../../entities';
 
 export interface EventLocationSheetProps {
   open: boolean;
@@ -80,9 +80,9 @@ export function EventLocationSheet({
             <ToggleGroup
               type="single"
               value={localLocation.type}
-              onValueChange={(value) => {
+              onValueChange={(value: EventLocation['type']) => {
                 if (value) {
-                  updateLocation({ type: value as EventLocationType });
+                  updateLocation({ type: value });
                 }
               }}
               backgroundColor="$color4"
