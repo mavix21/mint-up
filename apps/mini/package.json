@@ -37,7 +37,7 @@
     "vercel": "latest",
     "viem": "^2.31.7",
     "wagmi": "^2.15.6",
-    "zod": "^3.22.2"
+    "zod": "^4.0.7"
   },
   "devDependencies": {
     "@next/bundle-analyzer": "15.3.2",
