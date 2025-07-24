@@ -1,11 +1,11 @@
-import { Toast, useToastState } from '@tamagui/toast'
-import { XStack, YStack } from 'tamagui'
+import { Toast, useToastState } from '@tamagui/toast';
+import { XStack, YStack } from 'tamagui';
 
 export const CustomToast = () => {
-  const currentToast = useToastState()
+  const currentToast = useToastState();
 
   if (!currentToast || currentToast.isHandledNatively) {
-    return null
+    return null;
   }
 
   return (
@@ -38,5 +38,5 @@ export const CustomToast = () => {
         {!!currentToast.message && <Toast.Description>{currentToast.message}</Toast.Description>}
       </YStack>
     </Toast>
-  )
-}
+  );
+};
