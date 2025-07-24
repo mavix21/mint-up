@@ -1,7 +1,7 @@
 import { useVisualViewportHeight } from '@my/ui';
 import { X } from '@tamagui/lucide-icons';
 import { useState } from 'react';
-import { Sheet, Button, XStack, YStack, Text, TextArea, getTokens } from 'tamagui';
+import { Sheet, Button, XStack, YStack, TextArea } from 'tamagui';
 
 export interface EventDescriptionSheetProps {
   open: boolean;
