@@ -1,6 +1,7 @@
 import { View, H3, Text, Image, ScrollView } from '@my/ui';
 import { formatDate, formatDateTime, formatRelativeDate } from '@my/ui/src/lib/dates';
 import { X, Clock, MapPin } from '@tamagui/lucide-icons';
+import React from 'react';
 import { Adapt, Button, Dialog, Paragraph, Sheet, Unspaced, XStack, YStack } from 'tamagui';
 
 import { ConvexEventWithExtras } from '../my-events-screen';
@@ -15,6 +16,8 @@ export function EventModal({
   eventData: ConvexEventWithExtras;
 }) {
   //const imageUrl = eventData.poapImageUrl ?? eventData.nftTicketImageUrl;
+  const shortDescription = (eventData.description?.substring(0, 150) ?? '') + '...';
+  const [showFullDescription, setShowFullDescription] = React.useState(false);
 
   return (
     <Dialog modal open={toggleEvent} onOpenChange={setToggleEvent}>
@@ -64,7 +67,7 @@ export function EventModal({
           <YStack flex={1} pb="$4">
             <Dialog.Title>
               <View>
-                <Image height={200} source={{ uri: eventData.imageUrl ?? '' }} borderRadius="$3" />
+                <Image height={300} source={{ uri: eventData.imageUrl ?? '' }} borderRadius="$3" />
                 <H3 mt="$3" px="$4">
                   {eventData?.name}
                 </H3>
@@ -128,7 +131,21 @@ export function EventModal({
                   </YStack>
                   <View mt="$3">
                     <Text fontWeight="bold">About</Text>
-                    <Text mt="$2">{eventData?.description}</Text>
+                    {/* <Text mt="$2">{eventData?.description}</Text> */}
+                    <Paragraph size="$4" numberOfLines={showFullDescription ? undefined : 3}>
+                      {showFullDescription ? eventData.description : shortDescription}
+                    </Paragraph>
+                    {!showFullDescription && (
+                      <Button
+                        variant="outlined"
+                        size="$2"
+                        mt="$2"
+                        onPress={() => setShowFullDescription(true)}
+                        alignSelf="flex-start"
+                      >
+                        Read more...
+                      </Button>
+                    )}
                   </View>
                 </View>
               </Dialog.Description>

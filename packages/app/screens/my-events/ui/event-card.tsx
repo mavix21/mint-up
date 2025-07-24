@@ -40,7 +40,6 @@ export function EventCard({
         onPress={() => setToggleEvent(true)}
       >
         <EventModal toggleEvent={toggleEvent} setToggleEvent={setToggleEvent} eventData={event} />
-
         <XStack
           flexDirection="row-reverse"
           $xxs={{ flexDirection: 'column', alignItems: 'stretch' }}
