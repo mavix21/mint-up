@@ -123,7 +123,6 @@ export const createEvent = mutation({
   handler: async (ctx, args) => {
     const eventId = await ctx.db.insert('events', {
       ...args,
-      category: 'music & performing arts',
     });
 
     return eventId;
