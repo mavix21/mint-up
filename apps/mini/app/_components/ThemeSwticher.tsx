@@ -2,8 +2,8 @@
 
 import { getSize } from '@tamagui/get-token';
 import { MoonStar, Sun } from '@tamagui/lucide-icons';
-import { useRootTheme, useThemeSetting } from '@tamagui/next-theme';
-import { useEffect, useId, useState } from 'react';
+import { useThemeSetting } from '@tamagui/next-theme';
+import { useId, useState } from 'react';
 import { Appearance } from 'react-native';
 import {
   AnimatePresence,
@@ -23,7 +23,6 @@ export function ThemeSwitch({ size = '$8' }: { size?: SizeTokens }) {
 
   // do not use this code. only use in showcase
   const { set, current } = useThemeSetting();
-  const [theme] = useRootTheme();
 
   useIsomorphicLayoutEffect(() => {
     setChecked(current === 'dark');
