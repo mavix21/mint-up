@@ -102,14 +102,14 @@ export function EventLocationSheet({
                 </XStack>
               </ToggleGroup.Item>
               <ToggleGroup.Item
-                value="virtual"
+                value="online"
                 flex={1}
                 backgroundColor="transparent"
                 borderRadius="$4"
               >
                 <XStack alignItems="center" gap="$2">
                   <Globe size={16} />
-                  <SizableText fontWeight="500">Virtual</SizableText>
+                  <SizableText fontWeight="500">Online</SizableText>
                 </XStack>
               </ToggleGroup.Item>
             </ToggleGroup>
@@ -169,7 +169,7 @@ export function EventLocationSheet({
                   borderRadius="$4"
                 />
                 <SizableText fontSize="$2" color="$color10" mt="$1">
-                  Share the link where attendees can join the virtual event
+                  Share the link where attendees can join the online event
                 </SizableText>
               </YStack>
             )}

@@ -1,4 +1,4 @@
-import { TimePicker, Chip } from '@my/ui';
+import { TimePicker, Chip, Shake } from '@my/ui';
 import { Globe } from '@tamagui/lucide-icons';
 import { useForm } from '@tanstack/react-form';
 import { useState } from 'react';
@@ -15,6 +15,7 @@ import {
   VisuallyHidden,
   YGroup,
   Form,
+  Theme,
 } from 'tamagui';
 
 import {
@@ -28,7 +29,7 @@ import {
   TicketingButton,
   CategorySelector,
 } from './index';
-import type { EventLocation, TicketType } from '../../../entities';
+import { createEventFormSchema, type EventLocation, type TicketType } from '../../../entities';
 import { getClientTimezone, calculateDefaultEventTimes, getTodayDateString } from '../../../utils';
 
 export interface CreateEventFormProps {
@@ -38,6 +39,13 @@ export interface CreateEventFormProps {
   onThemeChange?: (theme: string) => void;
   showThemeSheet?: boolean;
   onShowThemeSheetChange?: (show: boolean) => void;
+}
+
+function toTimestamp(date: string, time: string) {
+  const localDateTimeString = `${date}T${time}`;
+  const localDateTime = new Date(localDateTimeString);
+
+  return localDateTime.getTime();
 }
 
 export function CreateEventForm({
@@ -77,9 +85,15 @@ export function CreateEventForm({
       description: '',
       tickets: [] as TicketType[],
     },
+    validators: {
+      onChange: createEventFormSchema,
+    },
   });
 
   const handleSubmit = () => {
+    const startTimestamp = toTimestamp(form.state.values.startDate, form.state.values.startTime);
+    const endTimestamp = toTimestamp(form.state.values.endDate, form.state.values.endTime);
+
     // TODO: Collect form data and call onSubmit
     onSubmit?.({
       name: form.state.values.name,
@@ -87,10 +101,10 @@ export function CreateEventForm({
       description: form.state.values.description,
       tickets: form.state.values.tickets,
       category: form.state.values.category,
-      startDate: form.state.values.startDate,
-      startTime: form.state.values.startTime,
-      endDate: form.state.values.endDate,
-      endTime: form.state.values.endTime,
+      startDate: startTimestamp,
+      endDate: endTimestamp,
+      startTimestamp,
+      endTimestamp,
     });
   };
 
@@ -111,27 +125,31 @@ export function CreateEventForm({
           name="name"
           children={(field) => {
             return (
-              <YStack>
-                <VisuallyHidden>
-                  <Label htmlFor={field.name}>Event Name</Label>
-                </VisuallyHidden>
-                <TextArea
-                  id={field.name}
-                  value={field.state.value}
-                  onChangeText={field.handleChange}
-                  placeholder="Event Name"
-                  flexGrow={1}
-                  unstyled
-                  fontWeight="700"
-                  placeholderTextColor="$color7"
-                  style={
-                    {
-                      fontSize: tamaguiTokens.size.$3.val,
-                      fieldSizing: 'content',
-                    } as any
-                  }
-                />
-              </YStack>
+              <Theme name={field.state.meta.errors.length > 0 ? 'red' : null} forceClassName>
+                <Shake shakeKey={field.state.meta.errors[0]?.message}>
+                  <YStack>
+                    <VisuallyHidden>
+                      <Label htmlFor={field.name}>Event Name</Label>
+                    </VisuallyHidden>
+                    <TextArea
+                      id={field.name}
+                      value={field.state.value}
+                      onChangeText={field.handleChange}
+                      placeholder="Event Name"
+                      flexGrow={1}
+                      unstyled
+                      fontWeight="700"
+                      placeholderTextColor="$color7"
+                      style={
+                        {
+                          fontSize: tamaguiTokens.size.$3.val,
+                          fieldSizing: 'content',
+                        } as any
+                      }
+                    />
+                  </YStack>
+                </Shake>
+              </Theme>
             );
           }}
         />

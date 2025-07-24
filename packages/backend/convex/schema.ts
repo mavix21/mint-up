@@ -10,8 +10,9 @@ import { usersTable } from './tables/user';
 import { ticketTemplatesTable } from './tables/ticketTemplates';
 import { registrationsTable } from './tables/registrations';
 import { poapTemplatesTable } from './tables/poapTemplates';
+import { typedV } from 'convex-helpers/validators';
 
-export default defineSchema({
+const schema = defineSchema({
   users: usersTable,
   linkedAccounts: linkedAccountsTable,
   sessions: sessionsTable,
@@ -23,3 +24,7 @@ export default defineSchema({
   poapTemplates: poapTemplatesTable,
   registrations: registrationsTable,
 });
+
+export default schema;
+
+export const vv = typedV(schema);

@@ -1,3 +1,7 @@
+import { api } from '@my/backend/_generated/api';
+import { Id } from '@my/backend/_generated/dataModel';
+import { useMutation } from '@my/backend/react';
+import { CreateEventFormData } from 'app/entities';
 import { useState } from 'react';
 import { YStack, Theme, ScrollView, ThemeName } from 'tamagui';
 
@@ -7,14 +11,27 @@ export function CreateEventScreen() {
   const [theme, setTheme] = useState<string>('');
   const [showThemeSheet, setShowThemeSheet] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const createEvent = useMutation(api.events.createEvent);
 
-  const handleSubmit = async (data: any) => {
+  const handleSubmit = async (
+    data: CreateEventFormData & { startTimestamp: number; endTimestamp: number }
+  ) => {
     setIsLoading(true);
+    console.log('Creating event with data:', data);
     try {
-      // TODO: Implement event creation logic
-      console.log('Creating event with data:', data);
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await createEvent({
+        name: data.name,
+        description: data.description,
+        startDate: data.startTimestamp,
+        endDate: data.endTimestamp,
+        category: data.category,
+        location: data.location,
+        visibility: 'public',
+        creatorId: 'jd74wb459s0vsnd7h8y14db7md7mamjp' as Id<'users'>,
+        image: 'kg2aphx307hkad4dxhpcrvjbkh7ma70s' as Id<'_storage'>,
+        automatedFlows: [],
+        hosts: [],
+      });
     } catch (error) {
       console.error('Error creating event:', error);
     } finally {

@@ -1,8 +1,8 @@
 import { z } from 'zod';
 
 // Base schemas for discriminated unions
-const virtualLocationSchema = z.object({
-  type: z.literal('virtual'),
+const onlineLocationSchema = z.object({
+  type: z.literal('online'),
   url: z.url('Please enter a valid URL').min(1, 'URL is required'),
 });
 
@@ -14,7 +14,7 @@ const inPersonLocationSchema = z.object({
 
 // Discriminated union for EventLocation
 export const eventLocationSchema = z.discriminatedUnion('type', [
-  virtualLocationSchema,
+  onlineLocationSchema,
   inPersonLocationSchema,
 ]);
 
