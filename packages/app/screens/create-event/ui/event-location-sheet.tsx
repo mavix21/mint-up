@@ -43,15 +43,41 @@ export function EventLocationSheet({
     onOpenChange(false);
   };
 
+  // Reset local state when sheet opens
+  const handleOpenChange = (isOpen: boolean) => {
+    if (isOpen) {
+      setLocalLocation(location);
+    }
+    onOpenChange(isOpen);
+  };
+
   const updateLocation = (updates: Partial<EventLocation>) => {
-    setLocalLocation((prev) => ({ ...prev, ...updates } as EventLocation));
+    setLocalLocation((prev) => {
+      const updatedLocation = { ...prev, ...updates } as EventLocation;
+
+      // Ensure the location has the correct structure for its type
+      if (updatedLocation.type === 'online') {
+        // For online locations, ensure only type and url properties
+        return {
+          type: 'online' as const,
+          url: updatedLocation.url || '',
+        } as EventLocation;
+      }
+
+      // For in-person locations, ensure type, address, and optional instructions
+      return {
+        type: 'in-person' as const,
+        address: updatedLocation.address || '',
+        instructions: updatedLocation.instructions,
+      } as EventLocation;
+    });
   };
 
   return (
     <Sheet
       open={open}
       forceRemoveScrollEnabled={open}
-      onOpenChange={onOpenChange}
+      onOpenChange={handleOpenChange}
       snapPoints={[90]}
       defaultPosition={0}
       modal
@@ -81,8 +107,20 @@ export function EventLocationSheet({
               type="single"
               value={localLocation.type}
               onValueChange={(value: EventLocation['type']) => {
-                if (value) {
-                  updateLocation({ type: value });
+                if (!value) return;
+                if (value === 'online') {
+                  // When switching to online, ensure we have url property
+                  updateLocation({
+                    type: 'online',
+                    url: '',
+                  });
+                } else {
+                  // When switching to in-person, ensure we have address property
+                  updateLocation({
+                    type: 'in-person',
+                    address: '',
+                    instructions: '',
+                  });
                 }
               }}
               backgroundColor="$color4"
