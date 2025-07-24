@@ -1,6 +1,6 @@
 import { Sheet, Button, XStack, YStack, useVisualViewportHeight } from '@my/ui';
 import { CreateEventScreen } from 'app/screens/create-event/create-event-screen';
-import { memo } from 'react';
+import { memo, useCallback } from 'react';
 
 interface CreateEventSheetWrapperProps {
   open: boolean;
@@ -8,7 +8,9 @@ interface CreateEventSheetWrapperProps {
 }
 
 export function CreateEventSheetWrapper({ open, setOpen }: CreateEventSheetWrapperProps) {
+  console.log('CreateEventSheetWrapper');
   const visualViewportHeight = useVisualViewportHeight();
+  const closeSheet = useCallback(() => setOpen(false), [setOpen]);
 
   return (
     <Sheet
@@ -49,13 +51,13 @@ export function CreateEventSheetWrapper({ open, setOpen }: CreateEventSheetWrapp
             </Button>
           </XStack>
 
-          <SheetContents />
+          <SheetContents closeSheet={closeSheet} />
         </YStack>
       </Sheet.Frame>
     </Sheet>
   );
 }
 
-const SheetContents = memo(() => {
-  return <CreateEventScreen />;
+const SheetContents = memo(({ closeSheet }: { closeSheet: () => void }) => {
+  return <CreateEventScreen closeSheet={closeSheet} />;
 });
