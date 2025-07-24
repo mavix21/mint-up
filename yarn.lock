@@ -4109,6 +4109,7 @@ __metadata:
   resolution: "@my/backend@workspace:packages/backend"
   dependencies:
     convex: "npm:^1.25.4"
+    convex-helpers: "npm:^0.1.99"
     typescript: "npm:~5.8.3"
   languageName: unknown
   linkType: soft
@@ -13984,6 +13985,33 @@ __metadata:
   version: 2.0.0
   resolution: "convert-source-map@npm:2.0.0"
   checksum: 10/c987be3ec061348cdb3c2bfb924bec86dea1eacad10550a85ca23edb0fe3556c3a61c7399114f3331ccb3499d7fd0285ab24566e5745929412983494c3926e15
+  languageName: node
+  linkType: hard
+
+"convex-helpers@npm:^0.1.99":
+  version: 0.1.99
+  resolution: "convex-helpers@npm:0.1.99"
+  peerDependencies:
+    "@standard-schema/spec": ^1.0.0
+    convex: ^1.13.0
+    hono: ^4.0.5
+    react: ^17.0.2 || ^18.0.0 || ^19.0.0
+    typescript: ^5.5
+    zod: ^3.22.4
+  peerDependenciesMeta:
+    "@standard-schema/spec":
+      optional: true
+    hono:
+      optional: true
+    react:
+      optional: true
+    typescript:
+      optional: true
+    zod:
+      optional: true
+  bin:
+    convex-helpers: bin.cjs
+  checksum: 10/e18b0c973b959e8cb08d146d893411dc04c6ac562f99f7c185478c459646a8ddea2b47fb65df01abd5b140bc92f3291cad4399a4ce09a5ce3410592b334b9ce9
   languageName: node
   linkType: hard
 
