@@ -6,14 +6,14 @@ import { Sheet, Button, XStack, YStack, Text, TextArea, getTokens } from 'tamagu
 export interface EventDescriptionSheetProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  description?: string;
+  description: string;
   onDescriptionChange: (description: string) => void;
 }
 
 export function EventDescriptionSheet({
   open,
   onOpenChange,
-  description = '',
+  description,
   onDescriptionChange,
 }: EventDescriptionSheetProps) {
   const [localDescription, setLocalDescription] = useState(description);

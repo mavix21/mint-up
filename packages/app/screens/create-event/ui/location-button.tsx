@@ -1,7 +1,7 @@
 import { MapPin, Globe } from '@tamagui/lucide-icons';
 import { Button, SizableText } from 'tamagui';
 
-import { EventLocation } from './event-location-sheet';
+import { EventLocation } from '../../../entities';
 
 export interface LocationButtonProps {
   location?: EventLocation;
@@ -30,7 +30,7 @@ export function LocationButton({ location, onPress }: LocationButtonProps) {
 
   const getLocationColor = () => {
     if (!location) {
-      return '$color8';
+      return '$color9';
     }
 
     if (location.type === 'in-person' && location.address) {
@@ -41,7 +41,7 @@ export function LocationButton({ location, onPress }: LocationButtonProps) {
       return '$color12';
     }
 
-    return '$color8';
+    return '$color9';
   };
 
   return (

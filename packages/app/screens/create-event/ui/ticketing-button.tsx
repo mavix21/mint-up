@@ -1,21 +1,21 @@
 import { Ticket } from '@tamagui/lucide-icons';
 import { Button, Text } from 'tamagui';
 
-import { TicketType } from './event-ticketing-sheet';
+import { TicketType } from '../../../entities';
 
 export interface TicketingButtonProps {
-  tickets?: TicketType[];
+  tickets: TicketType[];
   onPress: () => void;
 }
 
-export function TicketingButton({ tickets = [], onPress }: TicketingButtonProps) {
+export function TicketingButton({ tickets, onPress }: TicketingButtonProps) {
   const getTicketText = () => {
     if (tickets.length === 0) {
       return 'Free';
     }
 
-    const freeTickets = tickets.filter((t) => t.priceType === 'free');
-    const paidTickets = tickets.filter((t) => t.priceType === 'paid');
+    const freeTickets = tickets.filter((t) => t.type === 'free');
+    const paidTickets = tickets.filter((t) => t.type === 'paid');
 
     if (freeTickets.length > 0 && paidTickets.length === 0) {
       return 'Free';

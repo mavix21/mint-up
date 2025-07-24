@@ -27,9 +27,8 @@ import {
   EventTicketingSheet,
   TicketingButton,
   CategorySelector,
-  type EventLocation,
-  type TicketType,
 } from './index';
+import type { EventLocation, TicketType } from '../../../entities';
 import { getClientTimezone, calculateDefaultEventTimes, getTodayDateString } from '../../../utils';
 
 export interface CreateEventFormProps {
@@ -50,11 +49,8 @@ export function CreateEventForm({
   onShowThemeSheetChange,
 }: CreateEventFormProps) {
   const tamaguiTokens = getTokens();
-  const [location, setLocation] = useState<EventLocation | undefined>();
   const [showLocationSheet, setShowLocationSheet] = useState(false);
-  const [description, setDescription] = useState<string>('');
   const [showDescriptionSheet, setShowDescriptionSheet] = useState(false);
-  const [tickets, setTickets] = useState<TicketType[]>([]);
   const [showTicketingSheet, setShowTicketingSheet] = useState(false);
 
   // Get client timezone
@@ -69,6 +65,17 @@ export function CreateEventForm({
     defaultValues: {
       name: '',
       category: '',
+      startDate: todayDateString,
+      startTime,
+      endDate: todayDateString,
+      endTime,
+      location: {
+        type: 'in-person' as const,
+        address: '',
+        instructions: '',
+      } as EventLocation,
+      description: '',
+      tickets: [] as TicketType[],
     },
   });
 
@@ -76,10 +83,14 @@ export function CreateEventForm({
     // TODO: Collect form data and call onSubmit
     onSubmit?.({
       name: form.state.values.name,
-      location,
-      description,
-      tickets,
+      location: form.state.values.location,
+      description: form.state.values.description,
+      tickets: form.state.values.tickets,
       category: form.state.values.category,
+      startDate: form.state.values.startDate,
+      startTime: form.state.values.startTime,
+      endDate: form.state.values.endDate,
+      endTime: form.state.values.endTime,
     });
   };
 
@@ -157,17 +168,31 @@ export function CreateEventForm({
                     Start
                   </Label>
                   <XStack gap="$4" alignItems="center">
-                    <input
-                      id="start"
-                      type="date"
-                      style={{ textAlign: 'center' }}
-                      min={todayDateString}
-                      defaultValue={todayDateString}
+                    <form.Field
+                      name="startDate"
+                      children={(field) => {
+                        return (
+                          <input
+                            id="start"
+                            type="date"
+                            style={{ textAlign: 'center' }}
+                            min={todayDateString}
+                            defaultValue={todayDateString}
+                          />
+                        );
+                      }}
                     />
-                    <TimePicker
-                      value={startTime}
-                      onChangeText={(value) => {
-                        console.log(value);
+                    <form.Field
+                      name="startTime"
+                      children={(field) => {
+                        return (
+                          <TimePicker
+                            value={field.state.value}
+                            onChangeText={(value) => {
+                              field.handleChange(value);
+                            }}
+                          />
+                        );
                       }}
                     />
                   </XStack>
@@ -187,17 +212,31 @@ export function CreateEventForm({
                     End
                   </Label>
                   <XStack gap="$4" alignItems="center">
-                    <input
-                      id="end"
-                      type="date"
-                      style={{ textAlign: 'center' }}
-                      min={todayDateString}
-                      defaultValue={todayDateString}
+                    <form.Field
+                      name="endDate"
+                      children={(field) => {
+                        return (
+                          <input
+                            id="end"
+                            type="date"
+                            style={{ textAlign: 'center' }}
+                            min={todayDateString}
+                            defaultValue={todayDateString}
+                          />
+                        );
+                      }}
                     />
-                    <TimePicker
-                      value={endTime}
-                      onChangeText={(value) => {
-                        console.log(value);
+                    <form.Field
+                      name="endTime"
+                      children={(field) => {
+                        return (
+                          <TimePicker
+                            value={field.state.value}
+                            onChangeText={(value) => {
+                              field.handleChange(value);
+                            }}
+                          />
+                        );
                       }}
                     />
                   </XStack>
@@ -222,9 +261,13 @@ export function CreateEventForm({
                       py="$2"
                       borderRadius="$4"
                       backgroundColor="$color5"
-                      hoverStyle={{ backgroundColor: '$color6' }}
-                      pressStyle={{ backgroundColor: '$color7' }}
-                      focusStyle={{ backgroundColor: '$color8' }}
+                      hoverStyle={{
+                        backgroundColor: '$color6',
+                        borderColor: '$color7',
+                        borderWidth: 1,
+                      }}
+                      pressStyle={{ backgroundColor: '$color6' }}
+                      focusStyle={{ backgroundColor: '$color6' }}
                     >
                       <Chip.Icon>
                         <Globe size={16} />
@@ -249,12 +292,29 @@ export function CreateEventForm({
             borderRadius="$4"
           >
             <YGroup.Item>
-              <LocationButton location={location} onPress={() => setShowLocationSheet(true)} />
+              <form.Field
+                name="location"
+                children={(field) => {
+                  return (
+                    <LocationButton
+                      location={field.state.value}
+                      onPress={() => setShowLocationSheet(true)}
+                    />
+                  );
+                }}
+              />
             </YGroup.Item>
             <YGroup.Item>
-              <DescriptionButton
-                description={description}
-                onPress={() => setShowDescriptionSheet(true)}
+              <form.Field
+                name="description"
+                children={(field) => {
+                  return (
+                    <DescriptionButton
+                      description={field.state.value}
+                      onPress={() => setShowDescriptionSheet(true)}
+                    />
+                  );
+                }}
               />
             </YGroup.Item>
           </YGroup>
@@ -262,7 +322,18 @@ export function CreateEventForm({
         {/* Ticketing */}
         <YStack gap="$2">
           <SizableText>Ticketing</SizableText>
-          <TicketingButton tickets={tickets} onPress={() => setShowTicketingSheet(true)} />
+          <form.Field
+            name="tickets"
+            mode="array"
+            children={(field) => {
+              return (
+                <TicketingButton
+                  tickets={field.state.value}
+                  onPress={() => setShowTicketingSheet(true)}
+                />
+              );
+            }}
+          />
         </YStack>
         {/* Submit Button */}
         <YStack py="$4" borderColor="$color3">
@@ -280,25 +351,53 @@ export function CreateEventForm({
           </Form.Trigger>
         </YStack>
         {/* Location Sheet */}
-        <EventLocationSheet
-          open={showLocationSheet}
-          onOpenChange={setShowLocationSheet}
-          location={location}
-          onLocationChange={setLocation}
+        <form.Field
+          name="location"
+          children={(field) => {
+            return (
+              <EventLocationSheet
+                open={showLocationSheet}
+                onOpenChange={setShowLocationSheet}
+                location={field.state.value}
+                onLocationChange={(location) => {
+                  field.handleChange(location);
+                }}
+              />
+            );
+          }}
         />
         {/* Description Sheet */}
-        <EventDescriptionSheet
-          open={showDescriptionSheet}
-          onOpenChange={setShowDescriptionSheet}
-          description={description}
-          onDescriptionChange={setDescription}
+        <form.Field
+          name="description"
+          children={(field) => {
+            return (
+              <EventDescriptionSheet
+                open={showDescriptionSheet}
+                onOpenChange={setShowDescriptionSheet}
+                description={field.state.value}
+                onDescriptionChange={(description) => {
+                  field.handleChange(description);
+                }}
+              />
+            );
+          }}
         />
         {/* Ticketing Sheet */}
-        <EventTicketingSheet
-          open={showTicketingSheet}
-          onOpenChange={setShowTicketingSheet}
-          tickets={tickets}
-          onTicketsChange={setTickets}
+        <form.Field
+          name="tickets"
+          mode="array"
+          children={(field) => {
+            return (
+              <EventTicketingSheet
+                open={showTicketingSheet}
+                onOpenChange={setShowTicketingSheet}
+                tickets={field.state.value}
+                onTicketsChange={(tickets) => {
+                  field.handleChange(tickets);
+                }}
+              />
+            );
+          }}
         />
       </YStack>
     </Form>

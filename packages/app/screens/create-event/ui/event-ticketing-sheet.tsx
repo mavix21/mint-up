@@ -19,36 +19,19 @@ import {
   Group,
 } from 'tamagui';
 
-export type TicketPriceType = 'free' | 'paid';
-export type Cryptocurrency = 'ETH' | 'USDC';
-
-// Cryptocurrency options for maintainability
-const CRYPTOCURRENCY_OPTIONS = [
-  { value: 'ETH', label: 'Ethereum (ETH)' },
-  { value: 'USDC', label: 'USD Coin (USDC)' },
-] as const;
-
-export interface TicketType {
-  id: string;
-  name: string;
-  priceType: TicketPriceType;
-  price?: number;
-  currency?: Cryptocurrency;
-  description: string;
-  supply?: number;
-}
+import type { Cryptocurrency, TicketType } from '../../../entities';
 
 export interface EventTicketingSheetProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  tickets?: TicketType[];
+  tickets: TicketType[];
   onTicketsChange: (tickets: TicketType[]) => void;
 }
 
 export function EventTicketingSheet({
   open,
   onOpenChange,
-  tickets = [],
+  tickets,
   onTicketsChange,
 }: EventTicketingSheetProps) {
   const [localTickets, setLocalTickets] = useState<TicketType[]>(tickets);
@@ -76,16 +59,42 @@ export function EventTicketingSheet({
     const newTicket: TicketType = {
       id: Date.now().toString(),
       name: '',
-      priceType: 'free',
+      type: 'free',
       description: '',
-      currency: 'ETH', // Default currency for paid tickets
     };
     setLocalTickets((prev) => [...prev, newTicket]);
   };
 
   const updateTicket = (id: string, updates: Partial<TicketType>) => {
     setLocalTickets((prev) =>
-      prev.map((ticket) => (ticket.id === id ? { ...ticket, ...updates } : ticket))
+      prev.map((ticket) => {
+        if (ticket.id !== id) return ticket;
+
+        const updatedTicket = { ...ticket, ...updates } as TicketType;
+
+        // Ensure the ticket has the correct structure for its type
+        if (updatedTicket.type === 'free') {
+          // For free tickets, ensure no price or currency properties
+          return {
+            id: updatedTicket.id,
+            name: updatedTicket.name,
+            type: 'free' as const,
+            description: updatedTicket.description,
+            supply: updatedTicket.supply,
+          } as TicketType;
+        }
+
+        // For paid tickets, ensure price and currency are present
+        return {
+          id: updatedTicket.id,
+          name: updatedTicket.name,
+          type: 'paid' as const,
+          description: updatedTicket.description,
+          supply: updatedTicket.supply,
+          price: updatedTicket.price ?? 0,
+          currency: updatedTicket.currency ?? 'ETH',
+        } as TicketType;
+      })
     );
   };
 
@@ -97,7 +106,7 @@ export function EventTicketingSheet({
     const hasRequiredFields = ticket.name.trim() !== '' && ticket.description.trim() !== '';
 
     // For paid tickets, ensure price and currency are set
-    if (ticket.priceType === 'paid') {
+    if (ticket.type === 'paid') {
       return hasRequiredFields && ticket.price !== undefined && ticket.currency !== undefined;
     }
 
@@ -189,19 +198,26 @@ export function EventTicketingSheet({
                         <Label>Price Type</Label>
                         <ToggleGroup
                           type="single"
-                          value={ticket.priceType}
-                          onValueChange={(value) => {
-                            if (value) {
-                              updateTicket(ticket.id, {
-                                priceType: value as TicketPriceType,
-                                price: value === 'free' ? undefined : ticket.price,
-                                currency: value === 'paid' ? ticket.currency || 'ETH' : undefined,
-                              });
-                            }
-                          }}
+                          value={ticket.type}
                           borderRadius="$4"
                           orientation="horizontal"
                           size="$3"
+                          onValueChange={(value: TicketType['type']) => {
+                            if (!value) return;
+                            if (value === 'paid') {
+                              // When switching to paid, ensure we have price and currency
+                              updateTicket(ticket.id, {
+                                type: 'paid',
+                                price: 0, // Default price
+                                currency: 'ETH', // Default currency
+                              });
+                            } else {
+                              // When switching to free, remove price and currency
+                              updateTicket(ticket.id, {
+                                type: 'free',
+                              });
+                            }
+                          }}
                         >
                           <ToggleGroup.Item value="free" flex={1} borderRadius="$4">
                             <SizableText>Free</SizableText>
@@ -213,7 +229,7 @@ export function EventTicketingSheet({
                       </YStack>
 
                       {/* Price and Currency (only for paid tickets) */}
-                      {ticket.priceType === 'paid' && (
+                      {ticket.type === 'paid' && (
                         <YStack gap="$1">
                           <Label>Price & Currency</Label>
                           <Group orientation="horizontal" separator={<Separator vertical />}>
@@ -304,7 +320,7 @@ export function EventTicketingSheet({
                           placeholder="Leave empty for unlimited"
                           value={ticket.supply?.toString() || ''}
                           onChangeText={(text) => {
-                            const supply = parseInt(text) || undefined;
+                            const supply = parseInt(text, 10) || undefined;
                             updateTicket(ticket.id, { supply });
                           }}
                           keyboardType="number-pad"

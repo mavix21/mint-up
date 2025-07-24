@@ -1,7 +1,7 @@
 import { Button, SizableText } from 'tamagui';
 
 export interface DescriptionButtonProps {
-  description?: string;
+  description: string;
   onPress: () => void;
 }
 
@@ -18,9 +18,9 @@ export function DescriptionButton({ description, onPress }: DescriptionButtonPro
 
   const getDescriptionColor = () => {
     if (!description || description.trim() === '') {
-      return '$color11';
+      return '$color9';
     }
-    return '$color12';
+    return '$color10';
   };
 
   return (
@@ -29,7 +29,7 @@ export function DescriptionButton({ description, onPress }: DescriptionButtonPro
       {description && description.trim() !== '' && (
         <SizableText
           color={getDescriptionColor()}
-          ml="$2"
+          ml="$4"
           numberOfLines={1}
           flex={1}
           textAlign="right"

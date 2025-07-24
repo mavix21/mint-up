@@ -16,7 +16,6 @@ import { useState, useCallback, useMemo } from 'react';
 import {
   ScrollView,
   YStack,
-  Text,
   Card,
   RadioGroup,
   SizableText,

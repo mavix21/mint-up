@@ -14,19 +14,12 @@ import {
   SizableText,
 } from 'tamagui';
 
-export type EventLocationType = 'in-person' | 'virtual';
-
-export interface EventLocation {
-  type: EventLocationType;
-  address?: string;
-  instructions?: string;
-  url?: string;
-}
+import { EventLocation, EventLocationType } from '../../../entities';
 
 export interface EventLocationSheetProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  location?: EventLocation;
+  location: EventLocation;
   onLocationChange: (location: EventLocation) => void;
 }
 
@@ -38,9 +31,7 @@ export function EventLocationSheet({
 }: EventLocationSheetProps) {
   const visualViewportHeight = useVisualViewportHeight();
 
-  const [localLocation, setLocalLocation] = useState<EventLocation>(
-    location || { type: 'in-person' }
-  );
+  const [localLocation, setLocalLocation] = useState<EventLocation>(location);
 
   const handleSave = () => {
     onLocationChange(localLocation);
@@ -48,12 +39,12 @@ export function EventLocationSheet({
   };
 
   const handleCancel = () => {
-    setLocalLocation(location || { type: 'in-person' });
+    setLocalLocation(location);
     onOpenChange(false);
   };
 
   const updateLocation = (updates: Partial<EventLocation>) => {
-    setLocalLocation((prev) => ({ ...prev, ...updates }));
+    setLocalLocation((prev) => ({ ...prev, ...updates } as EventLocation));
   };
 
   return (
