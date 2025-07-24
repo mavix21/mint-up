@@ -1,6 +1,6 @@
 'use client';
 
-import { ToastProvider } from '@my/ui';
+import { ToastProvider } from 'app/provider/toast';
 import type { Session } from 'next-auth';
 import { SessionProvider } from 'next-auth/react';
 
