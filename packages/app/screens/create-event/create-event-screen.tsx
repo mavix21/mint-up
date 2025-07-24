@@ -1,6 +1,7 @@
 import { api } from '@my/backend/_generated/api';
 import { Id } from '@my/backend/_generated/dataModel';
 import { useMutation } from '@my/backend/react';
+import { useToastController } from '@my/ui';
 import { CreateEventFormData } from 'app/entities';
 import { useState } from 'react';
 import { YStack, Theme, ScrollView, ThemeName } from 'tamagui';
@@ -8,6 +9,7 @@ import { YStack, Theme, ScrollView, ThemeName } from 'tamagui';
 import { CreateEventForm } from './ui';
 
 export function CreateEventScreen() {
+  const toast = useToastController();
   const [theme, setTheme] = useState<string>('');
   const [showThemeSheet, setShowThemeSheet] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -31,6 +33,10 @@ export function CreateEventScreen() {
         image: 'kg2aphx307hkad4dxhpcrvjbkh7ma70s' as Id<'_storage'>,
         automatedFlows: [],
         hosts: [],
+      });
+      toast.show('Event created successfully', {
+        type: 'success',
+        preset: 'done',
       });
     } catch (error) {
       console.error('Error creating event:', error);

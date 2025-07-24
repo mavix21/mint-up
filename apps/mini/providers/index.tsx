@@ -1,5 +1,6 @@
 'use client';
 
+import { ToastProvider } from '@my/ui';
 import type { Session } from 'next-auth';
 import { SessionProvider } from 'next-auth/react';
 
@@ -18,7 +19,9 @@ export function Providers({
     <SessionProvider session={session}>
       <NextTamaguiProvider>
         <MiniKitContextProvider>
-          <ConvexClientProvider>{children}</ConvexClientProvider>
+          <ConvexClientProvider>
+            <ToastProvider>{children}</ToastProvider>
+          </ConvexClientProvider>
         </MiniKitContextProvider>
       </NextTamaguiProvider>
     </SessionProvider>
