@@ -9,7 +9,6 @@ import { YStack, Theme, ScrollView, ThemeName } from 'tamagui';
 import { CreateEventForm } from './ui';
 
 export function CreateEventScreen({ closeSheet }: { closeSheet: () => void }) {
-  console.log('CreateEventScreen');
   const toast = useToastController();
   const [theme, setTheme] = useState<string>('');
   const [showThemeSheet, setShowThemeSheet] = useState(false);

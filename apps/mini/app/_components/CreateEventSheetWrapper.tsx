@@ -8,7 +8,6 @@ interface CreateEventSheetWrapperProps {
 }
 
 export function CreateEventSheetWrapper({ open, setOpen }: CreateEventSheetWrapperProps) {
-  console.log('CreateEventSheetWrapper');
   const visualViewportHeight = useVisualViewportHeight();
   const closeSheet = useCallback(() => setOpen(false), [setOpen]);
 
