@@ -129,9 +129,11 @@ export const MyEventsScreen = () => {
                       {getDayOfWeek(formatRelativeDate(events[0]?.startDate) ?? '')}
                     </Text>
                   </View>
-                  {events.map((event) => (
-                    <EventCard key={event._id} event={event} isPast index={index} />
-                  ))}
+                  <YStack gap="$4">
+                    {events.map((event) => (
+                      <EventCard key={event._id} event={event} isPast index={index} />
+                    ))}
+                  </YStack>
                 </View>
               </View>
             </View>
@@ -170,9 +172,11 @@ export const MyEventsScreen = () => {
                       {getDayOfWeek(formatRelativeDate(events[0]?.startDate) ?? '')}
                     </Text>
                   </View>
-                  {events.map((event) => (
-                    <EventCard key={event._id} event={event} isPast index={index} />
-                  ))}
+                  <YStack gap="$4">
+                    {events.map((event) => (
+                      <EventCard key={event._id} event={event} isPast index={index} />
+                    ))}
+                  </YStack>
                 </View>
               </View>
             </View>
