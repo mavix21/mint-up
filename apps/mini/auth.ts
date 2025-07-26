@@ -84,6 +84,12 @@ export const authOptions: AuthOptions = {
           return null;
         }
 
+        console.log('SUCCESS', {
+          id: fid.toString(),
+          name: credentials?.name,
+          image: credentials?.pfp,
+        });
+
         return {
           id: fid.toString(),
           name: credentials?.name,

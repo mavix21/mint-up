@@ -19,16 +19,18 @@ export const useSignIn = () => {
         nonce: csrfToken,
       });
       if (!result) {
-        throw new Error('Sign in with Farcaster failed');
+        // throw new Error('Sign in with Farcaster failed');
+        return;
       }
 
       const { message, signature } = result;
 
-      await nextAuthSignIn('credentials', {
+      const signInResponse = await nextAuthSignIn('credentials', {
         message,
         signature,
         redirect: false,
       });
+      console.log('signInResponse', signInResponse);
     } catch (error) {
       console.error('[Error] sign in', error);
     }
