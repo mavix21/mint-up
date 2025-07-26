@@ -2,7 +2,7 @@ import { View, H3, Text, Image, ScrollView } from '@my/ui';
 import { formatDate, formatDateTime, formatRelativeDate } from '@my/ui/src/lib/dates';
 import { X, Clock, MapPin } from '@tamagui/lucide-icons';
 import React from 'react';
-import { Adapt, Button, Dialog, Paragraph, Sheet, Unspaced, XStack, YStack } from 'tamagui';
+import { Adapt, Anchor, Button, Dialog, Paragraph, Sheet, Unspaced, XStack, YStack } from 'tamagui';
 
 import { ConvexEventWithExtras } from '../my-events-screen';
 
@@ -18,6 +18,15 @@ export function EventModal({
   //const imageUrl = eventData.poapImageUrl ?? eventData.nftTicketImageUrl;
   const shortDescription = (eventData.description?.substring(0, 150) ?? '') + '...';
   const [showFullDescription, setShowFullDescription] = React.useState(false);
+
+  // Define el texto genérico para tu cast
+  const genericCastText =
+    '¡Hola Farcaster! Descubre mi mini-app construida con Tamagui. #Tamagui #Farcaster';
+  // Codifica el texto para que sea seguro en una URL
+  const encodedText = encodeURIComponent(genericCastText);
+
+  // Construye la URL del deep link para Warpcast
+  const warpcastUrl = `warpcast://post?text=${encodedText}`;
 
   return (
     <Dialog modal open={toggleEvent} onOpenChange={setToggleEvent}>
@@ -152,9 +161,16 @@ export function EventModal({
             </ScrollView>
 
             <View padding="$4" borderTopWidth={1} borderColor="$color3" bg="$color2">
-              <Button theme="green" width="100%">
-                Buy tickets
-              </Button>
+              {/* <Button theme="green" width="100%">
+                <a href="warpcast://post?text=Tu%20texto%20predefinido%20aquí">Buy tickets</a>
+              </Button> */}
+              <Anchor
+                href={warpcastUrl}
+                target="_blank" // Esto abre en una nueva pestaña/ventana en web
+                rel="noopener noreferrer" // Buenas prácticas de seguridad para target="_blank"
+              >
+                <Button theme="green">Crear Cast en Farcaster</Button>
+              </Anchor>
             </View>
           </YStack>
 
