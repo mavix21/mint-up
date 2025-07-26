@@ -60,7 +60,7 @@ export const authOptions: AuthOptions = {
         },
       },
       async authorize(credentials, req) {
-        console.log('AUTHORIZE', {
+        console.warn('AUTHORIZE', {
           credentials,
           req,
         });
@@ -75,7 +75,7 @@ export const authOptions: AuthOptions = {
         });
 
         const domain = getDomainFromUrl(process.env.NEXTAUTH_URL);
-        console.log('DOMAIN', domain);
+        console.warn('DOMAIN', domain);
 
         const verifyResponse = await appClient.verifySignInMessage({
           message: credentials?.message!,
@@ -84,13 +84,13 @@ export const authOptions: AuthOptions = {
           nonce: csrfToken,
         });
         const { success, fid } = verifyResponse;
-        console.log('VERIFY RESPONSE', verifyResponse);
+        console.warn('VERIFY RESPONSE', verifyResponse);
 
         if (!success) {
           return null;
         }
 
-        console.log('SUCCESS', {
+        console.warn('SUCCESS', {
           id: fid.toString(),
           name: credentials?.name,
           image: credentials?.pfp,
