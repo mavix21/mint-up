@@ -1,9 +1,6 @@
 import { api } from '@my/backend/_generated/api';
 import {
   Button,
-  formatRelativeDate,
-  formatDate,
-  Card,
   Image,
   Input,
   isWeb,
@@ -13,17 +10,12 @@ import {
   View,
   XStack,
   YStack,
-  Chip,
 } from '@my/ui';
-import { formatDateTime } from '@my/ui/src/lib/dates';
 import { ListFilter } from '@tamagui/lucide-icons';
 import { AnimationProp } from '@tamagui/web';
 import { useQuery } from 'convex/react';
 import React from 'react';
 
-import { RegistersAvatar } from './ui/RegistersAvatar';
-import { useRouter } from 'solito/navigation';
-import { EventModal } from '../my-events/ui/event-modal';
 import { ItemCardList } from './ui/ItemCardList';
 
 const data = [
@@ -118,7 +110,7 @@ export const ExploreEventsScreen = () => {
           })}
         </XStack>
       </ScrollView>
-      <YStack>
+      <YStack flex={1} overflow="scroll" maxHeight={'60vh'} $lg={{ paddingBottom: '$14' }}>
         {events?.map((event) => {
           return <ItemCardList key={event._id} id={event._id} />;
         })}

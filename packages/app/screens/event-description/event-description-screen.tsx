@@ -1,27 +1,13 @@
 import { api } from '@my/backend/_generated/api';
 import { Id } from '@my/backend/_generated/dataModel';
+import { YStack, Text, XStack, Card, Image, View, Chip } from '@my/ui';
 import { formatDate, formatDateTime, formatRelativeDate } from '@my/ui/src/lib/dates';
-import {
-  YStack,
-  Text,
-  ScrollView,
-  XStack,
-  Card,
-  Avatar,
-  H3,
-  Button,
-  Image,
-  Circle,
-  Paragraph,
-  View,
-  Chip,
-} from '@my/ui';
-import { Calendar, ChevronLeft, Clock, Heart, MapPin } from '@tamagui/lucide-icons';
 import { useQuery } from 'convex/react';
 import React from 'react';
 import { useParams } from 'solito/navigation';
-import { EventModal } from '../my-events/ui/event-modal';
+
 import { RegistersAvatar } from '../explore-events/ui/RegistersAvatar';
+import { EventModal } from '../my-events/ui/event-modal';
 
 export const EventDescriptionScreen = () => {
   const { id } = useParams<{ id: string }>();
@@ -29,7 +15,6 @@ export const EventDescriptionScreen = () => {
     eventId: id as Id<'events'>,
   });
   const [toggleEvent, setToggleEvent] = React.useState(false);
-  const [showFullDescription, setShowFullDescription] = React.useState(false);
   if (event === undefined) {
     return <Text>Loading</Text>;
   }
