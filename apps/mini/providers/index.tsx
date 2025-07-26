@@ -8,6 +8,8 @@ import { ConvexClientProvider } from './ConvexProvider';
 import { MiniKitContextProvider } from './MiniKitProvider';
 import { NextTamaguiProvider } from './NextTamaguiProvider';
 
+import { MiniAppProvider } from '@/contexts/mini-app.context';
+
 export function Providers({
   session,
   children,
@@ -17,13 +19,15 @@ export function Providers({
 }) {
   return (
     <SessionProvider session={session}>
-      <NextTamaguiProvider>
+      <ConvexClientProvider>
         <MiniKitContextProvider>
-          <ConvexClientProvider>
-            <ToastProvider>{children}</ToastProvider>
-          </ConvexClientProvider>
+          <MiniAppProvider>
+            <NextTamaguiProvider>
+              <ToastProvider>{children}</ToastProvider>
+            </NextTamaguiProvider>
+          </MiniAppProvider>
         </MiniKitContextProvider>
-      </NextTamaguiProvider>
+      </ConvexClientProvider>
     </SessionProvider>
   );
 }

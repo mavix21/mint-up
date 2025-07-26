@@ -10,16 +10,19 @@ import {
   WalletDropdownDisconnect,
 } from '@coinbase/onchainkit/wallet';
 import { Button, XStack } from '@my/ui';
-import { Settings } from '@tamagui/lucide-icons';
+import { Plus, Settings } from '@tamagui/lucide-icons';
+
+import { useMiniApp } from '@/contexts/mini-app.context';
 
 export function Topbar() {
+  const { addFrame } = useMiniApp();
   const { signIn } = useAuthenticate('localhost:3000');
   const handleSignIn = async () => {
     const result = await signIn();
-    if (result) {
-      console.log('sign in success');
-    } else {
+    if (result === false) {
       console.log('sign in failed');
+    } else {
+      console.log('sign in success', { result });
     }
   };
 
@@ -54,6 +57,7 @@ export function Topbar() {
           <WalletDropdownDisconnect />
         </WalletDropdown>
       </Wallet>
+      <Button circular icon={<Plus />} onPress={addFrame} />
       <Button circular icon={<Settings />} onPress={handleSignIn} />
     </XStack>
   );
