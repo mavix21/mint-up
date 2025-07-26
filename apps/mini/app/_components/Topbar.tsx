@@ -26,6 +26,10 @@ export function Topbar() {
     }
   };
 
+  const handleAddFrame = async () => {
+    await addFrame();
+  };
+
   return (
     <XStack
       flex={1}
@@ -57,8 +61,10 @@ export function Topbar() {
           <WalletDropdownDisconnect />
         </WalletDropdown>
       </Wallet>
-      <Button circular icon={<Plus />} onPress={addFrame} />
-      <Button circular icon={<Settings />} onPress={handleSignIn} />
+      <XStack gap="$2">
+        <Button circular icon={<Plus />} onPress={handleAddFrame} />
+        <Button circular icon={<Settings />} onPress={handleSignIn} />
+      </XStack>
     </XStack>
   );
 }
