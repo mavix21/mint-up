@@ -1,5 +1,6 @@
-import { isChrome } from '@my/ui';
 import { useEffect, useState } from 'react';
+
+import { isIos } from './devices';
 
 export function useVisualViewportHeight() {
   const [visualViewportHeight, setVisualViewportHeight] = useState('100%');
@@ -7,8 +8,7 @@ export function useVisualViewportHeight() {
   useEffect(() => {
     let initialHeight = '100%';
 
-    // Exclude Chrome because keyboard height is not included in the visual viewport height
-    if (typeof window !== 'undefined' && !isChrome && window.visualViewport) {
+    if (typeof window !== 'undefined' && isIos() && window.visualViewport) {
       initialHeight = `${window.visualViewport.height}px`;
 
       const handleResize = () => {
