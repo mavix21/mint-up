@@ -7,6 +7,8 @@ declare module 'next-auth' {
   interface Session {
     user: {
       fid: number;
+      name: string;
+      image: string;
     };
   }
 }
@@ -84,6 +86,8 @@ export const authOptions: AuthOptions = {
 
         return {
           id: fid.toString(),
+          name: credentials?.name,
+          image: credentials?.pfp,
         };
       },
     }),
@@ -91,7 +95,7 @@ export const authOptions: AuthOptions = {
   callbacks: {
     session: async ({ session, token }) => {
       if (session?.user) {
-        session.user.fid = parseInt(token.sub ?? '');
+        session.user.fid = parseInt(token.sub ?? '', 10);
       }
       return session;
     },
