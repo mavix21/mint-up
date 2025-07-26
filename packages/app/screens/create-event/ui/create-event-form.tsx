@@ -51,7 +51,7 @@ function toTimestamp(date: string, time: string) {
 export function CreateEventForm({
   onSubmit,
   isLoading,
-  theme = '',
+  theme,
   onThemeChange,
   showThemeSheet = false,
   onShowThemeSheetChange,
@@ -101,6 +101,7 @@ export function CreateEventForm({
       description: form.state.values.description,
       tickets: form.state.values.tickets,
       category: form.state.values.category,
+      theme,
       startDate: startTimestamp,
       endDate: endTimestamp,
       startTimestamp,

@@ -27,7 +27,10 @@ export function getThemeOptions(): ThemeOption[] {
  * @param fallbackColor - Fallback color if theme not found
  * @returns The color string for the theme
  */
-export function getThemeColor(themeValue: string, fallbackColor: string = '$color4'): string {
+export function getThemeColor(
+  themeValue: string | undefined,
+  fallbackColor: string = '$color'
+): string {
   const themeOptions = getThemeOptions();
   const theme = themeOptions.find((t) => t.value === themeValue);
   return theme?.color || fallbackColor;

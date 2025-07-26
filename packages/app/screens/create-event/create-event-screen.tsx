@@ -10,7 +10,7 @@ import { CreateEventForm } from './ui';
 
 export function CreateEventScreen({ closeSheet }: { closeSheet: () => void }) {
   const toast = useToastController();
-  const [theme, setTheme] = useState<string>('');
+  const [theme, setTheme] = useState<string | undefined>(undefined);
   const [showThemeSheet, setShowThemeSheet] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const createEvent = useMutation(api.events.createEvent);
@@ -33,6 +33,7 @@ export function CreateEventScreen({ closeSheet }: { closeSheet: () => void }) {
         image: 'kg2aphx307hkad4dxhpcrvjbkh7ma70s' as Id<'_storage'>,
         automatedFlows: [],
         hosts: [],
+        theme,
       });
       toast.show('Event created successfully', {
         type: 'success',

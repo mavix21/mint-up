@@ -9,6 +9,7 @@ export const eventsTable = defineTable({
   endDate: v.optional(v.number()),
   creatorId: v.id('users'),
   organizationId: v.optional(v.id('organizations')),
+  theme: v.optional(v.string()),
   category: v.union(
     v.literal('music & performing arts'),
     v.literal('business & professional'),

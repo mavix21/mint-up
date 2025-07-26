@@ -3,7 +3,7 @@ import { Button, XStack, Stack, Sheet, ToggleGroup, Text as TamaguiText } from '
 import { getThemeOptions, getThemeColor } from '../../../utils';
 
 export interface ThemeSelectorProps {
-  theme: string;
+  theme?: string;
   onThemeChange: (theme: string) => void;
   showThemeSheet: boolean;
   onShowThemeSheetChange: (show: boolean) => void;
