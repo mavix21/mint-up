@@ -1,4 +1,5 @@
 import { Address, Avatar, Name, Identity, EthBalance } from '@coinbase/onchainkit/identity';
+import { useAuthenticate } from '@coinbase/onchainkit/minikit';
 import {
   ConnectWallet,
   Wallet,
@@ -12,6 +13,16 @@ import { Button, XStack } from '@my/ui';
 import { Settings } from '@tamagui/lucide-icons';
 
 export function Topbar() {
+  const { signIn } = useAuthenticate('localhost:3000');
+  const handleSignIn = async () => {
+    const result = await signIn();
+    if (result) {
+      console.log('sign in success');
+    } else {
+      console.log('sign in failed');
+    }
+  };
+
   return (
     <XStack
       flex={1}
@@ -43,7 +54,7 @@ export function Topbar() {
           <WalletDropdownDisconnect />
         </WalletDropdown>
       </Wallet>
-      <Button circular icon={<Settings />} />
+      <Button circular icon={<Settings />} onPress={handleSignIn} />
     </XStack>
   );
 }
