@@ -1722,9 +1722,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@coinbase/onchainkit@npm:^0.38.16":
-  version: 0.38.16
-  resolution: "@coinbase/onchainkit@npm:0.38.16"
+"@coinbase/onchainkit@npm:^0.38.17":
+  version: 0.38.17
+  resolution: "@coinbase/onchainkit@npm:0.38.17"
   dependencies:
     "@farcaster/frame-sdk": "npm:^0.0.60"
     "@farcaster/frame-wagmi-connector": "npm:^0.0.53"
@@ -1740,7 +1740,7 @@ __metadata:
   peerDependencies:
     react: ^18 || ^19
     react-dom: ^18 || ^19
-  checksum: 10/4eaad30feec385142c4519224ad770bcb2a3b3333b83e541426012f1b434f697a16c08cac972960985581ee4d861be2b0b8f9f3d1433cd5b92f2f0405fc2bcce
+  checksum: 10/84cf5a6148fa0c3ddefede98a89b5317bdb7857e77105403a615cf3e9a558fed6b5c6636fd59a5139fc546292dcca890f88b917f86d2059a093483bc22d29dae
   languageName: node
   linkType: hard
 
@@ -21268,7 +21268,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "mini@workspace:apps/mini"
   dependencies:
-    "@coinbase/onchainkit": "npm:^0.38.16"
+    "@coinbase/onchainkit": "npm:^0.38.17"
     "@farcaster/auth-client": "npm:0.7.0"
     "@my/backend": "npm:*"
     "@my/ui": "npm:*"
