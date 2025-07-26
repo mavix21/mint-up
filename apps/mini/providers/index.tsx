@@ -17,6 +17,7 @@ export function Providers({
   session: Session | null;
   children: React.ReactNode;
 }) {
+  console.log('SESSION', session);
   return (
     <SessionProvider session={session}>
       <ConvexClientProvider>
