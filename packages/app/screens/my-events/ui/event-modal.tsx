@@ -1,10 +1,11 @@
-import { View, H3, Text, Image, ScrollView } from '@my/ui';
+import { View, H3, Text, Image, ScrollView, useVisualViewportHeight } from '@my/ui';
 import { formatDate, formatDateTime, formatRelativeDate } from '@my/ui/src/lib/dates';
 import { X, Clock, MapPin } from '@tamagui/lucide-icons';
 import React from 'react';
-import { Adapt, Anchor, Button, Dialog, Paragraph, Sheet, Unspaced, XStack, YStack } from 'tamagui';
+import { Adapt, Button, Dialog, Paragraph, Sheet, Unspaced, XStack, YStack } from 'tamagui';
 
 import { ConvexEventWithExtras } from '../my-events-screen';
+import { TicketsEventSheet } from './tickets-event-sheet';
 
 export function EventModal({
   toggleEvent,
@@ -16,22 +17,20 @@ export function EventModal({
   eventData: ConvexEventWithExtras;
 }) {
   //const imageUrl = eventData.poapImageUrl ?? eventData.nftTicketImageUrl;
-  const shortDescription = (eventData.description?.substring(0, 150) ?? '') + '...';
-  const [showFullDescription, setShowFullDescription] = React.useState(false);
-
-  // Define el texto genérico para tu cast
-  const genericCastText =
-    '¡Hola Farcaster! Descubre mi mini-app construida con Tamagui. #Tamagui #Farcaster';
-  // Codifica el texto para que sea seguro en una URL
-  const encodedText = encodeURIComponent(genericCastText);
-
-  // Construye la URL del deep link para Warpcast
-  const warpcastUrl = `warpcast://post?text=${encodedText}`;
+  const [showTicketsSheet, setShowTicketsSheet] = React.useState(false);
+  const visualViewportHeight = useVisualViewportHeight();
 
   return (
     <Dialog modal open={toggleEvent} onOpenChange={setToggleEvent}>
       <Adapt when="sm" platform="touch">
-        <Sheet animation="medium" zIndex={200_000} modal dismissOnSnapToBottom snapPoints={[98]}>
+        <Sheet
+          dismissOnSnapToBottom
+          disableDrag
+          modal
+          zIndex={200_000}
+          snapPoints={[100]}
+          animation="medium"
+        >
           <Sheet.Overlay
             animation="lazy"
             backgroundColor="$shadowColor"
@@ -39,7 +38,12 @@ export function EventModal({
             exitStyle={{ opacity: 0 }}
           />
           <Sheet.Handle backgroundColor="$color2" />
-          <Sheet.Frame gap="$3" backgroundColor="$color2" padding="$0">
+          <Sheet.Frame
+            gap="$3"
+            backgroundColor="$color2"
+            padding="$0"
+            style={{ height: visualViewportHeight }}
+          >
             <Adapt.Contents />
           </Sheet.Frame>
 
@@ -141,36 +145,22 @@ export function EventModal({
                   <View mt="$3">
                     <Text fontWeight="bold">About</Text>
                     {/* <Text mt="$2">{eventData?.description}</Text> */}
-                    <Paragraph size="$4" numberOfLines={showFullDescription ? undefined : 3}>
-                      {showFullDescription ? eventData.description : shortDescription}
-                    </Paragraph>
-                    {!showFullDescription && (
-                      <Button
-                        variant="outlined"
-                        size="$2"
-                        mt="$2"
-                        onPress={() => setShowFullDescription(true)}
-                        alignSelf="flex-start"
-                      >
-                        Read more...
-                      </Button>
-                    )}
+                    <Paragraph size="$4">{eventData.description}</Paragraph>
                   </View>
                 </View>
               </Dialog.Description>
             </ScrollView>
 
+            <TicketsEventSheet
+              key={eventData._id}
+              open={showTicketsSheet}
+              onOpenChange={setShowTicketsSheet}
+              eventId={eventData._id}
+            />
             <View padding="$4" borderTopWidth={1} borderColor="$color3" bg="$color2">
-              {/* <Button theme="green" width="100%">
-                <a href="warpcast://post?text=Tu%20texto%20predefinido%20aquí">Buy tickets</a>
-              </Button> */}
-              <Anchor
-                href={warpcastUrl}
-                target="_blank" // Esto abre en una nueva pestaña/ventana en web
-                rel="noopener noreferrer" // Buenas prácticas de seguridad para target="_blank"
-              >
-                <Button theme="green">Crear Cast en Farcaster</Button>
-              </Anchor>
+              <Button theme="green" width="100%" onPress={() => setShowTicketsSheet(true)}>
+                Buy tickets
+              </Button>
             </View>
           </YStack>
 

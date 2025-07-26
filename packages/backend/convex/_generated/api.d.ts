@@ -28,6 +28,7 @@ import type * as tables_registrations from "../tables/registrations.js";
 import type * as tables_sessions from "../tables/sessions.js";
 import type * as tables_ticketTemplates from "../tables/ticketTemplates.js";
 import type * as tables_user from "../tables/user.js";
+import type * as ticketTemplates from "../ticketTemplates.js";
 
 /**
  * A utility for referencing Convex functions in your app's API.
@@ -53,6 +54,7 @@ declare const fullApi: ApiFromModules<{
   "tables/sessions": typeof tables_sessions;
   "tables/ticketTemplates": typeof tables_ticketTemplates;
   "tables/user": typeof tables_user;
+  ticketTemplates: typeof ticketTemplates;
 }>;
 export declare const api: FilterApi<
   typeof fullApi,

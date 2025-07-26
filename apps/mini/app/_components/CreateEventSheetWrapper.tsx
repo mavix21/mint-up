@@ -19,7 +19,7 @@ export function CreateEventSheetWrapper({ open, setOpen }: CreateEventSheetWrapp
       modal
       open={open}
       onOpenChange={setOpen}
-      zIndex={100_000}
+      zIndex={200_000}
       snapPoints={[100]}
       snapPointsMode="percent"
       animation="medium"
