@@ -96,6 +96,7 @@ export const authOptions: AuthOptions = {
     session: async ({ session, token }) => {
       if (session?.user) {
         session.user.fid = parseInt(token.sub ?? '', 10);
+        session.user.name = token.name ?? '';
       }
       return session;
     },
