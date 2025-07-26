@@ -1,6 +1,6 @@
 import { View, H3, Text, Image, ScrollView, useVisualViewportHeight } from '@my/ui';
 import { formatDate, formatDateTime, formatRelativeDate } from '@my/ui/src/lib/dates';
-import { X, Clock, MapPin } from '@tamagui/lucide-icons';
+import { X, Clock, MapPin, Globe } from '@tamagui/lucide-icons';
 import React from 'react';
 import { Adapt, Button, Dialog, Paragraph, Sheet, Unspaced, XStack, YStack } from 'tamagui';
 
@@ -104,7 +104,7 @@ export function EventModal({
                     </XStack>
                     {typeof eventData.location === 'string' ? (
                       <XStack display="flex" gap="$2.5">
-                        <MapPin size={15} mt="$1.5" color="$gray10" />
+                        <MapPin size={15} mt="$1" color="$gray10" />
                         <YStack>
                           <Text fontSize="$1" fontWeight="bold">
                             {eventData.location}
@@ -116,7 +116,7 @@ export function EventModal({
                       </XStack>
                     ) : eventData.location?.type === 'online' ? (
                       <XStack display="flex" gap="$2.5">
-                        <MapPin size={15} mt="$1.5" color="$gray10" />
+                        <Globe size={15} mt="$1" color="$gray10" />
                         <YStack>
                           <Text fontSize="$1" fontWeight="bold">
                             {eventData.location.url}
@@ -128,7 +128,7 @@ export function EventModal({
                       </XStack>
                     ) : eventData.location?.type === 'in-person' ? (
                       <XStack display="flex" gap="$2.5">
-                        <MapPin size={15} mt="$1.5" color="$gray10" />
+                        <MapPin size={15} mt="$1" color="$gray10" />
                         <YStack>
                           <Text fontSize="$1" fontWeight="bold">
                             {eventData.location.address}
@@ -158,7 +158,7 @@ export function EventModal({
               eventId={eventData._id}
             />
             <View padding="$4" borderTopWidth={1} borderColor="$color3" bg="$color2">
-              <Button theme="green" width="100%" onPress={() => setShowTicketsSheet(true)}>
+              <Button width="100%" onPress={() => setShowTicketsSheet(true)}>
                 Buy tickets
               </Button>
             </View>

@@ -1,6 +1,6 @@
 import { View, YStack, XStack, Image, Text, Button, Theme } from '@my/ui';
 import { formatRelativeDate } from '@my/ui/src/lib/dates';
-import { ArrowRight, Clock, MapPin } from '@tamagui/lucide-icons';
+import { ArrowRight, Clock, Globe, MapPin } from '@tamagui/lucide-icons';
 import { useState } from 'react';
 import { Link } from 'solito/link';
 
@@ -103,8 +103,9 @@ export function EventCard({
                 </XStack>
               ) : event.location?.type === 'online' ? (
                 <XStack display="flex" ai="center" gap="$2">
-                  <MapPin size={15} />
-                  <Text fontSize="$1">{event.location.url}</Text>
+                  <Globe size={15} />
+                  {/* <Text fontSize="$1">{event.location.url}</Text> */}
+                  <Text fontSize="$1">Online</Text>
                 </XStack>
               ) : event.location?.type === 'in-person' ? (
                 <XStack display="flex" ai="center" gap="$2">
