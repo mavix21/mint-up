@@ -31,6 +31,7 @@ export function EventCard({
           gap: '$4',
         }}
         padding="$4"
+        my="$2"
         elevation="$2"
         borderRadius="$5"
         borderColor="$color6"

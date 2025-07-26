@@ -23,6 +23,7 @@ import React from 'react';
 
 import { RegistersAvatar } from './ui/RegistersAvatar';
 import { useRouter } from 'solito/navigation';
+import { EventModal } from '../my-events/ui/event-modal';
 
 const data = [
   {
@@ -41,6 +42,7 @@ export const ExploreEventsScreen = () => {
   const [selectedCategory, setSelectedCategory] = React.useState('All');
   const events = useQuery(api.events.getEventsByCategory, { category: selectedCategory });
   const categories = useQuery(api.events.getEventCategories);
+  const [toggleEvent, setToggleEvent] = React.useState(false);
 
   // Add 'All' at the start of the categories list
   const categoryList = React.useMemo(() => {
@@ -132,8 +134,14 @@ export const ExploreEventsScreen = () => {
               pressStyle={{ scale: 0.975 }}
               hoverStyle={{ borderColor: '$borderColorHover' }}
               py="$3"
-              onPress={() => router.push(`/events/detail/${event._id}`)}
+              // onPress={() => router.push(`/events/detail/${event._id}`)}
+              onPress={() => setToggleEvent(true)}
             >
+              <EventModal
+                toggleEvent={toggleEvent}
+                setToggleEvent={setToggleEvent}
+                eventData={event}
+              />
               <XStack space="$3" alignItems="center">
                 {/* App Icon */}
                 <Image
