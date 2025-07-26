@@ -24,6 +24,7 @@ import React from 'react';
 import { RegistersAvatar } from './ui/RegistersAvatar';
 import { useRouter } from 'solito/navigation';
 import { EventModal } from '../my-events/ui/event-modal';
+import { ItemCardList } from './ui/ItemCardList';
 
 const data = [
   {
@@ -38,11 +39,9 @@ const data = [
 ];
 
 export const ExploreEventsScreen = () => {
-  const router = useRouter();
   const [selectedCategory, setSelectedCategory] = React.useState('All');
   const events = useQuery(api.events.getEventsByCategory, { category: selectedCategory });
   const categories = useQuery(api.events.getEventCategories);
-  const [toggleEvent, setToggleEvent] = React.useState(false);
 
   // Add 'All' at the start of the categories list
   const categoryList = React.useMemo(() => {
@@ -121,58 +120,7 @@ export const ExploreEventsScreen = () => {
       </ScrollView>
       <YStack>
         {events?.map((event) => {
-          return (
-            <Card
-              key={event._id}
-              elevate
-              size="$4"
-              bordered
-              backgroundColor="$background"
-              mx="$4"
-              mt="$3"
-              borderRadius="$4"
-              pressStyle={{ scale: 0.975 }}
-              hoverStyle={{ borderColor: '$borderColorHover' }}
-              py="$3"
-              // onPress={() => router.push(`/events/detail/${event._id}`)}
-              onPress={() => setToggleEvent(true)}
-            >
-              <EventModal
-                toggleEvent={toggleEvent}
-                setToggleEvent={setToggleEvent}
-                eventData={event}
-              />
-              <XStack space="$3" alignItems="center">
-                {/* App Icon */}
-                <Image
-                  width={100}
-                  height={100}
-                  borderRadius="$2"
-                  backgroundColor="white"
-                  src={event.imageUrl}
-                />
-
-                {/* App Info */}
-                <YStack flex={1} space="$1">
-                  <Text fontSize="$2" color="$color11" numberOfLines={1}>
-                    {formatDate(formatRelativeDate(event.startDate))} •{' '}
-                    {formatDateTime(formatRelativeDate(event.startDate))}
-                  </Text>
-                  <Text fontSize="$4" color="$color" numberOfLines={3}>
-                    {event.name}
-                  </Text>
-                  <YStack>
-                    <Chip rounded theme="green_active" maxWidth="$14" mt="$1.5">
-                      <Chip.Text fontSize="$1">{event.category}</Chip.Text>
-                    </Chip>
-                    <View mt="$2.5">
-                      <RegistersAvatar eventId={event._id} />
-                    </View>
-                  </YStack>
-                </YStack>
-              </XStack>
-            </Card>
-          );
+          return <ItemCardList key={event._id} id={event._id} />;
         })}
       </YStack>
     </YStack>
