@@ -19,5 +19,5 @@
     },
     "check-circular-deps": {}
   },
-  "globalEnv": ["NEXT_PUBLIC_CONVEX_URL", "NEXTAUTH_SECRET"]
+  "globalEnv": ["NEXT_PUBLIC_CONVEX_URL", "NEXTAUTH_SECRET", "NEXTAUTH_URL"]
 }
