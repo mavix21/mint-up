@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 
+import { getSession } from '@/auth';
 import { Providers } from '@/providers';
-
 import '@coinbase/onchainkit/styles.css';
 import './app.css';
 
@@ -50,10 +50,11 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await getSession();
   return (
     <html lang="en" suppressHydrationWarning>
       <body>
-        <Providers session={null}>{children}</Providers>
+        <Providers session={session}>{children}</Providers>
       </body>
     </html>
   );
