@@ -22,7 +22,7 @@ export function MiniAppProvider({ children }: { children: React.ReactNode }) {
 
       return null;
     } catch (error) {
-      console.error('[error] adding frame', error);
+      console.error('[Error] adding frame', error);
       return null;
     }
   }, [addFrame]);
