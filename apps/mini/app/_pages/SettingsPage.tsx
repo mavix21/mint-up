@@ -7,6 +7,7 @@ import { ThemeSwitch } from '../_components/ThemeSwticher';
 
 export default function SettingsPage() {
   const { data: session } = useSession();
+  console.log('[SettingsPage] SESSION', session);
   return (
     <YStack flex={1} alignItems="center" justifyContent="center" height="100%">
       <Text>Settings</Text>
