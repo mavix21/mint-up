@@ -17,7 +17,7 @@ export function TicketsEventSheet({
   eventId,
   ticketList,
 }: TicketsEventSheetProps) {
-  const [value, setValue] = React.useState(ticketList[0].name);
+  const [value, setValue] = React.useState(ticketList[0]._id);
   console.log('value', value);
   // Reset local state when sheet opens
   const handleOpenChange = (isOpen: boolean) => {
@@ -59,7 +59,7 @@ export function TicketsEventSheet({
                   {ticketList.map((ticket) => (
                     <TicketCardRadioButton
                       key={ticket._id}
-                      selected={value === ticket.name}
+                      selected={value === ticket._id}
                       uniqueId={ticket._id}
                       setValue={setValue}
                       description={ticket.description ?? ''}
