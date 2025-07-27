@@ -35,7 +35,7 @@ export function MiniAppProvider({ children }: { children: React.ReactNode }) {
   }, [isFrameReady, setFrameReady]);
 
   useEffect(() => {
-    if (isFrameReady && !context?.client?.added) {
+    if (isFrameReady && context && !context.client.added) {
       handleAddFrame();
     }
   }, [isFrameReady, context?.client?.added, handleAddFrame]);
