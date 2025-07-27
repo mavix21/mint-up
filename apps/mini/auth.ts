@@ -23,7 +23,7 @@ function getDomainFromUrl(urlString: string | undefined): string {
   }
   try {
     const url = new URL(urlString);
-    return url.hostname;
+    return url.host;
   } catch (error) {
     console.error('Invalid NEXTAUTH_URL:', urlString, error);
     console.warn('Using localhost:3000 as fallback');
