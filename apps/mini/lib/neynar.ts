@@ -1,5 +1,3 @@
-'use server';
-
 import { NeynarAPIClient, Configuration, WebhookUserCreated } from '@neynar/nodejs-sdk';
 
 let neynarClient: NeynarAPIClient | null = null;
@@ -22,6 +20,7 @@ export function getNeynarClient() {
 type User = WebhookUserCreated['data'];
 
 export async function getNeynarUser(fid: number): Promise<User | null> {
+  'use server';
   try {
     const client = getNeynarClient();
     const usersResponse = await client.fetchBulkUsers({ fids: [fid] });
