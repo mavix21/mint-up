@@ -63,6 +63,7 @@ export function TicketsEventSheet({
                       uniqueId={ticket._id}
                       setValue={setValue}
                       description={ticket.description ?? ''}
+                      price={ticket.price.type}
                       id={ticket._id}
                       label={ticket.name}
                     />

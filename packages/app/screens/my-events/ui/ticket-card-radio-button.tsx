@@ -1,10 +1,11 @@
-import { Card, Label, RadioGroup, SizableText, View } from '@my/ui';
+import { Card, Label, RadioGroup, SizableText, View, XStack, YStack } from '@my/ui';
 import React from 'react';
 
 type ItemProps = {
   id: string;
   label: string;
   description: string;
+  price: string;
   setValue: (value: string) => void;
   uniqueId: string;
   selected: boolean;
@@ -14,6 +15,7 @@ export function TicketCardRadioButton({
   id,
   label,
   description,
+  price,
   setValue,
   uniqueId,
   selected,
@@ -35,19 +37,24 @@ export function TicketCardRadioButton({
         </RadioGroup.Item>
       </View>
       <View flexDirection="column" flexShrink={1}>
-        <Label
-          size="$4"
-          lineHeight="$2"
-          alignItems="flex-start"
-          flexDirection="column"
-          htmlFor={uniqueId + id}
-          cursor="pointer"
-        >
-          {label}
-        </Label>
-        <SizableText flexShrink={1} size="$3" fontWeight="300" color="$gray9">
-          {description}
-        </SizableText>
+        <XStack>
+          <YStack>
+            <Label
+              size="$4"
+              lineHeight="$2"
+              alignItems="flex-start"
+              flexDirection="column"
+              htmlFor={uniqueId + id}
+              cursor="pointer"
+            >
+              {label}
+            </Label>
+            <SizableText flexShrink={1} size="$3" fontWeight="300" color="$gray9">
+              {description}
+            </SizableText>
+          </YStack>
+          {/* <SizableText>{price}</SizableText> */}
+        </XStack>
       </View>
     </Card>
   );
