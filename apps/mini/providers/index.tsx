@@ -20,17 +20,15 @@ export function Providers({
 }) {
   return (
     <AuthKitProvider>
-      <SessionProvider session={session}>
-        <ConvexClientProvider>
-          <MiniKitContextProvider>
-            <MiniAppProvider>
-              <NextTamaguiProvider>
-                <ToastProvider>{children}</ToastProvider>
-              </NextTamaguiProvider>
-            </MiniAppProvider>
-          </MiniKitContextProvider>
-        </ConvexClientProvider>
-      </SessionProvider>
+      <ConvexClientProvider session={session}>
+        <MiniKitContextProvider>
+          <MiniAppProvider>
+            <NextTamaguiProvider>
+              <ToastProvider>{children}</ToastProvider>
+            </NextTamaguiProvider>
+          </MiniAppProvider>
+        </MiniKitContextProvider>
+      </ConvexClientProvider>
     </AuthKitProvider>
   );
 }
