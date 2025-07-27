@@ -1,20 +1,47 @@
 import { createAppClient, viemConnector } from '@farcaster/auth-client';
+import { Id } from '@my/backend/_generated/dataModel';
+import { SignJWT, importPKCS8 } from 'jose';
 import type { AuthOptions } from 'next-auth';
 import { getServerSession } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
+import { parseSiweMessage } from 'viem/siwe';
 
 import { getNeynarUser } from './lib/neynar';
 import { ConvexAdapter } from './src/convexAdapter';
+import { createUserByFid } from './src/users/create-user.action';
 
 declare module 'next-auth' {
   interface Session {
+    convexToken: string;
     user: {
+      id: Id<'users'>;
       fid: number;
-      name: string;
+      username: string;
       image: string;
+      currentWalletAddress: `0x${string}`;
+    };
+  }
+
+  interface User {
+    id: Id<'users'>;
+    fid: number;
+    username: string;
+    image: string;
+    currentWalletAddress: `0x${string}`;
+  }
+
+  interface JWT {
+    user: {
+      id: Id<'users'>;
+      fid: number;
+      username: string;
+      image: string;
+      currentWalletAddress: `0x${string}`;
     };
   }
 }
+
+const CONVEX_SITE_URL = process.env.NEXT_PUBLIC_CONVEX_URL!.replace(/.cloud$/, '.site');
 
 function getDomainFromUrl(urlString: string | undefined): string {
   if (!urlString) {
@@ -32,7 +59,7 @@ function getDomainFromUrl(urlString: string | undefined): string {
 }
 
 export const authOptions: AuthOptions = {
-  adapter: ConvexAdapter,
+  // adapter: ConvexAdapter,
   // Configure one or more authentication providers
   providers: [
     CredentialsProvider({
@@ -69,6 +96,13 @@ export const authOptions: AuthOptions = {
           console.error('CSRF token is missing from request');
           return null;
         }
+        const message = credentials?.message;
+        if (!message) {
+          console.error('Message is missing from request');
+          return null;
+        }
+        const { address } = parseSiweMessage(message);
+        console.log('address', address);
 
         const appClient = createAppClient({
           ethereum: viemConnector(),
@@ -77,7 +111,7 @@ export const authOptions: AuthOptions = {
         const domain = getDomainFromUrl(process.env.NEXTAUTH_URL);
 
         const verifyResponse = await appClient.verifySignInMessage({
-          message: credentials?.message!,
+          message,
           signature: credentials?.signature as `0x${string}`,
           domain,
           nonce: csrfToken,
@@ -98,10 +132,22 @@ export const authOptions: AuthOptions = {
             return null;
           }
 
+          const userId = await createUserByFid({
+            fid,
+            displayName: user.display_name,
+            username: user.username,
+            pfpUrl: user.pfp_url ?? '',
+            currentWalletAddress: address,
+            bio: user.profile.bio.text,
+          });
+
           return {
-            id: fid.toString(),
+            id: userId,
+            fid,
             name: user.username,
-            image: user.pfp_url,
+            username: user.username,
+            image: user.pfp_url ?? '',
+            currentWalletAddress: address ?? '0x0',
           };
         } catch (error) {
           console.error('Error getting Neynar user', { fid, error });
@@ -113,10 +159,31 @@ export const authOptions: AuthOptions = {
   callbacks: {
     session: async ({ session, token }) => {
       if (session?.user) {
-        session.user.fid = parseInt(token.sub ?? '', 10);
-        session.user.name = token.name ?? '';
+        session.user = token.user as typeof session.user;
       }
+
+      const privateKey = await importPKCS8(process.env.CONVEX_AUTH_PRIVATE_KEY!, 'RS256');
+      const convexToken = await new SignJWT({
+        sub: session.user.id,
+      })
+        .setProtectedHeader({ alg: 'RS256' })
+        .setIssuedAt()
+        .setIssuer(CONVEX_SITE_URL)
+        .setAudience('convex')
+        .setExpirationTime('1h')
+        .sign(privateKey);
+
+      session.convexToken = convexToken;
+
       return session;
+    },
+    jwt: async ({ token, user }) => {
+      if (user) {
+        token.user = user;
+        token.name = user.name;
+        token.id = user.id;
+      }
+      return token;
     },
   },
 };
