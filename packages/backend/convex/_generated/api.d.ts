@@ -13,11 +13,13 @@ import type {
   FilterApi,
   FunctionReference,
 } from "convex/server";
+import type * as authAdapter from "../authAdapter.js";
 import type * as events from "../events.js";
 import type * as nextjs from "../nextjs.js";
 import type * as react from "../react.js";
 import type * as registrations from "../registrations.js";
 import type * as storage from "../storage.js";
+import type * as tables_authTables from "../tables/authTables.js";
 import type * as tables_eventCommunications from "../tables/eventCommunications.js";
 import type * as tables_events from "../tables/events.js";
 import type * as tables_linkedAccounts from "../tables/linkedAccounts.js";
@@ -39,11 +41,13 @@ import type * as ticketTemplates from "../ticketTemplates.js";
  * ```
  */
 declare const fullApi: ApiFromModules<{
+  authAdapter: typeof authAdapter;
   events: typeof events;
   nextjs: typeof nextjs;
   react: typeof react;
   registrations: typeof registrations;
   storage: typeof storage;
+  "tables/authTables": typeof tables_authTables;
   "tables/eventCommunications": typeof tables_eventCommunications;
   "tables/events": typeof tables_events;
   "tables/linkedAccounts": typeof tables_linkedAccounts;

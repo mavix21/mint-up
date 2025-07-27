@@ -5,17 +5,16 @@ import { eventsTable } from './tables/events';
 import { linkedAccountsTable } from './tables/linkedAccounts';
 import { organizationMembersTable } from './tables/organizationMembers';
 import { organizationsTable } from './tables/organizations';
-import { sessionsTable } from './tables/sessions';
 import { usersTable } from './tables/user';
 import { ticketTemplatesTable } from './tables/ticketTemplates';
 import { registrationsTable } from './tables/registrations';
 import { poapTemplatesTable } from './tables/poapTemplates';
 import { typedV } from 'convex-helpers/validators';
+import { authTables } from './tables/authTables';
 
 const schema = defineSchema({
   users: usersTable,
   linkedAccounts: linkedAccountsTable,
-  sessions: sessionsTable,
   organizations: organizationsTable,
   organizationMembers: organizationMembersTable,
   events: eventsTable,
@@ -23,6 +22,7 @@ const schema = defineSchema({
   ticketTemplates: ticketTemplatesTable,
   poapTemplates: poapTemplatesTable,
   registrations: registrationsTable,
+  ...authTables,
 });
 
 export default schema;
