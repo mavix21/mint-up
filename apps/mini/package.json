@@ -21,6 +21,7 @@
     "@farcaster/auth-kit": "^0.8.1",
     "@my/backend": "*",
     "@my/ui": "*",
+    "@neynar/nodejs-sdk": "^3.27.0",
     "@tamagui/next-theme": "^1.132.15",
     "@tamagui/react-native-svg": "^1.132.15",
     "@tanstack/react-query": "4.18.0",
