@@ -93,24 +93,18 @@ export const authOptions: AuthOptions = {
           const user = await getNeynarUser(fid);
           if (!user) {
             console.error('Failed to get Neynar user', { fid });
-            // return null;
+            return null;
           }
-          console.log('USER', user);
 
-          // return {
-          //   id: fid.toString(),
-          //   name: user.username,
-          //   image: user.pfp_url,
-          // };
+          return {
+            id: fid.toString(),
+            name: user.username,
+            image: user.pfp_url,
+          };
         } catch (error) {
           console.error('Error getting Neynar user', { fid, error });
+          return null;
         }
-
-        return {
-          id: fid.toString(),
-          name: credentials?.name,
-          image: credentials?.pfp,
-        };
       },
     }),
   ],

@@ -1,4 +1,10 @@
-import { Address, Avatar, Name, Identity, EthBalance } from '@coinbase/onchainkit/identity';
+import {
+  Address,
+  Avatar as BaseAvatar,
+  Name,
+  Identity,
+  EthBalance,
+} from '@coinbase/onchainkit/identity';
 import {
   ConnectWallet,
   Wallet,
@@ -8,7 +14,7 @@ import {
   WalletDropdownLink,
   WalletDropdownDisconnect,
 } from '@coinbase/onchainkit/wallet';
-import { Button, XStack } from '@my/ui';
+import { Avatar, Button, XStack } from '@my/ui';
 import { Plus, Settings } from '@tamagui/lucide-icons';
 import { memo } from 'react';
 
@@ -19,7 +25,7 @@ import { useSignIn } from '@/lib/hooks/use-sign-in';
 
 export const Topbar = memo(() => {
   const { addFrame, context } = useMiniApp();
-  const { signIn, isSignedIn } = useSignIn();
+  const { signIn, isSignedIn, session } = useSignIn();
   const handleAddFrame = async () => {
     await addFrame();
   };
@@ -37,12 +43,19 @@ export const Topbar = memo(() => {
     >
       <Wallet className="!p-0">
         <ConnectWallet>
-          <Avatar className="h-6 w-6" />
+          {session ? (
+            <Avatar circular size="$2">
+              <Avatar.Image src={session.user.image} />
+              <Avatar.Fallback />
+            </Avatar>
+          ) : (
+            <BaseAvatar className="h-6 w-6" />
+          )}
           <Name />
         </ConnectWallet>
         <WalletDropdown className="z-10">
           <Identity className="px-4 pt-3 pb-2" hasCopyAddressOnClick>
-            <Avatar />
+            <BaseAvatar />
             <Name />
             <Address />
             <EthBalance />
