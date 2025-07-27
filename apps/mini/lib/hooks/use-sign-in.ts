@@ -1,10 +1,8 @@
-import { useAuthenticate, useMiniKit } from '@coinbase/onchainkit/minikit';
+import { useAuthenticate } from '@coinbase/onchainkit/minikit';
 import { getCsrfToken, signIn as nextAuthSignIn, useSession } from 'next-auth/react';
 import { useCallback } from 'react';
 
 export const useSignIn = () => {
-  const { context } = useMiniKit();
-  console.log('context', context);
   const { data: session, status } = useSession();
   // This method allows for Sign In with Farcaster (SIWF)
   const { signIn } = useAuthenticate();
