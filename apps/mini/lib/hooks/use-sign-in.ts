@@ -25,12 +25,11 @@ export const useSignIn = () => {
 
       const { message, signature } = result;
 
-      const signInResponse = await nextAuthSignIn('credentials', {
+      await nextAuthSignIn('credentials', {
         message,
         signature,
         redirect: false,
       });
-      console.log('signInResponse', signInResponse);
     } catch (error) {
       console.error('[Error] sign in', error);
     }
