@@ -78,9 +78,12 @@ export const authOptions: AuthOptions = {
           domain,
           nonce: csrfToken,
         });
-        const { success, fid } = verifyResponse;
+        const { success, fid, error } = verifyResponse;
 
         if (!success) {
+          console.error('Failed to verify sign in message', {
+            error,
+          });
           return null;
         }
 
