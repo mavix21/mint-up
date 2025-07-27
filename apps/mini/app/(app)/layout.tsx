@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import { getSession } from '@/auth';
 import { Providers } from '@/providers';
 import '@coinbase/onchainkit/styles.css';
+import '@farcaster/auth-kit/styles.css';
 import './app.css';
 
 export async function generateMetadata(): Promise<Metadata> {

@@ -10,13 +10,16 @@ import {
 } from '@coinbase/onchainkit/wallet';
 import { Button, XStack } from '@my/ui';
 import { Plus, Settings } from '@tamagui/lucide-icons';
+import { memo } from 'react';
+
+import { SignInWithFarcaster } from './SignInWithFarcaster';
 
 import { useMiniApp } from '@/contexts/mini-app.context';
 import { useSignIn } from '@/lib/hooks/use-sign-in';
 
-export function Topbar() {
-  const { addFrame } = useMiniApp();
-  const { signIn } = useSignIn();
+export const Topbar = memo(() => {
+  const { addFrame, context } = useMiniApp();
+  const { signIn, isSignedIn } = useSignIn();
   const handleAddFrame = async () => {
     await addFrame();
   };
@@ -53,9 +56,10 @@ export function Topbar() {
         </WalletDropdown>
       </Wallet>
       <XStack gap="$2">
+        {context === undefined && !isSignedIn && <SignInWithFarcaster />}
         <Button circular icon={<Plus />} onPress={handleAddFrame} />
         <Button circular icon={<Settings />} onPress={signIn} />
       </XStack>
     </XStack>
   );
-}
+});
