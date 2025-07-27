@@ -54,3 +54,6 @@ thumbs.db
 
 # Turborepo
 .turbo
+
+# local
+**/*.local.*
