@@ -30,6 +30,10 @@
     "./react": {
       "types": "./convex/react.ts",
       "default": "./convex/react.ts"
+    },
+    "./server": {
+      "types": "./convex/server.ts",
+      "default": "./convex/server.ts"
     }
   }
 }
