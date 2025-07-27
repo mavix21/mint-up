@@ -3,6 +3,8 @@ import type { AuthOptions } from 'next-auth';
 import { getServerSession } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 
+import { getNeynarUser } from './lib/neynar';
+
 declare module 'next-auth' {
   interface Session {
     user: {
@@ -85,6 +87,23 @@ export const authOptions: AuthOptions = {
             error,
           });
           return null;
+        }
+
+        try {
+          const user = await getNeynarUser(fid);
+          if (!user) {
+            console.error('Failed to get Neynar user', { fid });
+            // return null;
+          }
+          console.log('USER', user);
+
+          // return {
+          //   id: fid.toString(),
+          //   name: user.username,
+          //   image: user.pfp_url,
+          // };
+        } catch (error) {
+          console.error('Error getting Neynar user', { fid, error });
         }
 
         return {
