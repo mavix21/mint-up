@@ -5,6 +5,7 @@ interface MiniAppContextType {
   isFrameReady: boolean;
   setFrameReady: () => void;
   addFrame: () => Promise<{ url: string; token: string } | null>;
+  context: NonNullable<ReturnType<typeof useMiniKit>['context']> | undefined;
 }
 
 const MiniAppContext = createContext<MiniAppContextType | undefined>(undefined);
@@ -40,7 +41,14 @@ export function MiniAppProvider({ children }: { children: React.ReactNode }) {
   }, [isFrameReady, context?.client?.added, handleAddFrame]);
 
   return (
-    <MiniAppContext.Provider value={{ isFrameReady, setFrameReady, addFrame: handleAddFrame }}>
+    <MiniAppContext.Provider
+      value={{
+        isFrameReady,
+        setFrameReady,
+        addFrame: handleAddFrame,
+        context: context ?? undefined,
+      }}
+    >
       {children}
     </MiniAppContext.Provider>
   );
