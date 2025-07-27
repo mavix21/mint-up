@@ -1,7 +1,7 @@
 'use client';
 
-import { Text, YStack } from '@my/ui';
-import { useSession } from 'next-auth/react';
+import { Button, Text, YStack } from '@my/ui';
+import { signOut, useSession } from 'next-auth/react';
 
 import { ThemeSwitch } from '../_components/ThemeSwticher';
 
@@ -18,8 +18,9 @@ export default function SettingsPage() {
       marginInline="auto"
     >
       <Text>Settings</Text>
-      <Text>{session?.user.name}</Text>
-      <pre>{JSON.stringify(session, null, 2)}</pre>
+      <Text>{session?.user.username}</Text>
+      <pre>{JSON.stringify(session?.user, null, 2)}</pre>
+      <Button onPress={() => signOut()}>Sign Out</Button>
       <ThemeSwitch />
     </YStack>
   );
