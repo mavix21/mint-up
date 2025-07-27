@@ -7,7 +7,6 @@ export const linkedAccountsTable = defineTable({
     v.object({
       protocol: v.literal('farcaster'),
       fid: v.number(),
-      username: v.string(),
     }),
     v.object({
       protocol: v.literal('wallet'),
