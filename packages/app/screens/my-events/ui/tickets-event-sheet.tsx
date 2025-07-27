@@ -1,7 +1,7 @@
 import { api } from '@my/backend/_generated/api';
 import { Doc, Id } from '@my/backend/_generated/dataModel';
 import { useQuery } from '@my/backend/react';
-import { H2, Text, Sheet, YStack, H4, View, RadioGroup } from '@my/ui';
+import { H2, Text, Sheet, YStack, H4, View, RadioGroup, Button } from '@my/ui';
 import React from 'react';
 
 import { TicketCardRadioButton } from './ticket-card-radio-button';
@@ -73,6 +73,23 @@ export function TicketsEventSheet({
             </View>
           </YStack>
         </Sheet.ScrollView>
+
+        {/* Fixed button at bottom */}
+        <YStack
+          padding="$5"
+          backgroundColor="$background"
+          borderTopWidth={1}
+          borderTopColor="$borderColor"
+        >
+          <Button
+            size="$4"
+            onPress={() => {
+              /* your action */
+            }}
+          >
+            Continue
+          </Button>
+        </YStack>
       </Sheet.Frame>
     </Sheet>
   );
