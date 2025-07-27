@@ -6,6 +6,9 @@ import { Adapt, Button, Dialog, Paragraph, Sheet, Unspaced, XStack, YStack } fro
 
 import { ConvexEventWithExtras } from '../my-events-screen';
 import { TicketsEventSheet } from './tickets-event-sheet';
+import { useQuery } from '@my/backend/react';
+import { api } from '@my/backend/_generated/api';
+import { Id } from '@my/backend/_generated/dataModel';
 
 export function EventModal({
   toggleEvent,
@@ -19,6 +22,13 @@ export function EventModal({
   //const imageUrl = eventData.poapImageUrl ?? eventData.nftTicketImageUrl;
   const [showTicketsSheet, setShowTicketsSheet] = React.useState(false);
   const visualViewportHeight = useVisualViewportHeight();
+  const ticketList = useQuery(api.ticketTemplates.getTicketsById, {
+    eventId: eventData._id as Id<'events'>,
+  });
+
+  if (ticketList === undefined) {
+    return <Text>Loading...</Text>;
+  }
 
   return (
     <Dialog modal open={toggleEvent} onOpenChange={setToggleEvent}>
@@ -156,6 +166,7 @@ export function EventModal({
               open={showTicketsSheet}
               onOpenChange={setShowTicketsSheet}
               eventId={eventData._id}
+              ticketList={ticketList}
             />
             <View padding="$4" borderTopWidth={1} borderColor="$color3" bg="$color2">
               <Button width="100%" onPress={() => setShowTicketsSheet(true)}>
