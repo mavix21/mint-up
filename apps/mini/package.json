@@ -20,11 +20,8 @@
     "@farcaster/auth-client": "0.7.0",
     "@my/backend": "*",
     "@my/ui": "*",
-    "@supabase/auth-helpers-nextjs": "^0.10.0",
-    "@supabase/auth-helpers-react": "^0.5.0",
-    "@supabase/supabase-js": "^2.48.1",
-    "@tamagui/next-theme": "^1.132.6",
-    "@tamagui/react-native-svg": "^1.132.6",
+    "@tamagui/next-theme": "^1.132.15",
+    "@tamagui/react-native-svg": "^1.132.15",
     "@tanstack/react-query": "4.18.0",
     "@trpc/server": "^10.45.2",
     "app": "*",
@@ -37,12 +34,12 @@
     "vercel": "latest",
     "viem": "^2.31.7",
     "wagmi": "^2.15.6",
-    "zod": "^4.0.7"
+    "zod": "^4.0.10"
   },
   "devDependencies": {
     "@next/bundle-analyzer": "15.3.2",
     "@next/eslint-plugin-next": "15.3.2",
-    "@tamagui/next-plugin": "^1.132.6",
+    "@tamagui/next-plugin": "^1.132.15",
     "@types/node": "^18.6.4",
     "dotenv-cli": "^8.0.0"
   }
