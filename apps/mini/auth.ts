@@ -4,6 +4,7 @@ import { getServerSession } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 
 import { getNeynarUser } from './lib/neynar';
+import { ConvexAdapter } from './src/convexAdapter';
 
 declare module 'next-auth' {
   interface Session {
@@ -31,6 +32,7 @@ function getDomainFromUrl(urlString: string | undefined): string {
 }
 
 export const authOptions: AuthOptions = {
+  adapter: ConvexAdapter,
   // Configure one or more authentication providers
   providers: [
     CredentialsProvider({
