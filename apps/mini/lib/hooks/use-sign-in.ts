@@ -13,6 +13,7 @@ export const useSignIn = () => {
       if (!csrfToken) {
         throw new Error('Could not get CSRF token');
       }
+      console.warn('csrfToken', csrfToken);
       const result = await signIn({
         nonce: csrfToken,
       });
@@ -23,11 +24,12 @@ export const useSignIn = () => {
 
       const { message, signature } = result;
 
-      await nextAuthSignIn('credentials', {
+      const response = await nextAuthSignIn('credentials', {
         message,
         signature,
         redirect: false,
       });
+      console.warn('response', response);
     } catch (error) {
       console.error('[Error] sign in', error);
     }
