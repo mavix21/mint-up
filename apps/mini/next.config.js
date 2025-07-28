@@ -110,10 +110,6 @@ module.exports = () => {
     typescript: { ignoreBuildErrors: true },
     images: { unoptimized: true },
     output: 'standalone',
-    experimental: {
-      ...config.experimental,
-      // Disable static optimization
-      staticPageGenerationTimeout: 0,
-    },
+    experimental: config.experimental,
   };
 };
