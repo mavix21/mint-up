@@ -88,6 +88,7 @@ export const authOptions: AuthOptions = {
         },
       },
       async authorize(credentials, req) {
+        console.warn('authorize', credentials);
         const csrfToken = req?.body?.csrfToken;
         if (!csrfToken) {
           console.error('CSRF token is missing from request');
@@ -155,6 +156,7 @@ export const authOptions: AuthOptions = {
   ],
   callbacks: {
     session: async ({ session, token }) => {
+      console.warn('session', session, token);
       if (session?.user) {
         session.user = token.user as typeof session.user;
       }
@@ -175,6 +177,7 @@ export const authOptions: AuthOptions = {
       return session;
     },
     jwt: async ({ token, user }) => {
+      console.warn('jwt', token, user);
       if (user) {
         token.user = user;
         token.name = user.name;
