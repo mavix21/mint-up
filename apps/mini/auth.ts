@@ -139,6 +139,8 @@ export const authOptions: AuthOptions = {
             bio: user.profile.bio.text,
           });
 
+          console.log('userId', { userId });
+
           return {
             id: userId,
             fid,
@@ -156,7 +158,7 @@ export const authOptions: AuthOptions = {
   ],
   callbacks: {
     session: async ({ session, token }) => {
-      console.warn('session', session, token);
+      console.warn('------- session -------', session, token);
       if (session?.user) {
         session.user = token.user as typeof session.user;
       }
