@@ -81,7 +81,6 @@ export const MyEventsScreen = () => {
         flexDirection="column"
         overflowBlock="hidden"
         height="100%"
-        size="$3"
       >
         <Tabs.List
           mb="$6"
@@ -122,12 +121,12 @@ export const MyEventsScreen = () => {
                     borderRadius="$5"
                   />
                   <View mb="$4">
-                    <Text fontSize="$2" color="$color11">
+                    <SizableText fontSize="$2" color="$color11">
                       {formatDate(formatRelativeDate(events[0]?.startDate) ?? '')}
-                    </Text>
-                    <Text fontSize="$2">
+                    </SizableText>
+                    <SizableText fontSize="$2">
                       {getDayOfWeek(formatRelativeDate(events[0]?.startDate) ?? '')}
-                    </Text>
+                    </SizableText>
                   </View>
                   <YStack gap="$4">
                     {events.map((event) => (
