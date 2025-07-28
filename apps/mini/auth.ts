@@ -177,7 +177,7 @@ export const authOptions: AuthOptions = {
       return session;
     },
     jwt: async ({ token, user }) => {
-      console.warn('jwt', token, user);
+      console.warn('jwt', { token, user });
       if (user) {
         token.user = user;
         token.name = user.name;
