@@ -6,6 +6,9 @@ import '@coinbase/onchainkit/styles.css';
 import '@farcaster/auth-kit/styles.css';
 import './app.css';
 
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+
 export async function generateMetadata(): Promise<Metadata> {
   const URL = process.env.NEXT_PUBLIC_URL;
   const projectName = process.env.NEXT_PUBLIC_ONCHAINKIT_PROJECT_NAME;
