@@ -1,4 +1,4 @@
-import { View, YStack, XStack, Image, Text, Button, Theme } from '@my/ui';
+import { View, YStack, XStack, Image, Button, Theme, SizableText } from '@my/ui';
 import { formatRelativeDate } from '@my/ui/src/lib/dates';
 import { ArrowRight, Clock, Globe, MapPin } from '@tamagui/lucide-icons';
 import { useState } from 'react';
@@ -59,7 +59,7 @@ export function EventCard({
                 borderRadius={10}
                 backgroundColor="$color5"
                 objectFit="cover"
-                height={120}
+                height={108}
                 aspectRatio={1}
                 $xxs={{
                   height: 140,
@@ -71,7 +71,7 @@ export function EventCard({
                 source={{ uri: event.imageUrl ?? '' }}
               />
             </View>
-            <View flex={1} justifyContent="flex-start" gap="$2" $xxs={{ paddingInline: '$4' }}>
+            <YStack flex={1} justifyContent="flex-start" gap="$2" $xxs={{ paddingInline: '$4' }}>
               <View
                 flexDirection="row"
                 alignItems="center"
@@ -81,41 +81,47 @@ export function EventCard({
                   width: '100%',
                 }}
               >
-                <Text
-                  fontSize="$5"
+                <SizableText
+                  size="$5"
                   $gtMd={{
-                    fontSize: '$7',
+                    size: '$7',
                   }}
                   fontWeight="600"
                 >
                   {event.name}
-                </Text>
+                </SizableText>
               </View>
-              <XStack display="flex" ai="center" gap="$2">
-                <Clock size={15} />
-                <Text fontSize="$1">{formatTime(formatRelativeDate(event.startDate))}</Text>
+              <XStack mt={4} display="flex" ai="center" gap="$2">
+                <Clock size={15} color="$color11" />
+                <SizableText size="$1" color="$color11">
+                  {formatTime(formatRelativeDate(event.startDate))}
+                </SizableText>
               </XStack>
 
               {typeof event.location === 'string' ? (
-                <XStack display="flex" ai="center" gap="$2">
-                  <MapPin size={15} />
-                  <Text>{event.location}</Text>
+                <XStack display="flex" ai="flex-start" gap="$2">
+                  <MapPin size={15} color="$color11" />
+                  <SizableText color="$color11">{event.location}</SizableText>
                 </XStack>
               ) : event.location?.type === 'online' ? (
                 <XStack display="flex" ai="center" gap="$2">
-                  <Globe size={15} />
+                  <Globe size={15} color="$color11" />
                   {/* <Text fontSize="$1">{event.location.url}</Text> */}
-                  <Text fontSize="$1">Online</Text>
+                  <SizableText size="$1" color="$color11">
+                    Online
+                  </SizableText>
                 </XStack>
               ) : event.location?.type === 'in-person' ? (
-                <XStack display="flex" ai="center" gap="$2">
-                  <MapPin size={15} />
-                  <Text fontSize="$1">{event.location.address}</Text>
+                <XStack display="flex" ai="flex-start" gap="$2">
+                  <MapPin mt={2} size={15} flexShrink={0} color="$color11" />
+                  <SizableText size="$1" color="$color11">
+                    {event.location.address}
+                  </SizableText>
                 </XStack>
               ) : (
-                <Text>Unknown location</Text>
+                <SizableText color="$color11">Unknown location</SizableText>
               )}
-            </View>
+            </YStack>
           </XStack>
 
           <View
