@@ -1,7 +1,5 @@
-import { api } from '@my/backend/_generated/api';
 import { Doc, Id } from '@my/backend/_generated/dataModel';
-import { useQuery } from '@my/backend/react';
-import { H2, Text, Sheet, YStack, H4, View, RadioGroup, Button } from '@my/ui';
+import { Text, Sheet, YStack, H4, View, RadioGroup, Button } from '@my/ui';
 import React from 'react';
 
 import { TicketCardRadioButton } from './ticket-card-radio-button';
@@ -46,22 +44,26 @@ export function TicketsEventSheet({
         exitStyle={{ opacity: 0 }}
       />
       <Sheet.Handle />
-      <Sheet.Frame flex={1} justifyContent="center" alignItems="center" gap="$5">
+      <Sheet.Frame flex={1} width="100%" gap="$5">
         <Sheet.ScrollView>
-          <YStack padding="$5" gap="$8">
+          <YStack padding="$4" gap="$8" flex={1}>
             <H4>Choose the tickets you prefer</H4>
-            <View>
+            <View flex={1}>
               {/* {ticketList.map((ticket) => (
                 <H2>{ticket.name}</H2>
               ))} */}
-              <RadioGroup flexShrink={1} value={value} onValueChange={setValue}>
-                <View flexDirection="column" flexShrink={1} flexWrap="wrap" gap="$2">
+              <RadioGroup
+                flex={1}
+                value={value}
+                onValueChange={(value) => setValue(value as Id<'ticketTemplates'>)}
+              >
+                <View flexDirection="column" flex={1} flexWrap="wrap" gap="$2">
                   {ticketList.map((ticket) => (
                     <TicketCardRadioButton
                       key={ticket._id}
                       selected={value === ticket._id}
                       uniqueId={ticket._id}
-                      setValue={setValue}
+                      setValue={(value) => setValue(value as Id<'ticketTemplates'>)}
                       description={ticket.description ?? ''}
                       price={ticket.price.type}
                       id={ticket._id}

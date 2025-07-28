@@ -20,7 +20,7 @@ export function EventCard({
   const [toggleEvent, setToggleEvent] = useState(false);
   //const imageUrl = event.poapImageUrl ?? event.nftTicketImageUrl;
   //const showDimmed = isPast && !event.poapImageUrl;
-  console.log(index);
+  console.log('EventCard toggleEvent:', toggleEvent, 'for event:', event._id);
   return (
     <>
       <Theme name={event.theme as any}>
@@ -41,7 +41,6 @@ export function EventCard({
           backgroundColor="$color1"
           onPress={() => setToggleEvent(true)}
         >
-          <EventModal toggleEvent={toggleEvent} setToggleEvent={setToggleEvent} eventData={event} />
           <XStack
             flexDirection="row-reverse"
             $xxs={{ flexDirection: 'column', alignItems: 'stretch' }}
@@ -151,6 +150,8 @@ export function EventCard({
             </Link>
           </View>
         </YStack>
+
+        <EventModal toggleEvent={toggleEvent} setToggleEvent={setToggleEvent} eventData={event} />
       </Theme>
     </>
   );
