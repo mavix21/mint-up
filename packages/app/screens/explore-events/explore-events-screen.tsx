@@ -1,3 +1,5 @@
+'use client';
+
 import { api } from '@my/backend/_generated/api';
 import {
   Button,
@@ -110,7 +112,7 @@ export const ExploreEventsScreen = () => {
           })}
         </XStack>
       </ScrollView>
-      <YStack flex={1} overflow="scroll" maxHeight={'60vh'} $lg={{ paddingBottom: '$14' }}>
+      <YStack flex={1} overflow="scroll" maxHeight={'60vh' as any} $lg={{ paddingBottom: '$14' }}>
         {events?.map((event) => {
           return <ItemCardList key={event._id} id={event._id} />;
         })}
@@ -154,7 +156,7 @@ function HListItem({ uri, title }: { uri: string; title: string }) {
         scale: 0.98,
       }}
     >
-      <HListInner containerType="normal" group="listitem" animation="bouncy">
+      <HListInner containerType="normal" group animation="bouncy">
         <View
           flexDirection="column"
           f={1}
