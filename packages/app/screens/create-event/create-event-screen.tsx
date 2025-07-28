@@ -29,7 +29,6 @@ export function CreateEventScreen({ closeSheet }: { closeSheet: () => void }) {
         category: data.category,
         location: data.location,
         visibility: 'public',
-        creatorId: 'jd74wb459s0vsnd7h8y14db7md7mamjp' as Id<'users'>,
         image: 'kg2aphx307hkad4dxhpcrvjbkh7ma70s' as Id<'_storage'>,
         automatedFlows: [],
         hosts: [],

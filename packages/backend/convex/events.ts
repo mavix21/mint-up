@@ -3,6 +3,7 @@ import { v } from 'convex/values';
 import { mutation, query } from './_generated/server';
 import { vv } from './schema';
 import { omit } from 'convex-helpers';
+import { Id } from './_generated/dataModel';
 
 export const getAllEvents = query({
   handler: async (ctx) => {
@@ -119,10 +120,27 @@ export const getEventCategories = query({
 });
 
 export const createEvent = mutation({
-  args: omit(vv.doc('events').fields, ['_id', '_creationTime']),
+  args: omit(vv.doc('events').fields, ['_id', '_creationTime', 'creatorId']),
   handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) {
+      throw new Error('Unauthorized');
+    }
+
+    const user = await ctx.db.get(identity.subject as Id<'users'>);
+    if (!user) {
+      throw new Error('User not found');
+    }
     const eventId = await ctx.db.insert('events', {
       ...args,
+      creatorId: user._id,
+      hosts: [
+        ...args.hosts,
+        {
+          userId: user._id,
+          role: 'creator',
+        },
+      ],
     });
 
     return eventId;
