@@ -186,6 +186,10 @@ export const authOptions: AuthOptions = {
       return token;
     },
   },
+  secret: process.env.NEXTAUTH_SECRET,
+  session: {
+    strategy: 'jwt',
+  },
 };
 
 export const getSession = async () => {
