@@ -22,17 +22,29 @@ export function CreateEventScreen({ closeSheet }: { closeSheet: () => void }) {
     console.log('Creating event with data:', data);
     try {
       await createEvent({
-        name: data.name,
-        description: data.description,
-        startDate: data.startTimestamp,
-        endDate: data.endTimestamp,
-        category: data.category,
-        location: data.location,
-        visibility: 'public',
-        image: 'kg2aphx307hkad4dxhpcrvjbkh7ma70s' as Id<'_storage'>,
-        automatedFlows: [],
-        hosts: [],
-        theme,
+        event: {
+          name: data.name,
+          description: data.description,
+          startDate: data.startTimestamp,
+          endDate: data.endTimestamp,
+          category: data.category,
+          location: data.location,
+          visibility: 'public',
+          image: 'kg2aphx307hkad4dxhpcrvjbkh7ma70s' as Id<'_storage'>,
+          automatedFlows: [],
+          hosts: [],
+          theme,
+        },
+        tickets: data.tickets.map((ticket) => ({
+          name: ticket.name,
+          description: ticket.description,
+          totalSupply: ticket.supply,
+          isApprovalRequired: false,
+          price:
+            ticket.type === 'free'
+              ? { type: 'free' }
+              : { type: 'paid', amount: ticket.price, currency: ticket.currency },
+        })),
       });
       toast.show('Event created successfully', {
         type: 'success',

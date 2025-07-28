@@ -120,7 +120,12 @@ export const getEventCategories = query({
 });
 
 export const createEvent = mutation({
-  args: omit(vv.doc('events').fields, ['_id', '_creationTime', 'creatorId']),
+  args: {
+    event: v.object(omit(vv.doc('events').fields, ['_id', '_creationTime', 'creatorId'])),
+    tickets: v.array(
+      v.object(omit(vv.doc('ticketTemplates').fields, ['_id', '_creationTime', 'eventId']))
+    ),
+  },
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
     if (!identity) {
@@ -132,16 +137,23 @@ export const createEvent = mutation({
       throw new Error('User not found');
     }
     const eventId = await ctx.db.insert('events', {
-      ...args,
+      ...args.event,
       creatorId: user._id,
       hosts: [
-        ...args.hosts,
+        ...args.event.hosts,
         {
           userId: user._id,
           role: 'creator',
         },
       ],
     });
+
+    for (const ticket of args.tickets) {
+      await ctx.db.insert('ticketTemplates', {
+        ...ticket,
+        eventId,
+      });
+    }
 
     return eventId;
   },

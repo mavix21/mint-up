@@ -11,8 +11,10 @@ export const ticketTemplatesTable = defineTable({
     v.object({ type: v.literal('free') }),
     v.object({ type: v.literal('paid'), amount: v.number(), currency: v.string() })
   ),
-  nft: v.object({
-    image: v.id('_storage'),
-    metadata: v.optional(v.any()),
-  }),
+  nft: v.optional(
+    v.object({
+      image: v.id('_storage'),
+      metadata: v.optional(v.any()),
+    })
+  ),
 }).index('by_eventId', ['eventId']);
