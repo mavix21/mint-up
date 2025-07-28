@@ -34,7 +34,7 @@ export function TicketsEventSheet({
       forceRemoveScrollEnabled={open}
       onOpenChange={handleOpenChange}
       snapPoints={[90]}
-      defaultPosition={0}
+      zIndex={200_000}
       modal
       dismissOnOverlayPress
       dismissOnSnapToBottom
