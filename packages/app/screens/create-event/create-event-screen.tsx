@@ -10,6 +10,7 @@ import { YStack, Theme, ScrollView, ThemeName } from 'tamagui';
 import { useWriteContract } from 'wagmi';
 
 import { CreateEventForm } from './ui';
+import { MINTUP_CONTRACT_ADDRESS } from 'app/shared/lib/constants';
 
 export function CreateEventScreen({ closeSheet }: { closeSheet: () => void }) {
   const toast = useToastController();
@@ -51,6 +52,7 @@ export function CreateEventScreen({ closeSheet }: { closeSheet: () => void }) {
               : { type: 'paid', amount: ticket.price, currency: ticket.currency },
         })),
       });
+
       toast.show('Event created successfully', {
         type: 'success',
         preset: 'done',

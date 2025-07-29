@@ -144,21 +144,26 @@ export function EventModal({
               </ScrollView>
 
               <View padding="$4" borderTopWidth={1} borderColor="$color3" bg="$color2" width="100%">
-                <Button width="100%" onPress={() => setShowTicketsSheet(true)}>
-                  Buy tickets
-                </Button>
+                {ticketList.length > 0 ? (
+                  <Button width="100%" onPress={() => setShowTicketsSheet(true)}>
+                    Buy tickets
+                  </Button>
+                ) : (
+                  <Button width="100%">Disfruta del evento</Button>
+                )}
               </View>
             </YStack>
           </YStack>
         </Sheet.Frame>
       </Sheet>
-
-      <TicketsEventSheet
-        open={showTicketsSheet}
-        onOpenChange={setShowTicketsSheet}
-        eventId={eventData._id}
-        ticketList={ticketList}
-      />
+      {ticketList.length > 0 ? (
+        <TicketsEventSheet
+          open={showTicketsSheet}
+          onOpenChange={setShowTicketsSheet}
+          eventId={eventData._id}
+          ticketList={ticketList}
+        />
+      ) : null}
     </>
   );
 }
