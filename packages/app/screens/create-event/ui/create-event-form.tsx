@@ -197,6 +197,9 @@ export function CreateEventForm({
                             style={{ textAlign: 'center' }}
                             min={todayDateString}
                             defaultValue={todayDateString}
+                            onChange={(e) => {
+                              field.handleChange(e.target.value);
+                            }}
                           />
                         );
                       }}
@@ -241,6 +244,9 @@ export function CreateEventForm({
                             style={{ textAlign: 'center' }}
                             min={todayDateString}
                             defaultValue={todayDateString}
+                            onChange={(e) => {
+                              field.handleChange(e.target.value);
+                            }}
                           />
                         );
                       }}
