@@ -1,11 +1,22 @@
 import { api } from '@my/backend/_generated/api';
 import { Id } from '@my/backend/_generated/dataModel';
 import { useQuery } from '@my/backend/react';
-import { View, H3, Text, Image, ScrollView, useVisualViewportHeight } from '@my/ui';
+import {
+  View,
+  Text,
+  Image,
+  ScrollView,
+  useVisualViewportHeight,
+  Button,
+  H2,
+  Paragraph,
+  Sheet,
+  XStack,
+  YStack,
+} from '@my/ui';
 import { formatDate, formatDateTime, formatRelativeDate } from '@my/ui/src/lib/dates';
 import { Clock, MapPin, Globe } from '@tamagui/lucide-icons';
 import React, { Dispatch, SetStateAction } from 'react';
-import { Button, Paragraph, Sheet, XStack, YStack } from 'tamagui';
 
 import { ConvexEventWithExtras } from '../my-events-screen';
 import { TicketsEventSheet } from './tickets-event-sheet';
@@ -73,11 +84,9 @@ export function EventModal({
 
             {/* Event Content */}
             <YStack flex={1} pb="$4">
-              <View>
+              <View gap="$4">
                 <Image height={300} source={{ uri: eventData.imageUrl ?? '' }} borderRadius="$3" />
-                <H3 mt="$3" px="$4">
-                  {eventData?.name}
-                </H3>
+                <H2 px="$4">{eventData?.name}</H2>
               </View>
 
               <ScrollView flex={1} style={{ paddingHorizontal: 16 }}>
