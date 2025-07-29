@@ -27,7 +27,6 @@ export function TicketCardRadioButton({
       alignItems="flex-start"
       gap="$3"
       padding="$3"
-      active={selected}
       onPress={() => setValue(id)}
       cursor="pointer"
     >
