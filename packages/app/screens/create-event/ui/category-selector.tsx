@@ -13,6 +13,7 @@ import {
   Sparkles,
 } from '@tamagui/lucide-icons';
 import { AnyFieldApi } from '@tanstack/react-form';
+import { EventCategory } from 'app/entities/schemas';
 import { FieldInfo } from 'app/shared/ui/FieldInfo';
 import { useState, useCallback, useMemo } from 'react';
 import {
@@ -28,19 +29,7 @@ import {
 } from 'tamagui';
 import { LinearGradient } from 'tamagui/linear-gradient';
 
-export type EventCategory =
-  | 'music & performing arts'
-  | 'business & professional'
-  | 'arts & culture'
-  | 'tech'
-  | 'gaming'
-  | 'food & drink'
-  | 'health & wellness'
-  | 'sports & fitness'
-  | 'education & learning'
-  | 'community & causes'
-  | 'parties & socials'
-  | 'hobbies & interests';
+// Import the type from the schema
 
 const categoryData: {
   value: EventCategory;

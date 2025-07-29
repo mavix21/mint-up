@@ -65,28 +65,29 @@ const timeStringSchema = z
   .regex(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/, 'Time must be in HH:MM format');
 
 // Category validation
-const eventCategorySchema = z.string().refine(
-  (val) => {
-    const validCategories = [
-      'music & performing arts',
-      'business & professional',
-      'arts & culture',
-      'tech',
-      'gaming',
-      'food & drink',
-      'health & wellness',
-      'sports & fitness',
-      'education & learning',
-      'community & causes',
-      'parties & socials',
-      'hobbies & interests',
-    ];
-    return val && validCategories.includes(val);
-  },
-  {
-    message: 'Please select a category',
+const validCategories = [
+  'music & performing arts',
+  'business & professional',
+  'arts & culture',
+  'tech',
+  'gaming',
+  'food & drink',
+  'health & wellness',
+  'sports & fitness',
+  'education & learning',
+  'community & causes',
+  'parties & socials',
+  'hobbies & interests',
+] as const;
+
+export const eventCategorySchema = z.enum(validCategories).superRefine((val, ctx) => {
+  if (!val) {
+    ctx.addIssue({
+      code: 'custom',
+      message: 'Please select a category',
+    });
   }
-);
+});
 
 // Main create event form schema
 export const createEventFormSchema = z
@@ -192,6 +193,7 @@ export type CreateEventFormData = z.infer<typeof createEventFormSchema>;
 export type EventLocation = z.infer<typeof eventLocationSchema>;
 export type TicketType = z.infer<typeof ticketTypeSchema>;
 export type SubmitEventData = z.infer<typeof submitEventSchema>;
+export type EventCategory = z.infer<typeof eventCategorySchema>;
 
 // Validation error type
 export type CreateEventFormErrors = z.ZodFormattedError<CreateEventFormData>;
