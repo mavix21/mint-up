@@ -5,12 +5,14 @@ import { Id } from '@my/backend/_generated/dataModel';
 import { useMutation } from '@my/backend/react';
 import { useToastController } from '@my/ui';
 import { CreateEventFormData } from 'app/entities';
+import { abi } from 'app/shared/lib/abi';
+import { MINTUP_CONTRACT_ADDRESS } from 'app/shared/lib/constants';
+import { useSession } from 'next-auth/react';
 import { useState } from 'react';
 import { YStack, Theme, ScrollView, ThemeName } from 'tamagui';
 import { useWriteContract } from 'wagmi';
 
 import { CreateEventForm } from './ui';
-import { MINTUP_CONTRACT_ADDRESS } from 'app/shared/lib/constants';
 
 export function CreateEventScreen({ closeSheet }: { closeSheet: () => void }) {
   const toast = useToastController();
@@ -19,6 +21,7 @@ export function CreateEventScreen({ closeSheet }: { closeSheet: () => void }) {
   const [isLoading, setIsLoading] = useState(false);
   const createEvent = useMutation(api.events.createEvent);
 
+  const { data: session } = useSession();
   const { data: hash, writeContract } = useWriteContract();
 
   const handleSubmit = async (
@@ -51,6 +54,13 @@ export function CreateEventScreen({ closeSheet }: { closeSheet: () => void }) {
               ? { type: 'free' }
               : { type: 'paid', amount: ticket.price, currency: ticket.currency },
         })),
+      });
+
+      //Add writeContract event
+      writeContract({
+        address: MINTUP_CONTRACT_ADDRESS,
+        abi,
+        functionName: 'registerTicketType',
       });
 
       toast.show('Event created successfully', {
