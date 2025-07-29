@@ -1,6 +1,7 @@
 import { TimePicker, Chip, Shake } from '@my/ui';
 import { Globe } from '@tamagui/lucide-icons';
 import { useForm } from '@tanstack/react-form';
+import { FieldInfo } from 'app/shared/ui/FieldInfo';
 import { useState } from 'react';
 import {
   Button,
@@ -88,6 +89,16 @@ export function CreateEventForm({
     validators: {
       onChange: createEventFormSchema,
     },
+    onSubmit: async ({ value, formApi }) => {
+      console.log('onSubmit', value, formApi.state.isFormValid);
+      if (!formApi.state.isFormValid) {
+        console.log('Form is invalid');
+      }
+      handleSubmit();
+    },
+    onSubmitInvalid: async ({ formApi }) => {
+      console.log('onSubmitInvalid', formApi.state.isFormValid);
+    },
   });
 
   const handleSubmit = () => {
@@ -110,7 +121,12 @@ export function CreateEventForm({
   };
 
   return (
-    <Form onSubmit={handleSubmit}>
+    <Form
+      onSubmit={() => {
+        console.log('onSubmit', form.state.isFormValid);
+        form.handleSubmit();
+      }}
+    >
       <YStack gap="$4">
         {/* Event Image */}
         <EventImage />
@@ -126,9 +142,18 @@ export function CreateEventForm({
           name="name"
           children={(field) => {
             return (
-              <Theme name={field.state.meta.errors.length > 0 ? 'red' : null} forceClassName>
+              <Theme
+                name={
+                  field.state.meta.isTouched &&
+                  !field.state.meta.isValid &&
+                  field.state.meta.errors.length > 0
+                    ? 'red'
+                    : null
+                }
+                forceClassName
+              >
                 <Shake shakeKey={field.state.meta.errors[0]?.message}>
-                  <YStack>
+                  <YStack gap="$1">
                     <VisuallyHidden>
                       <Label htmlFor={field.name}>Event Name</Label>
                     </VisuallyHidden>
@@ -148,6 +173,7 @@ export function CreateEventForm({
                         } as any
                       }
                     />
+                    <FieldInfo field={field} />
                   </YStack>
                 </Shake>
               </Theme>
@@ -159,12 +185,15 @@ export function CreateEventForm({
           name="category"
           children={(field) => {
             return (
-              <CategorySelector
-                value={field.state.value}
-                onValueChange={(value) => {
-                  field.handleChange(value);
-                }}
-              />
+              <>
+                <CategorySelector
+                  value={field.state.value}
+                  onValueChange={(value) => {
+                    field.handleChange(value);
+                  }}
+                  fieldApi={field}
+                />
+              </>
             );
           }}
         />
@@ -286,13 +315,15 @@ export function CreateEventForm({
                       py="$2"
                       borderRadius="$4"
                       backgroundColor="$color5"
+                      borderWidth={1}
+                      borderColor="transparent"
                       hoverStyle={{
                         backgroundColor: '$color6',
-                        borderColor: '$color7',
+                        borderColor: '$color8',
                         borderWidth: 1,
                       }}
-                      pressStyle={{ backgroundColor: '$color6' }}
-                      focusStyle={{ backgroundColor: '$color6' }}
+                      pressStyle={{ backgroundColor: '$color6', borderColor: '$color8' }}
+                      focusStyle={{ backgroundColor: '$color6', borderColor: '$color8' }}
                     >
                       <Chip.Icon>
                         <Globe size={16} />
