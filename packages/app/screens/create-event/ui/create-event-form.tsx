@@ -310,21 +310,7 @@ export function CreateEventForm({
                     Timezone
                   </Label>
                   <XStack gap="$4" alignItems="center">
-                    <Chip
-                      size="$4"
-                      py="$2"
-                      borderRadius="$4"
-                      backgroundColor="$color5"
-                      borderWidth={1}
-                      borderColor="transparent"
-                      hoverStyle={{
-                        backgroundColor: '$color6',
-                        borderColor: '$color8',
-                        borderWidth: 1,
-                      }}
-                      pressStyle={{ backgroundColor: '$color6', borderColor: '$color8' }}
-                      focusStyle={{ backgroundColor: '$color6', borderColor: '$color8' }}
-                    >
+                    <Chip size="$4" py="$2" borderRadius="$4">
                       <Chip.Icon>
                         <Globe size={16} />
                       </Chip.Icon>

@@ -30,11 +30,22 @@ const ChipImpl = styled(View, {
       false: {
         borderRadius: 5,
         paddingHorizontal: '$3',
-        backgroundColor: '$color6',
+        backgroundColor: '$color5',
+        borderWidth: 1,
+        borderColor: 'transparent',
         justifyContent: 'center',
         alignItems: 'center',
         hoverStyle: {
-          backgroundColor: '$color7',
+          backgroundColor: '$color6',
+          borderColor: '$color8',
+        },
+        pressStyle: {
+          backgroundColor: '$color6',
+          borderColor: '$color8',
+        },
+        focusStyle: {
+          backgroundColor: '$color6',
+          borderColor: '$color8',
         },
       },
     },
