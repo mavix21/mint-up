@@ -65,20 +65,28 @@ const timeStringSchema = z
   .regex(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/, 'Time must be in HH:MM format');
 
 // Category validation
-const eventCategorySchema = z.enum([
-  'music & performing arts',
-  'business & professional',
-  'arts & culture',
-  'tech',
-  'gaming',
-  'food & drink',
-  'health & wellness',
-  'sports & fitness',
-  'education & learning',
-  'community & causes',
-  'parties & socials',
-  'hobbies & interests',
-]);
+const eventCategorySchema = z.string().refine(
+  (val) => {
+    const validCategories = [
+      'music & performing arts',
+      'business & professional',
+      'arts & culture',
+      'tech',
+      'gaming',
+      'food & drink',
+      'health & wellness',
+      'sports & fitness',
+      'education & learning',
+      'community & causes',
+      'parties & socials',
+      'hobbies & interests',
+    ];
+    return val && validCategories.includes(val);
+  },
+  {
+    message: 'Please select a category',
+  }
+);
 
 // Main create event form schema
 export const createEventFormSchema = z
