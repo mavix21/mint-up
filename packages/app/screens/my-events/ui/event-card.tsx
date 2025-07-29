@@ -1,6 +1,6 @@
 import { View, YStack, XStack, Image, Button, Theme, SizableText } from '@my/ui';
-import { formatRelativeDate } from '@my/ui/src/lib/dates';
 import { ArrowRight, Clock, Globe, MapPin } from '@tamagui/lucide-icons';
+import { formatTime } from 'app/shared';
 import { useState } from 'react';
 import { Link } from 'solito/link';
 
@@ -93,7 +93,7 @@ export function EventCard({
               <XStack mt={4} display="flex" ai="center" gap="$2">
                 <Clock size={15} color="$color11" />
                 <SizableText size="$1" color="$color11">
-                  {formatTime(formatRelativeDate(event.startDate))}
+                  {formatTime(event.startDate)}
                 </SizableText>
               </XStack>
 
@@ -156,12 +156,3 @@ export function EventCard({
     </>
   );
 }
-
-const formatTime = (dateString: string) => {
-  const date = new Date(dateString);
-  return date.toLocaleTimeString('en-US', {
-    hour: 'numeric',
-    minute: '2-digit',
-    hour12: true,
-  });
-};

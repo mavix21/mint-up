@@ -2,6 +2,11 @@ import { api } from '@my/backend/_generated/api';
 import { Doc } from '@my/backend/_generated/dataModel';
 import { FullscreenSpinner, H3, SizableText, Tabs, Text, View, YStack } from '@my/ui';
 import { formatRelativeDate } from '@my/ui/src/lib/dates';
+import {
+  formatRelativeDate as formatRelativeDateShared,
+  getDayOfWeek,
+  groupByDate,
+} from 'app/shared';
 import { useQuery } from 'convex/react';
 import React from 'react';
 
@@ -11,43 +16,6 @@ import { EventCard } from './ui/event-card';
 export type ConvexEventWithExtras = Doc<'events'> & {
   creatorName: string;
   imageUrl: string | null;
-};
-
-const formatDate = (dateString: string) => {
-  const date = new Date(dateString);
-  const today = new Date();
-  const tomorrow = new Date(today);
-  tomorrow.setDate(tomorrow.getDate() + 1);
-
-  if (date.toDateString() === today.toDateString()) {
-    return 'Today';
-  } else if (date.toDateString() === tomorrow.toDateString()) {
-    return 'Tomorrow';
-  } else {
-    return date.toLocaleDateString('en-US', {
-      month: 'short',
-      day: 'numeric',
-    });
-  }
-};
-
-const getDayOfWeek = (dateString: string) => {
-  const date = new Date(dateString);
-  return date.toLocaleDateString('en-US', { weekday: 'long' });
-};
-
-const groupEventsByDate = (events: ConvexEventWithExtras[], activeTab: string) => {
-  const grouped = events.reduce((acc, event) => {
-    const dateKey =
-      formatRelativeDate(event.startDate).split('T')[0] ?? formatRelativeDate(event.startDate);
-    acc[dateKey] ??= [];
-    acc[dateKey].push(event);
-    return acc;
-  }, {} as Record<string, ConvexEventWithExtras[]>);
-
-  return Object.entries(grouped).sort(([a], [b]) =>
-    activeTab === 'upcoming' ? a.localeCompare(b) : b.localeCompare(a)
-  );
 };
 
 export const MyEventsScreen = () => {
@@ -98,7 +66,14 @@ export const MyEventsScreen = () => {
         </Tabs.List>
 
         <Tabs.Content value="upcoming" overflowBlock="scroll" height="100%" paddingBottom={160}>
-          {groupEventsByDate(upcomingEvents, activeTab).map(([dateKey, events], index) => (
+          {groupByDate(
+            upcomingEvents,
+            (event) => {
+              const date = new Date(event.startDate);
+              return date.toISOString().split('T')[0];
+            },
+            activeTab === 'upcoming' ? 'asc' : 'desc'
+          ).map(([dateKey, events], index) => (
             <View key={dateKey} pos="relative">
               <View pos="absolute" bottom={0} left={4} top={16} w="$0.25" bg="$gray6" />
 
@@ -116,11 +91,9 @@ export const MyEventsScreen = () => {
                   />
                   <View mb="$4">
                     <SizableText fontSize="$2" color="$color11">
-                      {formatDate(formatRelativeDate(events[0]?.startDate) ?? '')}
+                      {formatRelativeDateShared(events[0]?.startDate)}
                     </SizableText>
-                    <SizableText fontSize="$2">
-                      {getDayOfWeek(formatRelativeDate(events[0]?.startDate) ?? '')}
-                    </SizableText>
+                    <SizableText fontSize="$2">{getDayOfWeek(events[0]?.startDate)}</SizableText>
                   </View>
                   <YStack gap="$4">
                     {events.map((event) => (
@@ -141,7 +114,14 @@ export const MyEventsScreen = () => {
           paddingInlineEnd="$4"
           paddingBottom={160}
         >
-          {groupEventsByDate(pastEvents, activeTab).map(([dateKey, events], index) => (
+          {groupByDate(
+            pastEvents,
+            (event) => {
+              const date = new Date(event.startDate);
+              return date.toISOString().split('T')[0];
+            },
+            activeTab === 'upcoming' ? 'asc' : 'desc'
+          ).map(([dateKey, events], index) => (
             <View key={dateKey} pos="relative">
               <View pos="absolute" bottom={0} left={4} top={16} w="$0.25" bg="$gray6" />
 
@@ -159,11 +139,9 @@ export const MyEventsScreen = () => {
                   />
                   <View mb="$4">
                     <Text fontSize="$2" color="$color11">
-                      {formatDate(formatRelativeDate(events[0]?.startDate) ?? '')}
+                      {formatRelativeDateShared(events[0]?.startDate)}
                     </Text>
-                    <Text fontSize="$2">
-                      {getDayOfWeek(formatRelativeDate(events[0]?.startDate) ?? '')}
-                    </Text>
+                    <Text fontSize="$2">{getDayOfWeek(events[0]?.startDate)}</Text>
                   </View>
                   <YStack gap="$4">
                     {events.map((event) => (

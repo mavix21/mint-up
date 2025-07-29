@@ -1,4 +1,5 @@
 import { MapPin, Globe } from '@tamagui/lucide-icons';
+import { formatLocationText, getLocationColor } from 'app/shared';
 import { Button, SizableText } from 'tamagui';
 
 import { EventLocation } from '../../../entities';
@@ -9,39 +10,11 @@ export interface LocationButtonProps {
 }
 
 export function LocationButton({ location, onPress }: LocationButtonProps) {
-  const getLocationText = () => {
-    if (!location) {
-      return 'Offline location or virtual link';
-    }
-
-    if (location.type === 'in-person') {
-      return location.address || 'Add address';
-    } else {
-      return location.url || 'Add meeting URL';
-    }
-  };
-
   const getLocationIcon = () => {
     if (!location) {
       return <MapPin size={16} />;
     }
     return location.type === 'in-person' ? <MapPin size={16} /> : <Globe size={16} />;
-  };
-
-  const getLocationColor = () => {
-    if (!location) {
-      return '$color9';
-    }
-
-    if (location.type === 'in-person' && location.address) {
-      return '$color12';
-    }
-
-    if (location.type === 'virtual' && location.url) {
-      return '$color12';
-    }
-
-    return '$color9';
   };
 
   return (
@@ -52,8 +25,26 @@ export function LocationButton({ location, onPress }: LocationButtonProps) {
       onPress={onPress}
     >
       <SizableText>Location</SizableText>
-      <SizableText color={getLocationColor()} ml="$2" numberOfLines={1} flex={1} textAlign="right">
-        {getLocationText()}
+      <SizableText
+        color={
+          getLocationColor(
+            location,
+            (l) => l.type,
+            (l) => (l.type === 'in-person' ? l.address : ''),
+            (l) => (l.type === 'online' ? l.url : '')
+          ) as any
+        }
+        ml="$2"
+        numberOfLines={1}
+        flex={1}
+        textAlign="right"
+      >
+        {formatLocationText(
+          location,
+          (l) => l.type,
+          (l) => (l.type === 'in-person' ? l.address : ''),
+          (l) => (l.type === 'online' ? l.url : '')
+        )}
       </SizableText>
     </Button>
   );

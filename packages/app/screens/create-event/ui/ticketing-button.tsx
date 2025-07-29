@@ -1,4 +1,5 @@
 import { Ticket } from '@tamagui/lucide-icons';
+import { formatTicketText, getTicketColor, getTicketCountText } from 'app/shared';
 import { Button, Text } from 'tamagui';
 
 import { TicketType } from '../../../entities';
