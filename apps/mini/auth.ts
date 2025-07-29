@@ -88,7 +88,6 @@ export const authOptions: AuthOptions = {
         },
       },
       async authorize(credentials, req) {
-        console.warn('authorize', credentials);
         const csrfToken = req?.body?.csrfToken;
         if (!csrfToken) {
           console.error('CSRF token is missing from request');
@@ -100,7 +99,6 @@ export const authOptions: AuthOptions = {
           return null;
         }
         const { address } = parseSiweMessage(message);
-        console.log('address', address);
 
         const appClient = createAppClient({
           ethereum: viemConnector(),
@@ -139,8 +137,6 @@ export const authOptions: AuthOptions = {
             bio: user.profile.bio.text,
           });
 
-          console.log('userId', { userId });
-
           return {
             id: userId,
             fid,
@@ -158,15 +154,12 @@ export const authOptions: AuthOptions = {
   ],
   callbacks: {
     session: async ({ session, token }) => {
-      console.warn('------- session -------', session, token);
       if (session?.user) {
         session.user = token.user as typeof session.user;
       }
 
       try {
-        console.warn('CONVEX_AUTH_PRIVATE_KEY', process.env.CONVEX_AUTH_PRIVATE_KEY);
         const privateKey = await importPKCS8(process.env.CONVEX_AUTH_PRIVATE_KEY!, 'RS256');
-        console.warn('privateKey', { privateKey });
         const convexToken = await new SignJWT({
           sub: session.user.id,
         })
@@ -176,18 +169,15 @@ export const authOptions: AuthOptions = {
           .setAudience('convex')
           .setExpirationTime('1h')
           .sign(privateKey);
-        console.warn('convexToken', { convexToken });
 
         session.convexToken = convexToken;
       } catch (error) {
         console.error('Error generating convex token', { error });
       }
-      console.warn('------- session end -------');
 
       return session;
     },
     jwt: async ({ token, user }) => {
-      console.warn('jwt', { token, user });
       if (user) {
         token.user = user;
         token.name = user.name;
