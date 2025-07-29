@@ -164,6 +164,7 @@ export const authOptions: AuthOptions = {
       }
 
       try {
+        console.warn('process.env.CONVEX_AUTH_PRIVATE_KEY', process.env.CONVEX_AUTH_PRIVATE_KEY);
         const privateKey = await importPKCS8(process.env.CONVEX_AUTH_PRIVATE_KEY!, 'RS256');
         console.warn('privateKey', { privateKey });
         const convexToken = await new SignJWT({
