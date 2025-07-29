@@ -8,7 +8,8 @@
     "types.d.ts",
     "../ui/src",
     "screens",
-    "entities"
+    "entities",
+    "shared"
   ],
   "compilerOptions": {
     "noEmit": true,
