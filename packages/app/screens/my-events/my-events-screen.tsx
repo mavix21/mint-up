@@ -97,19 +97,13 @@ export const MyEventsScreen = () => {
           </Tabs.Tab>
         </Tabs.List>
 
-        <Tabs.Content
-          value="upcoming"
-          overflowBlock="scroll"
-          height="100%"
-          paddingInlineEnd="$4"
-          paddingBottom={160}
-        >
+        <Tabs.Content value="upcoming" overflowBlock="scroll" height="100%" paddingBottom={160}>
           {groupEventsByDate(upcomingEvents, activeTab).map(([dateKey, events], index) => (
             <View key={dateKey} pos="relative">
               <View pos="absolute" bottom={0} left={4} top={16} w="$0.25" bg="$gray6" />
 
               <View mb="$9">
-                <View pos="relative" pl="$6">
+                <View pos="relative" pl="$5">
                   <View
                     theme="green"
                     bg="$color8"
@@ -152,7 +146,7 @@ export const MyEventsScreen = () => {
               <View pos="absolute" bottom={0} left={4} top={16} w="$0.25" bg="$gray6" />
 
               <View mb="$9">
-                <View pos="relative" pl="$6">
+                <View pos="relative" pl="$4">
                   <View
                     bg="$color8"
                     pos="absolute"
