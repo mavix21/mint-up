@@ -163,18 +163,24 @@ export const authOptions: AuthOptions = {
         session.user = token.user as typeof session.user;
       }
 
-      // const privateKey = await importPKCS8(process.env.CONVEX_AUTH_PRIVATE_KEY!, 'RS256');
-      // const convexToken = await new SignJWT({
-      //   sub: session.user.id,
-      // })
-      //   .setProtectedHeader({ alg: 'RS256' })
-      //   .setIssuedAt()
-      //   .setIssuer(CONVEX_SITE_URL)
-      //   .setAudience('convex')
-      //   .setExpirationTime('1h')
-      //   .sign(privateKey);
+      try {
+        const privateKey = await importPKCS8(process.env.CONVEX_AUTH_PRIVATE_KEY!, 'RS256');
+        console.warn('privateKey', { privateKey });
+        const convexToken = await new SignJWT({
+          sub: session.user.id,
+        })
+          .setProtectedHeader({ alg: 'RS256' })
+          .setIssuedAt()
+          .setIssuer(CONVEX_SITE_URL)
+          .setAudience('convex')
+          .setExpirationTime('1h')
+          .sign(privateKey);
+        console.warn('convexToken', { convexToken });
 
-      // session.convexToken = convexToken;
+        session.convexToken = convexToken;
+      } catch (error) {
+        console.error('Error generating convex token', { error });
+      }
       console.warn('------- session end -------');
 
       return session;
