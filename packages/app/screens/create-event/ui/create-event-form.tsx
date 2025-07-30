@@ -1,6 +1,6 @@
 import { TimePicker, Chip, Shake } from '@my/ui';
 import { Globe } from '@tamagui/lucide-icons';
-import { useForm } from '@tanstack/react-form';
+import { useAppForm } from 'app/shared/lib/form';
 import { FieldInfo } from 'app/shared/ui/FieldInfo';
 import { useState } from 'react';
 import {
@@ -70,7 +70,7 @@ export function CreateEventForm({
   const todayDateString = getTodayDateString();
 
   // form
-  const form = useForm({
+  const form = useAppForm({
     defaultValues: {
       name: '',
       category: '',
@@ -89,15 +89,18 @@ export function CreateEventForm({
     validators: {
       onChange: createEventFormSchema,
     },
-    onSubmit: async ({ value, formApi }) => {
-      console.log('onSubmit', value, formApi.state.isFormValid);
+    onSubmit: ({ value, formApi }) => {
+      console.log('fieldMeta', formApi.state.fieldMeta);
+      console.log('onSubmit???????', value, formApi.state.isFormValid);
+      console.log('errors', formApi.state.errors);
       if (!formApi.state.isFormValid) {
         console.log('Form is invalid');
       }
       handleSubmit();
     },
-    onSubmitInvalid: async ({ formApi }) => {
+    onSubmitInvalid: ({ formApi }) => {
       console.log('onSubmitInvalid', formApi.state.isFormValid);
+      console.log('errors', formApi.state.errors);
     },
   });
 
@@ -123,7 +126,6 @@ export function CreateEventForm({
   return (
     <Form
       onSubmit={() => {
-        console.log('onSubmit', form.state.isFormValid);
         form.handleSubmit();
       }}
     >
