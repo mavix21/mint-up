@@ -8,9 +8,10 @@ import { CreateEventFormData } from 'app/entities';
 import { abi } from 'app/shared/lib/abi';
 import { MINTUP_CONTRACT_ADDRESS } from 'app/shared/lib/constants';
 import { useSession } from 'next-auth/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { YStack, Theme, ScrollView, ThemeName } from 'tamagui';
-import { useWriteContract } from 'wagmi';
+import { parseEventLogs } from 'viem';
+import { useWaitForTransactionReceipt, useWriteContract } from 'wagmi';
 
 import { CreateEventForm } from './ui';
 
@@ -23,6 +24,32 @@ export function CreateEventScreen({ closeSheet }: { closeSheet: () => void }) {
 
   const { data: session } = useSession();
   const { data: hash, writeContract } = useWriteContract();
+  const {
+    isLoading: isConfirming,
+    isSuccess,
+    data,
+  } = useWaitForTransactionReceipt({
+    hash,
+  });
+
+  useEffect(() => {
+    if (isSuccess) {
+      for (const log of data.logs) {
+        const events = parseEventLogs({
+          abi,
+          logs: [log],
+        });
+        for (const event of events) {
+          if (event.eventName === 'TicketTypeRegistered') {
+            const { tokenId } = event.args;
+            console.log(tokenId);
+
+            return;
+          }
+        }
+      }
+    }
+  }, [isSuccess, data]);
 
   const handleSubmit = async (
     data: CreateEventFormData & { startTimestamp: number; endTimestamp: number }
@@ -61,6 +88,13 @@ export function CreateEventScreen({ closeSheet }: { closeSheet: () => void }) {
         address: MINTUP_CONTRACT_ADDRESS,
         abi,
         functionName: 'registerTicketType',
+        args: [
+          session?.user.currentWalletAddress as `0x${string}`,
+          BigInt(0),
+          BigInt(0),
+          BigInt(0),
+          `https://rose-gentle-toucan-395.mypinata.cloud/ipfs/ejemplo`,
+        ],
       });
 
       toast.show('Event created successfully', {

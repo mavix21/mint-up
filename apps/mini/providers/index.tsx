@@ -27,7 +27,7 @@ export function Providers({
     chains: [baseSepolia],
     connectors: [
       coinbaseWallet({
-        appName: 'Tu App Name',
+        appName: 'MintUp',
         preference: 'smartWalletOnly', // Para MiniKit
       }),
     ],
