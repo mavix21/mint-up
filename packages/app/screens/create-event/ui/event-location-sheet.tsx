@@ -1,18 +1,19 @@
-import { useVisualViewportHeight } from '@my/ui';
-import { MapPin, Globe } from '@tamagui/lucide-icons';
-import { useState } from 'react';
 import {
-  Sheet,
-  Button,
-  XStack,
-  YStack,
+  useVisualViewportHeight,
   Input,
   TextArea,
   Label,
   ToggleGroup,
   Separator,
   SizableText,
-} from 'tamagui';
+  Sheet,
+  Button,
+  XStack,
+  YStack,
+} from '@my/ui';
+import { MapPin, Globe } from '@tamagui/lucide-icons';
+import { AnyFieldApi } from '@tanstack/react-form';
+import { useState } from 'react';
 
 import { EventLocation } from '../../../entities';
 
@@ -21,6 +22,7 @@ export interface EventLocationSheetProps {
   onOpenChange: (open: boolean) => void;
   location: EventLocation;
   onLocationChange: (location: EventLocation) => void;
+  fieldApi?: AnyFieldApi;
 }
 
 export function EventLocationSheet({
