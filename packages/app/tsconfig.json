@@ -14,9 +14,11 @@
   "compilerOptions": {
     "noEmit": true,
     "composite": true,
+    "preserveSymlinks": true,
     "baseUrl": ".",
     "module": "ESNext",
     "moduleResolution": "bundler",
+    "skipLibCheck": true,
     "paths": {
       "app/*": ["./*"],
       "@my/*": ["../*"]
