@@ -82,7 +82,7 @@ export const ExploreEventsScreen = () => {
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={{ paddingRight: 20 }}
       >
-        <XStack space="$2">
+        <XStack space="$2" mb="$3">
           {categoryList.map((category) => {
             const isSelected = selectedCategory === category.label;
             return (

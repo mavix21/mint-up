@@ -33,6 +33,7 @@ export function ItemCardList({ id }: { id: string }) {
         pressStyle={{ scale: 0.975 }}
         hoverStyle={{ borderColor: '$borderColorHover' }}
         py="$3"
+        pl="$3"
         // onPress={() => router.push(`/events/detail/${event._id}`)}
         onPress={() => setToggleEvent(true)}
       >
