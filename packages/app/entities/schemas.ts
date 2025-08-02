@@ -3,7 +3,7 @@ import { z } from 'zod';
 // Base schemas for discriminated unions
 const onlineLocationSchema = z.object({
   type: z.literal('online'),
-  url: z.url('Please enter a valid URL').min(1, 'URL is required'),
+  url: z.string(), //z.url('Please enter a valid URL').min(1, 'URL is required'),
 });
 
 const inPersonLocationSchema = z.object({
@@ -32,7 +32,7 @@ const paidTicketSchema = z.object({
 // Complete ticket schema with base fields
 export const ticketTypeSchema = z.discriminatedUnion('type', [
   freeTicketSchema.extend({
-    id: z.string().uuid('Invalid ticket ID'),
+    id: z.string(),
     name: z.string().min(1, 'Ticket name is required').max(100, 'Ticket name too long'),
     description: z
       .string()
@@ -78,10 +78,11 @@ const validCategories = [
   'community & causes',
   'parties & socials',
   'hobbies & interests',
+  '',
 ] as const;
 
 export const eventCategorySchema = z.enum(validCategories).superRefine((val, ctx) => {
-  if (!val) {
+  if (!val || val.trim() === '') {
     ctx.addIssue({
       code: 'custom',
       message: 'Please select a category',
