@@ -34,19 +34,13 @@ export const ticketTypeSchema = z.discriminatedUnion('type', [
   freeTicketSchema.extend({
     id: z.string(),
     name: z.string().min(1, 'Ticket name is required').max(100, 'Ticket name too long'),
-    description: z
-      .string()
-      .min(1, 'Ticket description is required')
-      .max(500, 'Description too long'),
+    description: z.string().max(100, 'Description too long'),
     supply: z.number().positive('Supply must be positive').optional(),
   }),
   paidTicketSchema.extend({
-    id: z.string().uuid('Invalid ticket ID'),
+    id: z.string(),
     name: z.string().min(1, 'Ticket name is required').max(100, 'Ticket name too long'),
-    description: z
-      .string()
-      .min(1, 'Ticket description is required')
-      .max(500, 'Description too long'),
+    description: z.string().max(100, 'Description too long'),
     supply: z.number().positive('Supply must be positive').optional(),
   }),
 ]);
