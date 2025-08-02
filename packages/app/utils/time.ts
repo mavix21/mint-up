@@ -1,17 +1,23 @@
 export interface EventTimes {
   startTime: string;
   endTime: string;
+  shouldIncrementDate: boolean;
 }
 
 /**
- * Calculate one hour after a given time
+ * Calculate one hour after a given time and determine if date should change
  * @param time - Time string in HH:mm format
- * @returns Time string one hour after the input time
+ * @returns Object with end time and whether date should increment
  */
-export function calculateOneHourAfter(time: string): string {
+export function calculateOneHourAfter(time: string): {
+  endTime: string;
+  shouldIncrementDate: boolean;
+} {
   const [hours, minutes] = time.split(':').map(Number);
   const endHour = (hours + 1) % 24;
-  return `${endHour.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+  const endTime = `${endHour.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+  const shouldIncrementDate = endHour === 0; // If end hour is 00:xx, we've crossed midnight
+  return { endTime, shouldIncrementDate };
 }
 
 /**
@@ -34,9 +40,9 @@ export function calculateDefaultEventTimes(): EventTimes {
     .padStart(2, '0')}`;
 
   // End time is 1 hour after start time
-  const endTime = calculateOneHourAfter(startTime);
+  const { endTime, shouldIncrementDate } = calculateOneHourAfter(startTime);
 
-  return { startTime, endTime };
+  return { startTime, endTime, shouldIncrementDate };
 }
 
 /**
