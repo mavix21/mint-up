@@ -4,6 +4,17 @@ export interface EventTimes {
 }
 
 /**
+ * Calculate one hour after a given time
+ * @param time - Time string in HH:mm format
+ * @returns Time string one hour after the input time
+ */
+export function calculateOneHourAfter(time: string): string {
+  const [hours, minutes] = time.split(':').map(Number);
+  const endHour = (hours + 1) % 24;
+  return `${endHour.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+}
+
+/**
  * Calculate the closest 30-minute interval to the current time
  * @returns EventTimes object with start and end times in HH:mm format
  */
@@ -23,10 +34,7 @@ export function calculateDefaultEventTimes(): EventTimes {
     .padStart(2, '0')}`;
 
   // End time is 1 hour after start time
-  const endHour = (adjustedHour + 1) % 24;
-  const endTime = `${endHour.toString().padStart(2, '0')}:${finalMinute
-    .toString()
-    .padStart(2, '0')}`;
+  const endTime = calculateOneHourAfter(startTime);
 
   return { startTime, endTime };
 }
