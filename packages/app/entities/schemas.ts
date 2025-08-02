@@ -8,7 +8,7 @@ const onlineLocationSchema = z.object({
 
 const inPersonLocationSchema = z.object({
   type: z.literal('in-person'),
-  address: z.string().min(1, 'Address is required'),
+  address: z.string(),
   instructions: z.string().optional(),
 });
 
