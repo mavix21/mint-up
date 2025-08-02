@@ -103,7 +103,7 @@ export function EventTicketingSheet({
   };
 
   const isFormValid = localTickets.every((ticket) => {
-    const hasRequiredFields = ticket.name.trim() !== '' && ticket.description.trim() !== '';
+    const hasRequiredFields = ticket.name.trim() !== '';
 
     // For paid tickets, ensure price and currency are set
     if (ticket.type === 'paid') {
@@ -163,20 +163,28 @@ export function EventTicketingSheet({
                 </YStack>
               ) : (
                 localTickets.map((ticket, index) => (
-                  <Card key={ticket.id} backgroundColor="$color3" borderRadius="$4" p="$4">
+                  <Card
+                    key={ticket.id}
+                    borderColor="$color5"
+                    borderWidth={1}
+                    borderRadius="$4"
+                    p="$4"
+                  >
                     <YStack gap="$3">
                       {/* Ticket Header */}
                       <XStack alignItems="center" justifyContent="space-between">
                         <SizableText fontSize="$4" fontWeight="600">
                           Ticket {index + 1}
                         </SizableText>
-                        <Button
-                          size="$2"
-                          circular
-                          theme="red"
-                          onPress={() => removeTicket(ticket.id)}
-                          icon={<Trash2 size={14} />}
-                        />
+                        {localTickets.length > 1 && (
+                          <Button
+                            size="$2"
+                            circular
+                            theme="red"
+                            onPress={() => removeTicket(ticket.id)}
+                            icon={<Trash2 size={14} />}
+                          />
+                        )}
                       </XStack>
 
                       {/* Ticket Name */}
