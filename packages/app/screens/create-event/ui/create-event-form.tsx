@@ -1,10 +1,9 @@
 import { TimePicker, Chip, Shake } from '@my/ui';
-import { Globe } from '@tamagui/lucide-icons';
+import { Globe, Clock4, Clock2 } from '@tamagui/lucide-icons';
 import { useAppForm } from 'app/shared/lib/form';
 import { FieldInfo } from 'app/shared/ui/FieldInfo';
 import { useState } from 'react';
 import {
-  Button,
   Label,
   XStack,
   YStack,
@@ -29,13 +28,14 @@ import {
   EventTicketingSheet,
   TicketingButton,
   CategorySelector,
+  EventCategory,
 } from './index';
-import { createEventFormSchema, type EventLocation, type TicketType } from '../../../entities';
-import { getClientTimezone, calculateDefaultEventTimes, getTodayDateString } from '../../../utils';
+import { createEventFormSchema } from '../../../entities';
+import { getClientTimezone, calculateDefaultEventTimes } from '../../../utils';
+import { createEventFormOpts } from '../model/shared-form';
 
 export interface CreateEventFormProps {
   onSubmit?: (data: any) => void;
-  isLoading?: boolean;
   theme?: string;
   onThemeChange?: (theme: string) => void;
   showThemeSheet?: boolean;
@@ -45,13 +45,11 @@ export interface CreateEventFormProps {
 function toTimestamp(date: string, time: string) {
   const localDateTimeString = `${date}T${time}`;
   const localDateTime = new Date(localDateTimeString);
-
   return localDateTime.getTime();
 }
 
 export function CreateEventForm({
   onSubmit,
-  isLoading,
   theme,
   onThemeChange,
   showThemeSheet = false,
@@ -65,385 +63,355 @@ export function CreateEventForm({
   // Get client timezone
   const clientTimezone = getClientTimezone();
 
-  // Calculate closest time and default end time
-  const { startTime, endTime } = calculateDefaultEventTimes();
-  const todayDateString = getTodayDateString();
+  // Calculate default event times and dates
+  const { startTime, endTime, startDate, endDate } = calculateDefaultEventTimes();
 
   // form
   const form = useAppForm({
     defaultValues: {
-      name: '',
-      category: '',
-      startDate: todayDateString,
+      ...createEventFormOpts.defaultValues,
+      startDate,
       startTime,
-      endDate: todayDateString,
+      endDate,
       endTime,
-      location: {
-        type: 'in-person' as const,
-        address: '',
-        instructions: '',
-      } as EventLocation,
-      description: '',
-      tickets: [] as TicketType[],
     },
     validators: {
       onChange: createEventFormSchema,
     },
-    onSubmit: ({ value, formApi }) => {
-      console.log('fieldMeta', formApi.state.fieldMeta);
-      console.log('onSubmit???????', value, formApi.state.isFormValid);
-      console.log('errors', formApi.state.errors);
-      if (!formApi.state.isFormValid) {
-        console.log('Form is invalid');
-      }
-      handleSubmit();
+    onSubmit: ({ value }) => {
+      console.log('value', value);
+      const startTimestamp = toTimestamp(value.startDate, value.startTime);
+      const endTimestamp = toTimestamp(value.endDate, value.endTime);
+
+      onSubmit?.({
+        ...value,
+        startTimestamp,
+        endTimestamp,
+      });
     },
     onSubmitInvalid: ({ formApi }) => {
-      console.log('onSubmitInvalid', formApi.state.isFormValid);
+      console.log('form values', formApi.state.values);
       console.log('errors', formApi.state.errors);
     },
   });
 
-  const handleSubmit = () => {
-    const startTimestamp = toTimestamp(form.state.values.startDate, form.state.values.startTime);
-    const endTimestamp = toTimestamp(form.state.values.endDate, form.state.values.endTime);
-
-    // TODO: Collect form data and call onSubmit
-    onSubmit?.({
-      name: form.state.values.name,
-      location: form.state.values.location,
-      description: form.state.values.description,
-      tickets: form.state.values.tickets,
-      category: form.state.values.category,
-      theme,
-      startDate: startTimestamp,
-      endDate: endTimestamp,
-      startTimestamp,
-      endTimestamp,
-    });
-  };
-
   return (
-    <Form
-      onSubmit={() => {
-        form.handleSubmit();
-      }}
-    >
-      <YStack gap="$4">
-        {/* Event Image */}
-        <EventImage />
-        {/* Theme Selector */}
-        <ThemeSelector
-          theme={theme}
-          onThemeChange={onThemeChange || (() => {})}
-          showThemeSheet={showThemeSheet}
-          onShowThemeSheetChange={onShowThemeSheetChange || (() => {})}
-        />
-        {/* Event Name */}
-        <form.Field
-          name="name"
-          children={(field) => {
-            return (
-              <Theme
-                name={
-                  field.state.meta.isTouched &&
-                  !field.state.meta.isValid &&
-                  field.state.meta.errors.length > 0
-                    ? 'red'
-                    : null
-                }
-                forceClassName
-              >
-                <Shake shakeKey={field.state.meta.errors[0]?.message}>
-                  <YStack gap="$1">
-                    <VisuallyHidden>
-                      <Label htmlFor={field.name}>Event Name</Label>
-                    </VisuallyHidden>
-                    <TextArea
-                      id={field.name}
-                      value={field.state.value}
-                      onChangeText={field.handleChange}
-                      placeholder="Event Name"
-                      flexGrow={1}
-                      unstyled
-                      fontWeight="700"
-                      placeholderTextColor="$color7"
-                      style={
-                        {
-                          fontSize: tamaguiTokens.size.$3.val,
-                          fieldSizing: 'content',
-                        } as any
-                      }
-                    />
-                    <FieldInfo field={field} />
-                  </YStack>
-                </Shake>
-              </Theme>
-            );
-          }}
-        />
-        {/* Category Selector */}
-        <form.Field
-          name="category"
-          children={(field) => {
-            return (
-              <>
-                <CategorySelector
-                  value={field.state.value}
-                  onValueChange={(value) => {
-                    field.handleChange(value);
-                  }}
-                  fieldApi={field}
-                />
-              </>
-            );
-          }}
-        />
-        {/* Start/End DateTime */}
-        <YStack gap="$2">
-          <SizableText>Date & Time</SizableText>
+    <form.AppForm>
+      <Form
+        onSubmit={() => {
+          console.log('errors', form.state.errors);
+          form.handleSubmit();
+        }}
+      >
+        <YStack gap="$4">
+          {/* Event Image */}
+          <EventImage />
+          {/* Theme Selector */}
+          <ThemeSelector
+            theme={theme}
+            onThemeChange={onThemeChange || (() => {})}
+            showThemeSheet={showThemeSheet}
+            onShowThemeSheetChange={onShowThemeSheetChange || (() => {})}
+          />
+          {/* Event Name */}
+          <form.Field
+            name="name"
+            children={(field) => {
+              return (
+                <Theme
+                  name={
+                    field.state.meta.isTouched &&
+                    !field.state.meta.isValid &&
+                    field.state.meta.errors.length > 0
+                      ? 'red'
+                      : null
+                  }
+                  forceClassName
+                >
+                  <Shake shakeKey={field.state.meta.errors[0]?.message}>
+                    <YStack gap="$1">
+                      <VisuallyHidden>
+                        <Label htmlFor={field.name}>Event Name</Label>
+                      </VisuallyHidden>
+                      <TextArea
+                        id={field.name}
+                        value={field.state.value}
+                        onChangeText={field.handleChange}
+                        placeholder="Event Name"
+                        flexGrow={1}
+                        unstyled
+                        fontWeight="700"
+                        placeholderTextColor="$color7"
+                        style={
+                          {
+                            fontSize: tamaguiTokens.size.$3.val,
+                            fieldSizing: 'content',
+                          } as any
+                        }
+                      />
+                      <FieldInfo field={field} />
+                    </YStack>
+                  </Shake>
+                </Theme>
+              );
+            }}
+          />
+          {/* Category Selector */}
+          <form.Field
+            name="category"
+            children={(field) => {
+              return (
+                <>
+                  <CategorySelector
+                    value={field.state.value}
+                    onValueChange={(value: EventCategory) => {
+                      field.handleChange(value);
+                    }}
+                    fieldApi={field}
+                  />
+                </>
+              );
+            }}
+          />
+          {/* Start/End DateTime */}
           <YStack gap="$2">
-            <Group orientation="vertical" size="$2" separator={<Separator />} borderRadius="$4">
-              <Group.Item>
-                <XStack
-                  flex={1}
-                  alignItems="center"
-                  gap="$2"
-                  px="$true"
-                  py="$1.5"
-                  borderRadius="$true"
-                  backgroundColor="$color3"
-                >
-                  <Label htmlFor="start" flex={1} fontWeight="500">
-                    Start
-                  </Label>
-                  <XStack gap="$4" alignItems="center">
-                    <form.Field
-                      name="startDate"
-                      children={(field) => {
-                        return (
-                          <input
-                            id="start"
-                            type="date"
-                            style={{ textAlign: 'center' }}
-                            min={todayDateString}
-                            defaultValue={todayDateString}
-                            onChange={(e) => {
-                              field.handleChange(e.target.value);
-                            }}
-                          />
-                        );
-                      }}
-                    />
-                    <form.Field
-                      name="startTime"
-                      children={(field) => {
-                        return (
-                          <TimePicker
-                            value={field.state.value}
-                            onChangeText={(value) => {
-                              field.handleChange(value);
-                            }}
-                          />
-                        );
-                      }}
-                    />
+            <SizableText>Date & Time</SizableText>
+            <YStack gap="$2">
+              <Group orientation="vertical" size="$2" separator={<Separator />} borderRadius="$4">
+                <Group.Item>
+                  <XStack
+                    flex={1}
+                    alignItems="center"
+                    gap="$2"
+                    px="$true"
+                    py="$1.5"
+                    borderRadius="$true"
+                    backgroundColor="$color3"
+                  >
+                    <XStack alignItems="center" gap="$2" flex={1}>
+                      <Clock2 size={16} />
+                      <Label htmlFor="start" fontWeight="500">
+                        Start
+                      </Label>
+                    </XStack>
+                    <XStack gap="$4" alignItems="center">
+                      <form.AppField
+                        name="startDate"
+                        children={(field) => {
+                          return (
+                            <input
+                              id="start"
+                              type="date"
+                              style={{ textAlign: 'center' }}
+                              min={startDate}
+                              value={field.state.value}
+                              onChange={(e) => {
+                                field.handleChange(e.target.value);
+                              }}
+                            />
+                          );
+                        }}
+                      />
+                      <form.AppField
+                        name="startTime"
+                        children={(field) => {
+                          return (
+                            <TimePicker
+                              value={field.state.value}
+                              onChangeText={(value) => {
+                                field.handleChange(value);
+                              }}
+                            />
+                          );
+                        }}
+                      />
+                    </XStack>
                   </XStack>
-                </XStack>
-              </Group.Item>
-              <Group.Item>
-                <XStack
-                  flex={1}
-                  alignItems="center"
-                  gap="$2"
-                  px="$true"
-                  py="$1.5"
-                  borderRadius="$true"
-                  backgroundColor="$color3"
-                >
-                  <Label htmlFor="end" flex={1} fontWeight="500">
-                    End
-                  </Label>
-                  <XStack gap="$4" alignItems="center">
-                    <form.Field
-                      name="endDate"
-                      children={(field) => {
-                        return (
-                          <input
-                            id="end"
-                            type="date"
-                            style={{ textAlign: 'center' }}
-                            min={todayDateString}
-                            defaultValue={todayDateString}
-                            onChange={(e) => {
-                              field.handleChange(e.target.value);
-                            }}
-                          />
-                        );
-                      }}
-                    />
-                    <form.Field
-                      name="endTime"
-                      children={(field) => {
-                        return (
-                          <TimePicker
-                            value={field.state.value}
-                            onChangeText={(value) => {
-                              field.handleChange(value);
-                            }}
-                          />
-                        );
-                      }}
-                    />
+                </Group.Item>
+                <Group.Item>
+                  <XStack
+                    flex={1}
+                    alignItems="center"
+                    gap="$2"
+                    px="$true"
+                    py="$1.5"
+                    borderRadius="$true"
+                    backgroundColor="$color3"
+                  >
+                    <XStack alignItems="center" gap="$2" flex={1}>
+                      <Clock4 size={16} />
+                      <Label htmlFor="end" fontWeight="500">
+                        End
+                      </Label>
+                    </XStack>
+                    <XStack gap="$4" alignItems="center">
+                      <form.AppField
+                        name="endDate"
+                        children={(field) => {
+                          return (
+                            <input
+                              id="end"
+                              type="date"
+                              style={{ textAlign: 'center' }}
+                              min={startDate}
+                              value={field.state.value}
+                              onChange={(e) => {
+                                field.handleChange(e.target.value);
+                              }}
+                            />
+                          );
+                        }}
+                      />
+                      <form.AppField
+                        name="endTime"
+                        children={(field) => {
+                          return (
+                            <TimePicker
+                              value={field.state.value}
+                              onChangeText={(value) => {
+                                field.handleChange(value);
+                              }}
+                            />
+                          );
+                        }}
+                      />
+                    </XStack>
                   </XStack>
-                </XStack>
-              </Group.Item>
-              <Group.Item>
-                <XStack
-                  flex={1}
-                  alignItems="center"
-                  gap="$2"
-                  px="$true"
-                  py="$1.5"
-                  borderRadius="$true"
-                  backgroundColor="$color3"
-                >
-                  <Label flex={1} fontWeight="500">
-                    Timezone
-                  </Label>
-                  <XStack gap="$4" alignItems="center">
-                    <Chip size="$4" py="$2" borderRadius="$4">
-                      <Chip.Icon>
-                        <Globe size={16} />
-                      </Chip.Icon>
-                      <Chip.Text>
-                        <SizableText mr="$2">GMT{clientTimezone.offset}</SizableText>
-                        <SizableText>{clientTimezone.city}</SizableText>
-                      </Chip.Text>
-                    </Chip>
+                </Group.Item>
+                <Group.Item>
+                  <XStack
+                    flex={1}
+                    alignItems="center"
+                    gap="$2"
+                    px="$true"
+                    py="$1.5"
+                    borderRadius="$true"
+                    backgroundColor="$color3"
+                  >
+                    <XStack alignItems="center" gap="$2" flex={1}>
+                      <Globe size={16} />
+                      <Label fontWeight="500">Timezone</Label>
+                    </XStack>
+                    <XStack gap="$4" alignItems="center">
+                      <Chip size="$3" py="$2" borderRadius="$4">
+                        <Chip.Text>
+                          <SizableText mr="$2">GMT{clientTimezone.offset}</SizableText>
+                          <SizableText>{clientTimezone.city}</SizableText>
+                        </Chip.Text>
+                      </Chip>
+                    </XStack>
                   </XStack>
-                </XStack>
-              </Group.Item>
-            </Group>
+                </Group.Item>
+              </Group>
+            </YStack>
           </YStack>
-        </YStack>
-        <YStack gap="$2">
-          <SizableText>Event Details</SizableText>
-          <YGroup
-            backgroundColor="$color3"
-            orientation="vertical"
-            separator={<Separator />}
-            borderRadius="$4"
-          >
-            <YGroup.Item>
-              <form.Field
-                name="location"
-                children={(field) => {
-                  return (
-                    <LocationButton
-                      location={field.state.value}
-                      onPress={() => setShowLocationSheet(true)}
-                    />
-                  );
-                }}
-              />
-            </YGroup.Item>
-            <YGroup.Item>
-              <form.Field
-                name="description"
-                children={(field) => {
-                  return (
-                    <DescriptionButton
-                      description={field.state.value}
-                      onPress={() => setShowDescriptionSheet(true)}
-                    />
-                  );
-                }}
-              />
-            </YGroup.Item>
-          </YGroup>
-        </YStack>
-        {/* Ticketing */}
-        <YStack gap="$2">
-          <SizableText>Ticketing</SizableText>
+          <YStack gap="$2">
+            <SizableText>Event Details</SizableText>
+            <YGroup
+              backgroundColor="$color3"
+              orientation="vertical"
+              separator={<Separator />}
+              borderRadius="$4"
+            >
+              <YGroup.Item>
+                <form.Field
+                  name="location"
+                  children={(field) => {
+                    return (
+                      <LocationButton
+                        location={field.state.value}
+                        onPress={() => setShowLocationSheet(true)}
+                      />
+                    );
+                  }}
+                />
+              </YGroup.Item>
+              <YGroup.Item>
+                <form.Field
+                  name="description"
+                  children={(field) => {
+                    return (
+                      <DescriptionButton
+                        description={field.state.value}
+                        onPress={() => setShowDescriptionSheet(true)}
+                      />
+                    );
+                  }}
+                />
+              </YGroup.Item>
+            </YGroup>
+          </YStack>
+          {/* Ticketing */}
+          <YStack gap="$2">
+            <SizableText>Ticketing</SizableText>
+            <form.Field
+              name="tickets"
+              mode="array"
+              children={(field) => {
+                return (
+                  <TicketingButton
+                    tickets={field.state.value}
+                    onPress={() => setShowTicketingSheet(true)}
+                  />
+                );
+              }}
+            />
+          </YStack>
+          {/* Submit Button */}
+          <YStack py="$4" borderColor="$color3">
+            <Form.Trigger asChild>
+              <form.SubmitButton
+                size="$4"
+                themeInverse
+                fontWeight="600"
+                width="100%"
+                marginHorizontal="auto"
+              >
+                Create Event
+              </form.SubmitButton>
+            </Form.Trigger>
+          </YStack>
+          {/* Location Sheet */}
+          <EventLocationSheet
+            form={form}
+            open={showLocationSheet}
+            onOpenChange={setShowLocationSheet}
+          />
+          {/* Description Sheet */}
+          <form.Field
+            name="description"
+            children={(field) => {
+              return (
+                <EventDescriptionSheet
+                  open={showDescriptionSheet}
+                  onOpenChange={setShowDescriptionSheet}
+                  description={field.state.value}
+                  onDescriptionChange={(description) => {
+                    field.handleChange(description);
+                  }}
+                />
+              );
+            }}
+          />
+          {/* Ticketing Sheet */}
           <form.Field
             name="tickets"
             mode="array"
             children={(field) => {
               return (
-                <TicketingButton
+                <EventTicketingSheet
+                  open={showTicketingSheet}
+                  onOpenChange={setShowTicketingSheet}
                   tickets={field.state.value}
-                  onPress={() => setShowTicketingSheet(true)}
+                  onTicketsChange={(tickets) => {
+                    field.handleChange(tickets);
+                  }}
                 />
               );
             }}
           />
         </YStack>
-        {/* Submit Button */}
-        <YStack py="$4" borderColor="$color3">
-          <Form.Trigger asChild>
-            <Button
-              size="$4"
-              themeInverse
-              fontWeight="600"
-              width="100%"
-              marginHorizontal="auto"
-              disabled={isLoading}
-            >
-              {isLoading ? 'Creating...' : 'Create Event'}
-            </Button>
-          </Form.Trigger>
-        </YStack>
-        {/* Location Sheet */}
-        <form.Field
-          name="location"
-          children={(field) => {
-            return (
-              <EventLocationSheet
-                open={showLocationSheet}
-                onOpenChange={setShowLocationSheet}
-                location={field.state.value}
-                onLocationChange={(location) => {
-                  field.handleChange(location);
-                }}
-              />
-            );
-          }}
-        />
-        {/* Description Sheet */}
-        <form.Field
-          name="description"
-          children={(field) => {
-            return (
-              <EventDescriptionSheet
-                open={showDescriptionSheet}
-                onOpenChange={setShowDescriptionSheet}
-                description={field.state.value}
-                onDescriptionChange={(description) => {
-                  field.handleChange(description);
-                }}
-              />
-            );
-          }}
-        />
-        {/* Ticketing Sheet */}
-        <form.Field
-          name="tickets"
-          mode="array"
-          children={(field) => {
-            return (
-              <EventTicketingSheet
-                open={showTicketingSheet}
-                onOpenChange={setShowTicketingSheet}
-                tickets={field.state.value}
-                onTicketsChange={(tickets) => {
-                  field.handleChange(tickets);
-                }}
-              />
-            );
-          }}
-        />
-      </YStack>
-    </Form>
+      </Form>
+    </form.AppForm>
   );
 }
