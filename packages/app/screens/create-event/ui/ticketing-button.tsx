@@ -48,7 +48,7 @@ export function TicketingButton({ tickets, onPress }: TicketingButtonProps) {
     <Button
       justifyContent="space-between"
       backgroundColor="$color3"
-      iconAfter={<Ticket size={16} />}
+      icon={<Ticket size={16} />}
       onPress={onPress}
     >
       <Text>Tickets{getTicketCount()}</Text>
