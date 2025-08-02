@@ -1,9 +1,7 @@
-import { TimePicker, Chip, Shake } from '@my/ui';
-import { Globe, Clock4, Clock2 } from '@tamagui/lucide-icons';
-import { useAppForm } from 'app/shared/lib/form';
-import { FieldInfo } from 'app/shared/ui/FieldInfo';
-import { useState } from 'react';
 import {
+  TimePicker,
+  Chip,
+  Shake,
   Label,
   XStack,
   YStack,
@@ -16,7 +14,11 @@ import {
   YGroup,
   Form,
   Theme,
-} from 'tamagui';
+} from '@my/ui';
+import { Globe, Clock4, Clock2 } from '@tamagui/lucide-icons';
+import { useAppForm } from 'app/shared/lib/form';
+import { FieldInfo } from 'app/shared/ui/FieldInfo';
+import { useState } from 'react';
 
 import {
   EventImage,
@@ -90,6 +92,7 @@ export function CreateEventForm({
       });
     },
     onSubmitInvalid: ({ formApi }) => {
+      console.log('onSubmitInvalid');
       console.log('form values', formApi.state.values);
       console.log('errors', formApi.state.errors);
     },
@@ -99,7 +102,8 @@ export function CreateEventForm({
     <form.AppForm>
       <Form
         onSubmit={() => {
-          console.log('errors', form.state.errors);
+          console.log('errors', form.state.errors[0]?.['endTime']?.[0]);
+          // console.log('values', form.state.values);
           form.handleSubmit();
         }}
       >
@@ -229,54 +233,58 @@ export function CreateEventForm({
                   </XStack>
                 </Group.Item>
                 <Group.Item>
-                  <XStack
-                    flex={1}
-                    alignItems="center"
-                    gap="$2"
-                    px="$true"
-                    py="$1.5"
-                    borderRadius="$true"
-                    backgroundColor="$color3"
-                  >
-                    <XStack alignItems="center" gap="$2" flex={1}>
-                      <Clock4 size={16} />
-                      <Label htmlFor="end" fontWeight="500">
-                        End
-                      </Label>
-                    </XStack>
-                    <XStack gap="$4" alignItems="center">
-                      <form.AppField
-                        name="endDate"
-                        children={(field) => {
-                          return (
-                            <input
-                              id="end"
-                              type="date"
-                              style={{ textAlign: 'center' }}
-                              min={startDate}
-                              value={field.state.value}
-                              onChange={(e) => {
-                                field.handleChange(e.target.value);
-                              }}
-                            />
-                          );
-                        }}
-                      />
-                      <form.AppField
-                        name="endTime"
-                        children={(field) => {
-                          return (
-                            <TimePicker
-                              value={field.state.value}
-                              onChangeText={(value) => {
-                                field.handleChange(value);
-                              }}
-                            />
-                          );
-                        }}
-                      />
-                    </XStack>
-                  </XStack>
+                  <form.Subscribe selector={(state) => state.errors[0]?.['endTime']?.[0]}>
+                    {(error) => (
+                      <XStack
+                        theme={error ? 'red_alt1' : null}
+                        flex={1}
+                        alignItems="center"
+                        gap="$2"
+                        px="$true"
+                        py="$1.5"
+                        backgroundColor="$color3"
+                      >
+                        <XStack alignItems="center" gap="$2" flex={1}>
+                          <Clock4 size={16} />
+                          <Label htmlFor="end" fontWeight="500">
+                            End
+                          </Label>
+                        </XStack>
+                        <XStack gap="$4" alignItems="center">
+                          <form.AppField
+                            name="endDate"
+                            children={(field) => {
+                              return (
+                                <input
+                                  id="end"
+                                  type="date"
+                                  style={{ textAlign: 'center' }}
+                                  min={startDate}
+                                  value={field.state.value}
+                                  onChange={(e) => {
+                                    field.handleChange(e.target.value);
+                                  }}
+                                />
+                              );
+                            }}
+                          />
+                          <form.AppField
+                            name="endTime"
+                            children={(field) => {
+                              return (
+                                <TimePicker
+                                  value={field.state.value}
+                                  onChangeText={(value) => {
+                                    field.handleChange(value);
+                                  }}
+                                />
+                              );
+                            }}
+                          />
+                        </XStack>
+                      </XStack>
+                    )}
+                  </form.Subscribe>
                 </Group.Item>
                 <Group.Item>
                   <XStack
