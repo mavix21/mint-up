@@ -104,7 +104,6 @@ export const createEventFormSchema = z
 
     description: z
       .string()
-      .min(1, 'Event description is required')
       .max(2000, 'Description too long')
       .transform((val) => val.trim()),
 
