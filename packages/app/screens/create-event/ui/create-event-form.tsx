@@ -374,9 +374,8 @@ export function CreateEventForm({
                 fontWeight="600"
                 width="100%"
                 marginHorizontal="auto"
-              >
-                Create Event
-              </form.SubmitButton>
+                label="Create Event"
+              />
             </Form.Trigger>
           </YStack>
           {/* Location Sheet */}
