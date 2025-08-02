@@ -131,7 +131,6 @@ export function TimePicker({
   ref: inputRef,
 }: TimePickerProps) {
   const [open, setOpen] = useState(false);
-  console.log('value', value);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
