@@ -131,18 +131,16 @@ export function TimePicker({
   ref: inputRef,
 }: TimePickerProps) {
   const [open, setOpen] = useState(false);
-  const [timeValue, setTimeValue] = useState(value || '');
+  console.log('value', value);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
-    setTimeValue(newValue);
     if (onChangeText) {
       onChangeText(newValue);
     }
   };
 
   const handleTimeOptionSelect = (selectedValue: string) => {
-    setTimeValue(selectedValue);
     if (onChangeText) {
       onChangeText(selectedValue);
     }
@@ -163,7 +161,7 @@ export function TimePicker({
   if (isWebTouchable) {
     return (
       <TimeInput
-        value={timeValue}
+        value={value || ''}
         onChange={handleInputChange}
         disabled={disabled}
         id={id}
@@ -178,7 +176,7 @@ export function TimePicker({
       <Popover.Trigger asChild>
         <Button onPress={() => setOpen(true)} unstyled>
           <TimeInput
-            value={timeValue}
+            value={value || ''}
             onChange={handleInputChange}
             disabled={disabled}
             id={id}
@@ -190,7 +188,10 @@ export function TimePicker({
 
       <Popover.Content zIndex={200000} p="$2" backgroundColor="$color1">
         <Popover.ScrollView>
-          <TimeOptionsList timeValue={timeValue} handleTimeOptionSelect={handleTimeOptionSelect} />
+          <TimeOptionsList
+            timeValue={value || ''}
+            handleTimeOptionSelect={handleTimeOptionSelect}
+          />
         </Popover.ScrollView>
       </Popover.Content>
 
