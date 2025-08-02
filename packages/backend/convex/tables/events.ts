@@ -22,7 +22,8 @@ export const eventsTable = defineTable({
     v.literal('education & learning'),
     v.literal('community & causes'),
     v.literal('parties & socials'),
-    v.literal('hobbies & interests')
+    v.literal('hobbies & interests'),
+    v.literal('other')
   ),
   location: v.union(
     v.object({
