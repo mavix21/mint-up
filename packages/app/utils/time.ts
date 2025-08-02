@@ -1,48 +1,63 @@
 export interface EventTimes {
   startTime: string;
   endTime: string;
-  shouldIncrementDate: boolean;
+  startDate: string;
+  endDate: string;
 }
 
 /**
- * Calculate one hour after a given time and determine if date should change
+ * Calculate one hour after a given time
  * @param time - Time string in HH:mm format
- * @returns Object with end time and whether date should increment
+ * @returns End time in HH:mm format
  */
-export function calculateOneHourAfter(time: string): {
-  endTime: string;
-  shouldIncrementDate: boolean;
-} {
+export function calculateOneHourAfter(time: string): string {
   const [hours, minutes] = time.split(':').map(Number);
   const endHour = (hours + 1) % 24;
-  const endTime = `${endHour.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
-  const shouldIncrementDate = endHour === 0; // If end hour is 00:xx, we've crossed midnight
-  return { endTime, shouldIncrementDate };
+  return `${endHour.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
 }
 
 /**
  * Calculate the closest 30-minute interval to the current time
- * @returns EventTimes object with start and end times in HH:mm format
+ * @returns EventTimes object with start and end times and dates
  */
 export function calculateDefaultEventTimes(): EventTimes {
   const now = new Date();
   const currentHour = now.getHours();
   const currentMinute = now.getMinutes();
 
-  // Round to nearest 30-minute interval
-  const roundedMinute = Math.round(currentMinute / 30) * 30;
-  const adjustedHour = roundedMinute === 60 ? currentHour + 1 : currentHour;
-  const finalMinute = roundedMinute === 60 ? 0 : roundedMinute;
+  // Round to next 30-minute interval
+  let roundedMinute: number;
+  let adjustedHour: number;
+
+  if (currentMinute < 30) {
+    // Round to next 30-minute mark (e.g., 7:15 → 7:30, 7:45 → 8:00)
+    roundedMinute = 30;
+    adjustedHour = currentHour;
+  } else {
+    // Round to next hour (e.g., 7:45 → 8:00, 8:15 → 8:30)
+    roundedMinute = 0;
+    adjustedHour = (currentHour + 1) % 24;
+  }
 
   // Format start time (HH:mm)
-  const startTime = `${adjustedHour.toString().padStart(2, '0')}:${finalMinute
+  const startTime = `${adjustedHour.toString().padStart(2, '0')}:${roundedMinute
     .toString()
     .padStart(2, '0')}`;
 
-  // End time is 1 hour after start time
-  const { endTime, shouldIncrementDate } = calculateOneHourAfter(startTime);
+  // Calculate end time
+  const endTime = calculateOneHourAfter(startTime);
 
-  return { startTime, endTime, shouldIncrementDate };
+  // Determine dates
+  const today = getTodayDateString();
+  const tomorrow = getTomorrowDateString();
+
+  // If start time is 00:xx (midnight), use tomorrow's date
+  const startDate = adjustedHour === 0 ? tomorrow : today;
+
+  // If end time is 00:xx (midnight), use tomorrow's date
+  const endDate = endTime.startsWith('00:') ? tomorrow : startDate;
+
+  return { startTime, endTime, startDate, endDate };
 }
 
 /**
@@ -54,6 +69,19 @@ export function getTodayDateString(): string {
   const year = now.getFullYear();
   const month = String(now.getMonth() + 1).padStart(2, '0');
   const day = String(now.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
+/**
+ * Get tomorrow's date in YYYY-MM-DD format for HTML date inputs
+ * @returns Tomorrow's date as a string
+ */
+export function getTomorrowDateString(): string {
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  const year = tomorrow.getFullYear();
+  const month = String(tomorrow.getMonth() + 1).padStart(2, '0');
+  const day = String(tomorrow.getDate()).padStart(2, '0');
   return `${year}-${month}-${day}`;
 }
 
