@@ -142,12 +142,14 @@ export function EventCard({
           >
             {event.userRole === 'host' ? 'Manage Event' : 'View Ticket'}
           </Button> */}
+            {/*
             <Link href={`/events/manage/${event._id}`}>
               <Button size="$2" icon={ArrowRight}>
-                {/* {event.userRole === 'host' ? 'Manage Event' : 'View Ticket'} */}
+                // {event.userRole === 'host' ? 'Manage Event' : 'View Ticket'}
                 Manage Event
               </Button>
             </Link>
+            */}
           </View>
         </YStack>
 
