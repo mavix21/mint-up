@@ -77,7 +77,15 @@ export function EventModal({
               justifyContent="center"
               zIndex={1000}
             >
-              <Button size="$2" circular borderWidth={1} onPress={() => setToggleEvent(false)}>
+              <Button
+                size="$2"
+                circular
+                borderWidth={1}
+                onPress={() => {
+                  console.log('Hola');
+                  setToggleEvent(false);
+                }}
+              >
                 ✕
               </Button>
             </XStack>

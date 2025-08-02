@@ -16,11 +16,7 @@ export function RegistersAvatar({ eventId }: { eventId: string }) {
       <AvatarGroup
         size="$3"
         items={registers.map((register) => (
-          <Item
-            key={register._id}
-            size="$2"
-            imageUrl="https://images.unsplash.com/photo-1736754079614-8b43bcba9926?w=100"
-          />
+          <Item key={register._id} size="$2" imageUrl={register.assistant?.pfpUrl ?? ''} />
         ))}
       />
     )

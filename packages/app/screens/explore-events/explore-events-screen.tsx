@@ -47,11 +47,13 @@ export const ExploreEventsScreen = () => {
     <YStack>
       <XStack alignItems="center" space="$2" px="$4" pt="$5">
         <Input flex={1} size="$2" placeholder="Search" />
-        <Button size="$2">
+        {/* //**TODO: See what filter put here*/}
+        {/* <Button size="$2">
           <ListFilter size="$1" />
-        </Button>
+        </Button> */}
       </XStack>
-      <View f={1} w="100%" h="$12">
+      {/* //**TODO: See what info show here*/}
+      {/* <View f={1} w="100%" h="$12">
         <ScrollView
           {...(isWeb && {
             ai: 'center',
@@ -67,8 +69,8 @@ export const ExploreEventsScreen = () => {
             ))}
           </View>
         </ScrollView>
-      </View>
-      <YStack px="$4">
+      </View> */}
+      <YStack px="$4" pt="$4">
         <View>
           <Text fontSize="$3">Trending</Text>
         </View>
@@ -112,7 +114,7 @@ export const ExploreEventsScreen = () => {
           })}
         </XStack>
       </ScrollView>
-      <YStack flex={1} overflow="scroll" maxHeight={'60vh' as any} $lg={{ paddingBottom: '$14' }}>
+      <YStack flex={1} overflow="scroll" maxHeight={'75vh' as any} $lg={{ paddingBottom: '$14' }}>
         {events?.map((event) => {
           return <ItemCardList key={event._id} id={event._id} />;
         })}

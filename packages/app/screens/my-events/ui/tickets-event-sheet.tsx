@@ -16,7 +16,7 @@ export function TicketsEventSheet({
   ticketList,
 }: TicketsEventSheetProps) {
   const [value, setValue] = React.useState(ticketList[0]._id);
-  console.log('value', value);
+
   // Reset local state when sheet opens
   const handleOpenChange = (isOpen: boolean) => {
     onOpenChange(isOpen);

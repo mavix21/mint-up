@@ -6,8 +6,8 @@ import { useQuery } from 'convex/react';
 import React from 'react';
 import { useParams } from 'solito/navigation';
 
-import { RegistersAvatar } from '../explore-events/ui/RegistersAvatar';
 import { EventModal } from '../my-events/ui/event-modal';
+import { RegistersAvatar } from '../explore-events/ui/RegistersAvatar';
 
 export const EventDescriptionScreen = () => {
   const { id } = useParams<{ id: string }>();
@@ -18,7 +18,6 @@ export const EventDescriptionScreen = () => {
   if (event === undefined) {
     return <Text>Loading</Text>;
   }
-  const shortDescription = (event.description.substring(0, 150) ?? '') + '...';
 
   return (
     <Card

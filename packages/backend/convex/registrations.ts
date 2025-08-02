@@ -6,9 +6,19 @@ export const getRegistrationsByEventId = query({
     eventId: v.id('events'),
   },
   handler: async (ctx, args) => {
-    return await ctx.db
+    const registrations = await ctx.db
       .query('registrations')
       .filter((q) => q.eq(q.field('eventId'), args.eventId))
       .take(5);
+
+    return Promise.all(
+      registrations.map(async (registration) => {
+        const assistant = await ctx.db.get(registration.userId);
+        return {
+          ...registration,
+          assistant,
+        };
+      })
+    );
   },
 });

@@ -36,7 +36,6 @@ export function ItemCardList({ id }: { id: string }) {
         // onPress={() => router.push(`/events/detail/${event._id}`)}
         onPress={() => setToggleEvent(true)}
       >
-        <EventModal toggleEvent={toggleEvent} setToggleEvent={setToggleEvent} eventData={event} />
         <XStack space="$3" alignItems="center">
           {/* App Icon */}
           <Image
@@ -67,6 +66,7 @@ export function ItemCardList({ id }: { id: string }) {
           </YStack>
         </XStack>
       </Card>
+      <EventModal toggleEvent={toggleEvent} setToggleEvent={setToggleEvent} eventData={event} />
     </Theme>
   );
 }
