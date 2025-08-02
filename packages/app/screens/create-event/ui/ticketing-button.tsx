@@ -1,6 +1,5 @@
 import { Ticket } from '@tamagui/lucide-icons';
-import { formatTicketText, getTicketColor, getTicketCountText } from 'app/shared';
-import { Button, Text } from 'tamagui';
+import { Button, SizableText } from 'tamagui';
 
 import { TicketType } from '../../../entities';
 
@@ -46,15 +45,15 @@ export function TicketingButton({ tickets, onPress }: TicketingButtonProps) {
 
   return (
     <Button
-      justifyContent="space-between"
+      justifyContent="flex-start"
       backgroundColor="$color3"
       icon={<Ticket size={16} />}
       onPress={onPress}
     >
-      <Text>Tickets{getTicketCount()}</Text>
-      <Text color={getTicketColor()} ml="$2">
+      <SizableText flex={1}>Tickets{getTicketCount()}</SizableText>
+      <SizableText color={getTicketColor()} ml="$2">
         {getTicketText()}
-      </Text>
+      </SizableText>
     </Button>
   );
 }
