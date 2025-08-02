@@ -49,9 +49,9 @@ export const ticketTypeSchema = z.discriminatedUnion('type', [
 const dateStringSchema = z.string().refine(
   (date) => {
     const parsed = new Date(date);
-    return !isNaN(parsed.getTime()) && parsed >= new Date();
+    return !isNaN(parsed.getTime());
   },
-  { message: 'Date must be valid and not in the past' }
+  { message: 'Date must be valid' }
 );
 
 const timeStringSchema = z
@@ -122,18 +122,19 @@ export const createEventFormSchema = z
       message: 'End date/time must be after start date/time',
       path: ['endTime'], // This will show the error on the endTime field
     }
-  )
-  .refine(
-    (data) => {
-      const startDateTime = new Date(`${data.startDate}T${data.startTime}`);
-      const now = new Date();
-      return startDateTime > now;
-    },
-    {
-      message: 'Event must start in the future',
-      path: ['startDate'],
-    }
   );
+// .refine(
+//   (data) => {
+//     const startDateTime = new Date(`${data.startDate}T${data.startTime}`);
+//     const now = new Date();
+//     // Compare full datetime values, not just dates
+//     return startDateTime > now;
+//   },
+//   {
+//     message: 'Event must start in the future',
+//     path: ['startDate'],
+//   }
+// );
 
 // Schema for generating new ticket IDs
 export const generateTicketId = () => crypto.randomUUID();
