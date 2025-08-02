@@ -31,8 +31,8 @@ export function RegistersAvatar({ eventId }: { eventId: string }) {
   // Add remaining count circle if there are more than 5 total registers
   if (remainingCount > 0) {
     avatarItems.push(
-      <Circle key="remaining" size="$2" backgroundColor="$accentBackground" elevation="$4">
-        <Text color="$black10" fontSize="$1" fontWeight="bold">
+      <Circle key="remaining" size="$2" backgroundColor="$color" elevation="$4">
+        <Text color="$background" fontSize="$1">
           +{remainingCount}
         </Text>
       </Circle>
