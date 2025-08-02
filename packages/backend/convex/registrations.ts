@@ -22,3 +22,17 @@ export const getRegistrationsByEventId = query({
     );
   },
 });
+
+export const getRegistrationsByEventIdCount = query({
+  args: {
+    eventId: v.id('events'),
+  },
+  returns: v.number(),
+  handler: async (ctx, args) => {
+    const count = await ctx.db
+      .query('registrations')
+      .filter((q) => q.eq(q.field('eventId'), args.eventId))
+      .collect();
+    return count.length;
+  },
+});

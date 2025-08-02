@@ -1,6 +1,6 @@
 import { api } from '@my/backend/_generated/api';
 import { Id } from '@my/backend/_generated/dataModel';
-import { Text } from '@my/ui';
+import { Circle, Text, XStack } from '@my/ui';
 import { useQuery } from 'convex/react';
 
 import { AvatarGroup } from './AvatarGroup';
@@ -11,14 +11,37 @@ export function RegistersAvatar({ eventId }: { eventId: string }) {
     eventId: eventId as Id<'events'>,
   });
 
+  const numberOfTotalRegisters = useQuery(api.registrations.getRegistrationsByEventIdCount, {
+    eventId: eventId as Id<'events'>,
+  });
+
+  if (!registers?.length) return null;
+
+  // Show only first 5 registers
+  const visibleRegisters = registers.slice(0, 5);
+
+  // Calculate remaining count
+  const remainingCount = (numberOfTotalRegisters || 0) - visibleRegisters.length;
+
+  // Create items for AvatarGroup
+  const avatarItems = visibleRegisters.map((register) => (
+    <Item key={register._id} size="$2" imageUrl={register.assistant?.pfpUrl ?? ''} />
+  ));
+
+  // Add remaining count circle if there are more than 5 total registers
+  if (remainingCount > 0) {
+    avatarItems.push(
+      <Circle key="remaining" size="$2" backgroundColor="$accentBackground" elevation="$4">
+        <Text color="$black10" fontSize="$1" fontWeight="bold">
+          +{remainingCount}
+        </Text>
+      </Circle>
+    );
+  }
+
   return (
-    registers && (
-      <AvatarGroup
-        size="$3"
-        items={registers.map((register) => (
-          <Item key={register._id} size="$2" imageUrl={register.assistant?.pfpUrl ?? ''} />
-        ))}
-      />
-    )
+    <XStack>
+      <AvatarGroup size="$3" items={avatarItems} />
+    </XStack>
   );
 }

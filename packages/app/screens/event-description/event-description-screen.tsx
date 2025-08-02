@@ -6,8 +6,8 @@ import { useQuery } from 'convex/react';
 import React from 'react';
 import { useParams } from 'solito/navigation';
 
-import { EventModal } from '../my-events/ui/event-modal';
 import { RegistersAvatar } from '../explore-events/ui/RegistersAvatar';
+import { EventModal } from '../my-events/ui/event-modal';
 
 export const EventDescriptionScreen = () => {
   const { id } = useParams<{ id: string }>();
