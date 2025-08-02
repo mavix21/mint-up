@@ -16,7 +16,7 @@ export const EventDescriptionScreen = () => {
   });
   const [toggleEvent, setToggleEvent] = React.useState(false);
   if (event === undefined) {
-    return <Text>Loading</Text>;
+    return <Text>Loading event-description-screen</Text>;
   }
 
   return (

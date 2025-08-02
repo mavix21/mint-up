@@ -20,7 +20,7 @@ export function EventCard({
   const [toggleEvent, setToggleEvent] = useState(false);
   //const imageUrl = event.poapImageUrl ?? event.nftTicketImageUrl;
   //const showDimmed = isPast && !event.poapImageUrl;
-  
+
   return (
     <>
       <Theme name={event.theme as any}>

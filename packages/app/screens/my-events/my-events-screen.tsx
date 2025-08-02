@@ -1,7 +1,6 @@
 import { api } from '@my/backend/_generated/api';
 import { Doc } from '@my/backend/_generated/dataModel';
 import { FullscreenSpinner, H3, SizableText, Tabs, Text, View, YStack } from '@my/ui';
-import { formatRelativeDate } from '@my/ui/src/lib/dates';
 import {
   formatRelativeDate as formatRelativeDateShared,
   getDayOfWeek,
@@ -11,6 +10,7 @@ import { useQuery } from 'convex/react';
 import React from 'react';
 
 import { EventCard } from './ui/event-card';
+import { CardSkeleton } from '../../shared/ui/CardSkeleton';
 
 // Define the type for events returned by getUpcomingEvents
 export type ConvexEventWithExtras = Doc<'events'> & {
@@ -24,7 +24,15 @@ export const MyEventsScreen = () => {
 
   const [activeTab, setActiveTab] = React.useState('upcoming');
 
-  if (!upcomingEvents) return <FullscreenSpinner />; // TODO: improve skeleton
+  // if (!upcomingEvents)
+  //   return (
+  //     <YStack>
+  //       <CardSkeleton />
+  //       <CardSkeleton />
+  //       <CardSkeleton />
+  //       <CardSkeleton />
+  //     </YStack>
+  //   ); // TODO: improve skeleton
   if (!pastEvents) return <FullscreenSpinner />; // TODO: improve skeleton
 
   return (
@@ -66,44 +74,53 @@ export const MyEventsScreen = () => {
         </Tabs.List>
 
         <Tabs.Content value="upcoming" overflowBlock="scroll" height="100%" paddingBottom={160}>
-          {groupByDate(
-            upcomingEvents,
-            (event) => {
-              const date = new Date(event.startDate);
-              return date.toISOString().split('T')[0];
-            },
-            activeTab === 'upcoming' ? 'asc' : 'desc'
-          ).map(([dateKey, events], index) => (
-            <View key={dateKey} pos="relative">
-              <View pos="absolute" bottom={0} left={4} top={16} w="$0.25" bg="$gray6" />
+          {upcomingEvents ? (
+            groupByDate(
+              upcomingEvents,
+              (event) => {
+                const date = new Date(event.startDate);
+                return date.toISOString().split('T')[0];
+              },
+              activeTab === 'upcoming' ? 'asc' : 'desc'
+            ).map(([dateKey, events], index) => (
+              <View key={dateKey} pos="relative">
+                <View pos="absolute" bottom={0} left={4} top={16} w="$0.25" bg="$gray6" />
 
-              <View mb="$9">
-                <View pos="relative" pl="$5">
-                  <View
-                    theme="green"
-                    bg="$color8"
-                    pos="absolute"
-                    left={1}
-                    top={3}
-                    h="$0.75"
-                    w="$0.75"
-                    borderRadius="$5"
-                  />
-                  <View mb="$4">
-                    <SizableText fontSize="$2" color="$color11">
-                      {formatRelativeDateShared(events[0]?.startDate)}
-                    </SizableText>
-                    <SizableText fontSize="$2">{getDayOfWeek(events[0]?.startDate)}</SizableText>
+                <View mb="$9">
+                  <View pos="relative" pl="$5">
+                    <View
+                      theme="green"
+                      bg="$color8"
+                      pos="absolute"
+                      left={1}
+                      top={3}
+                      h="$0.75"
+                      w="$0.75"
+                      borderRadius="$5"
+                    />
+                    <View mb="$4">
+                      <SizableText fontSize="$2" color="$color11">
+                        {formatRelativeDateShared(events[0]?.startDate)}
+                      </SizableText>
+                      <SizableText fontSize="$2">{getDayOfWeek(events[0]?.startDate)}</SizableText>
+                    </View>
+                    <YStack gap="$4">
+                      {events.map((event) => (
+                        <EventCard key={event._id} event={event} isPast index={index} />
+                      ))}
+                    </YStack>
                   </View>
-                  <YStack gap="$4">
-                    {events.map((event) => (
-                      <EventCard key={event._id} event={event} isPast index={index} />
-                    ))}
-                  </YStack>
                 </View>
               </View>
-            </View>
-          ))}
+            ))
+          ) : (
+            <YStack>
+              <CardSkeleton />
+              <CardSkeleton />
+              <CardSkeleton />
+              <CardSkeleton />
+            </YStack>
+          )}
         </Tabs.Content>
 
         <Tabs.Content

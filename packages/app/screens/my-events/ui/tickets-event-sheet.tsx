@@ -23,7 +23,7 @@ export function TicketsEventSheet({
   };
 
   if (ticketList === undefined) {
-    return <Text>Loading...</Text>;
+    return <Text>Loading tickers-event-sheet</Text>;
   }
 
   return (

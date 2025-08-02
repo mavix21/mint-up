@@ -3,6 +3,7 @@ import { Id } from '@my/backend/_generated/dataModel';
 import { YStack, Text, XStack, Card, Image, View, Chip, Theme } from '@my/ui';
 import { formatDate, formatDateTime, formatRelativeDate } from '@my/ui/src/lib/dates';
 import { EventModal } from 'app/screens/my-events/ui/event-modal';
+import { SmallCardSkeleton } from 'app/shared/ui/SmallCardSkeleton';
 import { useQuery } from 'convex/react';
 import React from 'react';
 
@@ -16,7 +17,11 @@ export function ItemCardList({ id }: { id: string }) {
   const [toggleEvent, setToggleEvent] = React.useState(false);
 
   if (event === undefined) {
-    return <Text>Loading</Text>;
+    return (
+      <View alignItems="center">
+        <SmallCardSkeleton />
+      </View>
+    );
   }
 
   return (

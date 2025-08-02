@@ -38,7 +38,11 @@ export function EventModal({
   });
 
   if (ticketList === undefined) {
-    return <Text>Loading...</Text>;
+    return (
+      <Sheet open={false}>
+        <Text>Loading event-modal</Text>;
+      </Sheet>
+    );
   }
 
   return (
@@ -82,7 +86,6 @@ export function EventModal({
                 circular
                 borderWidth={1}
                 onPress={() => {
-                  console.log('Hola');
                   setToggleEvent(false);
                 }}
               >
