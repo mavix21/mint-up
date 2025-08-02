@@ -21,7 +21,7 @@ export function LocationButton({ location, onPress }: LocationButtonProps) {
     <Button
       justifyContent="space-between"
       backgroundColor="$color3"
-      iconAfter={getLocationIcon()}
+      icon={getLocationIcon()}
       onPress={onPress}
     >
       <SizableText>Location</SizableText>
