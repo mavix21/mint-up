@@ -1,3 +1,4 @@
+import { FileText } from '@tamagui/lucide-icons';
 import { formatDescriptionText, getDescriptionColor } from 'app/shared';
 import { Button, SizableText } from 'tamagui';
 
@@ -8,7 +9,12 @@ export interface DescriptionButtonProps {
 
 export function DescriptionButton({ description, onPress }: DescriptionButtonProps) {
   return (
-    <Button justifyContent="flex-start" backgroundColor="$color3" onPress={onPress}>
+    <Button
+      justifyContent="flex-start"
+      backgroundColor="$color3"
+      icon={<FileText size={16} />}
+      onPress={onPress}
+    >
       <SizableText>Description</SizableText>
       {description && description.trim() !== '' && (
         <SizableText
