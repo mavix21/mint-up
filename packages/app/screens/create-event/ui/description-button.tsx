@@ -12,10 +12,10 @@ export function DescriptionButton({ description, onPress }: DescriptionButtonPro
     <Button
       justifyContent="flex-start"
       backgroundColor="$color3"
-      icon={<FileText size={16} />}
+      icon={<FileText color="$color11" size={16} />}
       onPress={onPress}
     >
-      <SizableText>Description</SizableText>
+      <SizableText color="$color11">Description</SizableText>
       {description && description.trim() !== '' && (
         <SizableText
           color={getDescriptionColor(description) as any}
