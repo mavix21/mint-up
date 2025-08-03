@@ -86,10 +86,15 @@ export function EventModal({
                 circular
                 chromeless
                 borderWidth={1}
+                backgroundColor="$background025"
+                pressStyle={{
+                  backgroundColor: '$background05',
+                  borderColor: 'transparent',
+                }}
                 onPress={() => {
                   setToggleEvent(false);
                 }}
-                icon={<ChevronDown size={20} />}
+                icon={<ChevronDown size={24} />}
               />
             </XStack>
 
