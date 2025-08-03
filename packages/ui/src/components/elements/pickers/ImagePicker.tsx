@@ -1,6 +1,6 @@
 import { X, Upload } from '@tamagui/lucide-icons';
 import React, { useId, useState, useEffect, useRef } from 'react';
-import { Button, Image, Label, View, XStack, YStack } from 'tamagui';
+import { Button, Image, Label, View, YStack } from 'tamagui';
 
 import { useFilePicker } from './hooks/useFilePicker';
 
