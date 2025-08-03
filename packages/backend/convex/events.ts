@@ -1,24 +1,66 @@
 import { v } from 'convex/values';
 
-import { mutation, query } from './_generated/server';
+import { mutation, query, QueryCtx } from './_generated/server';
 import { vv } from './schema';
 import { omit } from 'convex-helpers';
-import { Id } from './_generated/dataModel';
+import { Doc, Id } from './_generated/dataModel';
+
+// Shared helper function to enrich events with common data
+async function enrichEventsWithCommonData(
+  ctx: QueryCtx,
+  events: Doc<'events'>[],
+  userId: Id<'users'> | null
+) {
+  // Get user registrations if userId is provided
+  let userRegistrations: any[] = [];
+  if (userId) {
+    userRegistrations = await ctx.db
+      .query('registrations')
+      .withIndex('by_user_and_event', (q: any) => q.eq('userId', userId))
+      .collect();
+  }
+
+  return Promise.all(
+    events.map(async (event) => {
+      const user = await ctx.db.get(event.creatorId);
+      const imageUrl = (await ctx.storage.getUrl(event.image)) ?? null;
+
+      // Get tickets for this event
+      const tickets = await ctx.db
+        .query('ticketTemplates')
+        .withIndex('by_eventId', (q: any) => q.eq('eventId', event._id))
+        .collect();
+
+      const isHost = userId ? event.creatorId === userId : false;
+
+      // Get user status if userId is provided
+      let userStatus = null;
+      if (userId && !isHost) {
+        const registration = userRegistrations.find((reg) => reg.eventId === event._id);
+        if (registration) {
+          userStatus = registration.status.type;
+        }
+      }
+
+      return {
+        ...event,
+        imageUrl,
+        tickets,
+        creator: {
+          name: user?.displayName ?? 'Anonymous',
+          imageUrl: user?.pfpUrl ?? null,
+        },
+        isHost,
+        userStatus,
+      };
+    })
+  );
+}
 
 export const getAllEvents = query({
   handler: async (ctx) => {
     const events = await ctx.db.query('events').order('desc').collect();
-    return Promise.all(
-      events.map(async (event) => {
-        const user = await ctx.db.get(event.creatorId);
-        const imageUrl = (await ctx.storage.getUrl(event.image)) ?? null;
-        return {
-          ...event,
-          creatorName: user?.displayName ?? 'Anonymous',
-          imageUrl,
-        };
-      })
-    );
+    return enrichEventsWithCommonData(ctx, events, null);
   },
 });
 
@@ -30,17 +72,7 @@ export const getUpcomingEvents = query({
       .withIndex('by_startDate', (q) => q.gt('startDate', today))
       .order('desc')
       .collect();
-    return Promise.all(
-      events.map(async (event) => {
-        const user = await ctx.db.get(event.creatorId);
-        const imageUrl = (await ctx.storage.getUrl(event.image)) ?? null;
-        return {
-          ...event,
-          creatorName: user?.displayName ?? 'Anonymous',
-          imageUrl,
-        };
-      })
-    );
+    return enrichEventsWithCommonData(ctx, events, null);
   },
 });
 
@@ -52,17 +84,7 @@ export const getPastEvents = query({
       .withIndex('by_startDate', (q) => q.lte('startDate', today))
       .order('desc')
       .collect();
-    return Promise.all(
-      events.map(async (event) => {
-        const user = await ctx.db.get(event.creatorId);
-        const imageUrl = (await ctx.storage.getUrl(event.image)) ?? null;
-        return {
-          ...event,
-          creatorName: user?.displayName ?? 'Anonymous',
-          imageUrl,
-        };
-      })
-    );
+    return enrichEventsWithCommonData(ctx, events, null);
   },
 });
 
@@ -92,30 +114,6 @@ export const getEventById = query({
   },
 });
 
-export const getEventsByCategory = query({
-  args: {
-    category: v.optional(v.string()),
-  },
-  handler: async (ctx, args) => {
-    let q = ctx.db.query('events');
-    if (args.category && args.category !== 'All') {
-      q = q.filter((q) => q.eq(q.field('category'), args.category));
-    }
-    const events = await q.order('desc').collect();
-    return Promise.all(
-      events.map(async (event) => {
-        const user = await ctx.db.get(event.creatorId);
-        const imageUrl = (await ctx.storage.getUrl(event.image)) ?? null;
-        return {
-          ...event,
-          creatorName: user?.displayName ?? 'Anonymous',
-          imageUrl,
-        };
-      })
-    );
-  },
-});
-
 export const getEventCategories = query({
   handler: async (ctx) => {
     const events = await ctx.db.query('events').collect();
@@ -130,6 +128,9 @@ export const searchEvents = query({
     category: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    const userId = identity !== null ? (identity.subject as Id<'users'>) : null;
+
     let q = ctx.db.query('events');
 
     // Apply category filter if specified and not "All"
@@ -146,20 +147,7 @@ export const searchEvents = query({
       filteredEvents = events.filter((event) => event.name.toLowerCase().includes(searchTerm));
     }
 
-    return Promise.all(
-      filteredEvents.map(async (event) => {
-        const user = await ctx.db.get(event.creatorId);
-        const imageUrl = (await ctx.storage.getUrl(event.image)) ?? null;
-        const ticketList = await ctx.db.query('ticketTemplates').withIndex('by_eventId').collect();
-
-        return {
-          ...event,
-          creatorName: user?.displayName ?? 'Anonymous',
-          imageUrl,
-          ticketList,
-        };
-      })
-    );
+    return enrichEventsWithCommonData(ctx, filteredEvents, userId);
   },
 });
 
@@ -236,42 +224,11 @@ export const getUserEvents = query({
     );
 
     // Combine and deduplicate events
-    const allEvents = [...hostedEvents, ...registeredEvents.filter(Boolean)];
-
-    // Enrich events with creator info, image URLs, tickets, and user role/status
-    return Promise.all(
-      allEvents
-        .filter((event): event is NonNullable<typeof event> => event !== null)
-        .map(async (event) => {
-          const user = await ctx.db.get(event.creatorId);
-          const imageUrl = (await ctx.storage.getUrl(event.image)) ?? null;
-
-          // Get tickets for this event
-          const tickets = await ctx.db
-            .query('ticketTemplates')
-            .withIndex('by_eventId', (q) => q.eq('eventId', event._id))
-            .collect();
-
-          // Determine user role and status
-          const isHost = event.creatorId === userId;
-          let userStatus = null;
-
-          if (!isHost) {
-            const registration = userRegistrations.find((reg) => reg.eventId === event._id);
-            if (registration) {
-              userStatus = registration.status.type;
-            }
-          }
-
-          return {
-            ...event,
-            creator: { name: user?.displayName ?? 'Anonymous', imageUrl: user?.pfpUrl ?? null },
-            imageUrl,
-            tickets,
-            isHost,
-            userStatus,
-          } as const;
-        })
+    const allEvents = [...hostedEvents, ...registeredEvents.filter(Boolean)].filter(
+      (event) => event !== null
     );
+
+    // Enrich events with common data (including isHost and userStatus)
+    return enrichEventsWithCommonData(ctx, allEvents, userId);
   },
 });
