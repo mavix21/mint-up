@@ -27,7 +27,7 @@ export const getUpcomingEvents = query({
     const today = Date.now();
     const events = await ctx.db
       .query('events')
-      .filter((q) => q.gte(q.field('startDate'), today))
+      .withIndex('by_startDate', (q) => q.gt('startDate', today))
       .order('desc')
       .collect();
     return Promise.all(
@@ -49,7 +49,7 @@ export const getPastEvents = query({
     const today = Date.now();
     const events = await ctx.db
       .query('events')
-      .filter((q) => q.lte(q.field('startDate'), today))
+      .withIndex('by_startDate', (q) => q.lte('startDate', today))
       .order('desc')
       .collect();
     return Promise.all(
@@ -74,7 +74,7 @@ export const getEventById = query({
     //const events = await ctx.db.query('events').order('desc').collect();
     const event = await ctx.db
       .query('events')
-      .filter((q) => q.eq(q.field('_id'), args.eventId))
+      .withIndex('by_id', (q) => q.eq('_id', args.eventId))
       .first();
 
     if (!event) {
@@ -150,10 +150,13 @@ export const searchEvents = query({
       filteredEvents.map(async (event) => {
         const user = await ctx.db.get(event.creatorId);
         const imageUrl = (await ctx.storage.getUrl(event.image)) ?? null;
+        const ticketList = await ctx.db.query('ticketTemplates').withIndex('by_eventId').collect();
+
         return {
           ...event,
           creatorName: user?.displayName ?? 'Anonymous',
           imageUrl,
+          ticketList,
         };
       })
     );
