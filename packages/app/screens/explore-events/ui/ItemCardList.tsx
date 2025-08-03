@@ -1,6 +1,6 @@
 import { api } from '@my/backend/_generated/api';
 import { Id } from '@my/backend/_generated/dataModel';
-import { YStack, Text, XStack, Card, Image, View, Chip, Theme } from '@my/ui';
+import { YStack, XStack, Card, Image, View, Chip, Theme, SizableText } from '@my/ui';
 import { formatDate, formatDateTime, formatRelativeDate } from '@my/ui/src/lib/dates';
 import { EventModal } from 'app/screens/my-events/ui/event-modal';
 import { SmallCardSkeleton } from 'app/shared/ui/SmallCardSkeleton';
@@ -53,21 +53,21 @@ export function ItemCardList({ id }: { id: string }) {
           />
 
           {/* App Info */}
-          <YStack flex={1} space="$1">
-            <Text fontSize="$2" color="$color11" numberOfLines={1}>
+          <YStack flex={1} gap="$3">
+            <SizableText size="$2" color="$color10" numberOfLines={1}>
               {formatDate(formatRelativeDate(event.startDate ?? 0))} •{' '}
               {formatDateTime(formatRelativeDate(event.startDate ?? 0))}
-            </Text>
-            <Text fontSize="$4" color="$color" numberOfLines={3}>
-              {event.name}
-            </Text>
-            <YStack>
-              <Chip rounded theme="green_active" maxWidth="$14" mt="$1.5">
-                <Chip.Text fontSize="$1">{event.category}</Chip.Text>
-              </Chip>
-              <View mt="$2.5">
-                <RegistersAvatar eventId={event._id ?? ''} />
+            </SizableText>
+            <YStack gap="$2">
+              <SizableText size="$5" color="$color" numberOfLines={3}>
+                {event.name}
+              </SizableText>
+              <View alignItems="flex-start">
+                <Chip size="$1" rounded paddingInline="$2">
+                  <Chip.Text fontWeight="600">{event.category}</Chip.Text>
+                </Chip>
               </View>
+              <RegistersAvatar eventId={event._id ?? ''} />
             </YStack>
           </YStack>
         </XStack>
