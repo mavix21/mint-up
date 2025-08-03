@@ -29,13 +29,6 @@ export function TicketingButton({ tickets, onPress }: TicketingButtonProps) {
     return 'Free & Paid';
   };
 
-  const getTicketColor = () => {
-    if (tickets.length === 0) {
-      return '$color11';
-    }
-    return '$color12';
-  };
-
   const getTicketCount = () => {
     if (tickets.length === 0) {
       return '';
@@ -47,11 +40,13 @@ export function TicketingButton({ tickets, onPress }: TicketingButtonProps) {
     <Button
       justifyContent="flex-start"
       backgroundColor="$color3"
-      icon={<Ticket size={16} />}
+      icon={<Ticket color="$color11" size={16} />}
       onPress={onPress}
     >
-      <SizableText flex={1}>Tickets{getTicketCount()}</SizableText>
-      <SizableText color={getTicketColor()} ml="$2">
+      <SizableText flex={1} color="$color11">
+        Tickets{getTicketCount()}
+      </SizableText>
+      <SizableText color="$color11" ml="$2">
         {getTicketText()}
       </SizableText>
     </Button>
