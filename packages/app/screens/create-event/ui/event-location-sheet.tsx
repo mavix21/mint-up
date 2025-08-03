@@ -104,22 +104,21 @@ export const EventLocationSheet = withForm({
                       disableDeactivation
                       value={eventLocationType}
                       onValueChange={(value: EventLocation['type']) => {
-                        field.handleChange(value);
-                        // if (!value) return;
-                        // if (value === 'online') {
-                        //   // When switching to online, ensure we have url property
-                        //   updateLocation({
-                        //     type: 'online',
-                        //     url: '',
-                        //   });
-                        // } else {
-                        //   // When switching to in-person, ensure we have address property
-                        //   updateLocation({
-                        //     type: 'in-person',
-                        //     address: '',
-                        //     instructions: '',
-                        //   });
-                        // }
+                        if (!value) return;
+                        if (value === 'online') {
+                          // When switching to online, create a new location object with only online properties
+                          form.setFieldValue('location', {
+                            type: 'online',
+                            url: '',
+                          });
+                        } else {
+                          // When switching to in-person, create a new location object with only in-person properties
+                          form.setFieldValue('location', {
+                            type: 'in-person',
+                            address: '',
+                            instructions: '',
+                          });
+                        }
                       }}
                       borderRadius="$4"
                       orientation="horizontal"
