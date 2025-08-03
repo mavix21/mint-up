@@ -61,6 +61,10 @@ module.exports = () => {
         {
           hostname: '192.168.0.23',
         },
+        {
+          protocol: 'https',
+          hostname: '**',
+        },
       ],
     },
 
