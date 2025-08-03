@@ -23,7 +23,11 @@ const convertDefaultImageToBlob = async (imagePath: string) => {
 };
 
 // Default images array - easy to extend in the future
-const DEFAULT_IMAGES = ['/images/event-image-example-01.png', '/images/event-image-example-02.png'];
+const DEFAULT_IMAGES = [
+  '/images/event-image-example-01.png',
+  '/images/event-image-example-02.png',
+  '/images/event-image-example-03.png',
+];
 
 export function EventImage({ imageUrl, onPress, onImageChange }: EventImageProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
