@@ -1,6 +1,7 @@
 import { api } from '@my/backend/_generated/api';
 import { Id } from '@my/backend/_generated/dataModel';
-import { Circle, Text, XStack } from '@my/ui';
+import { Circle, SizableText, Text, XStack, View } from '@my/ui';
+import { SkeletonLine } from 'app/shared/ui/SkeletonLine';
 import { useQuery } from 'convex/react';
 
 import { AvatarGroup } from './AvatarGroup';
@@ -15,7 +16,16 @@ export function RegistersAvatar({ eventId }: { eventId: string }) {
     eventId: eventId as Id<'events'>,
   });
 
-  if (!registers?.length) return null;
+  if (!registers) return <SkeletonLine width="$4" height="$1.5" />;
+
+  if (registers?.length < 1)
+    return (
+      <View height="$1.5" justifyContent="center">
+        <SizableText size="$1" color="$color10">
+          Be the first to join this event.
+        </SizableText>
+      </View>
+    );
 
   // Show only first 5 registers
   const visibleRegisters = registers.slice(0, 5);
