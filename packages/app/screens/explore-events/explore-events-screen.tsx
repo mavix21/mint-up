@@ -104,15 +104,15 @@ export const ExploreEventsScreen = () => {
       </View> */}
       <YStack px="$4" pt="$4">
         <View>
-          <Text fontSize="$3">
-            {searchTerm.trim()
+          <SizableText height="$3">
+            {searchTerm.trim() !== ''
               ? `Search results for "${searchTerm}"${
                   events && events.length > 0 ? ` (${events.length})` : ''
                 }`
               : events && events.length > 0
               ? `${events.length} events found`
-              : 'loading...'}
-          </Text>
+              : ''}
+          </SizableText>
         </View>
       </YStack>
       <ScrollView
@@ -129,26 +129,13 @@ export const ExploreEventsScreen = () => {
               <Button
                 key={category.label}
                 size="$3"
-                paddingHorizontal="$4"
-                paddingVertical="$2"
                 borderRadius="$10"
-                backgroundColor={isSelected ? '$color11' : '$background'}
-                borderWidth={1}
-                borderColor={isSelected ? '$color11' : '$borderColor'}
-                hoverStyle={{ backgroundColor: isSelected ? '$color11' : '$borderColor' }}
-                pressStyle={{
-                  scale: 0.98,
-                  backgroundColor: isSelected ? '$color10' : '$backgroundPress',
-                }}
+                theme={isSelected ? 'green' : null}
                 onPress={() => setSelectedCategory(category.label)}
               >
-                <Text
-                  color={isSelected ? 'white' : '$color'}
-                  fontWeight={isSelected ? '600' : '400'}
-                  fontSize="$3"
-                >
+                <Button.Text fontWeight={isSelected ? '600' : '400'} fontSize="$3">
                   {category.label}
-                </Text>
+                </Button.Text>
               </Button>
             );
           })}
