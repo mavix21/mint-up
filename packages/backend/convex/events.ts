@@ -76,8 +76,13 @@ export const getEventById = query({
       .query('events')
       .filter((q) => q.eq(q.field('_id'), args.eventId))
       .first();
-    const imageUrl = (await ctx.storage.getUrl(event!.image)) ?? null;
-    const user = await ctx.db.get(event!.creatorId);
+
+    if (!event) {
+      return null;
+    }
+
+    const imageUrl = (await ctx.storage.getUrl(event.image)) ?? null;
+    const user = await ctx.db.get(event.creatorId);
 
     return {
       ...event,
