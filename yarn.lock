@@ -9516,12 +9516,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tanstack/form-core@npm:1.15.0":
-  version: 1.15.0
-  resolution: "@tanstack/form-core@npm:1.15.0"
+"@tanstack/form-core@npm:1.15.1":
+  version: 1.15.1
+  resolution: "@tanstack/form-core@npm:1.15.1"
   dependencies:
     "@tanstack/store": "npm:^0.7.2"
-  checksum: 10/748194be3b5ce25c269b3905f3b48d47e86365da5bd50958cd0ded641add959efba392f0b58eddc3aa8f85aa07caab46a3197751a8f52a7b2ce89ff2a106c460
+  checksum: 10/50cbbfb4a80ca8ce09043c64b68e6289a8c26f30028b38469236073a6d7cdbcfd9c075e76deddffd95ee548fcbcc62f05ccb51df44bd09e720e76ff1b16026cb
   languageName: node
   linkType: hard
 
@@ -9539,11 +9539,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tanstack/react-form@npm:^1.14.1":
-  version: 1.15.0
-  resolution: "@tanstack/react-form@npm:1.15.0"
+"@tanstack/react-form@npm:^1.15.2":
+  version: 1.15.2
+  resolution: "@tanstack/react-form@npm:1.15.2"
   dependencies:
-    "@tanstack/form-core": "npm:1.15.0"
+    "@tanstack/form-core": "npm:1.15.1"
     "@tanstack/react-store": "npm:^0.7.3"
     decode-formdata: "npm:^0.9.0"
     devalue: "npm:^5.1.1"
@@ -9556,7 +9556,7 @@ __metadata:
       optional: true
     vinxi:
       optional: true
-  checksum: 10/a74e9d5d49cda0534e940ac4634ed98f849c33c4477b64e70c9defcba81056048ac5297e489bc5a09487644c3aab7487898722cf72699ab78657c26c0d9df447
+  checksum: 10/b44b3949bdad17ea92915546d92ca4cfb08743b55043600bcbedbde7257aafd6aaaaad055d49e54f883fea3559b31c21d50347404364046af0051ef3211ac0ce
   languageName: node
   linkType: hard
 
@@ -12107,7 +12107,7 @@ __metadata:
     "@tamagui/lucide-icons": "npm:^1.132.15"
     "@tamagui/shorthands": "npm:^1.132.15"
     "@tamagui/themes": "npm:^1.132.15"
-    "@tanstack/react-form": "npm:^1.14.1"
+    "@tanstack/react-form": "npm:^1.15.2"
     "@tanstack/react-query": "npm:4.18.0"
     "@trpc/client": "npm:^10.45.2"
     "@trpc/react-query": "npm:^10.45.2"
@@ -12122,6 +12122,7 @@ __metadata:
     expo-linking: "npm:~7.1.5"
     expo-secure-store: "npm:~14.2.3"
     react-dropzone: "npm:^14.2.3"
+    react-image-crop: "npm:^11.0.10"
     react-native: "npm:0.79.5"
     react-native-date-picker: "npm:^5.0.13"
     react-native-safe-area-context: "npm:5.4.0"
@@ -24631,6 +24632,15 @@ __metadata:
   peerDependencies:
     react: ">=17.0.0"
   checksum: 10/1dc433319341ec3dca84513c4197ef4f4c8232604d35f83546a8abfb41d9591f934b66aaaa4dc3dc8b1b65f488705a2a48ae6c1d9792660119a9cdedeab4ca8f
+  languageName: node
+  linkType: hard
+
+"react-image-crop@npm:^11.0.10":
+  version: 11.0.10
+  resolution: "react-image-crop@npm:11.0.10"
+  peerDependencies:
+    react: ">=16.13.1"
+  checksum: 10/5f38841ec89ac346a69e9bc3460eec71ccb8e154ef7364e7d8f87f902f6ecde2746dfd887230826d3d4fbe23314aa20cd19f80061bd9d3772d4464ba020987b8
   languageName: node
   linkType: hard
 
