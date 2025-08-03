@@ -26,7 +26,7 @@
     "@tamagui/shorthands": "^1.132.15",
     "@tamagui/themes": "^1.132.15",
     "@tanstack/react-form": "^1.15.2",
-    "@tanstack/react-query": "4.18.0",
+    "@tanstack/react-query": "5.84.1",
     "@trpc/client": "^10.45.2",
     "@trpc/react-query": "^10.45.2",
     "base64-arraybuffer": "^1.0.2",
@@ -44,7 +44,7 @@
     "react-native-safe-area-context": "5.4.0",
     "solito": "4.4.1",
     "superjson": "^1.13.1",
-    "zod": "^4.0.10",
+    "zod": "^4.0.14",
     "zustand": "5.0.2"
   },
   "devDependencies": {
