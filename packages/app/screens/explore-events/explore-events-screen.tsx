@@ -5,8 +5,8 @@ import {
   Button,
   Image,
   Input,
-  isWeb,
   ScrollView,
+  SizableText,
   styled,
   Text,
   View,
@@ -19,18 +19,6 @@ import { useQuery } from 'convex/react';
 import React from 'react';
 
 import { ItemCardList } from './ui/ItemCardList';
-
-const data = [
-  {
-    uri: 'https://upload.wikimedia.org/wikipedia/commons/b/b6/Image_created_with_a_mobile_phone.png',
-    title: 'Jakarta',
-  },
-  { uri: 'HLIST_2.jpg', title: 'Bandung' },
-  { uri: 'HLIST_3.jpg', title: 'SaiGon' },
-  { uri: 'HLIST_4.jpg', title: 'Tokyo' },
-  { uri: 'HLIST_5.jpg', title: 'Semarang' },
-  { uri: 'HLIST_6.jpg', title: 'Malang' },
-];
 
 export const ExploreEventsScreen = () => {
   const [selectedCategory, setSelectedCategory] = React.useState('All');
@@ -73,17 +61,16 @@ export const ExploreEventsScreen = () => {
 
   return (
     <YStack>
-      <XStack alignItems="center" space="$2" px="$4" pt="$5">
-        <XStack flex={1} alignItems="center" space="$2">
+      <XStack alignItems="center" gap="$2" px="$4" pt="$5">
+        <XStack flex={1} alignItems="center" gap="$2">
           <Input
             flex={1}
-            size="$2"
             placeholder="Search events..."
             value={searchTerm}
             onChangeText={handleSearchChange}
             onKeyPress={handleKeyPress}
           />
-          {searchTerm.trim() && (
+          {searchTerm.trim() !== '' && (
             <Button
               size="$2"
               circular
@@ -137,7 +124,7 @@ export const ExploreEventsScreen = () => {
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={{ paddingRight: 20 }}
       >
-        <XStack space="$2" mb="$3">
+        <XStack gap="$2" mb="$3">
           {categoryList.map((category) => {
             const isSelected = selectedCategory === category.label;
             return (
@@ -173,18 +160,18 @@ export const ExploreEventsScreen = () => {
         {events === undefined ? (
           // Loading state
           <YStack flex={1} justifyContent="center" alignItems="center" py="$8">
-            <Text color="$color11" fontSize="$4">
+            <SizableText color="$color11" fontSize="$4">
               Loading events...
-            </Text>
+            </SizableText>
           </YStack>
         ) : events.length === 0 ? (
           // Empty state
           <YStack flex={1} justifyContent="center" alignItems="center" py="$8">
-            <Text color="$color11" fontSize="$4" textAlign="center">
+            <SizableText color="$color11" fontSize="$4" textAlign="center">
               {searchTerm.trim()
                 ? `No events found for "${searchTerm}"`
                 : `No events found in ${selectedCategory} category`}
-            </Text>
+            </SizableText>
           </YStack>
         ) : (
           // Events list

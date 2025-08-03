@@ -16,7 +16,7 @@ export function ItemCardList({ id }: { id: string }) {
 
   const [toggleEvent, setToggleEvent] = React.useState(false);
 
-  if (event === undefined) {
+  if (!event) {
     return (
       <View alignItems="center">
         <SmallCardSkeleton />

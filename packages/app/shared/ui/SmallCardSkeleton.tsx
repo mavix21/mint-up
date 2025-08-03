@@ -34,7 +34,7 @@ export const SmallCardSkeleton = () => {
         {/* Title placeholder */}
         <SkeletonLine width="85%" height={20} marginBottom="$3" />
         {/* Tag placeholder (pill shape) */}
-        <SkeletonLine width={120} height={28} borderRadius="$true" />{' '}
+        <SkeletonLine width={120} height={28} borderRadius="$true" />
         {/* $true makes it fully rounded */}
       </View>
     </View>
