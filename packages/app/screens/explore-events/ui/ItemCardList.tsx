@@ -1,36 +1,16 @@
-import { api } from '@my/backend/_generated/api';
-import { Id } from '@my/backend/_generated/dataModel';
-import { YStack, XStack, Card, Image, View, Chip, Theme, SizableText } from '@my/ui';
+import { YStack, XStack, Card, Image, View, Chip, Theme, SizableText, ThemeName } from '@my/ui';
 import { formatDate, formatDateTime, formatRelativeDate } from '@my/ui/src/lib/dates';
-import { SmallCardSkeleton } from 'app/shared/ui/SmallCardSkeleton';
+import { ConvexEventWithExtras } from 'app/entities';
 import { EventModal } from 'app/widgets/event-modal';
-import { useQuery } from 'convex/react';
 import React from 'react';
 
 import { RegistersAvatar } from './RegistersAvatar';
 
-export function ItemCardList({ id }: { id: string }) {
-  // Check if this is a loading placeholder ID
-  const isPlaceholder = id.startsWith('loading-');
-
-  const event = isPlaceholder
-    ? null
-    : useQuery(api.events.getEventById, {
-        eventId: id as Id<'events'>,
-      });
-
+export function ItemCardList({ event }: { event: ConvexEventWithExtras }) {
   const [toggleEvent, setToggleEvent] = React.useState(false);
 
-  if (isPlaceholder || !event) {
-    return (
-      <View>
-        <SmallCardSkeleton />
-      </View>
-    );
-  }
-
   return (
-    <Theme name={event.theme as any}>
+    <Theme name={event.theme as ThemeName}>
       <Card
         key={event._id}
         elevate
@@ -47,7 +27,7 @@ export function ItemCardList({ id }: { id: string }) {
         // onPress={() => router.push(`/events/detail/${event._id}`)}
         onPress={() => setToggleEvent(true)}
       >
-        <XStack space="$3" alignItems="center">
+        <XStack gap="$3" alignItems="center">
           {/* App Icon */}
           <Image
             width={100}

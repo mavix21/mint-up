@@ -15,6 +15,7 @@ import {
 } from '@my/ui';
 import { X } from '@tamagui/lucide-icons';
 import { AnimationProp } from '@tamagui/web';
+import { SmallCardSkeleton } from 'app/shared/ui/SmallCardSkeleton';
 import { useQuery } from 'convex/react';
 import React from 'react';
 
@@ -24,18 +25,13 @@ export const ExploreEventsScreen = () => {
   const [selectedCategory, setSelectedCategory] = React.useState('All');
   const [searchTerm, setSearchTerm] = React.useState('');
 
-  // Use searchEvents query when there's a search term, otherwise use getEventsByCategory
-  const searchResults = useQuery(api.events.searchEvents, {
+  // Use a single query that handles both search and category filtering
+  const events = useQuery(api.events.searchEvents, {
     searchTerm: searchTerm.trim() || undefined,
     category: selectedCategory,
   });
 
-  const categoryEvents = useQuery(api.events.getEventsByCategory, { category: selectedCategory });
-
   const categories = useQuery(api.events.getEventCategories);
-
-  // Use search results if there's a search term, otherwise use category events
-  const events = searchTerm.trim() ? searchResults : categoryEvents;
 
   // Add 'All' at the start of the categories list
   const categoryList = React.useMemo(() => {
@@ -113,7 +109,9 @@ export const ExploreEventsScreen = () => {
               ? `Search results for "${searchTerm}"${
                   events && events.length > 0 ? ` (${events.length})` : ''
                 }`
-              : ''}
+              : events && events.length > 0
+              ? `${events.length} events found`
+              : 'loading...'}
           </Text>
         </View>
       </YStack>
@@ -156,25 +154,35 @@ export const ExploreEventsScreen = () => {
           })}
         </XStack>
       </ScrollView>
-      <YStack flex={1} overflow="scroll" maxHeight={'75vh' as any} $lg={{ paddingBottom: '$14' }}>
+      <YStack
+        flex={1}
+        overflow="scroll"
+        maxHeight={'75vh' as any}
+        $lg={{ paddingBottom: '$14' }}
+        gap="$2"
+      >
         {events === undefined ? (
           // Loading state - show placeholder items that will render individual skeletons
-          Array.from({ length: 6 }, (_, index) => (
-            <ItemCardList key={`loading-${index}`} id={`loading-${index}`} />
-          ))
+          <YStack gap="$2">
+            {Array.from({ length: 6 }, (_, index) => (
+              <SmallCardSkeleton key={`loading-${index}`} />
+            ))}
+          </YStack>
         ) : events.length === 0 ? (
           // Empty state
           <YStack flex={1} justifyContent="center" alignItems="center" py="$8">
             <SizableText color="$color11" fontSize="$4" textAlign="center">
               {searchTerm.trim()
                 ? `No events found for "${searchTerm}"`
-                : `No events found in ${selectedCategory} category`}
+                : selectedCategory !== 'All'
+                ? `No events found in ${selectedCategory} category`
+                : 'No events found'}
             </SizableText>
           </YStack>
         ) : (
           // Events list
           events.map((event) => {
-            return <ItemCardList key={event._id} id={event._id} />;
+            return <ItemCardList key={event._id} event={event} />;
           })
         )}
       </YStack>
