@@ -6,27 +6,29 @@ import {
   groupByDate,
 } from 'app/shared';
 import { useQuery } from 'convex/react';
-import React from 'react';
+import React, { useMemo } from 'react';
 
 import { EventCard } from './ui/event-card';
 import { CardSkeleton } from '../../shared/ui/CardSkeleton';
 
 export const MyEventsScreen = () => {
-  const upcomingEvents = useQuery(api.events.getUpcomingEvents);
-  const pastEvents = useQuery(api.events.getPastEvents);
-
+  const allUserEvents = useQuery(api.events.getUserEvents);
   const [activeTab, setActiveTab] = React.useState('upcoming');
 
-  // if (!upcomingEvents)
-  //   return (
-  //     <YStack>
-  //       <CardSkeleton />
-  //       <CardSkeleton />
-  //       <CardSkeleton />
-  //       <CardSkeleton />
-  //     </YStack>
-  //   ); // TODO: improve skeleton
-  if (!pastEvents) return <FullscreenSpinner />; // TODO: improve skeleton
+  // Memoize filtered events to avoid recalculation on every render
+  const { upcomingEvents, pastEvents } = useMemo(() => {
+    if (!allUserEvents) {
+      return { upcomingEvents: [], pastEvents: [] };
+    }
+
+    const today = Date.now();
+    const upcoming = allUserEvents.filter((event) => event.startDate > today);
+    const past = allUserEvents.filter((event) => event.startDate <= today);
+
+    return { upcomingEvents: upcoming, pastEvents: past };
+  }, [allUserEvents]);
+
+  if (!allUserEvents) return <FullscreenSpinner />;
 
   return (
     <YStack
@@ -67,7 +69,7 @@ export const MyEventsScreen = () => {
         </Tabs.List>
 
         <Tabs.Content value="upcoming" overflowBlock="scroll" height="100%" paddingBottom={160}>
-          {upcomingEvents ? (
+          {upcomingEvents.length > 0 ? (
             groupByDate(
               upcomingEvents,
               (event) => {

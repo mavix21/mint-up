@@ -202,3 +202,55 @@ export const createEvent = mutation({
     return eventId;
   },
 });
+
+export const getUserEvents = query({
+  handler: async (ctx) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) {
+      return [];
+    }
+
+    const userId = identity.subject as Id<'users'>;
+
+    // Get events where user is creator/host
+    const hostedEvents = await ctx.db
+      .query('events')
+      .withIndex('by_creatorId', (q) => q.eq('creatorId', userId))
+      .collect();
+
+    // Get events where user has registered
+    const userRegistrations = await ctx.db
+      .query('registrations')
+      .withIndex('by_user_and_event', (q) => q.eq('userId', userId))
+      .collect();
+
+    const registeredEventIds = userRegistrations.map((reg) => reg.eventId);
+
+    // Get registered events (excluding already fetched hosted events)
+    const registeredEvents = await Promise.all(
+      registeredEventIds
+        .filter((eventId) => !hostedEvents.some((event) => event._id === eventId))
+        .map(async (eventId) => {
+          return await ctx.db.get(eventId);
+        })
+    );
+
+    // Combine and deduplicate events
+    const allEvents = [...hostedEvents, ...registeredEvents.filter(Boolean)];
+
+    // Enrich events with creator info and image URLs
+    return Promise.all(
+      allEvents
+        .filter((event): event is NonNullable<typeof event> => event !== null)
+        .map(async (event) => {
+          const user = await ctx.db.get(event.creatorId);
+          const imageUrl = (await ctx.storage.getUrl(event.image)) ?? null;
+          return {
+            ...event,
+            creatorName: user?.displayName ?? 'Anonymous',
+            imageUrl,
+          };
+        })
+    );
+  },
+});
