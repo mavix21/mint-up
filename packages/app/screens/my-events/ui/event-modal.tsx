@@ -15,7 +15,7 @@ import {
   YStack,
 } from '@my/ui';
 import { formatDate, formatDateTime, formatRelativeDate } from '@my/ui/src/lib/dates';
-import { Clock, MapPin, Globe } from '@tamagui/lucide-icons';
+import { Clock, MapPin, Globe, ChevronDown } from '@tamagui/lucide-icons';
 import React, { Dispatch, SetStateAction } from 'react';
 
 import { ConvexEventWithExtras } from '../my-events-screen';
@@ -77,21 +77,20 @@ export function EventModal({
             <XStack
               position="absolute"
               top="$2"
-              right="$2"
+              left="$2"
               alignItems="center"
               justifyContent="center"
               zIndex={1000}
             >
               <Button
-                size="$2"
                 circular
+                chromeless
                 borderWidth={1}
                 onPress={() => {
                   setToggleEvent(false);
                 }}
-              >
-                ✕
-              </Button>
+                icon={<ChevronDown size={20} />}
+              />
             </XStack>
 
             {/* Event Content */}

@@ -142,9 +142,6 @@ export function EventTicketingSheet({
             <Text fontSize="$6" fontWeight="600">
               Event Tickets
             </Text>
-            <Button size="$2" circular backgroundColor="transparent" onPress={handleCancel}>
-              <X size={16} />
-            </Button>
           </XStack>
 
           <Separator />

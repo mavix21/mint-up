@@ -1,5 +1,5 @@
 import { useVisualViewportHeight } from '@my/ui';
-import { X } from '@tamagui/lucide-icons';
+import { ChevronDown } from '@tamagui/lucide-icons';
 import { useState } from 'react';
 import { Sheet, Button, XStack, YStack, TextArea } from 'tamagui';
 
@@ -61,13 +61,6 @@ export function EventDescriptionSheet({
         style={{ height: visualViewportHeight }}
       >
         <YStack flex={1} width="100%" maxWidth={496} marginHorizontal="auto">
-          {/* Header */}
-          <XStack alignItems="center" justifyContent="flex-end" px="$4">
-            <Button size="$2" circular backgroundColor="transparent" onPress={handleCancel}>
-              <X size={16} />
-            </Button>
-          </XStack>
-
           {/* TextArea - Takes up most of the space */}
           <YStack flex={1} px="$2">
             <TextArea

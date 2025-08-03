@@ -1,4 +1,5 @@
 import { Sheet, Button, XStack, YStack, useVisualViewportHeight } from '@my/ui';
+import { ChevronDown } from '@tamagui/lucide-icons';
 import { CreateEventScreen } from 'app/screens/create-event/create-event-screen';
 import { memo, useCallback } from 'react';
 
@@ -40,14 +41,18 @@ export function CreateEventSheetWrapper({ open, setOpen }: CreateEventSheetWrapp
           <XStack
             position="absolute"
             top="$2"
-            right="$2"
+            left="$2"
             zIndex={1000}
             alignItems="center"
             justifyContent="center"
           >
-            <Button size="$2" circular borderWidth={1} onPress={() => setOpen(false)}>
-              ✕
-            </Button>
+            <Button
+              circular
+              chromeless
+              borderWidth={1}
+              onPress={() => setOpen(false)}
+              icon={<ChevronDown size={20} />}
+            />
           </XStack>
 
           <SheetContents closeSheet={closeSheet} />
