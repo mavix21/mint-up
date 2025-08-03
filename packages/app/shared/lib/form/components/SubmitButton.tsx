@@ -21,7 +21,7 @@ export const SubmitButton = (props: ButtonProps & { label: string }) => {
             alignItems="center"
             justifyContent="center"
           >
-            <Button.Text>{props.label}</Button.Text>
+            <Button.Text fontWeight="600">{props.label}</Button.Text>
             <Button.Icon>
               <Spinner
                 key="loading-spinner"
