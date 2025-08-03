@@ -1,10 +1,9 @@
-import { View, YStack, XStack, Image, Theme, SizableText } from '@my/ui';
+import { View, YStack, XStack, Image, Theme, SizableText, ThemeName } from '@my/ui';
 import { Clock, Globe, MapPin } from '@tamagui/lucide-icons';
+import { ConvexEventWithExtras } from 'app/entities';
 import { formatTime } from 'app/shared';
+import { EventModal } from 'app/widgets/event-modal';
 import { useState } from 'react';
-
-import { EventModal } from './event-modal';
-import { ConvexEventWithExtras } from '../my-events-screen';
 
 export function EventCard({
   event,
@@ -22,7 +21,7 @@ export function EventCard({
 
   return (
     <>
-      <Theme name={event.theme as any}>
+      <Theme name={event.theme as ThemeName}>
         <YStack
           gap="$2"
           $xxs={{

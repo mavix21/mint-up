@@ -1,8 +1,7 @@
 import { MapPin, Globe } from '@tamagui/lucide-icons';
+import { EventLocation } from 'app/entities';
 import { formatLocationText, getLocationColor } from 'app/shared';
 import { Button, SizableText } from 'tamagui';
-
-import { EventLocation } from '../../../entities';
 
 export interface LocationButtonProps {
   location?: EventLocation;

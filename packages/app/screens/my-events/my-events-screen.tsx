@@ -1,5 +1,4 @@
 import { api } from '@my/backend/_generated/api';
-import { Doc } from '@my/backend/_generated/dataModel';
 import { FullscreenSpinner, H3, SizableText, Tabs, Text, View, YStack } from '@my/ui';
 import {
   formatRelativeDate as formatRelativeDateShared,
@@ -11,12 +10,6 @@ import React from 'react';
 
 import { EventCard } from './ui/event-card';
 import { CardSkeleton } from '../../shared/ui/CardSkeleton';
-
-// Define the type for events returned by getUpcomingEvents
-export type ConvexEventWithExtras = Doc<'events'> & {
-  creatorName: string;
-  imageUrl: string | null;
-};
 
 export const MyEventsScreen = () => {
   const upcomingEvents = useQuery(api.events.getUpcomingEvents);

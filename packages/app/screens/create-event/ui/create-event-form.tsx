@@ -30,9 +30,8 @@ import {
   EventTicketingSheet,
   TicketingButton,
   CategorySelector,
-  EventCategory,
 } from './index';
-import { createEventFormSchema } from '../../../entities';
+import { createEventFormSchema, EventCategory } from '../../../entities';
 import { getClientTimezone, calculateDefaultEventTimes } from '../../../utils';
 import { createEventFormOpts } from '../model/shared-form';
 
@@ -180,8 +179,8 @@ export function CreateEventForm({
                 <>
                   <CategorySelector
                     value={field.state.value}
-                    onValueChange={(value: EventCategory) => {
-                      field.handleChange(value);
+                    onValueChange={(value: string) => {
+                      field.handleChange(value as EventCategory);
                     }}
                     fieldApi={field}
                   />

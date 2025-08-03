@@ -13,8 +13,6 @@ import {
   YStack,
   H4,
   Avatar,
-  Card,
-  H1,
   H2,
   Chip,
   Theme,
@@ -27,8 +25,6 @@ import {
   Globe,
   ChevronDown,
   Share2,
-  MessageCircle,
-  MoreHorizontal,
   Calendar,
   User,
   ExternalLink,
@@ -36,8 +32,8 @@ import {
 } from '@tamagui/lucide-icons';
 import React, { Dispatch, SetStateAction } from 'react';
 
-import { ConvexEventWithExtras } from '../my-events-screen';
 import { TicketsEventSheet } from './tickets-event-sheet';
+import { ConvexEventWithExtras } from '../../entities/event.model';
 
 export function EventModal({
   toggleEvent,
@@ -61,6 +57,8 @@ export function EventModal({
       </Sheet>
     );
   }
+
+  const allFree = ticketList.every((ticket) => ticket.price.type === 'free');
 
   const isOnline = eventData.location?.type === 'online';
   const isInPerson = eventData.location?.type === 'in-person';
@@ -162,7 +160,11 @@ export function EventModal({
                     onPress={() => (ticketList.length > 0 ? setShowTicketsSheet(true) : null)}
                   >
                     <Button.Text>
-                      {ticketList.length > 0 ? 'Buy Tickets' : 'Join Waitlist'}
+                      {ticketList.length > 0
+                        ? allFree
+                          ? 'Register'
+                          : 'Buy Tickets'
+                        : 'Join Waitlist'}
                     </Button.Text>
                   </Button>
 
@@ -314,7 +316,9 @@ export function EventModal({
                 fontWeight="600"
                 onPress={() => (ticketList.length > 0 ? setShowTicketsSheet(true) : null)}
               >
-                <Button.Text>{ticketList.length > 0 ? 'Buy Tickets' : 'Join Waitlist'}</Button.Text>
+                <Button.Text>
+                  {ticketList.length > 0 ? (allFree ? 'Register' : 'Buy Tickets') : 'Join Waitlist'}
+                </Button.Text>
               </Button>
             </View>
           </YStack>

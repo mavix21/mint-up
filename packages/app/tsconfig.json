@@ -9,7 +9,8 @@
     "../ui/src",
     "screens",
     "entities",
-    "shared"
+    "shared",
+    "widgets"
   ],
   "compilerOptions": {
     "noEmit": true,

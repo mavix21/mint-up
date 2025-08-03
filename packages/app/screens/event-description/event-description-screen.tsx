@@ -2,12 +2,12 @@ import { api } from '@my/backend/_generated/api';
 import { Id } from '@my/backend/_generated/dataModel';
 import { YStack, Text, XStack, Card, Image, View, Chip } from '@my/ui';
 import { formatDate, formatDateTime, formatRelativeDate } from '@my/ui/src/lib/dates';
+import { EventModal } from 'app/widgets/event-modal/event-modal';
 import { useQuery } from 'convex/react';
 import React from 'react';
 import { useParams } from 'solito/navigation';
 
 import { RegistersAvatar } from '../explore-events/ui/RegistersAvatar';
-import { EventModal } from '../my-events/ui/event-modal';
 
 export const EventDescriptionScreen = () => {
   const { id } = useParams<{ id: string }>();

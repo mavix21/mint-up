@@ -1,5 +1,6 @@
 import { useVisualViewportHeight } from '@my/ui';
-import { Plus, X, Trash2, ChevronDown } from '@tamagui/lucide-icons';
+import { Plus, Trash2, ChevronDown } from '@tamagui/lucide-icons';
+import type { Cryptocurrency, TicketType } from 'app/entities';
 import { useState } from 'react';
 import {
   Sheet,
@@ -18,8 +19,6 @@ import {
   Select,
   Group,
 } from 'tamagui';
-
-import type { Cryptocurrency, TicketType } from '../../../entities';
 
 export interface EventTicketingSheetProps {
   open: boolean;

@@ -1,7 +1,6 @@
 import { Ticket } from '@tamagui/lucide-icons';
+import { TicketType } from 'app/entities';
 import { Button, SizableText } from 'tamagui';
-
-import { TicketType } from '../../../entities';
 
 export interface TicketingButtonProps {
   tickets: TicketType[];

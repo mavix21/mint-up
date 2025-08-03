@@ -1,5 +1,4 @@
 import { useVisualViewportHeight } from '@my/ui';
-import { ChevronDown } from '@tamagui/lucide-icons';
 import { useState } from 'react';
 import { Sheet, Button, XStack, YStack, TextArea } from 'tamagui';
 

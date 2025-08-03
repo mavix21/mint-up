@@ -13,10 +13,10 @@ import {
 } from '@my/ui';
 import { MapPin, Globe } from '@tamagui/lucide-icons';
 import { useStore } from '@tanstack/react-form';
+import { EventLocation } from 'app/entities/schemas';
 import { withForm } from 'app/shared/lib/form';
 import { useState } from 'react';
 
-import { EventLocation } from '../../../entities';
 import { createEventFormOpts } from '../model/shared-form';
 
 export interface EventLocationSheetProps {
