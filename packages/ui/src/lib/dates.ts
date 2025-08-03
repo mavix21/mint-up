@@ -13,7 +13,7 @@ export function formatDate(date: string) {
   }
 
   // Get weekday, day, and year
-  const weekday = dateObj.toLocaleDateString('en-US', { weekday: 'short' });
+  const weekday = dateObj.toLocaleDateString('en-US', { weekday: 'long' });
   const day = dateObj.getDate();
   const month = dateObj.toLocaleDateString('en-US', { month: 'short' });
   const year = dateObj.getFullYear();
