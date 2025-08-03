@@ -13,7 +13,7 @@ import {
   XStack,
   YStack,
 } from '@my/ui';
-import { ListFilter } from '@tamagui/lucide-icons';
+import { X } from '@tamagui/lucide-icons';
 import { AnimationProp } from '@tamagui/web';
 import { useQuery } from 'convex/react';
 import React from 'react';
@@ -34,8 +34,20 @@ const data = [
 
 export const ExploreEventsScreen = () => {
   const [selectedCategory, setSelectedCategory] = React.useState('All');
-  const events = useQuery(api.events.getEventsByCategory, { category: selectedCategory });
+  const [searchTerm, setSearchTerm] = React.useState('');
+
+  // Use searchEvents query when there's a search term, otherwise use getEventsByCategory
+  const searchResults = useQuery(api.events.searchEvents, {
+    searchTerm: searchTerm.trim() || undefined,
+    category: selectedCategory,
+  });
+
+  const categoryEvents = useQuery(api.events.getEventsByCategory, { category: selectedCategory });
+
   const categories = useQuery(api.events.getEventCategories);
+
+  // Use search results if there's a search term, otherwise use category events
+  const events = searchTerm.trim() ? searchResults : categoryEvents;
 
   // Add 'All' at the start of the categories list
   const categoryList = React.useMemo(() => {
@@ -43,10 +55,47 @@ export const ExploreEventsScreen = () => {
     return [{ label: 'All' }, ...categories.map((cat) => ({ label: cat }))];
   }, [categories]);
 
+  // Handle search input change
+  const handleSearchChange = (text: string) => {
+    setSearchTerm(text);
+    // If user starts searching and we're not on "All" category, switch to "All"
+    if (text.trim() && selectedCategory !== 'All') {
+      setSelectedCategory('All');
+    }
+  };
+
+  // Handle keyboard events
+  const handleKeyPress = (e: any) => {
+    if (e.key === 'Escape') {
+      setSearchTerm('');
+    }
+  };
+
   return (
     <YStack>
       <XStack alignItems="center" space="$2" px="$4" pt="$5">
-        <Input flex={1} size="$2" placeholder="Search" />
+        <XStack flex={1} alignItems="center" space="$2">
+          <Input
+            flex={1}
+            size="$2"
+            placeholder="Search events..."
+            value={searchTerm}
+            onChangeText={handleSearchChange}
+            onKeyPress={handleKeyPress}
+          />
+          {searchTerm.trim() && (
+            <Button
+              size="$2"
+              circular
+              onPress={() => setSearchTerm('')}
+              backgroundColor="$background"
+              borderWidth={1}
+              borderColor="$borderColor"
+            >
+              <X size="$1" />
+            </Button>
+          )}
+        </XStack>
         {/* //**TODO: See what filter put here*/}
         {/* <Button size="$2">
           <ListFilter size="$1" />
@@ -72,7 +121,13 @@ export const ExploreEventsScreen = () => {
       </View> */}
       <YStack px="$4" pt="$4">
         <View>
-          <Text fontSize="$3">Trending</Text>
+          <Text fontSize="$3">
+            {searchTerm.trim()
+              ? `Search results for "${searchTerm}"${
+                  events && events.length > 0 ? ` (${events.length})` : ''
+                }`
+              : 'Trending'}
+          </Text>
         </View>
       </YStack>
       <ScrollView
@@ -115,9 +170,28 @@ export const ExploreEventsScreen = () => {
         </XStack>
       </ScrollView>
       <YStack flex={1} overflow="scroll" maxHeight={'75vh' as any} $lg={{ paddingBottom: '$14' }}>
-        {events?.map((event) => {
-          return <ItemCardList key={event._id} id={event._id} />;
-        })}
+        {events === undefined ? (
+          // Loading state
+          <YStack flex={1} justifyContent="center" alignItems="center" py="$8">
+            <Text color="$color11" fontSize="$4">
+              Loading events...
+            </Text>
+          </YStack>
+        ) : events.length === 0 ? (
+          // Empty state
+          <YStack flex={1} justifyContent="center" alignItems="center" py="$8">
+            <Text color="$color11" fontSize="$4" textAlign="center">
+              {searchTerm.trim()
+                ? `No events found for "${searchTerm}"`
+                : `No events found in ${selectedCategory} category`}
+            </Text>
+          </YStack>
+        ) : (
+          // Events list
+          events.map((event) => {
+            return <ItemCardList key={event._id} id={event._id} />;
+          })
+        )}
       </YStack>
     </YStack>
   );

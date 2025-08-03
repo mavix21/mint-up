@@ -119,6 +119,42 @@ export const getEventCategories = query({
   },
 });
 
+export const searchEvents = query({
+  args: {
+    searchTerm: v.optional(v.string()),
+    category: v.optional(v.string()),
+  },
+  handler: async (ctx, args) => {
+    let q = ctx.db.query('events');
+
+    // Apply category filter if specified and not "All"
+    if (args.category && args.category !== 'All') {
+      q = q.filter((q) => q.eq(q.field('category'), args.category));
+    }
+
+    const events = await q.order('desc').collect();
+
+    // Apply search filter in memory for better partial matching
+    let filteredEvents = events;
+    if (args.searchTerm && args.searchTerm.trim() !== '') {
+      const searchTerm = args.searchTerm.toLowerCase().trim();
+      filteredEvents = events.filter((event) => event.name.toLowerCase().includes(searchTerm));
+    }
+
+    return Promise.all(
+      filteredEvents.map(async (event) => {
+        const user = await ctx.db.get(event.creatorId);
+        const imageUrl = (await ctx.storage.getUrl(event.image)) ?? null;
+        return {
+          ...event,
+          creatorName: user?.displayName ?? 'Anonymous',
+          imageUrl,
+        };
+      })
+    );
+  },
+});
+
 export const createEvent = mutation({
   args: {
     event: v.object(omit(vv.doc('events').fields, ['_id', '_creationTime', 'creatorId'])),
