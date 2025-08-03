@@ -1,6 +1,6 @@
 import { api } from '@my/backend/_generated/api';
 import { FullscreenSpinner, H3, SizableText, Tabs, Text, View, YStack } from '@my/ui';
-import { CalendarPlus } from '@tamagui/lucide-icons';
+import { CalendarPlus, History } from '@tamagui/lucide-icons';
 import {
   formatRelativeDate as formatRelativeDateShared,
   getDayOfWeek,
@@ -154,44 +154,64 @@ export const MyEventsScreen = () => {
           paddingInlineEnd="$4"
           paddingBottom={160}
         >
-          {groupByDate(
-            pastEvents,
-            (event) => {
-              const date = new Date(event.startDate);
-              return date.toISOString().split('T')[0];
-            },
-            activeTab === 'upcoming' ? 'asc' : 'desc'
-          ).map(([dateKey, events], index) => (
-            <View key={dateKey} pos="relative">
-              <View pos="absolute" bottom={0} left={4} top={16} w="$0.25" bg="$gray6" />
+          {pastEvents.length > 0 ? (
+            groupByDate(
+              pastEvents,
+              (event) => {
+                const date = new Date(event.startDate);
+                return date.toISOString().split('T')[0];
+              },
+              activeTab === 'upcoming' ? 'asc' : 'desc'
+            ).map(([dateKey, events], index) => (
+              <View key={dateKey} pos="relative">
+                <View pos="absolute" bottom={0} left={4} top={16} w="$0.25" bg="$gray6" />
 
-              <View mb="$9">
-                <View pos="relative" pl="$4">
-                  <View
-                    bg="$color8"
-                    pos="absolute"
-                    theme="green"
-                    left={1}
-                    top={3}
-                    h="$0.75"
-                    w="$0.75"
-                    borderRadius="$5"
-                  />
-                  <View mb="$4">
-                    <Text fontSize="$2" color="$color11">
-                      {formatRelativeDateShared(events[0]?.startDate)}
-                    </Text>
-                    <Text fontSize="$2">{getDayOfWeek(events[0]?.startDate)}</Text>
+                <View mb="$9">
+                  <View pos="relative" pl="$4">
+                    <View
+                      bg="$color8"
+                      pos="absolute"
+                      theme="green"
+                      left={1}
+                      top={3}
+                      h="$0.75"
+                      w="$0.75"
+                      borderRadius="$5"
+                    />
+                    <View mb="$4">
+                      <Text fontSize="$2" color="$color11">
+                        {formatRelativeDateShared(events[0]?.startDate)}
+                      </Text>
+                      <Text fontSize="$2">{getDayOfWeek(events[0]?.startDate)}</Text>
+                    </View>
+                    <YStack gap="$4">
+                      {events.map((event) => (
+                        <EventCard key={event._id} event={event} isPast index={index} />
+                      ))}
+                    </YStack>
                   </View>
-                  <YStack gap="$4">
-                    {events.map((event) => (
-                      <EventCard key={event._id} event={event} isPast index={index} />
-                    ))}
-                  </YStack>
                 </View>
               </View>
-            </View>
-          ))}
+            ))
+          ) : pastEvents.length <= 0 ? (
+            <YStack flex={1} justifyContent="center" alignItems="center" space="$4" padding="$4">
+              <History size="$8" color="$gray8" /> {/* Icon related to history/past */}
+              <Text fontSize="$6" fontWeight="bold" color="$gray10" textAlign="center">
+                No Past Events Found
+              </Text>
+              <Text fontSize="$4" color="$gray9" textAlign="center" maxWidth={300}>
+                Once you attend or create events, they&apos;ll appear here for your review. Start
+                joining now!
+              </Text>
+            </YStack>
+          ) : (
+            <YStack>
+              <CardSkeleton />
+              <CardSkeleton />
+              <CardSkeleton />
+              <CardSkeleton />
+            </YStack>
+          )}
 
           {/* {pastEvents.length === 0 && (
                 <Text py="$12" ai="center">
