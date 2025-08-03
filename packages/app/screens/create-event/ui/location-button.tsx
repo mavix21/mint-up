@@ -12,9 +12,13 @@ export interface LocationButtonProps {
 export function LocationButton({ location, onPress }: LocationButtonProps) {
   const getLocationIcon = () => {
     if (!location) {
-      return <MapPin size={16} />;
+      return <MapPin color="$color11" size={16} />;
     }
-    return location.type === 'in-person' ? <MapPin size={16} /> : <Globe size={16} />;
+    return location.type === 'in-person' ? (
+      <MapPin color="$color11" size={16} />
+    ) : (
+      <Globe color="$color11" size={16} />
+    );
   };
 
   return (
@@ -24,7 +28,7 @@ export function LocationButton({ location, onPress }: LocationButtonProps) {
       icon={getLocationIcon()}
       onPress={onPress}
     >
-      <SizableText>Location</SizableText>
+      <SizableText color="$color11">Location</SizableText>
       <SizableText
         color={
           getLocationColor(
