@@ -58,4 +58,5 @@ export const eventsTable = defineTable({
   ),
 })
   .index('by_creatorId', ['creatorId'])
-  .index('by_organizationId', ['organizationId']);
+  .index('by_organizationId', ['organizationId'])
+  .index('by_startDate', ['startDate']);
