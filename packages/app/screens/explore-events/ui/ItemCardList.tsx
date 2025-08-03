@@ -10,13 +10,18 @@ import React from 'react';
 import { RegistersAvatar } from './RegistersAvatar';
 
 export function ItemCardList({ id }: { id: string }) {
-  const event = useQuery(api.events.getEventById, {
-    eventId: id as Id<'events'>,
-  });
+  // Check if this is a loading placeholder ID
+  const isPlaceholder = id.startsWith('loading-');
+
+  const event = isPlaceholder
+    ? null
+    : useQuery(api.events.getEventById, {
+        eventId: id as Id<'events'>,
+      });
 
   const [toggleEvent, setToggleEvent] = React.useState(false);
 
-  if (!event) {
+  if (isPlaceholder || !event) {
     return (
       <View alignItems="center">
         <SmallCardSkeleton />

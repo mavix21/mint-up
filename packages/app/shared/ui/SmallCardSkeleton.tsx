@@ -6,9 +6,8 @@ export const SmallCardSkeleton = () => {
   return (
     // Main container for the card
     <View
-      width={350} // Approximate width based on image
-      height={110} // Approximate height
-      padding="$3" // Reduced padding for a smaller card
+      flex={1}
+      padding="$3"
       borderRadius="$4"
       backgroundColor="$background" // Card background
       shadowColor="$shadowColor"
@@ -17,13 +16,15 @@ export const SmallCardSkeleton = () => {
       shadowRadius={5}
       flexDirection="row" // Arrange content horizontally (image left, text right)
       alignItems="center"
+      marginHorizontal="$4"
+      marginTop="$3"
       marginBottom="$3" // Space between multiple cards
     >
       {/* Left section: Image placeholder */}
       <SkeletonLine
-        width={80} // Approximate image width/height
-        height={80}
-        borderRadius="$3" // Image corner radius
+        width={100} // Match the actual image size
+        height={100}
+        borderRadius="$2" // Match the actual image border radius
         marginRight="$3" // Space between image and text
       />
 

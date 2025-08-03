@@ -11,7 +11,6 @@ import { Topbar } from './Topbar';
 export const Navigator = memo(function Navigator() {
   const [activeTab, setActiveTab] = useState('my-events');
   const [open, setOpen] = useState(false);
-  console.log('Navigator');
 
   return (
     <>

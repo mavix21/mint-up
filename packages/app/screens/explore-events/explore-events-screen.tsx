@@ -158,12 +158,10 @@ export const ExploreEventsScreen = () => {
       </ScrollView>
       <YStack flex={1} overflow="scroll" maxHeight={'75vh' as any} $lg={{ paddingBottom: '$14' }}>
         {events === undefined ? (
-          // Loading state
-          <YStack flex={1} justifyContent="center" alignItems="center" py="$8">
-            <SizableText color="$color11" fontSize="$4">
-              Loading events...
-            </SizableText>
-          </YStack>
+          // Loading state - show placeholder items that will render individual skeletons
+          Array.from({ length: 6 }, (_, index) => (
+            <ItemCardList key={`loading-${index}`} id={`loading-${index}`} />
+          ))
         ) : events.length === 0 ? (
           // Empty state
           <YStack flex={1} justifyContent="center" alignItems="center" py="$8">
