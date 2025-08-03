@@ -2,8 +2,8 @@ import { api } from '@my/backend/_generated/api';
 import { Id } from '@my/backend/_generated/dataModel';
 import { YStack, XStack, Card, Image, View, Chip, Theme, SizableText } from '@my/ui';
 import { formatDate, formatDateTime, formatRelativeDate } from '@my/ui/src/lib/dates';
-import { EventModal } from '@my/app/widgets/event-modal/event-modal';
 import { SmallCardSkeleton } from 'app/shared/ui/SmallCardSkeleton';
+import { EventModal } from 'app/widgets/event-modal';
 import { useQuery } from 'convex/react';
 import React from 'react';
 
