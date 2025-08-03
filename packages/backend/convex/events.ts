@@ -265,7 +265,7 @@ export const getUserEvents = query({
 
           return {
             ...event,
-            creatorName: user?.displayName ?? 'Anonymous',
+            creator: { name: user?.displayName ?? 'Anonymous', imageUrl: user?.pfpUrl ?? null },
             imageUrl,
             tickets,
             isHost,
