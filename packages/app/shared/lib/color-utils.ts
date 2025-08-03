@@ -42,7 +42,7 @@ export const getLocationColor = <T>(
   getUrl: (location: T) => string
 ): string => {
   if (!location) {
-    return '$color9';
+    return '$color11';
   }
 
   if (getType(location) === 'in-person' && getAddress(location)) {
@@ -53,5 +53,5 @@ export const getLocationColor = <T>(
     return '$color12';
   }
 
-  return '$color9';
+  return '$color11';
 };
