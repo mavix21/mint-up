@@ -14,6 +14,7 @@ import {
 import { MapPin, Globe } from '@tamagui/lucide-icons';
 import { useStore } from '@tanstack/react-form';
 import { withForm } from 'app/shared/lib/form';
+import { useState } from 'react';
 
 import { EventLocation } from '../../../entities';
 import { createEventFormOpts } from '../model/shared-form';
@@ -31,6 +32,11 @@ export const EventLocationSheet = withForm({
   } as EventLocationSheetProps,
   render: function EventLocationSheet({ open, onOpenChange, form }) {
     const visualViewportHeight = useVisualViewportHeight();
+    const [savedValues, setSavedValues] = useState<{
+      address?: string;
+      instructions?: string;
+      url?: string;
+    }>({});
 
     const handleSave = () => {
       onOpenChange(false);
@@ -105,18 +111,31 @@ export const EventLocationSheet = withForm({
                       value={eventLocationType}
                       onValueChange={(value: EventLocation['type']) => {
                         if (!value) return;
+
+                        // Save current values before switching
+                        const currentLocation = form.getFieldValue('location');
+                        if (currentLocation.type === 'in-person') {
+                          setSavedValues((prev) => ({
+                            ...prev,
+                            address: currentLocation.address,
+                            instructions: currentLocation.instructions,
+                          }));
+                        } else if (currentLocation.type === 'online') {
+                          setSavedValues((prev) => ({ ...prev, url: currentLocation.url }));
+                        }
+
                         if (value === 'online') {
                           // When switching to online, create a new location object with only online properties
                           form.setFieldValue('location', {
                             type: 'online',
-                            url: '',
+                            url: savedValues.url || '',
                           });
                         } else {
                           // When switching to in-person, create a new location object with only in-person properties
                           form.setFieldValue('location', {
                             type: 'in-person',
-                            address: '',
-                            instructions: '',
+                            address: savedValues.address || '',
+                            instructions: savedValues.instructions || '',
                           });
                         }
                       }}
