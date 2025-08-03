@@ -52,8 +52,9 @@ const ImageCropSheet = ({ isOpen, onClose, imageSrc, onCropComplete }: ImageCrop
     const scaleX = image.naturalWidth / image.width;
     const scaleY = image.naturalHeight / image.height;
 
-    canvas.width = completedCrop.width;
-    canvas.height = completedCrop.height;
+    // Use natural dimensions for better quality
+    canvas.width = completedCrop.width * scaleX;
+    canvas.height = completedCrop.height * scaleY;
 
     ctx.drawImage(
       image,
@@ -63,8 +64,8 @@ const ImageCropSheet = ({ isOpen, onClose, imageSrc, onCropComplete }: ImageCrop
       completedCrop.height * scaleY,
       0,
       0,
-      completedCrop.width,
-      completedCrop.height
+      completedCrop.width * scaleX,
+      completedCrop.height * scaleY
     );
 
     return new Promise<string>((resolve) => {
@@ -74,7 +75,7 @@ const ImageCropSheet = ({ isOpen, onClose, imageSrc, onCropComplete }: ImageCrop
           const url = URL.createObjectURL(blob);
           resolve(url);
         },
-        'image/jpeg',
+        'image/png', // Use PNG for better quality
         1
       );
     });
