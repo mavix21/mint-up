@@ -1,5 +1,6 @@
 import { api } from '@my/backend/_generated/api';
 import { FullscreenSpinner, H3, SizableText, Tabs, Text, View, YStack } from '@my/ui';
+import { CalendarPlus } from '@tamagui/lucide-icons';
 import {
   formatRelativeDate as formatRelativeDateShared,
   getDayOfWeek,
@@ -108,6 +109,33 @@ export const MyEventsScreen = () => {
                 </View>
               </View>
             ))
+          ) : upcomingEvents.length <= 0 ? (
+            <YStack
+              flex={1} // Takes up available space
+              justifyContent="center" // Centers content vertically
+              alignItems="center" // Centers content horizontally
+              space="$4" // Adds space between items
+              padding="$4" // Adds padding around the content
+            >
+              <CalendarPlus size="$8" color="$gray8" /> {/* Larger icon to draw attention */}
+              <Text
+                fontSize="$6" // Larger font for the main message
+                fontWeight="bold"
+                color="$gray10"
+                textAlign="center"
+              >
+                No Upcoming Events Yet!
+              </Text>
+              <Text
+                fontSize="$4" // Slightly smaller for descriptive text
+                color="$gray9"
+                textAlign="center"
+                maxWidth={300} // Constrain text width for better readability
+              >
+                It looks like you don&apos;t have any events planned. Create a new one or explore
+                what&apos;s happening!
+              </Text>
+            </YStack>
           ) : (
             <YStack>
               <CardSkeleton />
