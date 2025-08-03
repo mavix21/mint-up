@@ -69,8 +69,14 @@ export function EventModal({
 
   const handleComposeWithEmbed = () => {
     composeCast({
-      text: 'Testing frame for event - Mint Up!',
-      embeds: [`https://mint-up-mini.vercel.app/${eventData._id}`],
+      text: `¡No te pierdas ${eventData.name}! 🎉
+
+      Un evento imperdible que no querrás perderte. ¡Prepárate!
+
+      🗓️ ${formatDate(formatRelativeDate(eventData.startDate))}
+      📍 ${eventData.location?.type}
+      `,
+      embeds: ['https://mint-up-mini.vercel.app'],
     });
   };
 
