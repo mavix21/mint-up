@@ -113,7 +113,7 @@ export const ExploreEventsScreen = () => {
               ? `Search results for "${searchTerm}"${
                   events && events.length > 0 ? ` (${events.length})` : ''
                 }`
-              : 'Trending'}
+              : ''}
           </Text>
         </View>
       </YStack>

@@ -23,7 +23,7 @@ export function ItemCardList({ id }: { id: string }) {
 
   if (isPlaceholder || !event) {
     return (
-      <View alignItems="center">
+      <View>
         <SmallCardSkeleton />
       </View>
     );
