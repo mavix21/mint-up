@@ -1,5 +1,5 @@
 import { Doc, Id } from '@my/backend/_generated/dataModel';
-import { Text, Sheet, YStack, H4, View, RadioGroup, Button } from '@my/ui';
+import { Sheet, YStack, H4, View, RadioGroup, Button } from '@my/ui';
 import React from 'react';
 
 import { TicketCardRadioButton } from './ticket-card-radio-button';
@@ -21,10 +21,6 @@ export function TicketsEventSheet({
   const handleOpenChange = (isOpen: boolean) => {
     onOpenChange(isOpen);
   };
-
-  if (ticketList === undefined) {
-    return <Text>Loading tickers-event-sheet</Text>;
-  }
 
   return (
     <Sheet
