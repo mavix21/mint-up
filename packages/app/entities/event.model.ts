@@ -1,7 +1,10 @@
 import { Doc } from '@my/backend/_generated/dataModel';
 
-// Define the type for events returned by getUpcomingEvents
+// Define the type for events returned by getUserEvents
 export type ConvexEventWithExtras = Doc<'events'> & {
   creatorName: string;
   imageUrl: string | null;
+  tickets: Doc<'ticketTemplates'>[];
+  isHost: boolean;
+  userStatus?: 'pending' | 'minted' | 'rejected' | null;
 };

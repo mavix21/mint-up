@@ -1,4 +1,4 @@
-import { View, YStack, XStack, Image, Theme, SizableText, ThemeName } from '@my/ui';
+import { View, YStack, XStack, Image, Theme, SizableText, ThemeName, Chip } from '@my/ui';
 import { Clock, Globe, MapPin } from '@tamagui/lucide-icons';
 import { ConvexEventWithExtras } from 'app/entities';
 import { formatTime } from 'app/shared';
@@ -16,14 +16,41 @@ export function EventCard({
 }) {
   //const [managedEventId, setManagedEventId] = useState<string | null>(null);
   const [toggleEvent, setToggleEvent] = useState(false);
-  //const imageUrl = event.poapImageUrl ?? event.nftTicketImageUrl;
-  //const showDimmed = isPast && !event.poapImageUrl;
+
+  const getStatusChip = () => {
+    if (event.isHost) {
+      return (
+        <Chip size="$2" theme="green">
+          <Chip.Text>Hosting</Chip.Text>
+        </Chip>
+      );
+    }
+
+    if (event.userStatus) {
+      const statusConfig = {
+        pending: { label: 'Pending', theme: 'yellow' as const },
+        minted: { label: 'Going', theme: 'green' as const },
+        rejected: { label: 'Rejected', theme: 'red' as const },
+      };
+
+      const config = statusConfig[event.userStatus as keyof typeof statusConfig];
+      if (config) {
+        return (
+          <Chip size="$2" theme={config.theme}>
+            <Chip.Text>{config.label}</Chip.Text>
+          </Chip>
+        );
+      }
+    }
+
+    return null;
+  };
 
   return (
     <>
       <Theme name={event.theme as ThemeName}>
         <YStack
-          gap="$2"
+          gap="$1"
           $xxs={{
             padding: '$0',
             paddingBlockEnd: '$4',
@@ -127,6 +154,7 @@ export function EventCard({
             gap="$5"
             $xxs={{ paddingInline: '$4' }}
           >
+            {getStatusChip()}
             {/* <Button
             size="$2"
             onPress={() => {

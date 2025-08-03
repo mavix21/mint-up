@@ -238,18 +238,39 @@ export const getUserEvents = query({
     // Combine and deduplicate events
     const allEvents = [...hostedEvents, ...registeredEvents.filter(Boolean)];
 
-    // Enrich events with creator info and image URLs
+    // Enrich events with creator info, image URLs, tickets, and user role/status
     return Promise.all(
       allEvents
         .filter((event): event is NonNullable<typeof event> => event !== null)
         .map(async (event) => {
           const user = await ctx.db.get(event.creatorId);
           const imageUrl = (await ctx.storage.getUrl(event.image)) ?? null;
+
+          // Get tickets for this event
+          const tickets = await ctx.db
+            .query('ticketTemplates')
+            .withIndex('by_eventId', (q) => q.eq('eventId', event._id))
+            .collect();
+
+          // Determine user role and status
+          const isHost = event.creatorId === userId;
+          let userStatus = null;
+
+          if (!isHost) {
+            const registration = userRegistrations.find((reg) => reg.eventId === event._id);
+            if (registration) {
+              userStatus = registration.status.type;
+            }
+          }
+
           return {
             ...event,
             creatorName: user?.displayName ?? 'Anonymous',
             imageUrl,
-          };
+            tickets,
+            isHost,
+            userStatus,
+          } as const;
         })
     );
   },
