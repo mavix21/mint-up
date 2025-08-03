@@ -90,6 +90,8 @@ export function CreateEventForm({
         startTimestamp,
         endTimestamp,
       });
+
+      form.reset();
     },
     onSubmitInvalid: ({ formApi }) => {
       console.log('onSubmitInvalid');
