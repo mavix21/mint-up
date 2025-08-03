@@ -59,4 +59,8 @@ export const eventsTable = defineTable({
 })
   .index('by_creatorId', ['creatorId'])
   .index('by_organizationId', ['organizationId'])
-  .index('by_startDate', ['startDate']);
+  .index('by_startDate', ['startDate'])
+  .searchIndex('search_events', {
+    searchField: 'name',
+    filterFields: ['category'],
+  });

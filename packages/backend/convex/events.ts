@@ -131,23 +131,35 @@ export const searchEvents = query({
     const identity = await ctx.auth.getUserIdentity();
     const userId = identity !== null ? (identity.subject as Id<'users'>) : null;
 
-    let q = ctx.db.query('events');
+    let events: Doc<'events'>[];
 
-    // Apply category filter if specified and not "All"
-    if (args.category && args.category !== 'All') {
-      q = q.filter((q) => q.eq(q.field('category'), args.category));
-    }
-
-    const events = await q.order('desc').collect();
-
-    // Apply search filter in memory for better partial matching
-    let filteredEvents = events;
+    // Use search index for efficient full-text search with relevance ranking
     if (args.searchTerm && args.searchTerm.trim() !== '') {
-      const searchTerm = args.searchTerm.toLowerCase().trim();
-      filteredEvents = events.filter((event) => event.name.toLowerCase().includes(searchTerm));
+      // Use search index with search expression and category filter
+      if (args.category && args.category !== 'All') {
+        events = await ctx.db
+          .query('events')
+          .withSearchIndex('search_events', (q) =>
+            q.search('name', args.searchTerm!).eq('category', args.category as any)
+          )
+          .collect();
+      } else {
+        // Search without category filter
+        events = await ctx.db
+          .query('events')
+          .withSearchIndex('search_events', (q) => q.search('name', args.searchTerm!))
+          .collect();
+      }
+    } else {
+      // No search term, just filter by category if specified
+      let q = ctx.db.query('events');
+      if (args.category && args.category !== 'All') {
+        q = q.filter((q) => q.eq(q.field('category'), args.category));
+      }
+      events = await q.order('desc').collect();
     }
 
-    return enrichEventsWithCommonData(ctx, filteredEvents, userId);
+    return enrichEventsWithCommonData(ctx, events, userId);
   },
 });
 
