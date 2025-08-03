@@ -37,7 +37,7 @@ import { getClientTimezone, calculateDefaultEventTimes } from '../../../utils';
 import { createEventFormOpts } from '../model/shared-form';
 
 export interface CreateEventFormProps {
-  onSubmit?: (data: any) => void;
+  onSubmit?: (data: any) => Promise<void>;
   theme?: string;
   onThemeChange?: (theme: string) => void;
   showThemeSheet?: boolean;
@@ -80,12 +80,12 @@ export function CreateEventForm({
     validators: {
       onChange: createEventFormSchema,
     },
-    onSubmit: ({ value }) => {
+    onSubmit: async ({ value }) => {
       console.log('value', value);
       const startTimestamp = toTimestamp(value.startDate, value.startTime);
       const endTimestamp = toTimestamp(value.endDate, value.endTime);
 
-      onSubmit?.({
+      await onSubmit?.({
         ...value,
         startTimestamp,
         endTimestamp,
@@ -102,14 +102,24 @@ export function CreateEventForm({
     <form.AppForm>
       <Form
         onSubmit={() => {
-          console.log('errors', form.state.errors[0]?.['endTime']?.[0]);
-          // console.log('values', form.state.values);
           form.handleSubmit();
         }}
       >
         <YStack gap="$4">
           {/* Event Image */}
-          <EventImage />
+          <form.Field
+            name="image"
+            children={(field) => {
+              return (
+                <EventImage
+                  imageUrl={field.state.value}
+                  onImageChange={(imageUrl) => {
+                    field.handleChange(imageUrl);
+                  }}
+                />
+              );
+            }}
+          />
           {/* Theme Selector */}
           <ThemeSelector
             theme={theme}
@@ -193,8 +203,8 @@ export function CreateEventForm({
                     backgroundColor="$color3"
                   >
                     <XStack alignItems="center" gap="$2" flex={1}>
-                      <Clock2 size={16} />
-                      <Label htmlFor="start" fontWeight="500">
+                      <Clock2 color="$color11" size={16} />
+                      <Label htmlFor="start" fontWeight="500" color="$color11">
                         Start
                       </Label>
                     </XStack>
@@ -245,8 +255,8 @@ export function CreateEventForm({
                         backgroundColor="$color3"
                       >
                         <XStack alignItems="center" gap="$2" flex={1}>
-                          <Clock4 size={16} />
-                          <Label htmlFor="end" fontWeight="500">
+                          <Clock4 color="$color11" size={16} />
+                          <Label htmlFor="end" fontWeight="500" color="$color11">
                             End
                           </Label>
                         </XStack>
@@ -297,8 +307,10 @@ export function CreateEventForm({
                     backgroundColor="$color3"
                   >
                     <XStack alignItems="center" gap="$2" flex={1}>
-                      <Globe size={16} />
-                      <Label fontWeight="500">Timezone</Label>
+                      <Globe color="$color11" size={16} />
+                      <Label fontWeight="500" color="$color11">
+                        Timezone
+                      </Label>
                     </XStack>
                     <XStack gap="$4" alignItems="center">
                       <Chip size="$3" py="$2" borderRadius="$4">

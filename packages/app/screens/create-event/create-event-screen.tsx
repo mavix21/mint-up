@@ -5,17 +5,34 @@ import { Id } from '@my/backend/_generated/dataModel';
 import { useMutation } from '@my/backend/react';
 import { useToastController } from '@my/ui';
 import { CreateEventFormData } from 'app/entities';
+import { blobUrlToFile } from 'app/shared/lib/file';
 import { useState } from 'react';
 import { YStack, Theme, ScrollView, ThemeName } from 'tamagui';
 
 import { CreateEventForm } from './ui';
 
+async function uploadFile({ file, uploadUrl }: { file: File; uploadUrl: string }) {
+  console.log('uploadFile', file);
+  const res = await fetch(uploadUrl, {
+    method: 'POST',
+    headers: { 'Content-Type': file.type },
+    body: file,
+  });
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  const response = await res.json();
+
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+  const storageId = response.storageId as Id<'_storage'>;
+
+  return storageId;
+}
+
 export function CreateEventScreen({ closeSheet }: { closeSheet: () => void }) {
   const toast = useToastController();
   const [theme, setTheme] = useState<string | undefined>(undefined);
   const [showThemeSheet, setShowThemeSheet] = useState(false);
-  const [, setIsLoading] = useState(false);
   const createEvent = useMutation(api.events.createEvent);
+  const generateUploadUrl = useMutation(api.storage.generateUploadUrl);
 
   // const { data: session } = useSession();
   // const { data: hash, writeContract } = useWriteContract();
@@ -49,9 +66,14 @@ export function CreateEventScreen({ closeSheet }: { closeSheet: () => void }) {
   const handleSubmit = async (
     data: CreateEventFormData & { startTimestamp: number; endTimestamp: number }
   ) => {
-    setIsLoading(true);
     console.log('Creating event with data:', data);
     try {
+      const uploadUrl = await generateUploadUrl();
+      console.log('uploadUrl', uploadUrl);
+      const file = await blobUrlToFile(data.image, 'image.jpg');
+
+      const storageId = await uploadFile({ file, uploadUrl });
+
       await createEvent({
         event: {
           name: data.name,
@@ -61,7 +83,7 @@ export function CreateEventScreen({ closeSheet }: { closeSheet: () => void }) {
           category: data.category === '' ? 'other' : data.category,
           location: data.location,
           visibility: 'public',
-          image: 'kg2aphx307hkad4dxhpcrvjbkh7ma70s' as Id<'_storage'>,
+          image: storageId,
           automatedFlows: [],
           hosts: [],
           theme,
@@ -99,8 +121,10 @@ export function CreateEventScreen({ closeSheet }: { closeSheet: () => void }) {
       closeSheet();
     } catch (error) {
       console.error('Error creating event:', error);
-    } finally {
-      setIsLoading(false);
+      toast.show('Error creating event', {
+        type: 'error',
+        preset: 'error',
+      });
     }
   };
 

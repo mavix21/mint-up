@@ -69,6 +69,7 @@ export function EventModal({
           key={visualViewportHeight}
           backgroundColor="$color2"
           padding="$0"
+          borderRadius="$0"
           style={{ height: visualViewportHeight }}
         >
           <YStack flex={1} width="100%">
@@ -96,7 +97,7 @@ export function EventModal({
             {/* Event Content */}
             <YStack flex={1} pb="$4">
               <View gap="$4">
-                <Image height={300} source={{ uri: eventData.imageUrl ?? '' }} borderRadius="$3" />
+                <Image height={300} source={{ uri: eventData.imageUrl ?? '' }} />
                 <H2 px="$4">{eventData?.name}</H2>
               </View>
 
@@ -129,7 +130,7 @@ export function EventModal({
                         <Globe size={15} mt="$1" color="$gray10" />
                         <YStack>
                           <Text fontSize="$1" fontWeight="bold">
-                            {eventData.location.url}
+                            {eventData.location.url || 'Link TBD'}
                           </Text>
                         </YStack>
                       </XStack>
@@ -138,7 +139,7 @@ export function EventModal({
                         <MapPin size={15} mt="$1" color="$gray10" />
                         <YStack>
                           <Text fontSize="$1" fontWeight="bold">
-                            {eventData.location.address}
+                            {eventData.location.address || 'Location TBD'}
                           </Text>
                         </YStack>
                       </XStack>

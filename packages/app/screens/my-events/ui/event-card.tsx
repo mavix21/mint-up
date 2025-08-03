@@ -1,8 +1,7 @@
-import { View, YStack, XStack, Image, Button, Theme, SizableText } from '@my/ui';
-import { ArrowRight, Clock, Globe, MapPin } from '@tamagui/lucide-icons';
+import { View, YStack, XStack, Image, Theme, SizableText } from '@my/ui';
+import { Clock, Globe, MapPin } from '@tamagui/lucide-icons';
 import { formatTime } from 'app/shared';
 import { useState } from 'react';
-import { Link } from 'solito/link';
 
 import { EventModal } from './event-modal';
 import { ConvexEventWithExtras } from '../my-events-screen';
@@ -100,7 +99,7 @@ export function EventCard({
               {typeof event.location === 'string' ? (
                 <XStack display="flex" ai="flex-start" gap="$2">
                   <MapPin size={15} color="$color11" />
-                  <SizableText color="$color11">{event.location}</SizableText>
+                  <SizableText color="$color11">{event.location || 'Location TBD'}</SizableText>
                 </XStack>
               ) : event.location?.type === 'online' ? (
                 <XStack display="flex" ai="center" gap="$2">
@@ -114,7 +113,7 @@ export function EventCard({
                 <XStack display="flex" ai="flex-start" gap="$2">
                   <MapPin mt={2} size={15} flexShrink={0} color="$color11" />
                   <SizableText size="$1" color="$color11">
-                    {event.location.address}
+                    {event.location.address || 'Location TBD'}
                   </SizableText>
                 </XStack>
               ) : (
