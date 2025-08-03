@@ -51,7 +51,7 @@ export function CreateEventSheetWrapper({ open, setOpen }: CreateEventSheetWrapp
               chromeless
               borderWidth={1}
               onPress={() => setOpen(false)}
-              icon={<ChevronDown size={20} />}
+              icon={<ChevronDown size={24} />}
             />
           </XStack>
 
