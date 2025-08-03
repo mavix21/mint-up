@@ -70,7 +70,7 @@ export function EventModal({
   const handleComposeWithEmbed = () => {
     composeCast({
       text: 'Testing frame for event - Mint Up!',
-      embeds: ['https://mint-up-mini.vercel.app/'],
+      embeds: [`https://mint-up-mini.vercel.app/${eventData._id}`],
     });
   };
 
