@@ -1,3 +1,4 @@
+import { useComposeCast } from '@coinbase/onchainkit/minikit';
 import { api } from '@my/backend/_generated/api';
 import { Id } from '@my/backend/_generated/dataModel';
 import { useQuery } from '@my/backend/react';
@@ -44,6 +45,8 @@ export function EventModal({
   setToggleEvent: Dispatch<SetStateAction<boolean>>;
   eventData: ConvexEventWithExtras;
 }) {
+  const { composeCast } = useComposeCast();
+
   const [showTicketsSheet, setShowTicketsSheet] = React.useState(false);
   const visualViewportHeight = useVisualViewportHeight();
   const ticketList = useQuery(api.ticketTemplates.getTicketsById, {
@@ -63,6 +66,13 @@ export function EventModal({
   const isOnline = eventData.location?.type === 'online';
   const isInPerson = eventData.location?.type === 'in-person';
   const hasLocation = typeof eventData.location === 'string' || isOnline || isInPerson;
+
+  const handleComposeWithEmbed = () => {
+    composeCast({
+      text: 'Testing frame for event - Mint Up!',
+      embeds: ['https://mint-up-mini.vercel.app/'],
+    });
+  };
 
   return (
     <>
@@ -170,7 +180,7 @@ export function EventModal({
 
                   <Theme name="gray">
                     <Button size="$4" icon={<Share2 size={16} />}>
-                      <Button.Text>Share</Button.Text>
+                      <Button.Text onPress={handleComposeWithEmbed}>Share</Button.Text>
                     </Button>
                   </Theme>
 
