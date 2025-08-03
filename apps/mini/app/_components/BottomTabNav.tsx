@@ -1,5 +1,5 @@
 import { XStack, YStack } from '@my/ui';
-import { Calendar, Cast, Plus, Search, Settings } from '@tamagui/lucide-icons';
+import { Calendar, Plus, Search } from '@tamagui/lucide-icons';
 
 import { BottomTab } from './BottomTab';
 
@@ -18,12 +18,12 @@ export function BottomTabNav({ activeTab, setActiveTab }: BottomTabNavProps) {
           label="My Events"
           Icon={Calendar}
         />
-        <BottomTab
+        {/* <BottomTab
           onClick={() => setActiveTab('casts')}
           isActive={activeTab === 'casts'}
           label="Casts"
           Icon={Cast}
-        />
+        /> */}
         <BottomTab
           onClick={() => setActiveTab('create')}
           isActive={activeTab === 'create'}
@@ -37,12 +37,12 @@ export function BottomTabNav({ activeTab, setActiveTab }: BottomTabNavProps) {
           label="Explore"
           Icon={Search}
         />
-        <BottomTab
+        {/* <BottomTab
           onClick={() => setActiveTab('settings')}
           isActive={activeTab === 'settings'}
-          label="Settings"
-          Icon={Settings}
-        />
+          label="Settings" */}
+        {/* Icon={Settings} */}
+        {/* /> */}
       </XStack>
     </YStack>
   );
