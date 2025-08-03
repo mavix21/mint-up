@@ -67,6 +67,39 @@ export function EventModal({
   const isInPerson = eventData.location?.type === 'in-person';
   const hasLocation = typeof eventData.location === 'string' || isOnline || isInPerson;
 
+  // Check if user is already registered
+  const isUserRegistered = eventData.userStatus && eventData.userStatus !== 'rejected';
+  const isUserHost = eventData.isHost;
+
+  const getStatusChip = () => {
+    if (isUserHost) {
+      return (
+        <Chip size="$2" theme="green">
+          <Chip.Text>Hosting</Chip.Text>
+        </Chip>
+      );
+    }
+
+    if (eventData.userStatus) {
+      const statusConfig = {
+        pending: { label: 'Pending Approval', theme: 'yellow' as const },
+        minted: { label: 'Ticket Minted', theme: 'green' as const },
+        rejected: { label: 'Registration Rejected', theme: 'red' as const },
+      };
+
+      const config = statusConfig[eventData.userStatus as keyof typeof statusConfig];
+      if (config) {
+        return (
+          <Chip size="$2" theme={config.theme}>
+            <Chip.Text>{config.label}</Chip.Text>
+          </Chip>
+        );
+      }
+    }
+
+    return null;
+  };
+
   const handleComposeWithEmbed = () => {
     composeCast({
       text: `¡No te pierdas ${eventData.name}! 🎉
@@ -161,39 +194,59 @@ export function EventModal({
 
                 {/* Status Badge */}
                 <XStack alignItems="center" gap="$2">
-                  <Chip size="$2" rounded>
-                    <Chip.Text>
-                      {ticketList.length > 0 ? 'Tickets Available' : 'Waitlist Open'}
-                    </Chip.Text>
-                  </Chip>
+                  {getStatusChip()}
+                  {!isUserHost && !isUserRegistered && (
+                    <Chip size="$2" rounded>
+                      <Chip.Text>
+                        {ticketList.length > 0 ? 'Tickets Available' : 'Waitlist Open'}
+                      </Chip.Text>
+                    </Chip>
+                  )}
                 </XStack>
 
-                {/* Action Buttons */}
-                <XStack gap="$3" justifyContent="space-between" alignItems="stretch">
-                  <Button
-                    flex={1}
-                    fontWeight="600"
-                    onPress={() => (ticketList.length > 0 ? setShowTicketsSheet(true) : null)}
-                  >
-                    <Button.Text>
-                      {ticketList.length > 0
-                        ? allFree
-                          ? 'Register'
-                          : 'Buy Tickets'
-                        : 'Join Waitlist'}
-                    </Button.Text>
-                  </Button>
-
-                  <Theme name="gray">
-                    <Button size="$4" icon={<Share2 size={16} />}>
-                      <Button.Text onPress={handleComposeWithEmbed}>Share</Button.Text>
+                {/* Action Buttons - Only show if user is not host and not already registered */}
+                {!isUserHost && !isUserRegistered && (
+                  <XStack gap="$3" justifyContent="space-between" alignItems="stretch">
+                    <Button
+                      flex={1}
+                      fontWeight="600"
+                      onPress={() => (ticketList.length > 0 ? setShowTicketsSheet(true) : null)}
+                    >
+                      <Button.Text>
+                        {ticketList.length > 0
+                          ? allFree
+                            ? 'Register'
+                            : 'Buy Tickets'
+                          : 'Join Waitlist'}
+                      </Button.Text>
                     </Button>
-                  </Theme>
 
-                  <Theme name="gray">
-                    <Button height="100%" size="$2" icon={<MoreVertical size={16} />} />
-                  </Theme>
-                </XStack>
+                    <Theme name="gray">
+                      <Button size="$4" icon={<Share2 size={16} />}>
+                        <Button.Text onPress={handleComposeWithEmbed}>Share</Button.Text>
+                      </Button>
+                    </Theme>
+
+                    <Theme name="gray">
+                      <Button height="100%" size="$2" icon={<MoreVertical size={16} />} />
+                    </Theme>
+                  </XStack>
+                )}
+
+                {/* Show only share and more buttons if user is host or already registered */}
+                {(isUserHost || isUserRegistered) && (
+                  <XStack gap="$3" justifyContent="flex-end" alignItems="stretch">
+                    <Theme name="gray">
+                      <Button size="$4" icon={<Share2 size={16} />}>
+                        <Button.Text onPress={handleComposeWithEmbed}>Share</Button.Text>
+                      </Button>
+                    </Theme>
+
+                    <Theme name="gray">
+                      <Button height="100%" size="$2" icon={<MoreVertical size={16} />} />
+                    </Theme>
+                  </XStack>
+                )}
 
                 {/* Location Section */}
                 {hasLocation && (
@@ -292,16 +345,19 @@ export function EventModal({
                   <YStack gap="$3">
                     {/* Placeholder Host - Replace with actual host data */}
                     <XStack alignItems="center" gap="$3">
-                      <Avatar circular size="$4" backgroundColor="$color8">
+                      {eventData.creator.imageUrl ? (
+                        <Avatar circular size="$4">
+                          <Avatar.Image source={{ uri: eventData.creator.imageUrl }} />
+                          <Avatar.Fallback backgroundColor="$color8" />
+                        </Avatar>
+                      ) : (
                         <User size={16} color="$color" />
-                      </Avatar>
+                      )}
                       <YStack flex={1}>
                         <SizableText size="$3" fontWeight="600">
-                          Event Organizer
+                          {eventData.creator.name}
                         </SizableText>
-                        <SizableText color="$color8" size="$2">
-                          Event Host
-                        </SizableText>
+                        {/* <SizableText color="$color8" size="$2" /> */}
                       </YStack>
                     </XStack>
                   </YStack>
@@ -320,23 +376,29 @@ export function EventModal({
               </YStack>
             </ScrollView>
 
-            {/* Bottom Action */}
-            <View
-              padding="$4"
-              borderTopWidth={1}
-              borderColor="$borderColor"
-              backgroundColor="$background"
-            >
-              <Button
-                width="100%"
-                fontWeight="600"
-                onPress={() => (ticketList.length > 0 ? setShowTicketsSheet(true) : null)}
+            {/* Bottom Action - Only show if user is not host and not already registered */}
+            {!isUserHost && !isUserRegistered && (
+              <View
+                padding="$4"
+                borderTopWidth={1}
+                borderColor="$borderColor"
+                backgroundColor="$background"
               >
-                <Button.Text>
-                  {ticketList.length > 0 ? (allFree ? 'Register' : 'Buy Tickets') : 'Join Waitlist'}
-                </Button.Text>
-              </Button>
-            </View>
+                <Button
+                  width="100%"
+                  fontWeight="600"
+                  onPress={() => (ticketList.length > 0 ? setShowTicketsSheet(true) : null)}
+                >
+                  <Button.Text>
+                    {ticketList.length > 0
+                      ? allFree
+                        ? 'Register'
+                        : 'Buy Tickets'
+                      : 'Join Waitlist'}
+                  </Button.Text>
+                </Button>
+              </View>
+            )}
           </YStack>
         </Sheet.Frame>
       </Sheet>
