@@ -40,16 +40,22 @@ export function CreateEventSheetWrapper({ open, setOpen }: CreateEventSheetWrapp
           {/* Close Button */}
           <XStack
             position="absolute"
-            top="$2"
-            left="$2"
+            top="$5"
+            left="$5"
             zIndex={1000}
             alignItems="center"
             justifyContent="center"
           >
             <Button
+              size="$3"
               circular
               chromeless
               borderWidth={1}
+              backgroundColor="$background025"
+              pressStyle={{
+                backgroundColor: '$background05',
+                borderColor: 'transparent',
+              }}
               onPress={() => setOpen(false)}
               icon={<ChevronDown size={24} />}
             />
