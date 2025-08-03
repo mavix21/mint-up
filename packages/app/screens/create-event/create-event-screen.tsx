@@ -131,7 +131,7 @@ export function CreateEventScreen({ closeSheet }: { closeSheet: () => void }) {
   return (
     <Theme name={theme as ThemeName}>
       <YStack flex={1} fullscreen backgroundColor="$color1">
-        <YStack flex={1} py="$4">
+        <YStack flex={1}>
           <ScrollView flex={1} width="100%">
             <YStack gap="$4" px="$4" py="$4" marginHorizontal="auto" width="100%" maxWidth={496}>
               <CreateEventForm
