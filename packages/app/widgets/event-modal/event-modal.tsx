@@ -103,13 +103,12 @@ export function EventModal({
   const handleComposeWithEmbed = () => {
     composeCast({
       text: `¡No te pierdas ${eventData.name}! 🎉
-
-  Un evento imperdible que no querrás perderte. ¡Prepárate!
+Un evento imperdible que no querrás perderte. ¡Prepárate!
 
       🗓️ ${formatDate(formatRelativeDate(eventData.startDate))}
       📍 ${eventData.location?.type}
       `,
-      embeds: [`https://mint-up-mini.vercel.app/events/detail/${eventData._id}`],
+      embeds: [`https://mint-up-mini.vercel.app/events/${eventData._id}`],
     });
   };
 
