@@ -104,12 +104,12 @@ export function EventModal({
     composeCast({
       text: `¡No te pierdas ${eventData.name}! 🎉
 
-      Un evento imperdible que no querrás perderte. ¡Prepárate!
+  Un evento imperdible que no querrás perderte. ¡Prepárate!
 
       🗓️ ${formatDate(formatRelativeDate(eventData.startDate))}
       📍 ${eventData.location?.type}
       `,
-      embeds: ['https://mint-up-mini.vercel.app'],
+      embeds: [`https://mint-up-mini.vercel.app/events/detail/${eventData._id}`],
     });
   };
 
