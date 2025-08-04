@@ -1,5 +1,5 @@
 import { omit } from 'convex-helpers';
-import { mutation } from './_generated/server';
+import { mutation } from './functions';
 import { vv } from './schema';
 import { ConvexError, v } from 'convex/values';
 
