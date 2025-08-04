@@ -1,4 +1,15 @@
 import {
+  ScrollView,
+  YStack,
+  Card,
+  RadioGroup,
+  SizableText,
+  XStack,
+  Theme,
+  ThemeName,
+  AnimatePresence,
+} from '@my/ui';
+import {
   Music,
   Briefcase,
   Palette,
@@ -16,17 +27,6 @@ import { AnyFieldApi } from '@tanstack/react-form';
 import { EventCategory } from 'app/entities/schemas';
 import { FieldInfo } from 'app/shared/ui/FieldInfo';
 import { useState, useCallback, useMemo } from 'react';
-import {
-  ScrollView,
-  YStack,
-  Card,
-  RadioGroup,
-  SizableText,
-  XStack,
-  Theme,
-  ThemeName,
-  AnimatePresence,
-} from 'tamagui';
 import { LinearGradient } from 'tamagui/linear-gradient';
 
 // Import the type from the schema
