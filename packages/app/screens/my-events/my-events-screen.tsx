@@ -146,14 +146,7 @@ export const MyEventsScreen = () => {
           )}
         </Tabs.Content>
 
-        <Tabs.Content
-          value="past"
-          className="space-y-0"
-          overflowBlock="scroll"
-          height="100%"
-          paddingInlineEnd="$4"
-          paddingBottom={160}
-        >
+        <Tabs.Content value="past" overflowBlock="scroll" height="100%" paddingBottom={160}>
           {pastEvents.length > 0 ? (
             groupByDate(
               pastEvents,
