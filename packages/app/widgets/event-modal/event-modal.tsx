@@ -27,6 +27,7 @@ import {
   User,
   ExternalLink,
   MoreVertical,
+  Sparkles,
 } from '@tamagui/lucide-icons';
 import React, { Dispatch, SetStateAction } from 'react';
 
@@ -222,12 +223,39 @@ Un evento imperdible que no querrás perderte. ¡Prepárate!
                 {/* Show only share and more buttons if user is host or already registered */}
                 {(isUserHost || isUserRegistered) && (
                   <XStack gap="$3" justifyContent="flex-end" alignItems="stretch">
+                    {isUserHost && (
+                      <Theme name="dark_gray">
+                        <Button
+                          flex={1}
+                          fontWeight="600"
+                          onPress={() => {
+                            console.log('show ticket');
+                          }}
+                          iconAfter={ExternalLink}
+                        >
+                          <Button.Text>Manage</Button.Text>
+                        </Button>
+                      </Theme>
+                    )}
+                    {isUserRegistered && (
+                      <Theme name="dark_green">
+                        <Button
+                          flex={1}
+                          fontWeight="600"
+                          onPress={() => {
+                            console.log('show ticket');
+                          }}
+                          iconAfter={<Sparkles />}
+                        >
+                          <Button.Text>You&apos;re in!</Button.Text>
+                        </Button>
+                      </Theme>
+                    )}
                     <Theme name="gray">
                       <Button size="$4" icon={<Share2 size={16} />}>
                         <Button.Text onPress={handleComposeWithEmbed}>Share</Button.Text>
                       </Button>
                     </Theme>
-
                     <Theme name="gray">
                       <Button height="100%" size="$2" icon={<MoreVertical size={16} />} />
                     </Theme>
