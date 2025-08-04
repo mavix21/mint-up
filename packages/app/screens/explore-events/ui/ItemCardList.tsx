@@ -52,7 +52,7 @@ export function ItemCardList({ event }: { event: ConvexEventWithExtras }) {
                   <Chip.Text fontWeight="600">{event.category}</Chip.Text>
                 </Chip>
               </View>
-              <RegistersAvatar eventId={event._id ?? ''} />
+              <RegistersAvatar event={event} />
             </YStack>
           </YStack>
         </XStack>

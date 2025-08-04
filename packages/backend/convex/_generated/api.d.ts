@@ -15,6 +15,7 @@ import type {
 } from "convex/server";
 import type * as authAdapter from "../authAdapter.js";
 import type * as events from "../events.js";
+import type * as functions from "../functions.js";
 import type * as http from "../http.js";
 import type * as nextjs from "../nextjs.js";
 import type * as react from "../react.js";
@@ -46,6 +47,7 @@ import type * as users from "../users.js";
 declare const fullApi: ApiFromModules<{
   authAdapter: typeof authAdapter;
   events: typeof events;
+  functions: typeof functions;
   http: typeof http;
   nextjs: typeof nextjs;
   react: typeof react;

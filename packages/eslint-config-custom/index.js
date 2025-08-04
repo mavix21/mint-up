@@ -8,6 +8,23 @@ module.exports = {
         '@typescript-eslint/no-var-requires': 'off',
       },
     },
+    {
+      files: ['packages/backend/convex/**/*.ts'],
+      rules: {
+        'no-restricted-imports': [
+          'error',
+          {
+            patterns: [
+              {
+                group: ['*/_generated/server'],
+                importNames: ['mutation', 'internalMutation'],
+                message: 'Use functions.ts for mutations to ensure triggers run',
+              },
+            ],
+          },
+        ],
+      },
+    },
   ],
   rules: {
     'react/react-in-jsx-scope': 'off',

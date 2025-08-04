@@ -1,24 +1,16 @@
-import { api } from '@my/backend/_generated/api';
-import { Id } from '@my/backend/_generated/dataModel';
-import { Circle, SizableText, Text, XStack, View } from '@my/ui';
+import { Circle, SizableText, View, XStack } from '@my/ui';
+import { ConvexEventWithExtras } from 'app/entities';
 import { SkeletonLine } from 'app/shared/ui/SkeletonLine';
-import { useQuery } from 'convex/react';
 
 import { AvatarGroup } from './AvatarGroup';
 import { Item } from './Item';
 
-export function RegistersAvatar({ eventId }: { eventId: string }) {
-  const registers = useQuery(api.registrations.getRegistrationsByEventId, {
-    eventId: eventId as Id<'events'>,
-  });
+export function RegistersAvatar({ event }: { event: ConvexEventWithExtras }) {
+  // Use registration metadata from event data instead of separate queries
+  const registrationCount = event.registrationCount ?? 0;
+  const recentRegistrations = event.recentRegistrations ?? [];
 
-  const numberOfTotalRegisters = useQuery(api.registrations.getRegistrationsByEventIdCount, {
-    eventId: eventId as Id<'events'>,
-  });
-
-  if (!registers) return <SkeletonLine width="$4" height="$1.5" />;
-
-  if (registers?.length < 1)
+  if (registrationCount === 0) {
     return (
       <View height="$1.5" justifyContent="center">
         <SizableText size="$1" color="$color10">
@@ -26,25 +18,21 @@ export function RegistersAvatar({ eventId }: { eventId: string }) {
         </SizableText>
       </View>
     );
+  }
 
-  // Show only first 5 registers
-  const visibleRegisters = registers.slice(0, 5);
-
-  // Calculate remaining count
-  const remainingCount = (numberOfTotalRegisters || 0) - visibleRegisters.length;
-
-  // Create items for AvatarGroup
-  const avatarItems = visibleRegisters.map((register) => (
-    <Item key={register._id} size="$2" imageUrl={register.assistant?.pfpUrl ?? ''} />
+  // Create items for AvatarGroup from recent registrations
+  const avatarItems = recentRegistrations.map((registration) => (
+    <Item key={registration.userId} size="$2" imageUrl={registration.pfpUrl ?? ''} />
   ));
 
-  // Add remaining count circle if there are more than 5 total registers
+  // Add remaining count circle if there are more registrations than shown
+  const remainingCount = registrationCount - recentRegistrations.length;
   if (remainingCount > 0) {
     avatarItems.push(
       <Circle key="remaining" size="$2" backgroundColor="$color" elevation="$4">
-        <Text color="$background" fontSize="$1">
+        <SizableText color="$background" fontSize="$1">
           +{remainingCount}
-        </Text>
+        </SizableText>
       </Circle>
     );
   }

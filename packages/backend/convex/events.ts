@@ -1,6 +1,7 @@
 import { v } from 'convex/values';
 
-import { mutation, query, QueryCtx } from './_generated/server';
+import { query, QueryCtx } from './_generated/server';
+import { mutation } from './functions';
 import { vv } from './schema';
 import { omit } from 'convex-helpers';
 import { Doc, Id } from './_generated/dataModel';

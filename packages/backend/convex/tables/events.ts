@@ -43,6 +43,18 @@ export const eventsTable = defineTable({
       role: v.union(v.string()),
     })
   ),
+  // Registration metadata for performance optimization
+  registrationCount: v.optional(v.number()),
+  recentRegistrations: v.optional(
+    v.array(
+      v.object({
+        userId: v.id('users'),
+        pfpUrl: v.optional(v.string()),
+        displayName: v.string(),
+        registrationTime: v.number(),
+      })
+    )
+  ),
 
   automatedFlows: v.optional(
     v.array(
