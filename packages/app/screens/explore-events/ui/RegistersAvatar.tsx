@@ -1,6 +1,5 @@
 import { Circle, SizableText, View, XStack } from '@my/ui';
 import { ConvexEventWithExtras } from 'app/entities';
-import { SkeletonLine } from 'app/shared/ui/SkeletonLine';
 
 import { AvatarGroup } from './AvatarGroup';
 import { Item } from './Item';

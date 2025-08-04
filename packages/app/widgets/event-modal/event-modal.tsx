@@ -1,7 +1,4 @@
 import { useComposeCast } from '@coinbase/onchainkit/minikit';
-import { api } from '@my/backend/_generated/api';
-import { Id } from '@my/backend/_generated/dataModel';
-import { useQuery } from '@my/backend/react';
 import {
   View,
   SizableText,
@@ -49,19 +46,9 @@ export function EventModal({
 
   const [showTicketsSheet, setShowTicketsSheet] = React.useState(false);
   const visualViewportHeight = useVisualViewportHeight();
-  const ticketList = useQuery(api.ticketTemplates.getTicketsById, {
-    eventId: eventData._id as Id<'events'>,
-  });
+  const tickets = eventData.tickets;
 
-  if (ticketList === undefined) {
-    return (
-      <Sheet open={false}>
-        <SizableText>Loading event-modal</SizableText>;
-      </Sheet>
-    );
-  }
-
-  const allFree = ticketList.every((ticket) => ticket.price.type === 'free');
+  const allFree = tickets.every((ticket) => ticket.price.type === 'free');
 
   const isOnline = eventData.location?.type === 'online';
   const isInPerson = eventData.location?.type === 'in-person';
@@ -197,7 +184,7 @@ Un evento imperdible que no querrás perderte. ¡Prepárate!
                   {!isUserHost && !isUserRegistered && (
                     <Chip size="$2" rounded>
                       <Chip.Text>
-                        {ticketList.length > 0 ? 'Tickets Available' : 'Waitlist Open'}
+                        {tickets.length > 0 ? 'Tickets Available' : 'Waitlist Open'}
                       </Chip.Text>
                     </Chip>
                   )}
@@ -209,10 +196,10 @@ Un evento imperdible que no querrás perderte. ¡Prepárate!
                     <Button
                       flex={1}
                       fontWeight="600"
-                      onPress={() => (ticketList.length > 0 ? setShowTicketsSheet(true) : null)}
+                      onPress={() => (tickets.length > 0 ? setShowTicketsSheet(true) : null)}
                     >
                       <Button.Text>
-                        {ticketList.length > 0
+                        {tickets.length > 0
                           ? allFree
                             ? 'Register'
                             : 'Buy Tickets'
@@ -386,14 +373,10 @@ Un evento imperdible que no querrás perderte. ¡Prepárate!
                 <Button
                   width="100%"
                   fontWeight="600"
-                  onPress={() => (ticketList.length > 0 ? setShowTicketsSheet(true) : null)}
+                  onPress={() => (tickets.length > 0 ? setShowTicketsSheet(true) : null)}
                 >
                   <Button.Text>
-                    {ticketList.length > 0
-                      ? allFree
-                        ? 'Register'
-                        : 'Buy Tickets'
-                      : 'Join Waitlist'}
+                    {tickets.length > 0 ? (allFree ? 'Register' : 'Buy Tickets') : 'Join Waitlist'}
                   </Button.Text>
                 </Button>
               </View>
@@ -402,12 +385,12 @@ Un evento imperdible que no querrás perderte. ¡Prepárate!
         </Sheet.Frame>
       </Sheet>
 
-      {ticketList.length > 0 ? (
+      {tickets.length > 0 ? (
         <TicketsEventSheet
           open={showTicketsSheet}
           onOpenChange={setShowTicketsSheet}
           eventId={eventData._id}
-          ticketList={ticketList}
+          ticketList={tickets}
         />
       ) : null}
     </>
