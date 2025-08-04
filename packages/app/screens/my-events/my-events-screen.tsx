@@ -82,7 +82,7 @@ export const MyEventsScreen = () => {
               <View key={dateKey} pos="relative">
                 <View pos="absolute" bottom={0} left={4} top={16} w="$0.25" bg="$gray6" />
 
-                <View mb="$9">
+                <View mb="$5">
                   <View pos="relative" pl="$5">
                     <View
                       theme="green"
@@ -100,7 +100,7 @@ export const MyEventsScreen = () => {
                       </SizableText>
                       <SizableText fontSize="$2">{getDayOfWeek(events[0]?.startDate)}</SizableText>
                     </View>
-                    <YStack gap="$4">
+                    <YStack gap="$2">
                       {events.map((event) => (
                         <EventCard key={event._id} event={event} isPast index={index} />
                       ))}
@@ -184,7 +184,7 @@ export const MyEventsScreen = () => {
                       </Text>
                       <Text fontSize="$2">{getDayOfWeek(events[0]?.startDate)}</Text>
                     </View>
-                    <YStack gap="$4">
+                    <YStack gap="$2">
                       {events.map((event) => (
                         <EventCard key={event._id} event={event} isPast index={index} />
                       ))}
