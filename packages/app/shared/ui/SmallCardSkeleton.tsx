@@ -9,7 +9,7 @@ export const SmallCardSkeleton = () => {
       flex={1}
       padding="$3"
       borderRadius="$4"
-      backgroundColor="$background" // Card background
+      backgroundColor="$color3" // Card background
       shadowColor="$shadowColor"
       shadowOffset={{ width: 0, height: 1 }} // Lighter shadow
       shadowOpacity={0.08}
