@@ -75,7 +75,7 @@ export const MyEventsScreen = () => {
               upcomingEvents,
               (event) => {
                 const date = new Date(event.startDate);
-                return date.toISOString().split('T')[0];
+                return date.toLocaleDateString(); // Uses user's locale and timezone
               },
               activeTab === 'upcoming' ? 'asc' : 'desc'
             ).map(([dateKey, events], index) => (
@@ -114,7 +114,7 @@ export const MyEventsScreen = () => {
               flex={1} // Takes up available space
               justifyContent="center" // Centers content vertically
               alignItems="center" // Centers content horizontally
-              space="$4" // Adds space between items
+              gap="$4" // Adds space between items
               padding="$4" // Adds padding around the content
             >
               <CalendarPlus size="$8" color="$gray8" /> {/* Larger icon to draw attention */}
@@ -159,7 +159,7 @@ export const MyEventsScreen = () => {
               pastEvents,
               (event) => {
                 const date = new Date(event.startDate);
-                return date.toISOString().split('T')[0];
+                return date.toLocaleDateString(); // Uses user's locale and timezone
               },
               activeTab === 'upcoming' ? 'asc' : 'desc'
             ).map(([dateKey, events], index) => (
