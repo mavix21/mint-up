@@ -7,6 +7,7 @@ import {
 import { DataModel } from './_generated/dataModel';
 import { Triggers } from 'convex-helpers/server/triggers';
 import { customCtx, customMutation } from 'convex-helpers/server/customFunctions';
+import { GenericMutationCtx } from 'convex/server';
 
 // start using Triggers, with table types from schema.ts
 const triggers = new Triggers<DataModel>();
