@@ -110,31 +110,25 @@ export const MyEventsScreen = () => {
               </View>
             ))
           ) : upcomingEvents.length <= 0 ? (
-            <YStack
-              flex={1} // Takes up available space
-              justifyContent="center" // Centers content vertically
-              alignItems="center" // Centers content horizontally
-              gap="$4" // Adds space between items
-              padding="$4" // Adds padding around the content
-            >
+            <YStack flex={1} justifyContent="center" alignItems="center" gap="$4" padding="$4">
               <CalendarPlus size="$8" color="$gray8" /> {/* Larger icon to draw attention */}
-              <Text
-                fontSize="$6" // Larger font for the main message
+              <SizableText
+                size="$6" // Larger font for the main message
                 fontWeight="bold"
                 color="$gray10"
                 textAlign="center"
               >
                 No Upcoming Events Yet!
-              </Text>
-              <Text
-                fontSize="$4" // Slightly smaller for descriptive text
+              </SizableText>
+              <SizableText
+                size="$4" // Slightly smaller for descriptive text
                 color="$gray9"
                 textAlign="center"
                 maxWidth={300} // Constrain text width for better readability
               >
                 It looks like you don&apos;t have any events planned. Create a new one or explore
                 what&apos;s happening!
-              </Text>
+              </SizableText>
             </YStack>
           ) : (
             <YStack>
@@ -172,10 +166,10 @@ export const MyEventsScreen = () => {
                       borderRadius="$5"
                     />
                     <View mb="$4">
-                      <Text fontSize="$2" color="$color11">
+                      <SizableText size="$2" color="$color11">
                         {formatRelativeDateShared(events[0]?.startDate)}
-                      </Text>
-                      <Text fontSize="$2">{getDayOfWeek(events[0]?.startDate)}</Text>
+                      </SizableText>
+                      <SizableText size="$2">{getDayOfWeek(events[0]?.startDate)}</SizableText>
                     </View>
                     <YStack gap="$2">
                       {events.map((event) => (
@@ -189,13 +183,13 @@ export const MyEventsScreen = () => {
           ) : pastEvents.length <= 0 ? (
             <YStack flex={1} justifyContent="center" alignItems="center" space="$4" padding="$4">
               <History size="$8" color="$gray8" /> {/* Icon related to history/past */}
-              <Text fontSize="$6" fontWeight="bold" color="$gray10" textAlign="center">
+              <SizableText size="$6" fontWeight="bold" color="$gray10" textAlign="center">
                 No Past Events Found
-              </Text>
-              <Text fontSize="$4" color="$gray9" textAlign="center" maxWidth={300}>
+              </SizableText>
+              <SizableText size="$4" color="$gray9" textAlign="center" maxWidth={300}>
                 Once you attend or create events, they&apos;ll appear here for your review. Start
                 joining now!
-              </Text>
+              </SizableText>
             </YStack>
           ) : (
             <YStack>
