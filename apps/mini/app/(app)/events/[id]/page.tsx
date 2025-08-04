@@ -1,3 +1,5 @@
+'use client';
+
 import { Text } from '@my/ui';
 import { useParams } from 'solito/navigation';
 
