@@ -6,6 +6,7 @@ import {
   Image,
   Input,
   ScrollView,
+  Paragraph,
   SizableText,
   styled,
   Text,
@@ -56,122 +57,127 @@ export const ExploreEventsScreen = () => {
   };
 
   return (
-    <YStack>
-      <XStack alignItems="center" gap="$2" px="$4" pt="$5">
-        <XStack flex={1} alignItems="center" gap="$2">
-          <Input
-            flex={1}
-            placeholder="Search events..."
-            value={searchTerm}
-            onChangeText={handleSearchChange}
-            onKeyPress={handleKeyPress}
-          />
-          {searchTerm.trim() !== '' && (
-            <Button
-              size="$2"
-              circular
-              onPress={() => setSearchTerm('')}
-              backgroundColor="$background"
-              borderWidth={1}
-              borderColor="$borderColor"
-            >
-              <X size="$1" />
-            </Button>
-          )}
-        </XStack>
-        {/* //**TODO: See what filter put here*/}
-        {/* <Button size="$2">
-          <ListFilter size="$1" />
-        </Button> */}
-      </XStack>
-      {/* //**TODO: See what info show here*/}
-      {/* <View f={1} w="100%" h="$12">
-        <ScrollView
-          {...(isWeb && {
-            ai: 'center',
-          })}
-          showsHorizontalScrollIndicator={false}
-          pl="5%"
-          pr="$6"
-          horizontal
-        >
-          <View flexDirection="row" gap="$6" h="50%">
-            {data.map(({ uri, title }) => (
-              <HListItem key={uri} uri={uri} title={title} />
-            ))}
-          </View>
-        </ScrollView>
-      </View> */}
-      <YStack px="$4" pt="$4">
-        <View>
-          <SizableText height="$3">
-            {searchTerm.trim() !== ''
-              ? `Search results for "${searchTerm}"${
-                  events && events.length > 0 ? ` (${events.length})` : ''
-                }`
-              : events && events.length > 0
-              ? `${events.length} events found`
-              : ''}
-          </SizableText>
-        </View>
-      </YStack>
-      <ScrollView
-        pl="$4"
-        pt="$2"
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={{ paddingRight: 20 }}
-      >
-        <XStack gap="$2" mb="$3">
-          {categoryList.map((category) => {
-            const isSelected = selectedCategory === category.label;
-            return (
+    <YStack gap="$4">
+      <YStack gap="$3">
+        <XStack alignItems="center" gap="$2" px="$4" pt="$2">
+          <XStack flex={1} alignItems="center" gap="$2">
+            <Input
+              flex={1}
+              placeholder="Search events..."
+              value={searchTerm}
+              onChangeText={handleSearchChange}
+              onKeyPress={handleKeyPress}
+              size="$3"
+            />
+            {searchTerm.trim() !== '' && (
               <Button
-                key={category.label}
-                size="$3"
-                borderRadius="$10"
-                theme={isSelected ? 'green' : null}
-                onPress={() => setSelectedCategory(category.label)}
+                size="$2"
+                circular
+                onPress={() => setSearchTerm('')}
+                backgroundColor="$background"
+                borderWidth={1}
+                borderColor="$borderColor"
               >
-                <Button.Text fontWeight={isSelected ? '600' : '400'} fontSize="$3">
-                  {category.label}
-                </Button.Text>
+                <X size="$1" />
               </Button>
-            );
-          })}
+            )}
+          </XStack>
+          {/* //**TODO: See what filter put here*/}
+          {/* <Button size="$2">
+            <ListFilter size="$1" />
+          </Button> */}
         </XStack>
-      </ScrollView>
-      <YStack
-        flex={1}
-        overflow="scroll"
-        maxHeight={'75vh' as any}
-        $lg={{ paddingBottom: '$14' }}
-        gap="$2"
-      >
-        {events === undefined ? (
-          // Loading state - show placeholder items that will render individual skeletons
-          <YStack gap="$2">
-            {Array.from({ length: 6 }, (_, index) => (
-              <SmallCardSkeleton key={`loading-${index}`} />
-            ))}
-          </YStack>
-        ) : events.length === 0 ? (
-          // Empty state
-          <YStack flex={1} justifyContent="center" alignItems="center" py="$8">
-            <SizableText color="$color11" fontSize="$4" textAlign="center">
-              {searchTerm.trim()
-                ? `No events found for "${searchTerm}"`
-                : selectedCategory !== 'All'
-                ? `No events found in ${selectedCategory} category`
-                : 'No events found'}
-            </SizableText>
-          </YStack>
-        ) : (
-          // Events list
-          events.map((event) => {
-            return <ItemCardList key={event._id} event={event} />;
-          })
-        )}
+        {/* //**TODO: See what info show here*/}
+        {/* <View f={1} w="100%" h="$12">
+          <ScrollView
+            {...(isWeb && {
+              ai: 'center',
+            })}
+            showsHorizontalScrollIndicator={false}
+            pl="5%"
+            pr="$6"
+            horizontal
+          >
+            <View flexDirection="row" gap="$6" h="50%">
+              {data.map(({ uri, title }) => (
+                <HListItem key={uri} uri={uri} title={title} />
+              ))}
+            </View>
+          </ScrollView>
+        </View> */}
+
+        <ScrollView
+          pl="$4"
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={{ paddingRight: 20 }}
+        >
+          <XStack gap="$2">
+            {categoryList.map((category) => {
+              const isSelected = selectedCategory === category.label;
+              return (
+                <Button
+                  key={category.label}
+                  size="$3"
+                  borderRadius="$10"
+                  theme={isSelected ? 'green' : null}
+                  onPress={() => setSelectedCategory(category.label)}
+                >
+                  <Button.Text fontWeight={isSelected ? '600' : '400'} fontSize="$3">
+                    {category.label}
+                  </Button.Text>
+                </Button>
+              );
+            })}
+          </XStack>
+        </ScrollView>
+      </YStack>
+
+      <YStack gap="$1">
+        <Paragraph size="$2" height="$1" color="$color10" pl="$4">
+          {searchTerm.trim() !== ''
+            ? `Search results for "${searchTerm}"${
+                events && events.length > 0 ? ` (${events.length})` : ''
+              }`
+            : events && events.length > 0
+            ? `${events.length} events found`
+            : 'Searching...'}
+        </Paragraph>
+        <ScrollView
+          flex={1}
+          p="$0"
+          overflow="scroll"
+          maxHeight={'75vh' as any}
+          $lg={{ paddingBottom: '$12' }}
+          gap="$2"
+        >
+          {events === undefined ? (
+            // Loading state - show placeholder items that will render individual skeletons
+            <YStack gap="$2">
+              {Array.from({ length: 6 }, (_, index) => (
+                <SmallCardSkeleton key={`loading-${index}`} />
+              ))}
+            </YStack>
+          ) : events.length === 0 ? (
+            // Empty state
+            <YStack flex={1} justifyContent="center" alignItems="center" py="$8">
+              <SizableText color="$color11" fontSize="$4" textAlign="center">
+                {searchTerm.trim()
+                  ? `No events found for "${searchTerm}"`
+                  : selectedCategory !== 'All'
+                  ? `No events found in ${selectedCategory} category`
+                  : 'No events found'}
+              </SizableText>
+            </YStack>
+          ) : (
+            // Events list
+            <YStack gap="$4" px="$4">
+              {events.map((event) => {
+                return <ItemCardList key={event._id} event={event} />;
+              })}
+            </YStack>
+          )}
+        </ScrollView>
       </YStack>
     </YStack>
   );
