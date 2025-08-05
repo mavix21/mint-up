@@ -1,5 +1,15 @@
 import { api } from '@my/backend/_generated/api';
-import { FullscreenSpinner, H3, Paragraph, SizableText, Tabs, Text, View, YStack } from '@my/ui';
+import {
+  FullscreenSpinner,
+  H3,
+  Paragraph,
+  ScrollView,
+  SizableText,
+  Tabs,
+  Text,
+  View,
+  YStack,
+} from '@my/ui';
 import { CalendarPlus, History } from '@tamagui/lucide-icons';
 import {
   formatRelativeDate as formatRelativeDateShared,
@@ -37,13 +47,12 @@ export const MyEventsScreen = () => {
       maxWidth={600}
       marginInline="auto"
       height="100%"
-      px="$4"
       py="$3"
       overflowBlock="hidden"
     >
       {/* <Navigation /> */}
 
-      <View mb="$4">
+      <View mb="$4" px="$4">
         <H3 mb="$2">My Events</H3>
         <Paragraph color="$color11">Your digital experiences collection ✨</Paragraph>
       </View>
@@ -54,6 +63,7 @@ export const MyEventsScreen = () => {
         overflowBlock="hidden"
         height="100%"
         size="$3"
+        px="$4"
       >
         <Tabs.List
           mb="$6"
@@ -70,127 +80,132 @@ export const MyEventsScreen = () => {
           </Tabs.Tab>
         </Tabs.List>
 
-        <Tabs.Content value="upcoming" overflowBlock="scroll" height="100%" paddingBottom={160}>
-          {upcomingEvents.length > 0 ? (
-            groupByDate(
-              upcomingEvents,
-              (event) => {
-                const date = new Date(event.startDate);
-                return date.toLocaleDateString(); // Uses user's locale and timezone
-              },
-              activeTab === 'upcoming' ? 'asc' : 'desc'
-            ).map(([dateKey, events], index) => (
-              <View key={dateKey} pos="relative">
-                <View pos="absolute" bottom={0} left={4} top={16} w="$0.25" bg="$gray6" />
+        <Tabs.Content value="upcoming" height="100%" paddingBottom={160}>
+          <ScrollView flex={1} height="100%" maxHeight="100%">
+            {upcomingEvents.length > 0 ? (
+              groupByDate(
+                upcomingEvents,
+                (event) => {
+                  const date = new Date(event.startDate);
+                  return date.toLocaleDateString(); // Uses user's locale and timezone
+                },
+                activeTab === 'upcoming' ? 'asc' : 'desc'
+              ).map(([dateKey, events], index) => (
+                <View key={dateKey} pos="relative">
+                  <View pos="absolute" bottom={0} left={4} top={16} w={1} bg="$color8" />
 
-                <View mb="$5">
-                  <View pos="relative" pl="$5">
-                    <View
-                      theme="green"
-                      bg="$color8"
-                      pos="absolute"
-                      left={1}
-                      top={3}
-                      h="$0.75"
-                      w="$0.75"
-                      borderRadius="$5"
-                    />
-                    <View mb="$4">
-                      <SizableText fontSize="$2" color="$color11">
-                        {formatRelativeDateShared(events[0]?.startDate)}
-                      </SizableText>
-                      <SizableText fontSize="$2">{getDayOfWeek(events[0]?.startDate)}</SizableText>
+                  <View mb="$5">
+                    <View pos="relative" pl="$5">
+                      <View
+                        theme="green"
+                        bg="$color8"
+                        pos="absolute"
+                        left={1}
+                        top={3}
+                        h="$0.75"
+                        w="$0.75"
+                        borderRadius="$5"
+                      />
+                      <View mb="$4">
+                        <SizableText fontSize="$2" color="$color11">
+                          {formatRelativeDateShared(events[0]?.startDate)}
+                        </SizableText>
+                        <SizableText fontSize="$2">
+                          {getDayOfWeek(events[0]?.startDate)}
+                        </SizableText>
+                      </View>
+                      <YStack gap="$2">
+                        {events.map((event) => (
+                          <EventCard key={event._id} event={event} isPast index={index} />
+                        ))}
+                      </YStack>
                     </View>
-                    <YStack gap="$2">
-                      {events.map((event) => (
-                        <EventCard key={event._id} event={event} isPast index={index} />
-                      ))}
-                    </YStack>
                   </View>
                 </View>
-              </View>
-            ))
-          ) : upcomingEvents.length <= 0 ? (
-            <YStack flex={1} justifyContent="center" alignItems="center" gap="$4" padding="$4">
-              <CalendarPlus size="$8" color="$color8" />
-              <SizableText size="$6" fontWeight="bold" color="$color10" textAlign="center">
-                No Upcoming Events Yet!
-              </SizableText>
-              <SizableText size="$4" color="$color9" textAlign="center" maxWidth={300}>
-                It looks like you don&apos;t have any events planned. Create a new one or explore
-                what&apos;s happening!
-              </SizableText>
-            </YStack>
-          ) : (
-            <YStack>
-              <CardSkeleton />
-              <CardSkeleton />
-              <CardSkeleton />
-              <CardSkeleton />
-            </YStack>
-          )}
+              ))
+            ) : upcomingEvents.length <= 0 ? (
+              <YStack flex={1} justifyContent="center" alignItems="center" gap="$4" padding="$4">
+                <CalendarPlus size="$8" color="$color8" />
+                <SizableText size="$6" fontWeight="bold" color="$color10" textAlign="center">
+                  No Upcoming Events Yet!
+                </SizableText>
+                <SizableText size="$4" color="$color9" textAlign="center" maxWidth={300}>
+                  It looks like you don&apos;t have any events planned. Create a new one or explore
+                  what&apos;s happening!
+                </SizableText>
+              </YStack>
+            ) : (
+              <YStack>
+                <CardSkeleton />
+                <CardSkeleton />
+                <CardSkeleton />
+                <CardSkeleton />
+              </YStack>
+            )}
+          </ScrollView>
         </Tabs.Content>
 
-        <Tabs.Content value="past" overflowBlock="scroll" height="100%" paddingBottom={160}>
-          {pastEvents.length > 0 ? (
-            groupByDate(
-              pastEvents,
-              (event) => {
-                const date = new Date(event.startDate);
-                return date.toLocaleDateString(); // Uses user's locale and timezone
-              },
-              activeTab === 'upcoming' ? 'asc' : 'desc'
-            ).map(([dateKey, events], index) => (
-              <View key={dateKey} pos="relative">
-                <View pos="absolute" bottom={0} left={4} top={16} w="$0.25" bg="$gray6" />
+        <Tabs.Content value="past" height="100%" paddingBottom={160}>
+          <ScrollView flex={1} height="100%" maxHeight="100%">
+            {pastEvents.length > 0 ? (
+              groupByDate(
+                pastEvents,
+                (event) => {
+                  const date = new Date(event.startDate);
+                  return date.toLocaleDateString(); // Uses user's locale and timezone
+                },
+                activeTab === 'upcoming' ? 'asc' : 'desc'
+              ).map(([dateKey, events], index) => (
+                <View key={dateKey} pos="relative">
+                  <View pos="absolute" bottom={0} left={4} top={16} w={1} bg="$color6" />
 
-                <View mb="$5">
-                  <View pos="relative" pl="$5">
-                    <View
-                      bg="$color8"
-                      pos="absolute"
-                      theme="green"
-                      left={1}
-                      top={3}
-                      h="$0.75"
-                      w="$0.75"
-                      borderRadius="$5"
-                    />
-                    <View mb="$4">
-                      <SizableText size="$2" color="$color11">
-                        {formatRelativeDateShared(events[0]?.startDate)}
-                      </SizableText>
-                      <SizableText size="$2">{getDayOfWeek(events[0]?.startDate)}</SizableText>
+                  <View mb="$5">
+                    <View pos="relative" pl="$5">
+                      <View
+                        bg="$color8"
+                        pos="absolute"
+                        theme="green"
+                        left={1}
+                        top={3}
+                        h="$0.75"
+                        w="$0.75"
+                        borderRadius="$5"
+                      />
+                      <View mb="$4">
+                        <SizableText size="$2" color="$color11">
+                          {formatRelativeDateShared(events[0]?.startDate)}
+                        </SizableText>
+                        <SizableText size="$2">{getDayOfWeek(events[0]?.startDate)}</SizableText>
+                      </View>
+                      <YStack gap="$2">
+                        {events.map((event) => (
+                          <EventCard key={event._id} event={event} isPast index={index} />
+                        ))}
+                      </YStack>
                     </View>
-                    <YStack gap="$2">
-                      {events.map((event) => (
-                        <EventCard key={event._id} event={event} isPast index={index} />
-                      ))}
-                    </YStack>
                   </View>
                 </View>
-              </View>
-            ))
-          ) : pastEvents.length <= 0 ? (
-            <YStack flex={1} justifyContent="center" alignItems="center" space="$4" padding="$4">
-              <History size="$8" color="$gray8" />
-              <SizableText size="$6" fontWeight="bold" color="$gray10" textAlign="center">
-                No Past Events Found
-              </SizableText>
-              <SizableText size="$4" color="$gray9" textAlign="center" maxWidth={300}>
-                Once you attend or create events, they&apos;ll appear here for your review. Start
-                joining now!
-              </SizableText>
-            </YStack>
-          ) : (
-            <YStack>
-              <CardSkeleton />
-              <CardSkeleton />
-              <CardSkeleton />
-              <CardSkeleton />
-            </YStack>
-          )}
-
+              ))
+            ) : pastEvents.length <= 0 ? (
+              <YStack flex={1} justifyContent="center" alignItems="center" space="$4" padding="$4">
+                <History size="$8" color="$gray8" />
+                <SizableText size="$6" fontWeight="bold" color="$gray10" textAlign="center">
+                  No Past Events Found
+                </SizableText>
+                <SizableText size="$4" color="$gray9" textAlign="center" maxWidth={300}>
+                  Once you attend or create events, they&apos;ll appear here for your review. Start
+                  joining now!
+                </SizableText>
+              </YStack>
+            ) : (
+              <YStack>
+                <CardSkeleton />
+                <CardSkeleton />
+                <CardSkeleton />
+                <CardSkeleton />
+              </YStack>
+            )}
+          </ScrollView>
           {/* {pastEvents.length === 0 && (
                 <Text py="$12" ai="center">
                   No past events

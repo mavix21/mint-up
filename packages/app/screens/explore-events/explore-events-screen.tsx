@@ -146,7 +146,6 @@ export const ExploreEventsScreen = () => {
         <ScrollView
           flex={1}
           p="$0"
-          overflow="scroll"
           maxHeight={'75vh' as any}
           $lg={{ paddingBottom: '$12' }}
           gap="$2"
