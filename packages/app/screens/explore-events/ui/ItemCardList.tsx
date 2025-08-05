@@ -17,8 +17,6 @@ export function ItemCardList({ event }: { event: ConvexEventWithExtras }) {
         size="$4"
         bordered
         backgroundColor="$background"
-        mx="$4"
-        mt="$3"
         borderRadius="$4"
         pressStyle={{ scale: 0.975 }}
         hoverStyle={{ borderColor: '$borderColorHover' }}
