@@ -1,5 +1,5 @@
 import { api } from '@my/backend/_generated/api';
-import { FullscreenSpinner, H3, SizableText, Tabs, Text, View, YStack } from '@my/ui';
+import { FullscreenSpinner, H3, Paragraph, SizableText, Tabs, Text, View, YStack } from '@my/ui';
 import { CalendarPlus, History } from '@tamagui/lucide-icons';
 import {
   formatRelativeDate as formatRelativeDateShared,
@@ -43,9 +43,9 @@ export const MyEventsScreen = () => {
     >
       {/* <Navigation /> */}
 
-      <View mb="$5">
+      <View mb="$4">
         <H3 mb="$2">My Events</H3>
-        <Text>Your digital experiences collection</Text>
+        <Paragraph color="$color11">Your digital experiences collection ✨</Paragraph>
       </View>
       <Tabs
         value={activeTab}
@@ -53,6 +53,7 @@ export const MyEventsScreen = () => {
         flexDirection="column"
         overflowBlock="hidden"
         height="100%"
+        size="$3"
       >
         <Tabs.List
           mb="$6"
@@ -111,21 +112,11 @@ export const MyEventsScreen = () => {
             ))
           ) : upcomingEvents.length <= 0 ? (
             <YStack flex={1} justifyContent="center" alignItems="center" gap="$4" padding="$4">
-              <CalendarPlus size="$8" color="$gray8" /> {/* Larger icon to draw attention */}
-              <SizableText
-                size="$6" // Larger font for the main message
-                fontWeight="bold"
-                color="$gray10"
-                textAlign="center"
-              >
+              <CalendarPlus size="$8" color="$color8" />
+              <SizableText size="$6" fontWeight="bold" color="$color10" textAlign="center">
                 No Upcoming Events Yet!
               </SizableText>
-              <SizableText
-                size="$4" // Slightly smaller for descriptive text
-                color="$gray9"
-                textAlign="center"
-                maxWidth={300} // Constrain text width for better readability
-              >
+              <SizableText size="$4" color="$color9" textAlign="center" maxWidth={300}>
                 It looks like you don&apos;t have any events planned. Create a new one or explore
                 what&apos;s happening!
               </SizableText>
@@ -153,8 +144,8 @@ export const MyEventsScreen = () => {
               <View key={dateKey} pos="relative">
                 <View pos="absolute" bottom={0} left={4} top={16} w="$0.25" bg="$gray6" />
 
-                <View mb="$9">
-                  <View pos="relative" pl="$4">
+                <View mb="$5">
+                  <View pos="relative" pl="$5">
                     <View
                       bg="$color8"
                       pos="absolute"
@@ -182,7 +173,7 @@ export const MyEventsScreen = () => {
             ))
           ) : pastEvents.length <= 0 ? (
             <YStack flex={1} justifyContent="center" alignItems="center" space="$4" padding="$4">
-              <History size="$8" color="$gray8" /> {/* Icon related to history/past */}
+              <History size="$8" color="$gray8" />
               <SizableText size="$6" fontWeight="bold" color="$gray10" textAlign="center">
                 No Past Events Found
               </SizableText>
