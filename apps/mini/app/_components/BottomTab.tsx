@@ -15,7 +15,18 @@ export const BottomTab = ({ isCenter, label, isActive, onClick, Icon }: BottomTa
         // Center button with special styling
         <YStack position="absolute" bottom={0}>
           <Button
-            theme="green_active"
+            backgroundColor="$green11"
+            borderColor="$green10"
+            borderWidth={1}
+            hoverStyle={{ backgroundColor: '$green10', borderColor: '$green10' }}
+            pressStyle={{
+              backgroundColor: '$green10',
+              borderColor: '$green10',
+              elevation: 2,
+              scale: 0.95,
+            }}
+            animation="100ms"
+            elevation={15}
             circular={isCenter}
             icon={Icon}
             onPress={onClick}
