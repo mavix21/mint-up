@@ -6,7 +6,6 @@ import {
   ScrollView,
   SizableText,
   Tabs,
-  Text,
   View,
   YStack,
 } from '@my/ui';
@@ -50,8 +49,6 @@ export const MyEventsScreen = () => {
       py="$3"
       overflowBlock="hidden"
     >
-      {/* <Navigation /> */}
-
       <View mb="$4" px="$4">
         <H3 mb="$2">My Events</H3>
         <Paragraph color="$color11">Your digital experiences collection ✨</Paragraph>
@@ -206,11 +203,6 @@ export const MyEventsScreen = () => {
               </YStack>
             )}
           </ScrollView>
-          {/* {pastEvents.length === 0 && (
-                <Text py="$12" ai="center">
-                  No past events
-                </Text>
-              )} */}
         </Tabs.Content>
       </Tabs>
     </YStack>
