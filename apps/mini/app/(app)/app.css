@@ -1,3 +1,59 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root .default-light,
+  .default-dark,
+  .base,
+  .cyberpunk,
+  .hacker {
+    --ock-text-inverse: var(--color12) !important;
+    --ock-text-foreground: var(--color12) !important; /* text color when wallet is connected */
+    --ock-text-foreground-muted: var(--color11) !important;
+    --ock-text-error: var(--red11) !important;
+    --ock-text-primary: var(--color12) !important;
+    --ock-text-success: var(--red11) !important;
+    --ock-text-warning: var(--red11) !important;
+    --ock-text-disabled: var(--red11) !important;
+
+    --ock-bg-default: var(--color3) !important;
+    --ock-bg-default-hover: var(--color5) !important;
+    --ock-bg-default-active: var(--red11) !important;
+    --ock-bg-alternate: var(--color10) !important;
+    --ock-bg-alternate-hover: var(--green10) !important;
+    --ock-bg-alternate-active: var(--green10) !important;
+    --ock-bg-inverse: var(--color10) !important;
+    --ock-bg-inverse-hover: var(--green10) !important;
+    --ock-bg-inverse-active: var(--red11) !important;
+    --ock-bg-primary: var(--green11) !important; /* bg color when no wallet is connected */
+    --ock-bg-primary-hover: var(--green10) !important;
+    --ock-bg-primary-active: var(--green10) !important;
+    --ock-bg-primary-washed: var(--red11) !important;
+    --ock-bg-primary-disabled: var(--red11) !important;
+    --ock-bg-secondary: var(--green11) !important; /* bg color when wallet is connected */
+    --ock-bg-secondary-hover: var(--green10) !important;
+    --ock-bg-secondary-active: var(--green9) !important;
+    --ock-bg-error: var(--red11) !important;
+    --ock-bg-warning: var(--red11) !important;
+    --ock-bg-success: var(--red11) !important;
+    --ock-bg-default-reverse: var(--red11) !important;
+
+    --ock-icon-color-primary: var(--green11) !important;
+    --ock-icon-color-foreground: var(--color12) !important;
+    --ock-icon-color-foreground-muted: var(--red11) !important;
+    --ock-icon-color-inverse: var(--red11) !important;
+    --ock-icon-color-error: var(--red11) !important;
+    --ock-icon-color-success: var(--red11) !important;
+    --ock-icon-color-warning: var(--red11) !important;
+
+    --ock-line-primary: var(--color6) !important;
+    --ock-line-default: var(--color6) !important;
+    --ock-line-heavy: var(--color6) !important;
+    --ock-line-inverse: var(--color6) !important;
+  }
+}
+
 html,
 body {
   margin: 0;
