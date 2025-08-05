@@ -90,5 +90,8 @@
     "turbo": "^2.5.3",
     "typescript": "~5.8.3",
     "ultra-runner": "^3.10.5"
+  },
+  "dependencies": {
+    "pinata": "^2.4.9"
   }
 }

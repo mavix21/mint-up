@@ -21965,6 +21965,7 @@ __metadata:
     node-gyp: "npm:^9.3.1"
     npm-run-all: "npm:^4.1.5"
     patch-package: "npm:^8.0.0"
+    pinata: "npm:^2.4.9"
     postinstall-postinstall: "npm:^2.1.0"
     prettier: "npm:^2.7.1"
     promise-throttle-all: "npm:^1.1.1"
@@ -23769,6 +23770,21 @@ __metadata:
   version: 5.0.0
   resolution: "pify@npm:5.0.0"
   checksum: 10/443e3e198ad6bfa8c0c533764cf75c9d5bc976387a163792fb553ffe6ce923887cf14eebf5aea9b7caa8eab930da8c33612990ae85bd8c2bc18bedb9eae94ecb
+  languageName: node
+  linkType: hard
+
+"pinata@npm:^2.4.9":
+  version: 2.4.9
+  resolution: "pinata@npm:2.4.9"
+  peerDependencies:
+    react: ">=16.8.0"
+    react-dom: ">=16.8.0"
+  peerDependenciesMeta:
+    react:
+      optional: true
+    react-dom:
+      optional: true
+  checksum: 10/393ce9048517cfc0d212a6bc27f696bf8e940e5273adce672d60989d38a1518fb47d4a27655396790370116cead25d7dfdbe47888d65eb0d24889ee926b5d2d9
   languageName: node
   linkType: hard
 
