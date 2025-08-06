@@ -49,7 +49,7 @@ export function EventModal({
   const visualViewportHeight = useVisualViewportHeight();
   const tickets = eventData.tickets;
 
-  const allFree = tickets.every((ticket) => ticket.price.type === 'free');
+  const allFree = tickets.every((ticket) => ticket.ticketType.type === 'onchain');
 
   const isOnline = eventData.location?.type === 'online';
   const isInPerson = eventData.location?.type === 'in-person';
