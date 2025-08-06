@@ -14,7 +14,7 @@ export function useFileInput(onFileSelect: (file: File) => void) {
         onFileSelect(file);
       }
     },
-    [openFilePicker]
+    [onFileSelect]
   );
 
   const FileInput = useCallback(

@@ -36,7 +36,7 @@ export function useDefaultImage({
     return () => {
       isMounted = false;
     };
-  }, [enabled, currentImage, onImageChange, defaultImagePath]);
+  }, [enabled, currentImage, onImageChange]);
 
   return defaultImagePath;
 }

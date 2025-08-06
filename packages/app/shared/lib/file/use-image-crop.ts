@@ -15,29 +15,28 @@ export function useImageCrop({ onImageChange }: UseImageCrop) {
     selectedFile: null,
   });
 
-  const openCropSheet = useCallback(
-    (file: File) => {
-      const previewUrl = URL.createObjectURL(file);
-      setCropState({
-        isOpen: true,
-        previewUrl,
-        selectedFile: file,
-      });
-    },
-    [cropState.previewUrl]
-  );
+  const openCropSheet = useCallback((file: File) => {
+    const previewUrl = URL.createObjectURL(file);
+    setCropState({
+      isOpen: true,
+      previewUrl,
+      selectedFile: file,
+    });
+  }, []);
 
   const closeCropSheet = useCallback(() => {
-    if (cropState.previewUrl) {
-      URL.revokeObjectURL(cropState.previewUrl);
-    }
+    setCropState((prevState) => {
+      if (prevState.previewUrl) {
+        URL.revokeObjectURL(prevState.previewUrl);
+      }
 
-    setCropState({
-      isOpen: false,
-      previewUrl: '',
-      selectedFile: null,
+      return {
+        isOpen: false,
+        previewUrl: '',
+        selectedFile: null,
+      };
     });
-  }, [cropState.previewUrl]);
+  }, []);
 
   const handleCropComplete = useCallback(
     async (croppedImageUrl: string) => {
