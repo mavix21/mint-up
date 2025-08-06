@@ -95,7 +95,7 @@ export const createEventFormSchema = z
 
     category: eventCategorySchema,
 
-    image: z.string(),
+    image: z.instanceof(File),
 
     startDate: dateStringSchema,
     startTime: timeStringSchema,

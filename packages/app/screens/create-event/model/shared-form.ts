@@ -5,7 +5,7 @@ export const createEventFormOpts = formOptions({
   defaultValues: {
     name: '',
     category: '' as EventCategory,
-    image: '',
+    image: undefined as File | undefined,
     location: {
       type: 'in-person' as const,
       address: '',

@@ -1,83 +1,30 @@
 import { Image as ImageIcon } from '@tamagui/lucide-icons';
-import { useCallback, useRef, useState } from 'react';
+import { useFileInput, useImageCrop, useImageUrl } from 'app/shared/lib/file';
+import { useDefaultImage } from 'app/shared/lib/file/use-default-image';
 import { YStack, Image, View, Button } from 'tamagui';
 
 import ImageCropSheet from './image-crop-sheet';
 
 export interface EventImageProps {
-  imageUrl?: string;
-  onPress?: () => void;
-  onImageChange?: (imageUrl: string) => void;
+  image: File | undefined;
+  onImageChange?: (file: File) => void;
+  autoLoadDefaultImage?: boolean;
 }
 
-// Convert default image path to blob URL
-const convertDefaultImageToBlob = async (imagePath: string) => {
-  try {
-    const response = await fetch(imagePath);
-    const blob = await response.blob();
-    return URL.createObjectURL(blob);
-  } catch (error) {
-    console.error('Error converting default image to blob:', error);
-    return imagePath; // fallback to original path
-  }
-};
+export function EventImage({ image, onImageChange, autoLoadDefaultImage = true }: EventImageProps) {
+  const defaultImagePath = useDefaultImage({
+    currentImage: image,
+    onImageChange,
+    enabled: autoLoadDefaultImage,
+  });
+  const blobUrl = useImageUrl(image);
+  const displayUrl = blobUrl ?? defaultImagePath;
 
-// Default images array - easy to extend in the future
-const DEFAULT_IMAGES = [
-  '/images/event-image-example-01.png',
-  '/images/event-image-example-02.png',
-  '/images/event-image-example-03.png',
-];
+  const { cropState, openCropSheet, closeCropSheet, handleCropComplete } = useImageCrop({
+    onImageChange,
+  });
 
-export function EventImage({ imageUrl, onPress, onImageChange }: EventImageProps) {
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const [showCropSheet, setShowCropSheet] = useState(false);
-  const [selectedImageSrc, setSelectedImageSrc] = useState<string>('');
-
-  // Select random default image
-  const defaultImage = useCallback(
-    () => DEFAULT_IMAGES[Math.floor(Math.random() * DEFAULT_IMAGES.length)],
-    []
-  );
-
-  // Use provided imageUrl or convert default image to blob
-  const displayImageUrl = imageUrl || defaultImage();
-
-  // Process default image if no imageUrl is provided
-  if (!imageUrl && onImageChange) {
-    convertDefaultImageToBlob(defaultImage()).then((blobUrl) => {
-      onImageChange(blobUrl);
-    });
-  }
-
-  const handlePress = () => {
-    if (onPress) {
-      onPress();
-      return;
-    }
-
-    fileInputRef.current?.click();
-  };
-
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setSelectedImageSrc(imageUrl);
-      setShowCropSheet(true);
-    }
-  };
-
-  const handleCropComplete = (croppedImageUrl: string) => {
-    onImageChange?.(croppedImageUrl);
-    setShowCropSheet(false);
-    setSelectedImageSrc('');
-  };
-
-  const handleCropClose = () => {
-    setShowCropSheet(false);
-    setSelectedImageSrc('');
-  };
+  const { FileInput, openFilePicker } = useFileInput(openCropSheet);
 
   return (
     <>
@@ -89,7 +36,7 @@ export function EventImage({ imageUrl, onPress, onImageChange }: EventImageProps
           borderRadius="$6"
           overflow="hidden"
           source={{
-            uri: displayImageUrl,
+            uri: displayUrl ?? undefined,
           }}
         />
         <YStack
@@ -107,22 +54,16 @@ export function EventImage({ imageUrl, onPress, onImageChange }: EventImageProps
             borderWidth={1}
             circular
             icon={<ImageIcon size={20} />}
-            onPress={handlePress}
+            onPress={openFilePicker}
           />
         </YStack>
-        <input
-          ref={fileInputRef}
-          type="file"
-          accept="image/*"
-          style={{ display: 'none' }}
-          onChange={handleFileChange}
-        />
+        <FileInput />
       </View>
-      {selectedImageSrc && (
+      {cropState.previewUrl && (
         <ImageCropSheet
-          isOpen={showCropSheet}
-          onClose={handleCropClose}
-          imageSrc={selectedImageSrc}
+          isOpen={cropState.isOpen}
+          onClose={closeCropSheet}
+          imageSrc={cropState.previewUrl}
           onCropComplete={handleCropComplete}
         />
       )}

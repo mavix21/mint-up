@@ -31,12 +31,14 @@ import {
   TicketingButton,
   CategorySelector,
 } from './index';
-import { createEventFormSchema, EventCategory } from '../../../entities';
+import { CreateEventFormData, createEventFormSchema, EventCategory } from '../../../entities';
 import { getClientTimezone, calculateDefaultEventTimes } from '../../../utils';
 import { createEventFormOpts } from '../model/shared-form';
 
 export interface CreateEventFormProps {
-  onSubmit?: (data: any) => Promise<void>;
+  onSubmit?: (
+    data: CreateEventFormData & { startTimestamp: number; endTimestamp: number }
+  ) => Promise<void>;
   theme?: string;
   onThemeChange?: (theme: string) => void;
   showThemeSheet?: boolean;
@@ -83,11 +85,16 @@ export function CreateEventForm({
       console.log('value', value);
       const startTimestamp = toTimestamp(value.startDate, value.startTime);
       const endTimestamp = toTimestamp(value.endDate, value.endTime);
+      const image = value.image;
+      if (!image) {
+        throw new Error('Image is required');
+      }
 
       await onSubmit?.({
         ...value,
         startTimestamp,
         endTimestamp,
+        image,
       });
 
       form.reset();
@@ -113,7 +120,7 @@ export function CreateEventForm({
             children={(field) => {
               return (
                 <EventImage
-                  imageUrl={field.state.value}
+                  image={field.state.value}
                   onImageChange={(imageUrl) => {
                     field.handleChange(imageUrl);
                   }}
