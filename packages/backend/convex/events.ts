@@ -200,6 +200,8 @@ export const createEvent = mutation({
       });
     }
 
+    // TODO: Agendar la action para hacer el trabajo pesado en segundo plano
+
     return eventId;
   },
 });
