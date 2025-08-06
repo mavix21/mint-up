@@ -1,7 +1,9 @@
 import type { Metadata } from 'next';
+import { headers } from 'next/headers';
 
 import { getSession } from '@/auth';
 import { Providers } from '@/providers';
+
 import '@coinbase/onchainkit/styles.css';
 import '@farcaster/auth-kit/styles.css';
 import './app.css';
@@ -54,11 +56,15 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const cookie = (await headers()).get('cookie');
   const session = await getSession();
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body>
-        <Providers session={session}>{children}</Providers>
+        <Providers session={session} cookie={cookie}>
+          {children}
+        </Providers>
       </body>
     </html>
   );
