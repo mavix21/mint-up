@@ -10,7 +10,7 @@ export const getRegistrationsByEventId = query({
   handler: async (ctx, args) => {
     const registrations = await ctx.db
       .query('registrations')
-      .filter((q) => q.eq(q.field('eventId'), args.eventId))
+      .withIndex('by_event', (q) => q.eq('eventId', args.eventId))
       .take(5);
 
     return Promise.all(
@@ -33,7 +33,7 @@ export const getRegistrationsByEventIdCount = query({
   handler: async (ctx, args) => {
     const count = await ctx.db
       .query('registrations')
-      .filter((q) => q.eq(q.field('eventId'), args.eventId))
+      .withIndex('by_event', (q) => q.eq('eventId', args.eventId))
       .collect();
     return count.length;
   },
@@ -50,7 +50,7 @@ export const getDetailedRegistrationsByEventId = query({
 
     const registrations = await ctx.db
       .query('registrations')
-      .filter((q) => q.eq(q.field('eventId'), args.eventId))
+      .withIndex('by_event', (q) => q.eq('eventId', args.eventId))
       .order('desc')
       .take(limit);
 
