@@ -43,6 +43,7 @@ export const eventsTable = defineTable({
       role: v.union(v.string()),
     })
   ),
+
   // Registration metadata for performance optimization
   registrationCount: v.optional(v.number()),
   recentRegistrations: v.optional(
@@ -52,6 +53,20 @@ export const eventsTable = defineTable({
         pfpUrl: v.optional(v.string()),
         displayName: v.string(),
         registrationTime: v.number(),
+      })
+    )
+  ),
+
+  onchainData: v.optional(
+    v.union(
+      v.object({
+        status: v.literal('pending'),
+      }),
+      v.object({
+        status: v.literal('synced'),
+        eventId: v.string(), // onchain event id
+        contractAddress: v.string(),
+        chainId: v.number(),
       })
     )
   ),

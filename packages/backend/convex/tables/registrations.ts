@@ -8,7 +8,7 @@ export const registrationsTable = defineTable({
   status: v.union(
     v.object({ type: v.literal('pending') }),
     v.object({ type: v.literal('rejected') }),
-    v.object({ type: v.literal('going') }),
+    v.object({ type: v.literal('approved'), approvedAt: v.number() }),
     v.object({
       type: v.literal('minted'),
       walletAddress: v.string(),

@@ -7,14 +7,27 @@ export const ticketTemplatesTable = defineTable({
   description: v.optional(v.string()),
   totalSupply: v.optional(v.number()),
   isApprovalRequired: v.boolean(),
-  price: v.union(
-    v.object({ type: v.literal('free') }),
-    v.object({ type: v.literal('paid'), amount: v.number(), currency: v.string() })
-  ),
-  nft: v.optional(
+  ticketType: v.union(
+    v.object({ type: v.literal('offchain') }),
     v.object({
-      image: v.id('_storage'),
-      metadata: v.optional(v.any()),
+      type: v.literal('onchain'),
+      price: v.object({ amount: v.number(), currency: v.string() }),
+      nft: v.optional(
+        v.object({
+          image: v.id('_storage'),
+          metadata: v.optional(v.any()),
+        })
+      ),
+      syncStatus: v.union(
+        v.object({ status: v.literal('pending') }),
+        v.object({
+          status: v.literal('synced'),
+          tokenId: v.int64(),
+          contractAddress: v.string(),
+          chainId: v.number(),
+        }),
+        v.object({ status: v.literal('error'), error: v.string() })
+      ),
     })
   ),
 }).index('by_eventId', ['eventId']);
