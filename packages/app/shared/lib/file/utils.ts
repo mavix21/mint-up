@@ -1,7 +1,7 @@
 export const DEFAULT_IMAGES = [
-  '/images/event-image-example-01.png',
-  '/images/event-image-example-02.png',
-  '/images/event-image-example-03.png',
+  '/images/event-image-example-01.jpg',
+  '/images/event-image-example-02.jpg',
+  '/images/event-image-example-03.jpg',
 ];
 
 export const getRandomDefaultImage = (): string => {
