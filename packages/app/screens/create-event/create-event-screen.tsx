@@ -81,10 +81,14 @@ export function CreateEventScreen({ closeSheet }: { closeSheet: () => void }) {
           description: ticket.description,
           totalSupply: ticket.supply,
           isApprovalRequired: false,
-          price:
+          ticketType:
             ticket.type === 'free'
-              ? { type: 'free' }
-              : { type: 'paid', amount: ticket.price, currency: ticket.currency },
+              ? { type: 'offchain' }
+              : {
+                  type: 'onchain',
+                  price: { amount: ticket.price, currency: ticket.currency },
+                  syncStatus: { status: 'pending' },
+                },
         })),
       });
 
