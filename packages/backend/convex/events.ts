@@ -320,7 +320,7 @@ export const createEventOnchain = internalAction({
             ? BigInt(t.ticketType.price.amount)
             : 0n,
         maxSupply: BigInt(t.totalSupply || 0),
-        metadataURI: 'Agregar metadata del evento',
+        metadataURI: t.ticketType.type === 'onchain' ? t.ticketType.nft?.metadata : '',
       }));
 
       console.log(`[Event: ${args.convexEventId}] Simulating contract call...`);
