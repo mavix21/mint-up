@@ -140,14 +140,6 @@ export const getEventById = query({
   },
 });
 
-export const getEventCategories = query({
-  handler: async (ctx) => {
-    const events = await ctx.db.query('events').collect();
-    const categoriesSet = new Set(events.map((event) => event.category));
-    return Array.from(categoriesSet);
-  },
-});
-
 export const searchEvents = query({
   args: {
     searchTerm: v.optional(v.string()),
