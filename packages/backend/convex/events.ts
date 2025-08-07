@@ -296,7 +296,9 @@ export const createEventOnchain = internalAction({
     convexEventId: v.id('events'),
     convexTicketTemplateIds: v.array(v.id('ticketTemplates')),
     organizerAddress: v.string(),
-    ticketsData: v.array(v.any()),
+    ticketsData: v.array(
+      v.object(omit(vv.doc('ticketTemplates').fields, ['_id', '_creationTime', 'eventId']))
+    ),
   },
   handler: async (ctx, args) => {
     if (
@@ -310,9 +312,13 @@ export const createEventOnchain = internalAction({
     try {
       const ticketParams = args.ticketsData.map((t) => ({
         priceETH:
-          t.price.type === 'paid' && t.price.currency === 'ETH' ? BigInt(t.price.amount) : 0n,
+          t.ticketType.type === 'onchain' && t.ticketType.price.currency === 'ETH'
+            ? BigInt(t.ticketType.price.amount)
+            : 0n,
         priceUSDC:
-          t.price.type === 'paid' && t.price.currency === 'USDC' ? BigInt(t.price.amount) : 0n,
+          t.ticketType.type === 'onchain' && t.ticketType.price.currency === 'USDC'
+            ? BigInt(t.ticketType.price.amount)
+            : 0n,
         maxSupply: BigInt(t.totalSupply || 0),
         metadataURI: 'Agregar metadata del evento',
       }));
