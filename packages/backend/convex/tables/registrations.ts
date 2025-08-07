@@ -35,4 +35,6 @@ export const registrationsTable = defineTable({
       ),
     })
   ),
-}).index('by_user_and_event', ['userId', 'eventId']);
+})
+  .index('by_event', ['eventId'])
+  .index('by_user_and_event', ['userId', 'eventId']);
