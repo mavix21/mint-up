@@ -166,7 +166,15 @@ export const searchEvents = query({
 
 export const createEvent = mutation({
   args: {
-    event: v.object(omit(vv.doc('events').fields, ['_id', '_creationTime', 'creatorId'])),
+    event: v.object(
+      omit(vv.doc('events').fields, [
+        '_id',
+        '_creationTime',
+        'creatorId',
+        'registrationCount',
+        'recentRegistrations',
+      ])
+    ),
     tickets: v.array(
       v.object(omit(vv.doc('ticketTemplates').fields, ['_id', '_creationTime', 'eventId']))
     ),
@@ -191,6 +199,8 @@ export const createEvent = mutation({
           role: 'creator',
         },
       ],
+      registrationCount: 0,
+      recentRegistrations: [],
     });
 
     for (const ticket of args.tickets) {
