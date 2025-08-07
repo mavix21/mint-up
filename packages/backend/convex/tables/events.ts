@@ -45,16 +45,14 @@ export const eventsTable = defineTable({
   ),
 
   // Registration metadata for performance optimization
-  registrationCount: v.optional(v.number()),
-  recentRegistrations: v.optional(
-    v.array(
-      v.object({
-        userId: v.id('users'),
-        pfpUrl: v.optional(v.string()),
-        displayName: v.string(),
-        registrationTime: v.number(),
-      })
-    )
+  registrationCount: v.number(),
+  recentRegistrations: v.array(
+    v.object({
+      userId: v.id('users'),
+      pfpUrl: v.optional(v.string()),
+      displayName: v.string(),
+      registrationTime: v.number(),
+    })
   ),
 
   onchainData: v.optional(
