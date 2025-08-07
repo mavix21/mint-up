@@ -16,6 +16,7 @@ import {
 } from '@my/ui';
 import { X } from '@tamagui/lucide-icons';
 import { AnimationProp } from '@tamagui/web';
+import { useForm } from '@tanstack/react-form';
 import { SmallCardSkeleton } from 'app/shared/ui/SmallCardSkeleton';
 import { useQuery } from 'convex/react';
 import React from 'react';
@@ -25,6 +26,13 @@ import { ItemCardList } from './ui/ItemCardList';
 export const ExploreEventsScreen = () => {
   const [selectedCategory, setSelectedCategory] = React.useState('All');
   const [searchTerm, setSearchTerm] = React.useState('');
+
+  const form = useForm({
+    defaultValues: {
+      searchTerm: '',
+      selectedCategory: 'All',
+    },
+  });
 
   // Use a single query that handles both search and category filtering
   const events = useQuery(api.events.searchEvents, {
@@ -49,38 +57,38 @@ export const ExploreEventsScreen = () => {
     }
   };
 
-  // Handle keyboard events
-  const handleKeyPress = (e: any) => {
-    if (e.key === 'Escape') {
-      setSearchTerm('');
-    }
-  };
-
   return (
     <YStack gap="$4">
       <YStack gap="$3">
         <XStack alignItems="center" gap="$2" px="$4" pt="$2">
           <XStack flex={1} alignItems="center" gap="$2">
-            <Input
-              flex={1}
-              placeholder="Search events..."
-              value={searchTerm}
-              onChangeText={handleSearchChange}
-              onKeyPress={handleKeyPress}
-              size="$3"
-            />
-            {searchTerm.trim() !== '' && (
-              <Button
-                size="$2"
-                circular
-                onPress={() => setSearchTerm('')}
-                backgroundColor="$background"
-                borderWidth={1}
-                borderColor="$borderColor"
-              >
-                <X size="$1" />
-              </Button>
-            )}
+            <form.Field name="searchTerm">
+              {(field) => {
+                return (
+                  <>
+                    <Input
+                      flex={1}
+                      placeholder="Search events..."
+                      value={field.state.value}
+                      onChangeText={field.handleChange}
+                      size="$3"
+                    />
+                    {field.state.value.trim() !== '' && (
+                      <Button
+                        size="$2"
+                        circular
+                        onPress={() => field.handleChange('')}
+                        backgroundColor="$background"
+                        borderWidth={1}
+                        borderColor="$borderColor"
+                      >
+                        <X size="$1" />
+                      </Button>
+                    )}
+                  </>
+                );
+              }}
+            </form.Field>
           </XStack>
           {/* //**TODO: See what filter put here*/}
           {/* <Button size="$2">
