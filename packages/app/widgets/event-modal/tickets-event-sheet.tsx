@@ -114,12 +114,8 @@ export function TicketsEventSheet({
                     <TicketCardRadioButton
                       key={ticket._id}
                       selected={value === ticket._id}
-                      uniqueId={ticket._id}
+                      ticket={ticket}
                       setValue={(value) => setValue(value as Id<'ticketTemplates'>)}
-                      description={ticket.description ?? ''}
-                      price={ticket.price.type}
-                      id={ticket._id}
-                      label={ticket.name}
                     />
                   ))}
                 </View>

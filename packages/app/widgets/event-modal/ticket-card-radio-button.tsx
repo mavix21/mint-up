@@ -1,25 +1,13 @@
-import { Card, Label, RadioGroup, SizableText, View, XStack, YStack } from '@my/ui';
-import React from 'react';
+import { Doc } from '@my/backend/convex/_generated/dataModel';
+import { Card, RadioGroup, SizableText, View, XStack, YStack } from '@my/ui';
 
 type ItemProps = {
-  id: string;
-  label: string;
-  description: string;
-  price: string;
+  ticket: Doc<'ticketTemplates'>;
   setValue: (value: string) => void;
-  uniqueId: string;
   selected: boolean;
 };
 
-export function TicketCardRadioButton({
-  id,
-  label,
-  description,
-  price,
-  setValue,
-  uniqueId,
-  selected,
-}: ItemProps) {
+export function TicketCardRadioButton({ ticket, setValue, selected }: ItemProps) {
   return (
     <Card
       flexDirection="row"
@@ -27,32 +15,37 @@ export function TicketCardRadioButton({
       alignItems="flex-start"
       gap="$3"
       padding="$3"
-      onPress={() => setValue(id)}
+      onPress={() => setValue(ticket._id)}
       cursor="pointer"
     >
       <View onPress={(e) => e.stopPropagation()}>
-        <RadioGroup.Item id={uniqueId + id} value={id}>
+        <RadioGroup.Item id={ticket._id} value={ticket._id}>
           <RadioGroup.Indicator />
         </RadioGroup.Item>
       </View>
       <View flexDirection="column" flexShrink={1}>
         <XStack>
           <YStack>
-            <Label
+            <SizableText
               size="$4"
               lineHeight="$2"
               alignItems="flex-start"
               flexDirection="column"
-              htmlFor={uniqueId + id}
               cursor="pointer"
             >
-              {label}
-            </Label>
+              {ticket.name}
+            </SizableText>
             <SizableText flexShrink={1} size="$3" fontWeight="300" color="$gray9">
-              {description}
+              {ticket.description}
             </SizableText>
           </YStack>
-          {/* <SizableText>{price}</SizableText> */}
+          {ticket.ticketType.type === 'offchain' ? (
+            <SizableText>Free</SizableText>
+          ) : (
+            <SizableText>
+              {ticket.ticketType.price.amount} {ticket.ticketType.price.currency}
+            </SizableText>
+          )}
         </XStack>
       </View>
     </Card>
