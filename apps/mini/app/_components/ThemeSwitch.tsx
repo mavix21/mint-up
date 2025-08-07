@@ -17,7 +17,7 @@ import {
 } from 'tamagui';
 import type { SizeTokens } from 'tamagui';
 
-export function ThemeSwitch({ size = '$8' }: { size?: SizeTokens }) {
+export function ThemeSwitch({ size = '$4' }: { size?: SizeTokens }) {
   const uniqueId = useId();
   const [checked, setChecked] = useState(false);
 

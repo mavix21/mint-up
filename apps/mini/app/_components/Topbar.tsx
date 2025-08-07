@@ -15,17 +15,20 @@ import {
   WalletDropdownDisconnect,
 } from '@coinbase/onchainkit/wallet';
 import { Avatar, Button, XStack } from '@my/ui';
-import { Plus, Settings } from '@tamagui/lucide-icons';
-import { memo } from 'react';
+import { Plus } from '@tamagui/lucide-icons';
+import { memo, useState } from 'react';
 
+import { SettingsDropdown } from './SettingsDropdown';
 import { SignInWithFarcaster } from './SignInWithFarcaster';
+import { ThemeSwitch } from './ThemeSwitch';
 
 import { useMiniApp } from '@/contexts/mini-app.context';
 import { useSignIn } from '@/lib/hooks/use-sign-in';
 
 export const Topbar = memo(() => {
   const { addFrame, context } = useMiniApp();
-  const { signIn, isSignedIn, session } = useSignIn();
+  const { isSignedIn, session } = useSignIn();
+  const [triggerOpen, setTriggerOpen] = useState(false);
   const handleAddFrame = async () => {
     await addFrame();
   };
@@ -68,10 +71,11 @@ export const Topbar = memo(() => {
           <WalletDropdownDisconnect />
         </WalletDropdown>
       </Wallet>
-      <XStack gap="$2">
+      <XStack gap="$2" alignItems="center">
         {context === undefined && !isSignedIn && <SignInWithFarcaster />}
-        <Button circular icon={<Plus />} onPress={handleAddFrame} />
-        <Button circular icon={<Settings />} onPress={signIn} />
+        {/* <Button circular icon={<Plus />} onPress={handleAddFrame} /> */}
+        <ThemeSwitch size="$3" />
+        <SettingsDropdown triggerOpen={triggerOpen} setTriggerOpen={setTriggerOpen} />
       </XStack>
     </XStack>
   );

@@ -3,7 +3,7 @@
 import { Button, Text, YStack } from '@my/ui';
 import { signOut, useSession } from 'next-auth/react';
 
-import { ThemeSwitch } from '../_components/ThemeSwticher';
+import { ThemeSwitch } from '../_components/ThemeSwitch';
 
 export default function SettingsPage() {
   const { data: session } = useSession();

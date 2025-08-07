@@ -127,14 +127,17 @@ Un evento imperdible que no querrás perderte. ¡Prepárate!
           borderRadius="$0"
           style={{ height: visualViewportHeight }}
         >
-          <YStack flex={1} width="100%">
+          <YStack flex={1} width="100%" maxWidth={496} marginInline="auto">
             {/* Hero Section with Image */}
-            <View position="relative">
+            <View position="relative" p="$4">
               <Image
-                height={300}
                 width="100%"
+                maxWidth={496}
+                aspectRatio={1}
                 source={{ uri: eventData.imageUrl ?? '' }}
                 objectFit="cover"
+                borderRadius="$6"
+                overflow="hidden"
               />
 
               {/* Close Button */}
@@ -157,7 +160,7 @@ Un evento imperdible que no querrás perderte. ¡Prepárate!
 
             {/* Event Content */}
             <ScrollView flex={1} showsVerticalScrollIndicator={false}>
-              <YStack padding="$4" gap="$4">
+              <YStack gap="$4" padding="$4" pt="$0">
                 {/* Event Header */}
                 <YStack gap="$2">
                   <H2 fontWeight="bold" color="$color">
