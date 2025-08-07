@@ -1,6 +1,6 @@
 import { v } from 'convex/values';
 import { query } from './_generated/server';
-import { mutation } from './functions';
+import { mutation } from './_generated/server';
 import { Id } from './_generated/dataModel';
 
 export const getRegistrationsByEventId = query({
@@ -81,7 +81,22 @@ export const createRegistration = mutation({
       throw new Error('Unauthorized');
     }
 
+    const event = await ctx.db.get(args.eventId);
+    if (!event) {
+      throw new Error('Event not found');
+    }
+
+    const ticketTemplate = await ctx.db.get(args.ticketTemplateId);
+    if (!ticketTemplate) {
+      throw new Error('Ticket template not found');
+    }
+
     const userId = identity.subject as Id<'users'>;
+
+    const user = await ctx.db.get(userId);
+    if (!user) {
+      throw new Error('User not found');
+    }
 
     // Check if user is already registered for this event
     const existingRegistration = await ctx.db
@@ -99,7 +114,24 @@ export const createRegistration = mutation({
       userId,
       eventId: args.eventId,
       ticketTemplateId: args.ticketTemplateId,
-      status: { type: 'pending' },
+      status: ticketTemplate.isApprovalRequired
+        ? { type: 'pending' }
+        : { type: 'approved', approvedAt: Date.now() },
+    });
+
+    if (ticketTemplate.isApprovalRequired) return registrationId;
+
+    await ctx.db.patch(args.eventId, {
+      registrationCount: event.registrationCount + 1,
+      recentRegistrations: [
+        ...event.recentRegistrations,
+        {
+          userId,
+          displayName: user.username,
+          pfpUrl: user.pfpUrl,
+          registrationTime: Date.now(),
+        },
+      ].slice(-5),
     });
 
     return registrationId;
@@ -116,6 +148,11 @@ export const deleteRegistration = mutation({
       throw new Error('Unauthorized');
     }
 
+    const event = await ctx.db.get(args.eventId);
+    if (!event) {
+      throw new Error('Event not found');
+    }
+
     const userId = identity.subject as Id<'users'>;
 
     // Find and delete the registration
@@ -126,6 +163,15 @@ export const deleteRegistration = mutation({
 
     if (!registration) {
       throw new Error('Registration not found');
+    }
+
+    if (registration.status.type === 'approved') {
+      await ctx.db.patch(args.eventId, {
+        registrationCount: event.registrationCount - 1,
+        recentRegistrations: event.recentRegistrations.filter(
+          (registration) => registration.userId !== userId
+        ),
+      });
     }
 
     // Delete the registration
