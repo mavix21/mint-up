@@ -87,6 +87,20 @@ export function CreateEventScreen({ closeSheet }: { closeSheet: () => void }) {
               : {
                   type: 'onchain',
                   price: { amount: ticket.price, currency: ticket.currency },
+                  nft: {
+                    image: storageId,
+                    metadata: {
+                      name: ticket.name,
+                      description: ticket.description,
+                      image: url,
+                      attributes: [
+                        {
+                          trait_type: 'Type',
+                          value: ticket.type,
+                        },
+                      ],
+                    },
+                  },
                   syncStatus: { status: 'pending' },
                 },
         })),
