@@ -16,11 +16,6 @@ export const abi = [
     type: 'constructor',
   },
   {
-    inputs: [],
-    name: 'AllTicketsMinted',
-    type: 'error',
-  },
-  {
     inputs: [
       {
         internalType: 'address',
@@ -123,31 +118,6 @@ export const abi = [
     type: 'error',
   },
   {
-    inputs: [],
-    name: 'EventDoesNotExist',
-    type: 'error',
-  },
-  {
-    inputs: [],
-    name: 'IncorrectETHAmount',
-    type: 'error',
-  },
-  {
-    inputs: [],
-    name: 'NoTicketTypesProvided',
-    type: 'error',
-  },
-  {
-    inputs: [],
-    name: 'NotAuthorized',
-    type: 'error',
-  },
-  {
-    inputs: [],
-    name: 'OrganizerAddressCannotBeZero',
-    type: 'error',
-  },
-  {
     inputs: [
       {
         internalType: 'address',
@@ -167,21 +137,6 @@ export const abi = [
       },
     ],
     name: 'OwnableUnauthorizedAccount',
-    type: 'error',
-  },
-  {
-    inputs: [],
-    name: 'ReentrancyGuardReentrantCall',
-    type: 'error',
-  },
-  {
-    inputs: [],
-    name: 'TicketTypeDoesNotExist',
-    type: 'error',
-  },
-  {
-    inputs: [],
-    name: 'USDCTransferFailed',
     type: 'error',
   },
   {
@@ -226,27 +181,9 @@ export const abi = [
       },
       {
         indexed: false,
-        internalType: 'uint256[]',
-        name: 'ticketTypeIds',
-        type: 'uint256[]',
-      },
-      {
-        indexed: false,
-        internalType: 'uint256[]',
-        name: 'pricesETH',
-        type: 'uint256[]',
-      },
-      {
-        indexed: false,
-        internalType: 'uint256[]',
-        name: 'pricesUSDC',
-        type: 'uint256[]',
-      },
-      {
-        indexed: false,
-        internalType: 'uint256[]',
-        name: 'maxSupplies',
-        type: 'uint256[]',
+        internalType: 'uint256',
+        name: 'ticketCount',
+        type: 'uint256',
       },
     ],
     name: 'EventCreated',
@@ -442,12 +379,12 @@ export const abi = [
             type: 'string',
           },
         ],
-        internalType: 'struct MintUpEvents.TicketTypeInput[]',
+        internalType: 'struct MintUpFactory.TicketParams[]',
         name: '_tickets',
         type: 'tuple[]',
       },
     ],
-    name: 'createEvent',
+    name: 'createEventWithTickets',
     outputs: [
       {
         internalType: 'uint256',
@@ -466,36 +403,17 @@ export const abi = [
         type: 'uint256',
       },
     ],
-    name: 'events',
+    name: 'eventInfo',
     outputs: [
-      {
-        internalType: 'uint256',
-        name: 'eventId',
-        type: 'uint256',
-      },
       {
         internalType: 'address',
         name: 'organizer',
         type: 'address',
       },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [
       {
         internalType: 'uint256',
-        name: '_eventId',
+        name: 'ticketTypeCount',
         type: 'uint256',
-      },
-    ],
-    name: 'getTicketTypesForEvent',
-    outputs: [
-      {
-        internalType: 'uint256[]',
-        name: '',
-        type: 'uint256[]',
       },
     ],
     stateMutability: 'view',
@@ -645,24 +563,6 @@ export const abi = [
   {
     inputs: [
       {
-        internalType: 'uint256',
-        name: '_tokenId',
-        type: 'uint256',
-      },
-      {
-        internalType: 'string',
-        name: '_newURI',
-        type: 'string',
-      },
-    ],
-    name: 'setTokenURI',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
         internalType: 'bytes4',
         name: 'interfaceId',
         type: 'bytes4',
@@ -687,13 +587,8 @@ export const abi = [
         type: 'uint256',
       },
     ],
-    name: 'ticketTypes',
+    name: 'ticketDetails',
     outputs: [
-      {
-        internalType: 'address',
-        name: 'organizer',
-        type: 'address',
-      },
       {
         internalType: 'uint256',
         name: 'priceETH',
