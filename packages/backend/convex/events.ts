@@ -422,7 +422,7 @@ export const finalizeOnchainSync = internalMutation({
               ...currentTemplate.ticketType,
               syncStatus: {
                 status: 'synced',
-                tokenId: BigInt(update.tokenId),
+                tokenId: update.tokenId,
                 contractAddress: args.contractAddress,
                 chainId: args.chainId,
               },
