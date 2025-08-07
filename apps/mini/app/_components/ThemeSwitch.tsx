@@ -1,10 +1,5 @@
 'use client';
 
-import { getSize } from '@tamagui/get-token';
-import { MoonStar, Sun } from '@tamagui/lucide-icons';
-import { useThemeSetting } from '@tamagui/next-theme';
-import { useId, useState } from 'react';
-import { Appearance } from 'react-native';
 import {
   AnimatePresence,
   getVariableValue,
@@ -14,8 +9,13 @@ import {
   YStack,
   isWeb,
   useIsomorphicLayoutEffect,
-} from 'tamagui';
-import type { SizeTokens } from 'tamagui';
+} from '@my/ui';
+import type { SizeTokens } from '@my/ui';
+import { getSize } from '@tamagui/get-token';
+import { MoonStar, Sun } from '@tamagui/lucide-icons';
+import { useThemeSetting } from '@tamagui/next-theme';
+import { useId, useState } from 'react';
+import { Appearance } from 'react-native';
 
 export function ThemeSwitch({ size = '$4' }: { size?: SizeTokens }) {
   const uniqueId = useId();
