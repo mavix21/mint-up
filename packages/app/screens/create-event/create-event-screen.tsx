@@ -16,35 +16,6 @@ export function CreateEventScreen({ closeSheet }: { closeSheet: () => void }) {
   const [showThemeSheet, setShowThemeSheet] = useState(false);
   const createEvent = useMutation(api.events.createEvent);
 
-  // const { data: session } = useSession();
-  // const { data: hash, writeContract } = useWriteContract();
-  // const {
-  //   isLoading: isConfirming,
-  //   isSuccess,
-  //   data,
-  // } = useWaitForTransactionReceipt({
-  //   hash,
-  // });
-
-  // useEffect(() => {
-  //   if (isSuccess) {
-  //     for (const log of data.logs) {
-  //       const events = parseEventLogs({
-  //         abi,
-  //         logs: [log],
-  //       });
-  //       for (const event of events) {
-  //         if (event.eventName === 'TicketTypeRegistered') {
-  //           const { tokenId } = event.args;
-  //           console.log(tokenId);
-
-  //           return;
-  //         }
-  //       }
-  //     }
-  //   }
-  // }, [isSuccess, data]);
-
   const handleSubmit = async (
     data: CreateEventFormData & { startTimestamp: number; endTimestamp: number }
   ) => {

@@ -220,8 +220,11 @@ export const createEvent = mutation({
       recentRegistrations: [],
     });
 
-    const ticketTemplateIds = await Promise.all(
-      args.tickets.map((ticket) =>
+    const onchainTickets = args.tickets.filter((ticket) => ticket.ticketType.type === 'onchain');
+    const offchainTickets = args.tickets.filter((ticket) => ticket.ticketType.type === 'offchain');
+
+    await Promise.all(
+      offchainTickets.map((ticket) =>
         ctx.db.insert('ticketTemplates', {
           ...ticket,
           eventId,
@@ -229,12 +232,22 @@ export const createEvent = mutation({
       )
     );
 
-    // TODO: Agendar la action para hacer el trabajo pesado en segundo plano
+    const onchainTicketTemplateIds = await Promise.all(
+      onchainTickets.map((ticket) =>
+        ctx.db.insert('ticketTemplates', {
+          ...ticket,
+          eventId,
+        })
+      )
+    );
+
+    if (onchainTickets.length === 0) return eventId;
+
     await ctx.scheduler.runAfter(0, internal.events.createEventOnchain, {
       convexEventId: eventId,
-      convexTicketTemplateIds: ticketTemplateIds,
+      convexTicketTemplateIds: onchainTicketTemplateIds,
       organizerAddress: user.currentWalletAddress ?? '',
-      ticketsData: args.tickets,
+      ticketsData: onchainTickets,
     });
 
     return eventId;
@@ -301,19 +314,20 @@ export const createEventOnchain = internalAction({
       throw new Error('Missing required environment variables for on-chain interaction.');
     }
 
+    // TODO: Pinata upload metadata
+
     try {
-      const ticketParams = args.ticketsData.map((t) => ({
-        priceETH:
-          t.ticketType.type === 'onchain' && t.ticketType.price.currency === 'ETH'
-            ? BigInt(t.ticketType.price.amount)
-            : 0n,
-        priceUSDC:
-          t.ticketType.type === 'onchain' && t.ticketType.price.currency === 'USDC'
-            ? BigInt(t.ticketType.price.amount)
-            : 0n,
-        maxSupply: BigInt(t.totalSupply || 0),
-        metadataURI: t.ticketType.type === 'onchain' ? t.ticketType.nft?.metadata : '',
-      }));
+      const ticketParams = args.ticketsData
+        .filter(
+          (t): t is Doc<'ticketTemplates'> & { ticketType: { type: 'onchain' } } =>
+            t.ticketType.type === 'onchain'
+        )
+        .map((t) => ({
+          priceETH: BigInt(t.ticketType.price.amount),
+          priceUSDC: BigInt(t.ticketType.price.amount),
+          maxSupply: BigInt(t.totalSupply || 0),
+          metadataURI: t.ticketType.nft.metadata,
+        }));
 
       console.log(`[Event: ${args.convexEventId}] Simulating contract call...`);
       const { request } = await publicClient.simulateContract({
