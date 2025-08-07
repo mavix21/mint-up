@@ -1,10 +1,35 @@
 import { v } from 'convex/values';
 
-import { query, QueryCtx } from './_generated/server';
+import { internal } from './_generated/api';
+import { action, internalAction, internalMutation, query, QueryCtx } from './_generated/server';
 import { mutation } from './functions';
 import { vv } from './schema';
 import { omit } from 'convex-helpers';
 import { Doc, Id } from './_generated/dataModel';
+import { baseSepolia } from 'viem/chains'; // Usa la red correcta
+
+import { abi } from '../../app/shared/lib/abi';
+
+import { privateKeyToAccount } from 'viem/accounts';
+import { createPublicClient, createWalletClient, decodeEventLog, http } from 'viem';
+
+// --- CONSTANTES ---
+const CONTRACT_ADDRESS = process.env.MINTUP_FACTORY_CONTRACT_ADDRESS as `0x${string}`;
+
+// --- HELPERS DE VIEM ---
+// Creamos los clientes de Viem una sola vez para reutilizarlos.
+const account = privateKeyToAccount(process.env.BACKEND_SIGNER_PRIVATE_KEY as `0x${string}`);
+
+const walletClient = createWalletClient({
+  account,
+  chain: baseSepolia,
+  transport: http(process.env.BASE_SEPOLIA_RPC_URL),
+});
+
+const publicClient = createPublicClient({
+  chain: baseSepolia,
+  transport: http(process.env.BASE_SEPOLIA_RPC_URL),
+});
 
 // Shared helper function to enrich events with common data
 async function enrichEventsWithCommonData(
@@ -193,14 +218,22 @@ export const createEvent = mutation({
       ],
     });
 
-    for (const ticket of args.tickets) {
-      await ctx.db.insert('ticketTemplates', {
-        ...ticket,
-        eventId,
-      });
-    }
+    const ticketTemplateIds = await Promise.all(
+      args.tickets.map((ticket) =>
+        ctx.db.insert('ticketTemplates', {
+          ...ticket,
+          eventId,
+        })
+      )
+    );
 
     // TODO: Agendar la action para hacer el trabajo pesado en segundo plano
+    await ctx.scheduler.runAfter(0, internal.events.createEventOnchain, {
+      convexEventId: eventId,
+      convexTicketTemplateIds: ticketTemplateIds,
+      organizerAddress: user.currentWalletAddress ?? '',
+      ticketsData: args.tickets,
+    });
 
     return eventId;
   },
@@ -245,5 +278,142 @@ export const getUserEvents = query({
 
     // Enrich events with common data (including isHost and userStatus)
     return enrichEventsWithCommonData(ctx, allEvents, userId);
+  },
+});
+
+export const createEventOnchain = internalAction({
+  args: {
+    convexEventId: v.id('events'),
+    convexTicketTemplateIds: v.array(v.id('ticketTemplates')),
+    organizerAddress: v.string(),
+    ticketsData: v.array(v.any()),
+  },
+  handler: async (ctx, args) => {
+    if (
+      !process.env.BACKEND_SIGNER_PRIVATE_KEY ||
+      !process.env.BASE_SEPOLIA_RPC_URL ||
+      !CONTRACT_ADDRESS
+    ) {
+      throw new Error('Missing required environment variables for on-chain interaction.');
+    }
+
+    try {
+      const ticketParams = args.ticketsData.map((t) => ({
+        priceETH:
+          t.price.type === 'paid' && t.price.currency === 'ETH' ? BigInt(t.price.amount) : 0n,
+        priceUSDC:
+          t.price.type === 'paid' && t.price.currency === 'USDC' ? BigInt(t.price.amount) : 0n,
+        maxSupply: BigInt(t.totalSupply || 0),
+        metadataURI: 'Agregar metadata del evento',
+      }));
+
+      console.log(`[Event: ${args.convexEventId}] Simulating contract call...`);
+      const { request } = await publicClient.simulateContract({
+        account,
+        address: CONTRACT_ADDRESS,
+        abi: abi,
+        functionName: 'createEventWithTickets',
+        args: [args.organizerAddress as `0x${string}`, ticketParams],
+      });
+
+      console.log(`[Event: ${args.convexEventId}] Sending transaction...`);
+      const txHash = await walletClient.writeContract(request);
+      console.log(
+        `[Event: ${args.convexEventId}] Transaction sent with hash: ${txHash}. Waiting for receipt...`
+      );
+
+      const receipt = await publicClient.waitForTransactionReceipt({ hash: txHash });
+
+      if (receipt.status === 'reverted') {
+        throw new Error('Transaction reverted.');
+      }
+
+      let onchainEventId: string | null = null;
+      for (const log of receipt.logs) {
+        try {
+          const decodedLog = decodeEventLog({ abi: abi, data: log.data, topics: log.topics });
+          if (decodedLog.eventName === 'EventCreated') {
+            onchainEventId = (decodedLog.args as any).eventId.toString();
+            break;
+          }
+        } catch {
+          throw new Error('Error inside trying read receipt.log');
+        }
+      }
+
+      if (!onchainEventId) {
+        throw new Error('Could not find EventCreated log in transaction receipt');
+      }
+
+      console.log(
+        `[Event: ${args.convexEventId}] On-chain event created with ID: ${onchainEventId}.`
+      );
+
+      const ticketUpdates = args.convexTicketTemplateIds.map((templateId, index) => {
+        const ticketIndex = BigInt(index);
+        const tokenId = (BigInt(onchainEventId as string) << 128n) | ticketIndex;
+        return {
+          templateId: templateId,
+          tokenId: tokenId.toString(),
+        };
+      });
+
+      await ctx.runMutation(internal.events.finalizeOnchainSync, {
+        convexEventId: args.convexEventId,
+        onchainEventId: onchainEventId,
+        contractAddress: CONTRACT_ADDRESS,
+        chainId: baseSepolia.id,
+        ticketUpdates,
+      });
+
+      console.log(`[Event: ${args.convexEventId}] Successfully synced on-chain data to Convex.`);
+    } catch (error) {
+      console.error(`[Event: ${args.convexEventId}] On-chain sync failed:`, error);
+      throw error;
+    }
+  },
+});
+
+export const finalizeOnchainSync = internalMutation({
+  args: {
+    convexEventId: v.id('events'),
+    onchainEventId: v.string(),
+    contractAddress: v.string(),
+    chainId: v.number(),
+    ticketUpdates: v.array(
+      v.object({
+        templateId: v.id('ticketTemplates'),
+        tokenId: v.string(),
+      })
+    ),
+  },
+  handler: async (ctx, args) => {
+    await ctx.db.patch(args.convexEventId, {
+      onchainData: {
+        status: 'synced',
+        eventId: args.onchainEventId,
+        contractAddress: args.contractAddress,
+        chainId: args.chainId,
+      },
+    });
+
+    await Promise.all(
+      args.ticketUpdates.map(async (update) => {
+        const currentTemplate = await ctx.db.get(update.templateId);
+        if (currentTemplate && currentTemplate.ticketType.type === 'onchain') {
+          return ctx.db.patch(update.templateId, {
+            ticketType: {
+              ...currentTemplate.ticketType,
+              syncStatus: {
+                status: 'synced',
+                tokenId: BigInt(update.tokenId),
+                contractAddress: args.contractAddress,
+                chainId: args.chainId,
+              },
+            },
+          });
+        }
+      })
+    );
   },
 });

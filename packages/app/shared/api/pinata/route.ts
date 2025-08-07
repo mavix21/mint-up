@@ -2,7 +2,7 @@
 
 import { pinata } from 'app/shared/lib/pinata.config';
 
-export async function uploadCertificateJSON(name: string, imageUrl: string) {
+export async function uploadEventImgJSON(name: string, imageUrl: string) {
   try {
     const upload = await pinata.upload.public
       .json({
