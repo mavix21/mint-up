@@ -126,14 +126,16 @@ export const MyEventsScreen = () => {
             ) : upcomingEvents.length <= 0 ? (
               <YStack flex={1} justifyContent="center" alignItems="center" gap="$4" padding="$4">
                 <Authenticated>
-                  <CalendarPlus size="$8" color="$color8" />
-                  <SizableText size="$6" fontWeight="bold" color="$color10" textAlign="center">
-                    No Upcoming Events Yet!
-                  </SizableText>
-                  <SizableText size="$4" color="$color9" textAlign="center" maxWidth={300}>
-                    It looks like you don&apos;t have any events planned. Create a new one or
-                    explore what&apos;s happening!
-                  </SizableText>
+                  <YStack gap="$2.5" alignItems="center" justifyContent="center">
+                    <CalendarPlus size="$8" color="$color8" />
+                    <SizableText size="$6" fontWeight="bold" color="$color10" textAlign="center">
+                      No Upcoming Events Yet!
+                    </SizableText>
+                    <SizableText size="$4" color="$color9" textAlign="center" maxWidth={300}>
+                      It looks like you don&apos;t have any events planned. Create a new one or
+                      explore what&apos;s happening!
+                    </SizableText>
+                  </YStack>
                 </Authenticated>
                 <Unauthenticated>
                   <YStack gap="$2.5" alignItems="center" justifyContent="center">
