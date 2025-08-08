@@ -20,7 +20,7 @@
     --ock-bg-default: var(--color3) !important;
     --ock-bg-default-hover: var(--color5) !important;
     --ock-bg-default-active: var(--green4) !important;
-    --ock-bg-alternate: var(--color10) !important;
+    --ock-bg-alternate: var(--color5) !important; /* used in mint card - bg */
     --ock-bg-alternate-hover: var(--green5) !important;
     --ock-bg-alternate-active: var(--green4) !important;
     --ock-bg-inverse: var(--color10) !important;
@@ -36,8 +36,8 @@
     --ock-bg-secondary-active: var(--green4) !important;
     --ock-bg-error: var(--red11) !important;
     --ock-bg-warning: var(--red11) !important;
-    --ock-bg-success: var(--red11) !important;
-    --ock-bg-default-reverse: var(--red11) !important;
+    --ock-bg-success: var(--green11) !important;
+    --ock-bg-default-reverse: var(--green6) !important; /* used in mint card */
 
     --ock-icon-color-primary: var(--green11) !important;
     --ock-icon-color-foreground: var(--color12) !important;
