@@ -205,7 +205,10 @@ export const createEvent = mutation({
           v.object({ type: v.literal('offchain') }),
           v.object({
             type: v.literal('onchain'),
-            price: v.object({ amount: v.number(), currency: v.string() }),
+            price: v.object({
+              amount: v.number(),
+              currency: v.union(v.literal('ETH'), v.literal('USDC')),
+            }),
             imageUrl: v.string(),
           })
         ),
@@ -345,7 +348,10 @@ export const createEventOnchain = internalAction({
         ]),
         ticketType: v.object({
           type: v.literal('onchain'),
-          price: v.object({ amount: v.number(), currency: v.string() }),
+          price: v.object({
+            amount: v.number(),
+            currency: v.union(v.literal('ETH'), v.literal('USDC')),
+          }),
           imageUrl: v.string(),
         }),
       })
@@ -360,34 +366,39 @@ export const createEventOnchain = internalAction({
       throw new Error('Missing required environment variables for on-chain interaction.');
     }
 
-    // TODO: Pinata upload metadata
-    // for now take the image from the first ticket
-    let metadataURI = '';
     try {
-      const upload = await pinata.upload.public.json({
-        name: args.ticketsData[0].name,
-        description: args.ticketsData[0].description,
-        image: args.ticketsData[0].ticketType.imageUrl,
-        attributes: [
-          {
-            trait_type: 'Type',
-            value: args.ticketsData[0].name,
-          },
-        ],
-      });
-      metadataURI = `https://${process.env.NEXT_PUBLIC_GATEWAY_URL}/ipfs/${upload.cid}`;
-    } catch (error) {
-      console.error('Error uploading metadata to Pinata:', error);
-      metadataURI = args.ticketsData[0].ticketType.imageUrl;
-    }
+      // Upload metadata for each ticket
+      const ticketParams = await Promise.all(
+        args.ticketsData.map(async (t) => {
+          let metadataURI = '';
+          try {
+            const upload = await pinata.upload.public.json({
+              name: t.name,
+              description: t.description,
+              image: t.ticketType.imageUrl,
+              attributes: [
+                {
+                  trait_type: 'Type',
+                  value: t.name,
+                },
+              ],
+            });
+            metadataURI = `https://${process.env.NEXT_PUBLIC_GATEWAY_URL}/ipfs/${upload.cid}`;
+          } catch (error) {
+            console.error('Error uploading metadata to Pinata:', error);
+            metadataURI = t.ticketType.imageUrl;
+          }
 
-    try {
-      const ticketParams = args.ticketsData.map((t) => ({
-        priceETH: BigInt(t.ticketType.price.amount),
-        priceUSDC: BigInt(t.ticketType.price.amount),
-        maxSupply: BigInt(t.totalSupply || 0),
-        metadataURI,
-      }));
+          return {
+            priceETH:
+              t.ticketType.price.currency === 'ETH' ? BigInt(t.ticketType.price.amount) : 0n,
+            priceUSDC:
+              t.ticketType.price.currency === 'USDC' ? BigInt(t.ticketType.price.amount) : 0n,
+            maxSupply: BigInt(t.totalSupply || 0),
+            metadataURI,
+          };
+        })
+      );
 
       console.log(`[Event: ${args.convexEventId}] Simulating contract call...`);
       const { request } = await publicClient.simulateContract({
@@ -437,7 +448,7 @@ export const createEventOnchain = internalAction({
         return {
           templateId: templateId,
           tokenId: tokenId.toString(),
-          metadataURI,
+          metadataURI: ticketParams[index].metadataURI,
         };
       });
 
