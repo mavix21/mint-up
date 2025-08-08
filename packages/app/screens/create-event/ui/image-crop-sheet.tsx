@@ -76,7 +76,7 @@ const ImageCropSheet = ({ isOpen, onClose, imageSrc, onCropComplete }: ImageCrop
           resolve(url);
         },
         'image/png', // Use PNG for better quality
-        1
+        0.85
       );
     });
   }, [completedCrop]);
