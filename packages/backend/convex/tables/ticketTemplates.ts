@@ -11,7 +11,10 @@ export const ticketTemplatesTable = defineTable({
     v.object({ type: v.literal('offchain') }),
     v.object({
       type: v.literal('onchain'),
-      price: v.object({ amount: v.number(), currency: v.string() }),
+      price: v.object({
+        amount: v.number(),
+        currency: v.union(v.literal('ETH'), v.literal('USDC')),
+      }),
       syncStatus: v.union(
         v.object({ status: v.literal('pending') }),
         v.object({
