@@ -11,6 +11,7 @@ export const CustomToast = () => {
   return (
     <Toast
       key={currentToast.id}
+      zIndex={999_999}
       duration={currentToast.duration}
       viewportName={currentToast.viewportName}
       enterStyle={{ o: 0, scale: 0.5, y: -25 }}
