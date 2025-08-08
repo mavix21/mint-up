@@ -207,6 +207,7 @@ Check it out 👇`,
                       flex={1}
                       fontWeight="600"
                       onPress={() => (tickets.length > 0 ? setShowTicketsSheet(true) : null)}
+                      themeInverse
                     >
                       <Button.Text>
                         {tickets.length > 0
@@ -401,15 +402,11 @@ Check it out 👇`,
 
             {/* Bottom Action - Only show if user is not host and not already registered */}
             {!isUserHost && !isUserRegistered && (
-              <View
-                padding="$4"
-                borderTopWidth={1}
-                borderColor="$borderColor"
-                backgroundColor="$background"
-              >
+              <View padding="$4" borderTopWidth={1} borderColor="$borderColor">
                 <Button
                   width="100%"
                   fontWeight="600"
+                  themeInverse
                   onPress={() => (tickets.length > 0 ? setShowTicketsSheet(true) : null)}
                 >
                   <Button.Text>
