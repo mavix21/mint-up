@@ -6,8 +6,8 @@ import {
   View,
   RadioGroup,
   Button,
-  SizableText,
   useToastController,
+  SizableText,
 } from '@my/ui';
 import React from 'react';
 
@@ -15,7 +15,6 @@ import { FreeTicketCard } from './components/FreeTicketCard';
 import { PaidTicketCard } from './components/PaidTicketCard';
 import { useTicketRegistration } from './hooks/use-ticket-registration';
 import { useTicketTransaction } from './hooks/use-ticket-transaction';
-import { TicketRegistrationService } from './services/ticket-registration.service';
 import { isTicketFree, isTicketPaid } from './utils/ticket-types';
 
 export interface TicketsEventSheetProps {
@@ -39,12 +38,6 @@ export function TicketsEventSheet({
   const registrationHook = useTicketRegistration();
   const transactionHook = useTicketTransaction();
 
-  // Create service instance
-  const registrationService = React.useMemo(
-    () => new TicketRegistrationService(registrationHook, transactionHook),
-    [registrationHook, transactionHook]
-  );
-
   // Get selected ticket
   const selectedTicket = React.useMemo(
     () => ticketList.find((ticket) => ticket._id === selectedTicketId) || null,
@@ -56,7 +49,8 @@ export function TicketsEventSheet({
     if (!isOpen) {
       setError(null);
       setSelectedTicketId(null);
-      registrationService.resetStates();
+      registrationHook.resetState();
+      transactionHook.resetTransaction();
     }
     onOpenChange(isOpen);
   };
@@ -75,31 +69,66 @@ export function TicketsEventSheet({
     setError(null);
 
     try {
-      const result = await registrationService.registerTicket(eventId, selectedTicket);
+      if (isTicketFree(selectedTicket)) {
+        // For free tickets, register directly
+        await registrationHook.registerTicket(eventId, selectedTicket._id);
 
-      if (result.success) {
-        // Close the sheet on success
-        handleOpenChange(false);
-
-        const message = result.transactionHash
-          ? `Registration successful! Transaction: ${result.transactionHash.slice(0, 10)}...`
-          : 'Registration successful!';
-
-        toast.show(message, {
-          type: 'success',
-          preset: 'done',
-        });
-      } else {
-        setError(result.error || 'Registration failed');
+        if (registrationHook.registrationState.success) {
+          handleOpenChange(false);
+          toast.show('Registration successful!', {
+            type: 'success',
+            preset: 'done',
+          });
+        } else if (registrationHook.registrationState.error) {
+          setError(registrationHook.registrationState.error);
+        }
+      } else if (isTicketPaid(selectedTicket)) {
+        // For paid tickets, start transaction
+        await transactionHook.purchaseTicket(selectedTicket);
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Registration failed');
     }
   };
 
-  const isProcessing = registrationService.isProcessing();
-  const hasError = registrationService.hasError() || error;
-  const errorMessage = error || registrationService.getErrorMessage();
+  // Handle transaction success
+  React.useEffect(() => {
+    if (transactionHook.transactionState.isSuccess && transactionHook.transactionState.hash) {
+      // Transaction succeeded, register the ticket
+      registrationHook.registerTicket(eventId, selectedTicket!._id).then(() => {
+        if (registrationHook.registrationState.success) {
+          handleOpenChange(false);
+          const message = `Registration successful! Transaction: ${transactionHook.transactionState.hash!.slice(
+            0,
+            10
+          )}...`;
+          toast.show(message, {
+            type: 'success',
+            preset: 'done',
+          });
+        } else if (registrationHook.registrationState.error) {
+          setError(registrationHook.registrationState.error);
+        }
+      });
+    }
+  }, [transactionHook.transactionState.isSuccess, transactionHook.transactionState.hash]);
+
+  // Handle transaction error
+  React.useEffect(() => {
+    if (transactionHook.transactionState.isError) {
+      setError(transactionHook.transactionState.error || 'Transaction failed');
+    }
+  }, [transactionHook.transactionState.isError, transactionHook.transactionState.error]);
+
+  const isProcessing =
+    registrationHook.registrationState.isRegistering || transactionHook.transactionState.isPending;
+  const hasError =
+    registrationHook.registrationState.error || transactionHook.transactionState.error || error;
+  const errorMessage =
+    error ||
+    registrationHook.registrationState.error ||
+    transactionHook.transactionState.error ||
+    'An error occurred';
 
   return (
     <Sheet
@@ -124,13 +153,13 @@ export function TicketsEventSheet({
           <YStack padding="$4" gap="$8" flex={1}>
             <H4>Choose the tickets you prefer</H4>
 
-            {/* {hasError && (
+            {hasError && (
               <View backgroundColor="$red2" padding="$3" borderRadius="$2">
                 <SizableText color="$red10" size="$2">
                   {errorMessage}
                 </SizableText>
               </View>
-            )} */}
+            )}
 
             <View flex={1}>
               <RadioGroup
