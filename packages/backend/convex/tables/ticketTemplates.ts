@@ -12,10 +12,6 @@ export const ticketTemplatesTable = defineTable({
     v.object({
       type: v.literal('onchain'),
       price: v.object({ amount: v.number(), currency: v.string() }),
-      nft: v.object({
-        image: v.id('_storage'),
-        metadata: v.optional(v.any()),
-      }),
       syncStatus: v.union(
         v.object({ status: v.literal('pending') }),
         v.object({
@@ -23,6 +19,9 @@ export const ticketTemplatesTable = defineTable({
           tokenId: v.string(),
           contractAddress: v.string(),
           chainId: v.number(),
+          nft: v.object({
+            metadataURI: v.string(),
+          }),
         }),
         v.object({ status: v.literal('error'), error: v.string() })
       ),

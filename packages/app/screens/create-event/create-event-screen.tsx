@@ -58,38 +58,10 @@ export function CreateEventScreen({ closeSheet }: { closeSheet: () => void }) {
               : {
                   type: 'onchain',
                   price: { amount: ticket.price, currency: ticket.currency },
-                  nft: {
-                    image: storageId,
-                    metadata: {
-                      name: ticket.name,
-                      description: ticket.description,
-                      image: url,
-                      attributes: [
-                        {
-                          trait_type: 'Type',
-                          value: ticket.type,
-                        },
-                      ],
-                    },
-                  },
-                  syncStatus: { status: 'pending' },
+                  imageUrl: url ?? process.env.NEXT_PUBLIC_APP_ICON!,
                 },
         })),
       });
-
-      //Add writeContract event
-      // writeContract({
-      //   address: MINTUP_CONTRACT_ADDRESS,
-      //   abi,
-      //   functionName: 'registerTicketType',
-      //   args: [
-      //     session?.user.currentWalletAddress as `0x${string}`,
-      //     BigInt(0),
-      //     BigInt(0),
-      //     BigInt(0),
-      //     `https://rose-gentle-toucan-395.mypinata.cloud/ipfs/ejemplo`,
-      //   ],
-      // });
 
       toast.show('Event created successfully', {
         type: 'success',

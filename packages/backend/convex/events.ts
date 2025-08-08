@@ -1,17 +1,18 @@
 import { v } from 'convex/values';
 
 import { internal } from './_generated/api';
-import { action, internalAction, internalMutation, query, QueryCtx } from './_generated/server';
+import { internalAction, internalMutation, query, QueryCtx } from './_generated/server';
 import { mutation } from './_generated/server';
 import { vv } from './schema';
 import { omit } from 'convex-helpers';
 import { Doc, Id } from './_generated/dataModel';
 import { baseSepolia } from 'viem/chains'; // Usa la red correcta
-
 import { abi } from '../../app/shared/lib/abi';
+import { pinata } from '../../app/shared/lib/pinata.config';
 
 import { privateKeyToAccount } from 'viem/accounts';
 import { createPublicClient, createWalletClient, decodeEventLog, http } from 'viem';
+import { pick } from 'convex-helpers';
 
 // --- CONSTANTES ---
 const CONTRACT_ADDRESS = process.env.MINTUP_FACTORY_CONTRACT_ADDRESS as `0x${string}`;
@@ -193,7 +194,22 @@ export const createEvent = mutation({
       ])
     ),
     tickets: v.array(
-      v.object(omit(vv.doc('ticketTemplates').fields, ['_id', '_creationTime', 'eventId']))
+      v.object({
+        ...pick(vv.doc('ticketTemplates').fields, [
+          'name',
+          'description',
+          'totalSupply',
+          'isApprovalRequired',
+        ]),
+        ticketType: v.union(
+          v.object({ type: v.literal('offchain') }),
+          v.object({
+            type: v.literal('onchain'),
+            price: v.object({ amount: v.number(), currency: v.string() }),
+            imageUrl: v.string(),
+          })
+        ),
+      })
     ),
   },
   handler: async (ctx, args) => {
@@ -220,8 +236,21 @@ export const createEvent = mutation({
       recentRegistrations: [],
     });
 
-    const onchainTickets = args.tickets.filter((ticket) => ticket.ticketType.type === 'onchain');
-    const offchainTickets = args.tickets.filter((ticket) => ticket.ticketType.type === 'offchain');
+    const onchainTickets = args.tickets.filter(
+      (
+        ticket
+      ): ticket is Doc<'ticketTemplates'> & {
+        ticketType: {
+          type: 'onchain';
+          price: { amount: number; currency: string };
+          imageUrl: string;
+        };
+      } => ticket.ticketType.type === 'onchain'
+    );
+    const offchainTickets = args.tickets.filter(
+      (ticket): ticket is Doc<'ticketTemplates'> & { ticketType: { type: 'offchain' } } =>
+        ticket.ticketType.type === 'offchain'
+    );
 
     await Promise.all(
       offchainTickets.map((ticket) =>
@@ -237,6 +266,11 @@ export const createEvent = mutation({
         ctx.db.insert('ticketTemplates', {
           ...ticket,
           eventId,
+          ticketType: {
+            type: 'onchain',
+            price: ticket.ticketType.price,
+            syncStatus: { status: 'pending' },
+          },
         })
       )
     );
@@ -302,7 +336,19 @@ export const createEventOnchain = internalAction({
     convexTicketTemplateIds: v.array(v.id('ticketTemplates')),
     organizerAddress: v.string(),
     ticketsData: v.array(
-      v.object(omit(vv.doc('ticketTemplates').fields, ['_id', '_creationTime', 'eventId']))
+      v.object({
+        ...pick(vv.doc('ticketTemplates').fields, [
+          'name',
+          'description',
+          'totalSupply',
+          'isApprovalRequired',
+        ]),
+        ticketType: v.object({
+          type: v.literal('onchain'),
+          price: v.object({ amount: v.number(), currency: v.string() }),
+          imageUrl: v.string(),
+        }),
+      })
     ),
   },
   handler: async (ctx, args) => {
@@ -315,19 +361,33 @@ export const createEventOnchain = internalAction({
     }
 
     // TODO: Pinata upload metadata
+    // for now take the image from the first ticket
+    let metadataURI = '';
+    try {
+      const upload = await pinata.upload.public.json({
+        name: args.ticketsData[0].name,
+        description: args.ticketsData[0].description,
+        image: args.ticketsData[0].ticketType.imageUrl,
+        attributes: [
+          {
+            trait_type: 'Type',
+            value: args.ticketsData[0].name,
+          },
+        ],
+      });
+      metadataURI = `https://${process.env.NEXT_PUBLIC_GATEWAY_URL}/ipfs/${upload.cid}`;
+    } catch (error) {
+      console.error('Error uploading metadata to Pinata:', error);
+      metadataURI = args.ticketsData[0].ticketType.imageUrl;
+    }
 
     try {
-      const ticketParams = args.ticketsData
-        .filter(
-          (t): t is Doc<'ticketTemplates'> & { ticketType: { type: 'onchain' } } =>
-            t.ticketType.type === 'onchain'
-        )
-        .map((t) => ({
-          priceETH: BigInt(t.ticketType.price.amount),
-          priceUSDC: BigInt(t.ticketType.price.amount),
-          maxSupply: BigInt(t.totalSupply || 0),
-          metadataURI: t.ticketType.nft.metadata,
-        }));
+      const ticketParams = args.ticketsData.map((t) => ({
+        priceETH: BigInt(t.ticketType.price.amount),
+        priceUSDC: BigInt(t.ticketType.price.amount),
+        maxSupply: BigInt(t.totalSupply || 0),
+        metadataURI,
+      }));
 
       console.log(`[Event: ${args.convexEventId}] Simulating contract call...`);
       const { request } = await publicClient.simulateContract({
@@ -377,6 +437,7 @@ export const createEventOnchain = internalAction({
         return {
           templateId: templateId,
           tokenId: tokenId.toString(),
+          metadataURI,
         };
       });
 
@@ -406,6 +467,7 @@ export const finalizeOnchainSync = internalMutation({
       v.object({
         templateId: v.id('ticketTemplates'),
         tokenId: v.string(),
+        metadataURI: v.string(),
       })
     ),
   },
@@ -431,6 +493,9 @@ export const finalizeOnchainSync = internalMutation({
                 tokenId: update.tokenId,
                 contractAddress: args.contractAddress,
                 chainId: args.chainId,
+                nft: {
+                  metadataURI: update.metadataURI,
+                },
               },
             },
           });
