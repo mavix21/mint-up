@@ -31,45 +31,16 @@ export class TicketRegistrationService {
       }
 
       if (isTicketPaid(ticket)) {
-        // For paid tickets, first purchase on blockchain, then register
+        // For paid tickets, initiate the transaction
+        // The transaction state will be managed by wagmi hooks
         await this.transactionHook.purchaseTicket(ticket);
 
-        // Wait for transaction to complete
-        if (this.transactionHook.transactionState.isError) {
-          return {
-            success: false,
-            error: this.transactionHook.transactionState.error || 'Transaction failed',
-          };
-        }
-
-        // If transaction is successful, register the ticket
-        if (this.transactionHook.transactionState.isSuccess) {
-          await this.registrationHook.registerTicket(eventId, ticket._id);
-
-          if (this.registrationHook.registrationState.error) {
-            return {
-              success: false,
-              error: this.registrationHook.registrationState.error,
-            };
-          }
-
-          return {
-            success: true,
-            transactionHash: this.transactionHook.transactionState.hash || undefined,
-          };
-        }
-
-        // If transaction is still pending, return pending state
-        if (this.transactionHook.transactionState.isPending) {
-          return {
-            success: false,
-            error: 'Transaction is still processing. Please wait.',
-          };
-        }
-
+        // Return immediately - the UI will handle transaction state updates
+        // The transaction success/failure will be handled by the wagmi hooks
+        // and reflected in the UI through the transaction state
         return {
-          success: false,
-          error: 'Transaction did not complete successfully',
+          success: false, // Transaction is in progress
+          error: undefined,
         };
       }
 
