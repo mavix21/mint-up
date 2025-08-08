@@ -31,7 +31,11 @@ export function useTicketTransaction(): UseTicketTransactionReturn {
 
   const { writeContract, isPending, isError, error, data: hash } = useWriteContract();
 
-  const { data: receipt, isSuccess } = useWaitForTransactionReceipt({
+  const {
+    data: receipt,
+    isSuccess,
+    isError: receiptError,
+  } = useWaitForTransactionReceipt({
     hash: hash as `0x${string}`,
   });
 
@@ -53,15 +57,31 @@ export function useTicketTransaction(): UseTicketTransactionReturn {
     });
 
     try {
-      const priceInEth = parseEther(ticket.ticketType.price.amount.toString());
+      const { amount, currency } = ticket.ticketType.price;
 
-      writeContract({
-        address: MINTUP_FACTORY_CONTRACT_ADDRESS,
-        abi,
-        functionName: 'mintTicket',
-        args: [BigInt(ticket.ticketType.syncStatus.tokenId)],
-        value: priceInEth,
-      });
+      // Handle different currencies
+      if (currency === 'ETH') {
+        const priceInEth = parseEther(amount.toString());
+        writeContract({
+          address: MINTUP_FACTORY_CONTRACT_ADDRESS,
+          abi,
+          functionName: 'mintTicket',
+          args: [BigInt(ticket.ticketType.syncStatus.tokenId)],
+          value: priceInEth,
+        });
+      } else if (currency === 'USDC') {
+        // For USDC payments, the contract handles USDC transfer internally
+        // We just call mintTicket without ETH value
+        writeContract({
+          address: MINTUP_FACTORY_CONTRACT_ADDRESS,
+          abi,
+          functionName: 'mintTicket',
+          args: [BigInt(ticket.ticketType.syncStatus.tokenId)],
+          value: 0n, // No ETH value for USDC payments
+        });
+      } else {
+        throw new Error(`Unsupported currency: ${currency}`);
+      }
     } catch (err) {
       setState({
         isPending: false,
@@ -97,10 +117,21 @@ export function useTicketTransaction(): UseTicketTransactionReturn {
     }));
   }
 
-  if (isSuccess && !state.isSuccess) {
+  // Only mark as success when we have both success and receipt
+  if (isSuccess && receipt && !state.isSuccess) {
     setState((prev) => ({
       ...prev,
       isSuccess: true,
+      isPending: false,
+    }));
+  }
+
+  // Handle transaction receipt errors
+  if (receiptError && !state.isError) {
+    setState((prev) => ({
+      ...prev,
+      isError: true,
+      error: 'Transaction failed on blockchain',
       isPending: false,
     }));
   }
