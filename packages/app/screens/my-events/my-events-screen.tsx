@@ -1,5 +1,6 @@
 import { api } from '@my/backend/_generated/api';
 import {
+  Button,
   FullscreenSpinner,
   H3,
   Paragraph,
@@ -9,19 +10,21 @@ import {
   View,
   YStack,
 } from '@my/ui';
-import { CalendarPlus, History } from '@tamagui/lucide-icons';
+import { CalendarPlus, History, LogIn } from '@tamagui/lucide-icons';
 import {
   formatRelativeDate as formatRelativeDateShared,
   getDayOfWeek,
   groupByDate,
 } from 'app/shared';
-import { useQuery } from 'convex/react';
+import { useSignIn } from 'app/shared/lib/hooks/use-sign-in';
+import { Authenticated, Unauthenticated, useQuery } from 'convex/react';
 import React, { useMemo } from 'react';
 
 import { EventCard } from './ui/event-card';
 import { CardSkeleton } from '../../shared/ui/CardSkeleton';
 
 export const MyEventsScreen = () => {
+  const { signIn } = useSignIn();
   const allUserEvents = useQuery(api.events.getUserEvents);
   const [activeTab, setActiveTab] = React.useState('upcoming');
 
@@ -122,14 +125,37 @@ export const MyEventsScreen = () => {
               ))
             ) : upcomingEvents.length <= 0 ? (
               <YStack flex={1} justifyContent="center" alignItems="center" gap="$4" padding="$4">
-                <CalendarPlus size="$8" color="$color8" />
-                <SizableText size="$6" fontWeight="bold" color="$color10" textAlign="center">
-                  No Upcoming Events Yet!
-                </SizableText>
-                <SizableText size="$4" color="$color9" textAlign="center" maxWidth={300}>
-                  It looks like you don&apos;t have any events planned. Create a new one or explore
-                  what&apos;s happening!
-                </SizableText>
+                <Authenticated>
+                  <CalendarPlus size="$8" color="$color8" />
+                  <SizableText size="$6" fontWeight="bold" color="$color10" textAlign="center">
+                    No Upcoming Events Yet!
+                  </SizableText>
+                  <SizableText size="$4" color="$color9" textAlign="center" maxWidth={300}>
+                    It looks like you don&apos;t have any events planned. Create a new one or
+                    explore what&apos;s happening!
+                  </SizableText>
+                </Authenticated>
+                <Unauthenticated>
+                  <YStack gap="$2.5" alignItems="center" justifyContent="center">
+                    <LogIn size="$8" color="$color8" />
+                    <SizableText size="$6" fontWeight="bold" color="$color10" textAlign="center">
+                      Sign In to Create Events!
+                    </SizableText>
+                    <SizableText size="$4" color="$color9" textAlign="center" maxWidth={300}>
+                      Join our community to create amazing events and build your digital experiences
+                      collection.
+                    </SizableText>
+                    <Button
+                      theme="green"
+                      size="$4"
+                      icon={<LogIn size={16} />}
+                      onPress={signIn}
+                      mt="$2"
+                    >
+                      Sign In
+                    </Button>
+                  </YStack>
+                </Unauthenticated>
               </YStack>
             ) : (
               <YStack>
@@ -185,14 +211,36 @@ export const MyEventsScreen = () => {
               ))
             ) : pastEvents.length <= 0 ? (
               <YStack flex={1} justifyContent="center" alignItems="center" space="$4" padding="$4">
-                <History size="$8" color="$gray8" />
-                <SizableText size="$6" fontWeight="bold" color="$gray10" textAlign="center">
-                  No Past Events Found
-                </SizableText>
-                <SizableText size="$4" color="$gray9" textAlign="center" maxWidth={300}>
-                  Once you attend or create events, they&apos;ll appear here for your review. Start
-                  joining now!
-                </SizableText>
+                <Authenticated>
+                  <History size="$8" color="$gray8" />
+                  <SizableText size="$6" fontWeight="bold" color="$gray10" textAlign="center">
+                    No Past Events Found
+                  </SizableText>
+                  <SizableText size="$4" color="$gray9" textAlign="center" maxWidth={300}>
+                    Once you attend or create events, they&apos;ll appear here for your review.
+                    Start joining now!
+                  </SizableText>
+                </Authenticated>
+                <Unauthenticated>
+                  <YStack gap="$2.5" alignItems="center" justifyContent="center">
+                    <History size="$8" color="$color8" />
+                    <SizableText size="$6" fontWeight="bold" color="$color10" textAlign="center">
+                      Your Event History Awaits!
+                    </SizableText>
+                    <SizableText size="$4" color="$color9" textAlign="center" maxWidth={300}>
+                      Sign in to view your past events and track your digital experiences journey.
+                    </SizableText>
+                    <Button
+                      theme="green"
+                      size="$4"
+                      icon={<LogIn size={16} />}
+                      onPress={signIn}
+                      mt="$2"
+                    >
+                      Sign In
+                    </Button>
+                  </YStack>
+                </Unauthenticated>
               </YStack>
             ) : (
               <YStack>
