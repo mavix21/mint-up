@@ -124,13 +124,13 @@ export function TicketsEventSheet({
           <YStack padding="$4" gap="$8" flex={1}>
             <H4>Choose the tickets you prefer</H4>
 
-            {hasError && (
+            {/* {hasError && (
               <View backgroundColor="$red2" padding="$3" borderRadius="$2">
                 <SizableText color="$red10" size="$2">
                   {errorMessage}
                 </SizableText>
               </View>
-            )}
+            )} */}
 
             <View flex={1}>
               <RadioGroup
