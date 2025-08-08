@@ -22,6 +22,7 @@ export const formatRelativeDate = (dateInput: string | number | Date): string =>
     return date.toLocaleDateString('en-US', {
       month: 'short',
       day: 'numeric',
+      year: 'numeric',
     });
   }
 };
