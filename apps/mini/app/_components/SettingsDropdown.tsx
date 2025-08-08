@@ -45,13 +45,13 @@ export function SettingsDropdown({ triggerOpen, setTriggerOpen }: SettingsDropdo
         elevation={5}
         overflow="hidden"
       >
-        <DropdownItem hoverStyle={{ backgroundColor: '$backgroundFocus' }}>
+        <DropdownItem>
           <Settings size={14} color="$color10" />
           <DropdownText>Settings</DropdownText>
         </DropdownItem>
 
         <Authenticated>
-          <DropdownItem hoverStyle={{ backgroundColor: '$backgroundFocus' }} onPress={handleLogout}>
+          <DropdownItem onPress={handleLogout}>
             <LogOut size={14} color="$color10" />
             <DropdownText>Logout</DropdownText>
           </DropdownItem>
@@ -65,10 +65,10 @@ const DropdownItem = styled(View, {
   backgroundColor: '$color2',
   width: '100%',
   hoverStyle: {
-    backgroundColor: '$backgroundHover',
+    backgroundColor: '$color4',
   },
   pressStyle: {
-    backgroundColor: '$backgroundPress',
+    backgroundColor: '$color4',
   },
   cursor: 'pointer',
   paddingHorizontal: '$4',
