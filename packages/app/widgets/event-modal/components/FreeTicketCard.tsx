@@ -66,6 +66,8 @@ export function FreeTicketCard({
             paddingHorizontal="$2"
             paddingVertical="$1"
             borderRadius="$2"
+            alignItems="flex-end"
+            justifyContent="flex-end"
           >
             <SizableText size="$2" color="$green10" fontWeight="600">
               Free
