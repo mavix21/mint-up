@@ -90,12 +90,18 @@ export function EventModal({
 
   const handleComposeWithEmbed = () => {
     composeCast({
-      text: `¡No te pierdas ${eventData.name}! 🎉
-Un evento imperdible que no querrás perderte. ¡Prepárate!
+      text: `🎉 ${eventData.name}
 
-      🗓️ ${formatDate(formatRelativeDate(eventData.startDate))}
-      📍 ${eventData.location?.type}
-      `,
+Join me at this amazing event! 
+
+🗓️ ${formatDate(formatRelativeDate(eventData.startDate))}
+📍 ${
+        eventData.location?.type === 'online'
+          ? 'Virtual Event'
+          : eventData.location?.address || 'Location TBD'
+      }
+
+Check it out 👇`,
       embeds: [`https://mint-up-mini.vercel.app/events/${eventData._id}`],
     });
   };
@@ -416,7 +422,7 @@ Un evento imperdible que no querrás perderte. ¡Prepárate!
         </Sheet.Frame>
       </Sheet>
 
-      {tickets.length > 0 ? (
+      {tickets.length > 0 && !isUserHost && !isUserRegistered ? (
         <TicketsEventSheet
           open={showTicketsSheet}
           onOpenChange={setShowTicketsSheet}
