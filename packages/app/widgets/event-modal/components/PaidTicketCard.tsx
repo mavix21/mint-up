@@ -1,4 +1,4 @@
-import { Card, RadioGroup, SizableText, View, XStack, YStack, Spinner } from '@my/ui';
+import { Card, RadioGroup, SizableText, View, XStack, YStack, Spinner, Chip } from '@my/ui';
 
 import { TicketTemplate, isOnchainTicket, isTicketSynced } from '../utils/ticket-types';
 
@@ -34,8 +34,8 @@ export function PaidTicketCard({
       onPress={() => !disabled && onSelect(ticket._id)}
       cursor={disabled ? 'not-allowed' : 'pointer'}
       opacity={disabled ? 0.6 : 1}
-      backgroundColor={selected ? '$blue2' : undefined}
-      borderColor={selected ? '$blue8' : undefined}
+      backgroundColor={selected ? '$color4' : undefined}
+      borderColor={selected ? '$color8' : undefined}
     >
       <View onPress={(e) => e.stopPropagation()}>
         <RadioGroup.Item id={ticket._id} value={ticket._id} disabled={disabled || !isSynced}>
@@ -43,24 +43,24 @@ export function PaidTicketCard({
         </RadioGroup.Item>
       </View>
 
-      <View flexDirection="column" flexShrink={1}>
+      <View flexDirection="column" flex={1}>
         <XStack justifyContent="space-between" alignItems="flex-start">
           <YStack flex={1}>
             <SizableText
               size="$4"
               lineHeight="$2"
               fontWeight={selected ? '600' : '400'}
-              color={selected ? '$blue11' : undefined}
+              color={selected ? '$color12' : undefined}
             >
               {ticket.name}
             </SizableText>
             {ticket.description && (
-              <SizableText flexShrink={1} size="$3" fontWeight="300" color="$gray9" marginTop="$1">
+              <SizableText flexShrink={1} size="$3" fontWeight="300" color="$color9" marginTop="$1">
                 {ticket.description}
               </SizableText>
             )}
             {ticket.totalSupply && (
-              <SizableText size="$2" color="$gray8" marginTop="$1">
+              <SizableText size="$2" color="$color8" marginTop="$1">
                 {ticket.totalSupply} available
               </SizableText>
             )}
@@ -82,21 +82,16 @@ export function PaidTicketCard({
           </YStack>
 
           <YStack alignItems="flex-end" gap="$1">
-            <View
-              backgroundColor="$purple2"
-              paddingHorizontal="$2"
-              paddingVertical="$1"
-              borderRadius="$2"
-            >
-              <SizableText size="$2" color="$purple10" fontWeight="600">
+            <Chip theme="purple" size="$2" rounded>
+              <Chip.Text fontWeight="600">
                 {amount} {currency}
-              </SizableText>
-            </View>
+              </Chip.Text>
+            </Chip>
 
             {/* Transaction pending indicator */}
             {isTransactionPending && selected && (
               <View
-                backgroundColor="$blue2"
+                backgroundColor="$color2"
                 paddingHorizontal="$2"
                 paddingVertical="$1"
                 borderRadius="$2"
@@ -104,8 +99,8 @@ export function PaidTicketCard({
                 alignItems="center"
                 gap="$1"
               >
-                <Spinner size="small" color="$blue10" />
-                <SizableText size="$2" color="$blue10" fontWeight="600">
+                <Spinner size="small" color="$color10" />
+                <SizableText size="$2" color="$color10" fontWeight="600">
                   Processing...
                 </SizableText>
               </View>
