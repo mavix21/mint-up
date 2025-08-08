@@ -12,13 +12,16 @@ export const SignInPromptModal = memo(function SignInPromptModal({
   open,
   onOpenChange,
 }: SignInPromptModalProps) {
-  const { signIn, isLoading } = useSignIn();
+  const { signIn, isLoading, isSignedIn } = useSignIn();
 
   const handleSignIn = () => {
     signIn();
-    // Don't close the modal immediately to show loading state
-    // The modal will close when authentication completes
   };
+
+  // Close modal when user is signed in
+  if (isSignedIn && open) {
+    onOpenChange(false);
+  }
 
   return (
     <Dialog modal open={open} onOpenChange={onOpenChange}>
@@ -62,9 +65,9 @@ export const SignInPromptModal = memo(function SignInPromptModal({
               theme="green"
               icon={<LogIn size={16} />}
               onPress={handleSignIn}
-              disabled={isLoading}
+              disabled={isLoading || isSignedIn}
             >
-              {isLoading ? 'Signing In...' : 'Sign In'}
+              {isLoading ? 'Signing In...' : isSignedIn ? 'Signed In' : 'Sign In'}
             </Button>
 
             <Button onPress={() => onOpenChange(false)} disabled={isLoading}>
