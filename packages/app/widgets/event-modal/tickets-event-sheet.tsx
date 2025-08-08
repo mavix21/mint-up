@@ -16,7 +16,7 @@ import { PaidTicketCard } from './components/PaidTicketCard';
 import { useTicketRegistration } from './hooks/use-ticket-registration';
 import { useTicketTransaction } from './hooks/use-ticket-transaction';
 import { TicketRegistrationService } from './services/ticket-registration.service';
-import { TicketTemplate, isTicketFree, isTicketPaid } from './utils/ticket-types';
+import { isTicketFree, isTicketPaid } from './utils/ticket-types';
 
 export interface TicketsEventSheetProps {
   open: boolean;
