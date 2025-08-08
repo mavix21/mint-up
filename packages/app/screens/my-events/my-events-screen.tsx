@@ -212,14 +212,16 @@ export const MyEventsScreen = () => {
             ) : pastEvents.length <= 0 ? (
               <YStack flex={1} justifyContent="center" alignItems="center" space="$4" padding="$4">
                 <Authenticated>
-                  <History size="$8" color="$gray8" />
-                  <SizableText size="$6" fontWeight="bold" color="$gray10" textAlign="center">
-                    No Past Events Found
-                  </SizableText>
-                  <SizableText size="$4" color="$gray9" textAlign="center" maxWidth={300}>
-                    Once you attend or create events, they&apos;ll appear here for your review.
-                    Start joining now!
-                  </SizableText>
+                  <YStack gap="$2.5" alignItems="center" justifyContent="center">
+                    <History size="$8" color="$gray8" />
+                    <SizableText size="$6" fontWeight="bold" color="$gray10" textAlign="center">
+                      No Past Events Found
+                    </SizableText>
+                    <SizableText size="$4" color="$gray9" textAlign="center" maxWidth={300}>
+                      Once you attend or create events, they&apos;ll appear here for your review.
+                      Start joining now!
+                    </SizableText>
+                  </YStack>
                 </Authenticated>
                 <Unauthenticated>
                   <YStack gap="$2.5" alignItems="center" justifyContent="center">
