@@ -11,7 +11,7 @@ export const CustomToast = () => {
   return (
     <Toast
       key={currentToast.id}
-      zIndex={999_999}
+      zIndex={300_000}
       duration={currentToast.duration}
       viewportName={currentToast.viewportName}
       enterStyle={{ o: 0, scale: 0.5, y: -25 }}
@@ -29,11 +29,11 @@ export const CustomToast = () => {
           {/* <Toast.Close asChild>
             <Button
               chromeless
-              icon={X}
+              icon={<X size={16} />}
               size="$1"
               circular
               style={{ alignItems: 'center', justifyContent: 'center' }}
-            ></Button>
+            />
           </Toast.Close> */}
         </XStack>
         {!!currentToast.message && <Toast.Description>{currentToast.message}</Toast.Description>}
