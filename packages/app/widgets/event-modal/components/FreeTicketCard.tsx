@@ -1,16 +1,23 @@
-import { Doc } from '@my/backend/convex/_generated/dataModel';
 import { Card, RadioGroup, SizableText, View, XStack, YStack } from '@my/ui';
 
-import { getTicketPrice } from './utils/ticket-types';
+import { TicketTemplate, isOffchainTicket } from '../utils/ticket-types';
 
-type ItemProps = {
-  ticket: Doc<'ticketTemplates'>;
-  setValue: (value: string) => void;
+interface FreeTicketCardProps {
+  ticket: TicketTemplate;
   selected: boolean;
-};
+  onSelect: (ticketId: string) => void;
+  disabled?: boolean;
+}
 
-export function TicketCardRadioButton({ ticket, setValue, selected }: ItemProps) {
-  const price = getTicketPrice(ticket);
+export function FreeTicketCard({
+  ticket,
+  selected,
+  onSelect,
+  disabled = false,
+}: FreeTicketCardProps) {
+  if (!isOffchainTicket(ticket)) {
+    return null;
+  }
 
   return (
     <Card
@@ -19,16 +26,18 @@ export function TicketCardRadioButton({ ticket, setValue, selected }: ItemProps)
       alignItems="flex-start"
       gap="$3"
       padding="$3"
-      onPress={() => setValue(ticket._id)}
-      cursor="pointer"
+      onPress={() => !disabled && onSelect(ticket._id)}
+      cursor={disabled ? 'not-allowed' : 'pointer'}
+      opacity={disabled ? 0.6 : 1}
       backgroundColor={selected ? '$blue2' : undefined}
       borderColor={selected ? '$blue8' : undefined}
     >
       <View onPress={(e) => e.stopPropagation()}>
-        <RadioGroup.Item id={ticket._id} value={ticket._id}>
+        <RadioGroup.Item id={ticket._id} value={ticket._id} disabled={disabled}>
           <RadioGroup.Indicator />
         </RadioGroup.Item>
       </View>
+
       <View flexDirection="column" flexShrink={1}>
         <XStack justifyContent="space-between" alignItems="flex-start">
           <YStack flex={1}>
@@ -53,17 +62,13 @@ export function TicketCardRadioButton({ ticket, setValue, selected }: ItemProps)
           </YStack>
 
           <View
-            backgroundColor={price === 'Free' ? '$green2' : '$purple2'}
+            backgroundColor="$green2"
             paddingHorizontal="$2"
             paddingVertical="$1"
             borderRadius="$2"
           >
-            <SizableText
-              size="$2"
-              color={price === 'Free' ? '$green10' : '$purple10'}
-              fontWeight="600"
-            >
-              {price}
+            <SizableText size="$2" color="$green10" fontWeight="600">
+              Free
             </SizableText>
           </View>
         </XStack>

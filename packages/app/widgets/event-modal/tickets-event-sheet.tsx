@@ -1,5 +1,4 @@
-import { api } from '@my/backend/_generated/api';
-import { Doc, Id } from '@my/backend/_generated/dataModel';
+import { Doc } from '@my/backend/_generated/dataModel';
 import {
   Sheet,
   YStack,
@@ -10,10 +9,14 @@ import {
   SizableText,
   useToastController,
 } from '@my/ui';
-import { useMutation } from 'convex/react';
 import React from 'react';
 
-import { TicketCardRadioButton } from './ticket-card-radio-button';
+import { FreeTicketCard } from './components/FreeTicketCard';
+import { PaidTicketCard } from './components/PaidTicketCard';
+import { useTicketRegistration } from './hooks/use-ticket-registration';
+import { useTicketTransaction } from './hooks/use-ticket-transaction';
+import { TicketRegistrationService } from './services/ticket-registration.service';
+import { TicketTemplate, isTicketFree, isTicketPaid } from './utils/ticket-types';
 
 export interface TicketsEventSheetProps {
   open: boolean;
@@ -29,48 +32,74 @@ export function TicketsEventSheet({
   ticketList,
 }: TicketsEventSheetProps) {
   const toast = useToastController();
-  const [value, setValue] = React.useState(ticketList[0]?._id);
-  const [isRegistering, setIsRegistering] = React.useState(false);
+  const [selectedTicketId, setSelectedTicketId] = React.useState<string | null>(null);
   const [error, setError] = React.useState<string | null>(null);
 
-  const createRegistration = useMutation(api.registrations.createRegistration);
+  // Initialize hooks
+  const registrationHook = useTicketRegistration();
+  const transactionHook = useTicketTransaction();
+
+  // Create service instance
+  const registrationService = React.useMemo(
+    () => new TicketRegistrationService(registrationHook, transactionHook),
+    [registrationHook, transactionHook]
+  );
+
+  // Get selected ticket
+  const selectedTicket = React.useMemo(
+    () => ticketList.find((ticket) => ticket._id === selectedTicketId) || null,
+    [ticketList, selectedTicketId]
+  );
 
   // Reset local state when sheet opens
   const handleOpenChange = (isOpen: boolean) => {
     if (!isOpen) {
       setError(null);
-      setIsRegistering(false);
+      setSelectedTicketId(null);
+      registrationService.resetStates();
     }
     onOpenChange(isOpen);
   };
 
+  const handleTicketSelect = (ticketId: string) => {
+    setSelectedTicketId(ticketId);
+    setError(null);
+  };
+
   const handleRegister = async () => {
-    if (!value) {
+    if (!selectedTicket) {
       setError('Please select a ticket type');
       return;
     }
 
-    setIsRegistering(true);
     setError(null);
 
     try {
-      await createRegistration({
-        eventId: eventId as Id<'events'>,
-        ticketTemplateId: value,
-      });
+      const result = await registrationService.registerTicket(eventId, selectedTicket);
 
-      // Close the sheet on success
-      handleOpenChange(false);
-      toast.show('Registration successful', {
-        type: 'success',
-        preset: 'done',
-      });
+      if (result.success) {
+        // Close the sheet on success
+        handleOpenChange(false);
+
+        const message = result.transactionHash
+          ? `Registration successful! Transaction: ${result.transactionHash.slice(0, 10)}...`
+          : 'Registration successful!';
+
+        toast.show(message, {
+          type: 'success',
+          preset: 'done',
+        });
+      } else {
+        setError(result.error || 'Registration failed');
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Registration failed');
-    } finally {
-      setIsRegistering(false);
     }
   };
+
+  const isProcessing = registrationService.isProcessing();
+  const hasError = registrationService.hasError() || error;
+  const errorMessage = error || registrationService.getErrorMessage();
 
   return (
     <Sheet
@@ -95,10 +124,10 @@ export function TicketsEventSheet({
           <YStack padding="$4" gap="$8" flex={1}>
             <H4>Choose the tickets you prefer</H4>
 
-            {error && (
+            {hasError && (
               <View backgroundColor="$red2" padding="$3" borderRadius="$2">
                 <SizableText color="$red10" size="$2">
-                  {error}
+                  {errorMessage}
                 </SizableText>
               </View>
             )}
@@ -106,18 +135,45 @@ export function TicketsEventSheet({
             <View flex={1}>
               <RadioGroup
                 flex={1}
-                value={value}
-                onValueChange={(value) => setValue(value as Id<'ticketTemplates'>)}
+                value={selectedTicketId || ''}
+                onValueChange={handleTicketSelect}
+                disabled={isProcessing}
               >
                 <View flexDirection="column" flex={1} flexWrap="wrap" gap="$2">
-                  {ticketList.map((ticket) => (
-                    <TicketCardRadioButton
-                      key={ticket._id}
-                      selected={value === ticket._id}
-                      ticket={ticket}
-                      setValue={(value) => setValue(value as Id<'ticketTemplates'>)}
-                    />
-                  ))}
+                  {ticketList.map((ticket) => {
+                    const isSelected = selectedTicketId === ticket._id;
+                    const isTransactionPending =
+                      isSelected &&
+                      isTicketPaid(ticket) &&
+                      transactionHook.transactionState.isPending;
+
+                    if (isTicketFree(ticket)) {
+                      return (
+                        <FreeTicketCard
+                          key={ticket._id}
+                          ticket={ticket}
+                          selected={isSelected}
+                          onSelect={handleTicketSelect}
+                          disabled={isProcessing}
+                        />
+                      );
+                    }
+
+                    if (isTicketPaid(ticket)) {
+                      return (
+                        <PaidTicketCard
+                          key={ticket._id}
+                          ticket={ticket}
+                          selected={isSelected}
+                          onSelect={handleTicketSelect}
+                          disabled={isProcessing}
+                          isTransactionPending={isTransactionPending}
+                        />
+                      );
+                    }
+
+                    return null;
+                  })}
                 </View>
               </RadioGroup>
             </View>
@@ -131,8 +187,14 @@ export function TicketsEventSheet({
           borderTopWidth={1}
           borderTopColor="$borderColor"
         >
-          <Button size="$4" onPress={handleRegister} disabled={isRegistering || !value}>
-            <Button.Text>{isRegistering ? 'Registering...' : 'Register'}</Button.Text>
+          <Button size="$4" onPress={handleRegister} disabled={isProcessing || !selectedTicketId}>
+            <Button.Text>
+              {isProcessing
+                ? transactionHook.transactionState.isPending
+                  ? 'Processing transaction...'
+                  : 'Registering...'
+                : 'Register'}
+            </Button.Text>
           </Button>
         </YStack>
       </Sheet.Frame>

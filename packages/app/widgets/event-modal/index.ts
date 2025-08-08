@@ -1,1 +1,17 @@
+// Components
+export { FreeTicketCard } from './components/FreeTicketCard';
+export { PaidTicketCard } from './components/PaidTicketCard';
+export { TicketCardRadioButton } from './ticket-card-radio-button';
+export { TicketsEventSheet } from './tickets-event-sheet';
+
+// Hooks
+export { useTicketRegistration } from './hooks/use-ticket-registration';
+export { useTicketTransaction } from './hooks/use-ticket-transaction';
+
+// Services
+export { TicketRegistrationService } from './services/ticket-registration.service';
+
+// Utils
+export * from './utils/ticket-types';
+
 export { EventModal } from './event-modal';
