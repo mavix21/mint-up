@@ -14,8 +14,8 @@ import {
   WalletDropdownLink,
   WalletDropdownDisconnect,
 } from '@coinbase/onchainkit/wallet';
-import { Avatar, Button, XStack } from '@my/ui';
-import { signOut, useSession } from 'next-auth/react';
+import { Avatar, XStack } from '@my/ui';
+import { useSession } from 'next-auth/react';
 import { memo, useState } from 'react';
 
 import { SettingsDropdown } from './SettingsDropdown';
@@ -74,7 +74,6 @@ export const Topbar = memo(() => {
         {context === undefined && !session && <SignInWithFarcaster />}
         {/* <Button circular icon={<Plus />} onPress={handleAddFrame} /> */}
         <ThemeSwitch size="$3" />
-        <Button onPress={() => signOut()} />
         <SettingsDropdown triggerOpen={triggerOpen} setTriggerOpen={setTriggerOpen} />
       </XStack>
     </XStack>

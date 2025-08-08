@@ -1,5 +1,7 @@
+import { Authenticated } from '@my/backend/react';
 import { Button, Popover, styled, Text, View } from '@my/ui';
-import { Settings } from '@tamagui/lucide-icons';
+import { LogOut, Settings } from '@tamagui/lucide-icons';
+import { signOut } from 'next-auth/react';
 
 interface SettingsDropdownProps {
   triggerOpen: boolean;
@@ -7,6 +9,13 @@ interface SettingsDropdownProps {
 }
 
 export function SettingsDropdown({ triggerOpen, setTriggerOpen }: SettingsDropdownProps) {
+  const logout = signOut;
+
+  const handleLogout = () => {
+    logout();
+    setTriggerOpen(false);
+  };
+
   return (
     <Popover
       offset={{ mainAxis: 5 }}
@@ -37,8 +46,16 @@ export function SettingsDropdown({ triggerOpen, setTriggerOpen }: SettingsDropdo
         overflow="hidden"
       >
         <DropdownItem hoverStyle={{ backgroundColor: '$backgroundFocus' }}>
+          <Settings size={14} color="$color10" />
           <DropdownText>Settings</DropdownText>
         </DropdownItem>
+
+        <Authenticated>
+          <DropdownItem hoverStyle={{ backgroundColor: '$backgroundFocus' }} onPress={handleLogout}>
+            <LogOut size={14} color="$color10" />
+            <DropdownText>Logout</DropdownText>
+          </DropdownItem>
+        </Authenticated>
       </Popover.Content>
     </Popover>
   );
@@ -57,7 +74,9 @@ const DropdownItem = styled(View, {
   paddingHorizontal: '$4',
   paddingVertical: '$2',
   alignItems: 'center',
-  justifyContent: 'center',
+  justifyContent: 'flex-start',
+  flexDirection: 'row',
+  gap: '$2',
   $xs: {
     paddingHorizontal: '$2',
     paddingVertical: '$1',
