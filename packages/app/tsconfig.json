@@ -22,7 +22,8 @@
     "skipLibCheck": true,
     "paths": {
       "app/*": ["./*"],
-      "@my/*": ["../*"]
+      "@my/*": ["../*"],
+      "@my/backend/*": ["../backend/*"]
     }
   },
   "references": []
