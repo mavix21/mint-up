@@ -11,7 +11,14 @@ import { abi } from '../../app/shared/lib/abi';
 import { pinata } from '../../app/shared/lib/pinata.config';
 
 import { privateKeyToAccount } from 'viem/accounts';
-import { createPublicClient, createWalletClient, decodeEventLog, http } from 'viem';
+import {
+  createPublicClient,
+  createWalletClient,
+  decodeEventLog,
+  http,
+  parseEther,
+  parseUnits,
+} from 'viem';
 import { pick } from 'convex-helpers';
 
 // --- CONSTANTES ---
@@ -391,9 +398,13 @@ export const createEventOnchain = internalAction({
 
           return {
             priceETH:
-              t.ticketType.price.currency === 'ETH' ? BigInt(t.ticketType.price.amount) : 0n,
+              t.ticketType.price.currency === 'ETH'
+                ? parseEther(t.ticketType.price.amount.toString())
+                : 0n,
             priceUSDC:
-              t.ticketType.price.currency === 'USDC' ? BigInt(t.ticketType.price.amount) : 0n,
+              t.ticketType.price.currency === 'USDC'
+                ? parseUnits(t.ticketType.price.amount.toString(), 6)
+                : 0n,
             maxSupply: BigInt(t.totalSupply || 0),
             metadataURI,
           };
