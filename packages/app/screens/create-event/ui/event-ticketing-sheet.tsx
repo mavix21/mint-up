@@ -1,7 +1,8 @@
 import { useVisualViewportHeight } from '@my/ui';
 import { Plus, Trash2, ChevronDown } from '@tamagui/lucide-icons';
+import { useStore } from '@tanstack/react-form';
 import type { Cryptocurrency, TicketType } from 'app/entities';
-import { useState } from 'react';
+import { withForm } from 'app/shared/lib/form';
 import {
   Sheet,
   Button,
@@ -18,360 +19,373 @@ import {
   SizableText,
   Select,
   Group,
+  useTheme,
+  getTokens,
 } from 'tamagui';
+
+import { createEventFormOpts } from '../model/shared-form';
 
 export interface EventTicketingSheetProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  tickets: TicketType[];
-  onTicketsChange: (tickets: TicketType[]) => void;
 }
 
-export function EventTicketingSheet({
-  open,
-  onOpenChange,
-  tickets,
-  onTicketsChange,
-}: EventTicketingSheetProps) {
-  const [localTickets, setLocalTickets] = useState<TicketType[]>(tickets);
-  const visualViewportHeight = useVisualViewportHeight();
+export const EventTicketingSheet = withForm({
+  ...createEventFormOpts,
+  props: {
+    open: false,
+    onOpenChange: () => {},
+  } as EventTicketingSheetProps,
+  render: function EventTicketingSheet({ open, onOpenChange, form }) {
+    const theme = useTheme();
+    const tokens = getTokens();
+    const visualViewportHeight = useVisualViewportHeight();
 
-  const handleSave = () => {
-    onTicketsChange(localTickets);
-    onOpenChange(false);
-  };
+    const ticketsFromStore = useStore(form.store, (state) => state.values.tickets || []);
 
-  const handleCancel = () => {
-    setLocalTickets(tickets);
-    onOpenChange(false);
-  };
-
-  // Reset local state when sheet opens
-  const handleOpenChange = (isOpen: boolean) => {
-    if (isOpen) {
-      setLocalTickets(tickets);
-    }
-    onOpenChange(isOpen);
-  };
-
-  const addTicket = () => {
-    const newTicket: TicketType = {
-      id: Date.now().toString(),
-      name: '',
-      type: 'free',
-      description: '',
+    const handleSave = () => {
+      onOpenChange(false);
     };
-    setLocalTickets((prev) => [...prev, newTicket]);
-  };
 
-  const updateTicket = (id: string, updates: Partial<TicketType>) => {
-    setLocalTickets((prev) =>
-      prev.map((ticket) => {
-        if (ticket.id !== id) return ticket;
+    const handleCancel = () => {
+      onOpenChange(false);
+    };
 
-        const updatedTicket = { ...ticket, ...updates } as TicketType;
-
-        // Ensure the ticket has the correct structure for its type
-        if (updatedTicket.type === 'free') {
-          // For free tickets, ensure no price or currency properties
-          return {
-            id: updatedTicket.id,
-            name: updatedTicket.name,
-            type: 'free' as const,
-            description: updatedTicket.description,
-            supply: updatedTicket.supply,
-          } as TicketType;
-        }
-
-        // For paid tickets, ensure price and currency are present
-        return {
-          id: updatedTicket.id,
-          name: updatedTicket.name,
-          type: 'paid' as const,
-          description: updatedTicket.description,
-          supply: updatedTicket.supply,
-          price: updatedTicket.price ?? 0,
-          currency: updatedTicket.currency ?? 'ETH',
-        } as TicketType;
-      })
-    );
-  };
-
-  const removeTicket = (id: string) => {
-    setLocalTickets((prev) => prev.filter((ticket) => ticket.id !== id));
-  };
-
-  const isFormValid = localTickets.every((ticket) => {
-    const hasRequiredFields = ticket.name.trim() !== '';
-
-    // For paid tickets, ensure price and currency are set
-    if (ticket.type === 'paid') {
-      return hasRequiredFields && ticket.price !== undefined && ticket.currency !== undefined;
-    }
-
-    return hasRequiredFields;
-  });
-
-  return (
-    <Sheet
-      open={open}
-      onOpenChange={handleOpenChange}
-      snapPoints={[100]}
-      defaultPosition={0}
-      modal
-      disableDrag
-      dismissOnOverlayPress={false}
-      dismissOnSnapToBottom={false}
-    >
-      <Sheet.Overlay
-        animation="lazy"
-        backgroundColor="$shadowColor"
-        enterStyle={{ opacity: 0 }}
-        exitStyle={{ opacity: 0 }}
-      />
-      <Sheet.Frame
-        py="$4"
-        backgroundColor="$color2"
-        key={visualViewportHeight}
-        style={{ height: visualViewportHeight }}
+    return (
+      <Sheet
+        open={open}
+        onOpenChange={onOpenChange}
+        snapPoints={[100]}
+        defaultPosition={0}
+        modal
+        disableDrag
+        dismissOnOverlayPress={false}
+        dismissOnSnapToBottom={false}
       >
-        <YStack flex={1} width="100%" maxWidth={496} marginHorizontal="auto">
-          {/* Header */}
-          <XStack alignItems="center" justifyContent="space-between" px="$4" pb="$3">
-            <Text fontSize="$6" fontWeight="600">
-              Event Tickets
-            </Text>
-          </XStack>
+        <Sheet.Overlay
+          animation="lazy"
+          backgroundColor="$shadowColor"
+          enterStyle={{ opacity: 0 }}
+          exitStyle={{ opacity: 0 }}
+        />
+        <Sheet.Frame
+          py="$4"
+          backgroundColor="$color2"
+          key={visualViewportHeight}
+          style={{ height: visualViewportHeight }}
+        >
+          <YStack flex={1} width="100%" maxWidth={496} marginHorizontal="auto">
+            {/* Header */}
+            <XStack alignItems="center" justifyContent="space-between" px="$4" pb="$3">
+              <Text fontSize="$6" fontWeight="600">
+                Event Tickets
+              </Text>
+            </XStack>
 
-          <Separator />
+            <Separator />
 
-          {/* Content */}
-          <ScrollView flex={1} px="$4" py="$3">
-            <YStack gap="$4">
-              {localTickets.length === 0 ? (
-                <YStack alignItems="center" py="$8" gap="$3">
-                  <Text fontSize="$4" color="$color10" textAlign="center">
-                    No tickets created yet
-                  </Text>
-                  <Text fontSize="$3" color="$color9" textAlign="center">
-                    Add your first ticket type to get started
-                  </Text>
-                </YStack>
-              ) : (
-                localTickets.map((ticket, index) => (
-                  <Card
-                    key={ticket.id}
-                    borderColor="$color5"
-                    borderWidth={1}
-                    borderRadius="$4"
-                    p="$4"
-                  >
-                    <YStack gap="$3">
-                      {/* Ticket Header */}
-                      <XStack alignItems="center" justifyContent="space-between">
-                        <SizableText fontSize="$4" fontWeight="600">
-                          Ticket {index + 1}
-                        </SizableText>
-                        {localTickets.length > 1 && (
-                          <Button
-                            size="$2"
-                            circular
-                            theme="red"
-                            onPress={() => removeTicket(ticket.id)}
-                            icon={<Trash2 size={14} />}
-                          />
-                        )}
-                      </XStack>
+            {/* Content */}
+            <ScrollView flex={1} px="$4" py="$3">
+              <form.AppField
+                name="tickets"
+                mode="array"
+                children={(field) => {
+                  const tickets = field.state.value || [];
 
-                      {/* Ticket Name */}
-                      <YStack gap="$1">
-                        <Label htmlFor={`ticket-name-${ticket.id}`}>Ticket Name</Label>
-                        <Input
-                          id={`ticket-name-${ticket.id}`}
-                          placeholder="e.g., Early Bird, VIP, General Admission"
-                          value={ticket.name}
-                          onChangeText={(text) => updateTicket(ticket.id, { name: text })}
-                          backgroundColor="$color4"
-                          borderColor="$color5"
-                          borderRadius="$4"
-                        />
-                      </YStack>
+                  const addTicket = () => {
+                    const newTicket: TicketType = {
+                      id: Date.now().toString(),
+                      name: '',
+                      type: 'free',
+                      description: '',
+                    };
+                    field.handleChange([...tickets, newTicket]);
+                  };
 
-                      {/* Price Type */}
-                      <YStack gap="$1">
-                        <Label>Price Type</Label>
-                        <ToggleGroup
-                          type="single"
-                          value={ticket.type}
-                          borderRadius="$4"
-                          orientation="horizontal"
-                          size="$3"
-                          onValueChange={(value: TicketType['type']) => {
-                            if (!value) return;
-                            if (value === 'paid') {
-                              // When switching to paid, ensure we have price and currency
-                              updateTicket(ticket.id, {
-                                type: 'paid',
-                                price: 0, // Default price
-                                currency: 'ETH', // Default currency
-                              });
-                            } else {
-                              // When switching to free, remove price and currency
-                              updateTicket(ticket.id, {
-                                type: 'free',
-                              });
-                            }
-                          }}
-                        >
-                          <ToggleGroup.Item value="free" flex={1} borderRadius="$4">
-                            <SizableText>Free</SizableText>
-                          </ToggleGroup.Item>
-                          <ToggleGroup.Item value="paid" flex={1} borderRadius="$4">
-                            <SizableText>Paid</SizableText>
-                          </ToggleGroup.Item>
-                        </ToggleGroup>
-                      </YStack>
+                  const removeTicket = (index: number) => {
+                    const filteredTickets = tickets.filter((_, i) => i !== index);
+                    field.handleChange(filteredTickets);
+                  };
 
-                      {/* Price and Currency (only for paid tickets) */}
-                      {ticket.type === 'paid' && (
-                        <YStack gap="$1">
-                          <Label>Price & Currency</Label>
-                          <Group orientation="horizontal" separator={<Separator vertical />}>
-                            <Group.Item>
-                              <YStack flex={1}>
-                                <Input
-                                  id={`ticket-price-${ticket.id}`}
-                                  placeholder="0.00"
-                                  value={ticket.price?.toString() || ''}
-                                  onChangeText={(text) => {
-                                    const price = parseFloat(text) || undefined;
-                                    updateTicket(ticket.id, { price });
-                                  }}
-                                  keyboardType="decimal-pad"
-                                  backgroundColor="$color4"
-                                  borderColor="$color5"
-                                  borderRadius="$4"
-                                  borderTopRightRadius={0}
-                                  borderBottomRightRadius={0}
+                  return (
+                    <YStack gap="$4">
+                      {tickets.length === 0 ? (
+                        <YStack alignItems="center" py="$8" gap="$3">
+                          <Text fontSize="$4" color="$color10" textAlign="center">
+                            No tickets created yet
+                          </Text>
+                          <Text fontSize="$3" color="$color9" textAlign="center">
+                            Add your first ticket type to get started
+                          </Text>
+                        </YStack>
+                      ) : (
+                        tickets.map((ticket: TicketType, index: number) => {
+                          const ticketType = ticketsFromStore[index]?.type || 'free';
+
+                          return (
+                            <Card
+                              key={ticket.id}
+                              borderColor="$color5"
+                              borderWidth={1}
+                              borderRadius="$4"
+                              p="$4"
+                            >
+                              <YStack gap="$3">
+                                {/* Ticket Header */}
+                                <XStack alignItems="center" justifyContent="space-between">
+                                  <SizableText fontSize="$4" fontWeight="600">
+                                    Ticket {index + 1}
+                                  </SizableText>
+                                  {tickets.length > 1 && (
+                                    <Button
+                                      size="$2"
+                                      circular
+                                      theme="red"
+                                      onPress={() => removeTicket(index)}
+                                      icon={<Trash2 size={14} />}
+                                    />
+                                  )}
+                                </XStack>
+
+                                {/* Ticket Name */}
+                                <form.AppField
+                                  name={`tickets[${index}].name`}
+                                  children={(nameField) => (
+                                    <YStack gap="$1">
+                                      <Label htmlFor={`ticket-name-${ticket.id}`}>
+                                        Ticket Name
+                                      </Label>
+                                      <Input
+                                        id={`ticket-name-${ticket.id}`}
+                                        placeholder="e.g., Early Bird, VIP, General Admission"
+                                        value={nameField.state.value || ''}
+                                        onChangeText={nameField.handleChange}
+                                        backgroundColor="$color4"
+                                        borderColor="$color5"
+                                        borderRadius="$4"
+                                      />
+                                    </YStack>
+                                  )}
+                                />
+
+                                {/* Price Type */}
+                                <YStack gap="$1">
+                                  <Label>Price Type</Label>
+                                  <ToggleGroup
+                                    type="single"
+                                    value={ticketType}
+                                    borderRadius="$4"
+                                    orientation="horizontal"
+                                    size="$3"
+                                    onValueChange={(value: TicketType['type']) => {
+                                      if (!value) return;
+
+                                      if (value === 'paid') {
+                                        // When switching to paid, ensure we have price and currency
+                                        form.setFieldValue(`tickets[${index}]`, {
+                                          id: ticket.id,
+                                          name: ticket.name,
+                                          description: ticket.description,
+                                          supply: ticket.supply,
+                                          type: 'paid',
+                                          price: 0,
+                                          currency: 'ETH',
+                                        } as TicketType);
+                                      } else {
+                                        // When switching to free, remove price and currency
+                                        form.setFieldValue(`tickets[${index}]`, {
+                                          id: ticket.id,
+                                          name: ticket.name,
+                                          description: ticket.description,
+                                          supply: ticket.supply,
+                                          type: 'free',
+                                        } as TicketType);
+                                      }
+                                    }}
+                                  >
+                                    <ToggleGroup.Item value="free" flex={1} borderRadius="$4">
+                                      <SizableText>Free</SizableText>
+                                    </ToggleGroup.Item>
+                                    <ToggleGroup.Item value="paid" flex={1} borderRadius="$4">
+                                      <SizableText>Paid</SizableText>
+                                    </ToggleGroup.Item>
+                                  </ToggleGroup>
+                                </YStack>
+
+                                {/* Price and Currency (only for paid tickets) */}
+                                {ticketType === 'paid' && (
+                                  <YStack gap="$1">
+                                    <Label>Price & Currency</Label>
+                                    <Group
+                                      orientation="horizontal"
+                                      separator={<Separator vertical />}
+                                    >
+                                      <Group.Item>
+                                        <form.AppField
+                                          name={`tickets[${index}].price`}
+                                          children={(priceField) => (
+                                            <YStack flex={1}>
+                                              <input
+                                                id={`ticket-price-${ticket.id}`}
+                                                placeholder="0.00"
+                                                value={priceField.state.value?.toString() || ''}
+                                                onChange={(e) => {
+                                                  priceField.handleChange(e.target.valueAsNumber);
+                                                }}
+                                                min={0}
+                                                step={0.0001}
+                                                type="number"
+                                                style={{
+                                                  padding: tokens.space.$3.val,
+                                                  backgroundColor: theme.color4.val,
+                                                  borderColor: theme.color5.val,
+                                                  borderRadius: tokens.radius.$4.val,
+                                                  borderTopRightRadius: 0,
+                                                  borderBottomRightRadius: 0,
+                                                }}
+                                              />
+                                            </YStack>
+                                          )}
+                                        />
+                                      </Group.Item>
+                                      <Group.Item>
+                                        <form.AppField
+                                          name={`tickets[${index}].currency`}
+                                          children={(currencyField) => (
+                                            <Select
+                                              id={`ticket-currency-${ticket.id}`}
+                                              value={currencyField.state.value || 'ETH'}
+                                              onValueChange={(value) => {
+                                                currencyField.handleChange(value as Cryptocurrency);
+                                              }}
+                                            >
+                                              <Select.Trigger
+                                                backgroundColor="$color4"
+                                                borderColor="$color5"
+                                                borderRadius="$4"
+                                                borderTopLeftRadius={0}
+                                                borderBottomLeftRadius={0}
+                                                iconAfter={ChevronDown}
+                                                width={120}
+                                              >
+                                                <Select.Value placeholder="ETH" />
+                                              </Select.Trigger>
+
+                                              <Select.Content zIndex={400_000}>
+                                                <Select.ScrollUpButton />
+                                                <Select.Viewport>
+                                                  <Select.Item index={0} value="ETH">
+                                                    <Select.ItemText>ETH</Select.ItemText>
+                                                  </Select.Item>
+                                                  <Select.Item index={1} value="USDC">
+                                                    <Select.ItemText>USDC</Select.ItemText>
+                                                  </Select.Item>
+                                                </Select.Viewport>
+                                                <Select.ScrollDownButton />
+                                              </Select.Content>
+                                            </Select>
+                                          )}
+                                        />
+                                      </Group.Item>
+                                    </Group>
+                                  </YStack>
+                                )}
+
+                                {/* Description */}
+                                <form.AppField
+                                  name={`tickets[${index}].description`}
+                                  children={(descriptionField) => (
+                                    <YStack gap="$1">
+                                      <Label htmlFor={`ticket-description-${ticket.id}`}>
+                                        Description
+                                      </Label>
+                                      <TextArea
+                                        id={`ticket-description-${ticket.id}`}
+                                        placeholder="What's included with this ticket?"
+                                        value={descriptionField.state.value || ''}
+                                        onChangeText={descriptionField.handleChange}
+                                        backgroundColor="$color4"
+                                        borderColor="$color5"
+                                        borderRadius="$4"
+                                        minHeight={80}
+                                        style={
+                                          {
+                                            fieldSizing: 'content',
+                                          } as any
+                                        }
+                                      />
+                                    </YStack>
+                                  )}
+                                />
+
+                                {/* Supply */}
+                                <form.AppField
+                                  name={`tickets[${index}].supply`}
+                                  children={(supplyField) => (
+                                    <YStack gap="$1">
+                                      <Label htmlFor={`ticket-supply-${ticket.id}`}>
+                                        Total Supply (Optional)
+                                      </Label>
+                                      <Input
+                                        id={`ticket-supply-${ticket.id}`}
+                                        placeholder="Leave empty for unlimited"
+                                        value={supplyField.state.value?.toString() || ''}
+                                        onChangeText={(text) => {
+                                          const supply = parseInt(text, 10) || undefined;
+                                          supplyField.handleChange(supply);
+                                        }}
+                                        keyboardType="number-pad"
+                                        backgroundColor="$color4"
+                                        borderColor="$color5"
+                                        borderRadius="$4"
+                                      />
+                                    </YStack>
+                                  )}
                                 />
                               </YStack>
-                            </Group.Item>
-                            <Group.Item>
-                              <Select
-                                id={`ticket-currency-${ticket.id}`}
-                                value={ticket.currency || 'ETH'}
-                                onValueChange={(value) => {
-                                  updateTicket(ticket.id, { currency: value as Cryptocurrency });
-                                }}
-                              >
-                                <Select.Trigger
-                                  backgroundColor="$color4"
-                                  borderColor="$color5"
-                                  borderRadius="$4"
-                                  borderTopLeftRadius={0}
-                                  borderBottomLeftRadius={0}
-                                  iconAfter={ChevronDown}
-                                  width={120}
-                                >
-                                  <Select.Value placeholder="ETH" />
-                                </Select.Trigger>
-
-                                <Select.Content zIndex={400_000}>
-                                  <Select.ScrollUpButton />
-                                  <Select.Viewport>
-                                    <Select.Item index={0} value="ETH">
-                                      <Select.ItemText>ETH</Select.ItemText>
-                                    </Select.Item>
-                                    <Select.Item index={1} value="USDC">
-                                      <Select.ItemText>USDC</Select.ItemText>
-                                    </Select.Item>
-                                  </Select.Viewport>
-                                  <Select.ScrollDownButton />
-                                </Select.Content>
-                              </Select>
-                            </Group.Item>
-                          </Group>
-                        </YStack>
+                            </Card>
+                          );
+                        })
                       )}
 
-                      {/* Description */}
-                      <YStack gap="$1">
-                        <Label htmlFor={`ticket-description-${ticket.id}`}>Description</Label>
-                        <TextArea
-                          id={`ticket-description-${ticket.id}`}
-                          placeholder="What's included with this ticket?"
-                          value={ticket.description}
-                          onChangeText={(text) => updateTicket(ticket.id, { description: text })}
-                          backgroundColor="$color4"
-                          borderColor="$color5"
-                          borderRadius="$4"
-                          minHeight={80}
-                          style={
-                            {
-                              fieldSizing: 'content',
-                            } as any
-                          }
-                        />
-                      </YStack>
-
-                      {/* Supply */}
-                      <YStack gap="$1">
-                        <Label htmlFor={`ticket-supply-${ticket.id}`}>
-                          Total Supply (Optional)
-                        </Label>
-                        <Input
-                          id={`ticket-supply-${ticket.id}`}
-                          placeholder="Leave empty for unlimited"
-                          value={ticket.supply?.toString() || ''}
-                          onChangeText={(text) => {
-                            const supply = parseInt(text, 10) || undefined;
-                            updateTicket(ticket.id, { supply });
-                          }}
-                          keyboardType="number-pad"
-                          backgroundColor="$color4"
-                          borderColor="$color5"
-                          borderRadius="$4"
-                        />
-                      </YStack>
+                      {/* Add Ticket Button */}
+                      <Button
+                        onPress={addTicket}
+                        backgroundColor="$color4"
+                        borderColor="$color5"
+                        borderWidth={1}
+                        borderStyle="dashed"
+                        py="$4"
+                      >
+                        <XStack alignItems="center" gap="$2">
+                          <Plus size={16} />
+                          <SizableText>Add Ticket Type</SizableText>
+                        </XStack>
+                      </Button>
                     </YStack>
-                  </Card>
-                ))
-              )}
+                  );
+                }}
+              />
+            </ScrollView>
 
-              {/* Add Ticket Button */}
-              <Button
-                onPress={addTicket}
-                backgroundColor="$color4"
-                borderColor="$color5"
-                borderWidth={1}
-                borderStyle="dashed"
-                py="$4"
-              >
-                <XStack alignItems="center" gap="$2">
-                  <Plus size={16} />
-                  <SizableText>Add Ticket Type</SizableText>
-                </XStack>
+            {/* Action Buttons */}
+            <XStack
+              gap="$3"
+              p="$4"
+              borderTopWidth={1}
+              borderTopColor="$color4"
+              backgroundColor="$color2"
+            >
+              <Button flex={1} theme="red" onPress={handleCancel}>
+                Cancel
               </Button>
-            </YStack>
-          </ScrollView>
-
-          {/* Action Buttons */}
-          <XStack
-            gap="$3"
-            p="$4"
-            borderTopWidth={1}
-            borderTopColor="$color4"
-            backgroundColor="$color2"
-          >
-            <Button flex={1} theme="red" onPress={handleCancel}>
-              Cancel
-            </Button>
-            <Button flex={1} themeInverse onPress={handleSave} disabled={!isFormValid}>
-              Save Tickets
-            </Button>
-          </XStack>
-        </YStack>
-      </Sheet.Frame>
-    </Sheet>
-  );
-}
+              <Button flex={1} themeInverse onPress={handleSave}>
+                Save Tickets
+              </Button>
+            </XStack>
+          </YStack>
+        </Sheet.Frame>
+      </Sheet>
+    );
+  },
+}) as typeof EventTicketingSheet;
