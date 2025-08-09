@@ -48,28 +48,6 @@ export const EventLocationSheet = withForm({
 
     const eventLocationType = useStore(form.store, (state) => state.values.location.type);
 
-    // const updateLocation = (updates: Partial<EventLocation>) => {
-    //   setLocalLocation((prev) => {
-    //     const updatedLocation = { ...prev, ...updates } as EventLocation;
-
-    //     // Ensure the location has the correct structure for its type
-    //     if (updatedLocation.type === 'online') {
-    //       // For online locations, ensure only type and url properties
-    //       return {
-    //         type: 'online' as const,
-    //         url: updatedLocation.url || '',
-    //       };
-    //     }
-
-    //     // For in-person locations, ensure type, address, and optional instructions
-    //     return {
-    //       type: 'in-person' as const,
-    //       address: updatedLocation.address || '',
-    //       instructions: updatedLocation.instructions,
-    //     };
-    //   });
-    // };
-
     return (
       <Sheet
         open={open}
