@@ -29,6 +29,7 @@ import {
   MoreVertical,
   Sparkles,
 } from '@tamagui/lucide-icons';
+import { RegistersAvatar } from 'app/screens/explore-events/ui/RegistersAvatar';
 import React, { Dispatch, SetStateAction } from 'react';
 
 import { TicketsEventSheet } from './tickets-event-sheet';
@@ -275,17 +276,14 @@ Check it out 👇`,
                 {/* Location Section */}
                 {hasLocation && (
                   <YStack gap="$3">
-                    <XStack alignItems="center" justifyContent="space-between">
-                      <H4 size="$4" fontWeight="600">
-                        Location
-                      </H4>
-                      <Button size="$2" backgroundColor="transparent">
-                        <Button.Text>Contact</Button.Text>
-                      </Button>
-                    </XStack>
-
-                    <Separator />
-
+                    <YStack gap="$2">
+                      <XStack alignItems="center" justifyContent="space-between">
+                        <SizableText size="$4" fontWeight="600">
+                          Location
+                        </SizableText>
+                      </XStack>
+                      <Separator />
+                    </YStack>
                     <XStack alignItems="flex-start" gap="$3">
                       {isOnline ? (
                         <Globe size={18} marginTop="$0.5" />
@@ -357,15 +355,14 @@ Check it out 👇`,
 
                 {/* Hosts Section */}
                 <YStack gap="$3">
-                  <XStack alignItems="center" justifyContent="space-between">
-                    <H4 size="$4" fontWeight="600">
-                      Hosts
-                    </H4>
-                    <Button size="$2" backgroundColor="transparent">
-                      <Button.Text>Contact</Button.Text>
-                    </Button>
-                  </XStack>
-
+                  <YStack gap="$2">
+                    <XStack alignItems="center" justifyContent="space-between">
+                      <SizableText size="$4" fontWeight="600">
+                        Hosts
+                      </SizableText>
+                    </XStack>
+                    <Separator />
+                  </YStack>
                   <YStack gap="$3">
                     {/* Placeholder Host - Replace with actual host data */}
                     <XStack alignItems="center" gap="$3">
@@ -387,12 +384,43 @@ Check it out 👇`,
                   </YStack>
                 </YStack>
 
+                {/* Attendees Section */}
+                {eventData.registrationCount === 0 ? (
+                  <YStack gap="$3">
+                    <YStack gap="$2">
+                      <SizableText size="$4" fontWeight="600">
+                        Attendees
+                      </SizableText>
+                      <Separator />
+                    </YStack>
+
+                    <View>
+                      <SizableText size="$1">Be the first to join this event.</SizableText>
+                    </View>
+                  </YStack>
+                ) : (
+                  <YStack gap="$3">
+                    <YStack gap="$2">
+                      <SizableText size="$4" fontWeight="600">
+                        {eventData.registrationCount}{' '}
+                        {eventData.registrationCount === 1 ? 'attendee' : 'attendees'}
+                      </SizableText>
+                      <Separator />
+                    </YStack>
+                    <View>
+                      <RegistersAvatar event={eventData} />
+                    </View>
+                  </YStack>
+                )}
+
                 {/* About Event Section */}
                 <YStack gap="$3">
-                  <SizableText size="$4" fontWeight="600">
-                    About Event
-                  </SizableText>
-                  <Separator />
+                  <YStack gap="$2">
+                    <SizableText size="$4" fontWeight="600">
+                      About event
+                    </SizableText>
+                    <Separator />
+                  </YStack>
                   <SizableText size="$3" lineHeight="$4">
                     {eventData.description || 'No description available for this event.'}
                   </SizableText>
