@@ -421,21 +421,10 @@ export function CreateEventForm({
             }}
           />
           {/* Ticketing Sheet */}
-          <form.Field
-            name="tickets"
-            mode="array"
-            children={(field) => {
-              return (
-                <EventTicketingSheet
-                  open={showTicketingSheet}
-                  onOpenChange={setShowTicketingSheet}
-                  tickets={field.state.value}
-                  onTicketsChange={(tickets) => {
-                    field.handleChange(tickets);
-                  }}
-                />
-              );
-            }}
+          <EventTicketingSheet
+            open={showTicketingSheet}
+            onOpenChange={setShowTicketingSheet}
+            form={form}
           />
         </YStack>
       </Form>
