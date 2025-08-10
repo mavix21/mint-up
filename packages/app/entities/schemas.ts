@@ -1,5 +1,7 @@
 import { z } from 'zod';
 
+export const validCurrencies = ['USDC'] as const;
+
 // Base schemas for discriminated unions
 const onlineLocationSchema = z.object({
   type: z.literal('online'),
@@ -25,11 +27,8 @@ const freeTicketSchema = z.object({
 
 const paidTicketSchema = z.object({
   type: z.literal('paid'),
-  price: z
-    .number()
-    .positive('Price must be positive')
-    .min(0.00001, 'Price must be at least 0.00001'),
-  currency: z.enum(['ETH', 'USDC']),
+  price: z.number().positive('Price must be positive').min(0.001, 'Price must be at least 0.001'),
+  currency: z.enum(validCurrencies),
 });
 
 // Complete ticket schema with base fields
@@ -153,7 +152,7 @@ export const createTicketSchema = z
       .positive('Price must be positive')
       .min(0.01, 'Price must be at least 0.01')
       .optional(),
-    currency: z.enum(['ETH', 'USDC']).optional(),
+    currency: z.enum(validCurrencies).optional(),
     name: z.string().min(1, 'Ticket name is required').max(100, 'Ticket name too long'),
     description: z
       .string()
@@ -189,6 +188,7 @@ export const submitEventSchema = createEventFormSchema
   }));
 
 // Type exports for TypeScript
+export type Cryptocurrency = (typeof validCurrencies)[number];
 export type CreateEventFormData = z.infer<typeof createEventFormSchema>;
 export type EventLocation = z.infer<typeof eventLocationSchema>;
 export type TicketType = z.infer<typeof ticketTypeSchema>;

@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { parseEther } from 'viem';
 import { useWriteContract, useWaitForTransactionReceipt } from 'wagmi';
 
 import { abi } from '../../../shared/lib/abi';
@@ -60,16 +59,18 @@ export function useTicketTransaction(): UseTicketTransactionReturn {
       const { amount, currency } = ticket.ticketType.price;
 
       // Handle different currencies
-      if (currency === 'ETH') {
-        const priceInEth = parseEther(amount.toString());
-        writeContract({
-          address: MINTUP_FACTORY_CONTRACT_ADDRESS,
-          abi,
-          functionName: 'mintTicket',
-          args: [BigInt(ticket.ticketType.syncStatus.tokenId)],
-          value: priceInEth,
-        });
-      } else if (currency === 'USDC') {
+      // if (currency === 'ETH') {
+      //   const priceInEth = parseEther(amount.toString());
+      //   writeContract({
+      //     address: MINTUP_FACTORY_CONTRACT_ADDRESS,
+      //     abi,
+      //     functionName: 'mintTicket',
+      //     args: [BigInt(ticket.ticketType.syncStatus.tokenId)],
+      //     value: priceInEth,
+      //   });
+      // }
+
+      if (currency === 'USDC') {
         // For USDC payments, the contract handles USDC transfer internally
         // We just call mintTicket without ETH value
         writeContract({

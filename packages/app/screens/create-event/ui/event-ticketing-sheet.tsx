@@ -189,7 +189,7 @@ export const EventTicketingSheet = withForm({
                                           supply: ticket.supply,
                                           type: 'paid',
                                           price: 0,
-                                          currency: 'ETH',
+                                          currency: 'USDC',
                                         } as TicketType);
                                       } else {
                                         // When switching to free, remove price and currency
@@ -268,16 +268,13 @@ export const EventTicketingSheet = withForm({
                                                 iconAfter={ChevronDown}
                                                 width={120}
                                               >
-                                                <Select.Value placeholder="ETH" />
+                                                <Select.Value placeholder="USDC" />
                                               </Select.Trigger>
 
                                               <Select.Content zIndex={400_000}>
                                                 <Select.ScrollUpButton />
                                                 <Select.Viewport>
-                                                  <Select.Item index={0} value="ETH">
-                                                    <Select.ItemText>ETH</Select.ItemText>
-                                                  </Select.Item>
-                                                  <Select.Item index={1} value="USDC">
+                                                  <Select.Item index={0} value="USDC">
                                                     <Select.ItemText>USDC</Select.ItemText>
                                                   </Select.Item>
                                                 </Select.Viewport>
