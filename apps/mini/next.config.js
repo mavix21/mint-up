@@ -90,16 +90,16 @@ module.exports = () => {
       viewTransition: true,
       // optimizeCss: true,
     },
-    async redirects() {
-      return [
-        {
-          source: '/.well-known/farcaster.json',
-          destination:
-            'https://api.farcaster.xyz/miniapps/hosted-manifest/01982577-d89f-0540-fa7e-17f27d859f03',
-          permanent: true,
-        },
-      ];
-    },
+    // async redirects() {
+    //   return [
+    //     {
+    //       source: '/.well-known/farcaster.json',
+    //       destination:
+    //         'https://api.farcaster.xyz/miniapps/hosted-manifest/01982577-d89f-0540-fa7e-17f27d859f03',
+    //       permanent: true,
+    //     },
+    //   ];
+    // },
   };
 
   for (const plugin of plugins) {
