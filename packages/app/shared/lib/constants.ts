@@ -1,2 +1,15 @@
+import { isDevelopment } from './environment';
+
 export const MINTUP_FACTORY_CONTRACT_ADDRESS =
   '0x5d6983aDCaF1dc403B824308eB82005d2318e133' as const;
+
+// Use different USDC contract addresses based on environment
+export const USDC_CONTRACT_ADDRESS = (() => {
+  if (isDevelopment()) {
+    // Development USDC contract address
+    return '0x036CbD53842c5426634e7929541eC2318f3dCF7e' as const;
+  } else {
+    // Production USDC contract address
+    return '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913' as const;
+  }
+})();
