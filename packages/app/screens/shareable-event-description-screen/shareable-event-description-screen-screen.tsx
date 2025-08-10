@@ -2,7 +2,6 @@ import { api } from '@my/backend/_generated/api';
 import { Id } from '@my/backend/_generated/dataModel';
 import { useQuery } from '@my/backend/react';
 import { EventModal } from 'app/widgets/event-modal';
-import { ConvexEventWithExtras } from 'app/entities';
 import React from 'react';
 
 export const ShareableEventDescriptionScreenScreen = ({ id }: { id: string }) => {
