@@ -1,21 +1,13 @@
+import { LifecycleStatus } from '@coinbase/onchainkit/transaction';
 import { Doc } from '@my/backend/_generated/dataModel';
-import {
-  Sheet,
-  YStack,
-  H4,
-  View,
-  RadioGroup,
-  Button,
-  useToastController,
-  SizableText,
-} from '@my/ui';
-import React from 'react';
+import { Sheet, YStack, H4, View, RadioGroup, Button, useToastController } from '@my/ui';
+import React, { useCallback } from 'react';
 
-import { FreeTicketCard } from './components/FreeTicketCard';
-import { PaidTicketCard } from './components/PaidTicketCard';
 import { useTicketRegistration } from './hooks/use-ticket-registration';
-import { useTicketTransaction } from './hooks/use-ticket-transaction';
-import { isTicketFree, isTicketPaid } from './utils/ticket-types';
+import { BuyTicketButton } from './ui/BuyTicketButton';
+import { FreeTicketCard } from './ui/FreeTicketCard';
+import { PaidTicketCard } from './ui/PaidTicketCard';
+import { isTicketFree, isTicketPaid, isOnchainTicket } from './utils/ticket-types';
 
 export interface TicketsEventSheetProps {
   open: boolean;
@@ -32,11 +24,9 @@ export function TicketsEventSheet({
 }: TicketsEventSheetProps) {
   const toast = useToastController();
   const [selectedTicketId, setSelectedTicketId] = React.useState<string | null>(null);
-  const [error, setError] = React.useState<string | null>(null);
 
   // Initialize hooks
   const registrationHook = useTicketRegistration();
-  const transactionHook = useTicketTransaction();
 
   // Get selected ticket
   const selectedTicket = React.useMemo(
@@ -47,26 +37,21 @@ export function TicketsEventSheet({
   // Reset local state when sheet opens
   const handleOpenChange = (isOpen: boolean) => {
     if (!isOpen) {
-      setError(null);
       setSelectedTicketId(null);
       registrationHook.resetState();
-      transactionHook.resetTransaction();
+      // transactionHook.resetTransaction();
     }
     onOpenChange(isOpen);
   };
 
   const handleTicketSelect = (ticketId: string) => {
     setSelectedTicketId(ticketId);
-    setError(null);
   };
 
   const handleRegister = async () => {
     if (!selectedTicket) {
-      setError('Please select a ticket type');
       return;
     }
-
-    setError(null);
 
     try {
       if (isTicketFree(selectedTicket)) {
@@ -79,56 +64,72 @@ export function TicketsEventSheet({
             type: 'success',
             preset: 'done',
           });
-        } else if (registrationHook.registrationState.error) {
-          setError(registrationHook.registrationState.error);
         }
       } else if (isTicketPaid(selectedTicket)) {
         // For paid tickets, start transaction
-        await transactionHook.purchaseTicket(selectedTicket);
+        // await transactionHook.purchaseTicket(selectedTicket);
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Registration failed');
+      console.error(err);
     }
   };
 
-  // Handle transaction success
-  React.useEffect(() => {
-    if (transactionHook.transactionState.isSuccess && transactionHook.transactionState.hash) {
-      // Transaction succeeded, register the ticket
-      registrationHook.registerTicket(eventId, selectedTicket!._id).then(() => {
-        if (registrationHook.registrationState.success) {
-          handleOpenChange(false);
-          const message = `Registration successful! Transaction: ${transactionHook.transactionState.hash!.slice(
-            0,
-            10
-          )}...`;
-          toast.show(message, {
-            type: 'success',
-            preset: 'done',
-          });
-        } else if (registrationHook.registrationState.error) {
-          setError(registrationHook.registrationState.error);
-        }
-      });
+  const handleOnStatus = useCallback((status: LifecycleStatus) => {
+    switch (status.statusName) {
+      case 'success':
+        console.log('BUY TICKET SUCCESS');
+        break;
+      default:
+        console.log(status);
     }
-  }, [transactionHook.transactionState.isSuccess, transactionHook.transactionState.hash]);
+  }, []);
 
-  // Handle transaction error
-  React.useEffect(() => {
-    if (transactionHook.transactionState.isError) {
-      setError(transactionHook.transactionState.error || 'Transaction failed');
+  const getButtonType = () => {
+    if (!selectedTicket) {
+      return (
+        <Button disabled>
+          <Button.Text>Select a ticket</Button.Text>
+        </Button>
+      );
     }
-  }, [transactionHook.transactionState.isError, transactionHook.transactionState.error]);
 
-  const isProcessing =
-    registrationHook.registrationState.isRegistering || transactionHook.transactionState.isPending;
-  const hasError =
-    registrationHook.registrationState.error || transactionHook.transactionState.error || error;
-  const errorMessage =
-    error ||
-    registrationHook.registrationState.error ||
-    transactionHook.transactionState.error ||
-    'An error occurred';
+    if (isTicketFree(selectedTicket)) {
+      return (
+        <Button onPress={handleRegister} disabled={isProcessing || !selectedTicketId}>
+          <Button.Text>{isProcessing ? 'Registering...' : 'Register'}</Button.Text>
+        </Button>
+      );
+    }
+
+    if (isOnchainTicket(selectedTicket)) {
+      switch (selectedTicket.ticketType.syncStatus.status) {
+        case 'pending':
+          return (
+            <Button disabled>
+              <Button.Text>Syncing ticket...</Button.Text>
+            </Button>
+          );
+        case 'error':
+          return (
+            <Button disabled>
+              <Button.Text>Error syncing ticket</Button.Text>
+            </Button>
+          );
+        default:
+          return (
+            <BuyTicketButton
+              handleOnStatus={handleOnStatus}
+              price={selectedTicket.ticketType.price.amount}
+              tokenId={selectedTicket.ticketType.syncStatus.tokenId}
+            />
+          );
+      }
+    }
+
+    return null;
+  };
+
+  const isProcessing = registrationHook.registrationState.isRegistering;
 
   return (
     <Sheet
@@ -153,14 +154,6 @@ export function TicketsEventSheet({
           <YStack padding="$4" gap="$8" flex={1}>
             <H4>Choose the tickets you prefer</H4>
 
-            {hasError && (
-              <View backgroundColor="$red2" padding="$3" borderRadius="$2">
-                <SizableText color="$red10" size="$2">
-                  {errorMessage}
-                </SizableText>
-              </View>
-            )}
-
             <View flex={1}>
               <RadioGroup
                 flex={1}
@@ -171,10 +164,8 @@ export function TicketsEventSheet({
                 <View flexDirection="column" flex={1} flexWrap="wrap" gap="$2">
                   {ticketList.map((ticket) => {
                     const isSelected = selectedTicketId === ticket._id;
-                    const isTransactionPending =
-                      isSelected &&
-                      isTicketPaid(ticket) &&
-                      transactionHook.transactionState.isPending;
+                    const isTransactionPending = isSelected && isTicketPaid(ticket);
+                    // && transactionHook.transactionState.isPending;
 
                     if (isTicketFree(ticket)) {
                       return (
@@ -196,7 +187,7 @@ export function TicketsEventSheet({
                           selected={isSelected}
                           onSelect={handleTicketSelect}
                           disabled={isProcessing}
-                          isTransactionPending={isTransactionPending}
+                          isTransactionPending={false}
                         />
                       );
                     }
@@ -216,15 +207,7 @@ export function TicketsEventSheet({
           borderTopWidth={1}
           borderTopColor="$borderColor"
         >
-          <Button size="$4" onPress={handleRegister} disabled={isProcessing || !selectedTicketId}>
-            <Button.Text>
-              {isProcessing
-                ? transactionHook.transactionState.isPending
-                  ? 'Processing transaction...'
-                  : 'Registering...'
-                : 'Register'}
-            </Button.Text>
-          </Button>
+          {getButtonType()}
         </YStack>
       </Sheet.Frame>
     </Sheet>
