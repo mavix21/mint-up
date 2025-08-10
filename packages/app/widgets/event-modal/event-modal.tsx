@@ -9,7 +9,6 @@ import {
   Sheet,
   XStack,
   YStack,
-  H4,
   Avatar,
   H2,
   Chip,
