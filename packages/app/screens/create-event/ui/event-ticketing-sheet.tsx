@@ -254,7 +254,7 @@ export const EventTicketingSheet = withForm({
                                           children={(currencyField) => (
                                             <Select
                                               id={`ticket-currency-${ticket.id}`}
-                                              value={currencyField.state.value || 'ETH'}
+                                              value={currencyField.state.value || 'USDC'}
                                               onValueChange={(value) => {
                                                 currencyField.handleChange(value as Cryptocurrency);
                                               }}

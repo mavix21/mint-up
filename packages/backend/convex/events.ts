@@ -261,7 +261,7 @@ export const createEvent = mutation({
             type: v.literal('onchain'),
             price: v.object({
               amount: v.number(),
-              currency: v.union(v.literal('ETH'), v.literal('USDC')),
+              currency: v.union(v.literal('USDC')),
             }),
             imageUrl: v.string(),
           })
@@ -404,7 +404,7 @@ export const createEventOnchain = internalAction({
           type: v.literal('onchain'),
           price: v.object({
             amount: v.number(),
-            currency: v.union(v.literal('ETH'), v.literal('USDC')),
+            currency: v.union(v.literal('USDC')),
           }),
           imageUrl: v.string(),
         }),
@@ -444,10 +444,7 @@ export const createEventOnchain = internalAction({
           }
 
           return {
-            priceETH:
-              t.ticketType.price.currency === 'ETH'
-                ? parseEther(t.ticketType.price.amount.toString())
-                : 0n,
+            priceETH: 0n,
             priceUSDC:
               t.ticketType.price.currency === 'USDC'
                 ? parseUnits(t.ticketType.price.amount.toString(), 6)
