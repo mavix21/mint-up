@@ -1,3 +1,5 @@
+import { base, baseSepolia } from 'viem/chains';
+
 import { isDevelopment } from './environment';
 
 export const MINTUP_FACTORY_CONTRACT_ADDRESS =
@@ -11,5 +13,13 @@ export const USDC_CONTRACT_ADDRESS = (() => {
   } else {
     // Production USDC contract address
     return '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913' as const;
+  }
+})();
+
+export const BASE_CHAIN_ID = (() => {
+  if (isDevelopment()) {
+    return baseSepolia.id;
+  } else {
+    return base.id;
   }
 })();
