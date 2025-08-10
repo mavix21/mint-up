@@ -91,6 +91,51 @@ async function enrichEventsWithCommonData(
   );
 }
 
+async function enrichEventWithCommonData(
+  ctx: QueryCtx,
+  event: Doc<'events'>,
+  userId: Id<'users'> | null
+) {
+  // Get user registration if userId is provided
+  let userRegistration: any = null;
+  if (userId) {
+    const registrations = await ctx.db
+      .query('registrations')
+      .withIndex('by_user_and_event', (q: any) => q.eq('userId', userId).eq('eventId', event._id))
+      .collect();
+    userRegistration = registrations[0] || null;
+  }
+
+  const user = await ctx.db.get(event.creatorId);
+  const imageUrl = (await ctx.storage.getUrl(event.image)) ?? null;
+
+  // Get tickets for this event
+  const tickets = await ctx.db
+    .query('ticketTemplates')
+    .withIndex('by_eventId', (q: any) => q.eq('eventId', event._id))
+    .collect();
+
+  const isHost = userId ? event.creatorId === userId : false;
+
+  // Get user status if userId is provided
+  let userStatus = null;
+  if (userId && !isHost && userRegistration) {
+    userStatus = userRegistration.status.type;
+  }
+
+  return {
+    ...event,
+    imageUrl,
+    tickets,
+    creator: {
+      name: user?.displayName ?? 'Anonymous',
+      imageUrl: user?.pfpUrl ?? null,
+    },
+    isHost,
+    userStatus,
+  };
+}
+
 export const getAllEvents = query({
   handler: async (ctx) => {
     const events = await ctx.db.query('events').order('desc').collect();
@@ -127,7 +172,8 @@ export const getEventById = query({
     eventId: v.id('events'),
   },
   handler: async (ctx, args) => {
-    //const events = await ctx.db.query('events').order('desc').collect();
+    const identity = await ctx.auth.getUserIdentity();
+    const userId = identity !== null ? (identity.subject as Id<'users'>) : null;
     const event = await ctx.db
       .query('events')
       .withIndex('by_id', (q) => q.eq('_id', args.eventId))
@@ -137,14 +183,15 @@ export const getEventById = query({
       return null;
     }
 
-    const imageUrl = (await ctx.storage.getUrl(event.image)) ?? null;
-    const user = await ctx.db.get(event.creatorId);
+    // const imageUrl = (await ctx.storage.getUrl(event.image)) ?? null;
+    // const user = await ctx.db.get(event.creatorId);
 
-    return {
-      ...event,
-      creatorName: user?.displayName ?? 'Anonymous',
-      imageUrl,
-    };
+    // return {
+    //   ...event,
+    //   creatorName: user?.displayName ?? 'Anonymous',
+    //   imageUrl,
+    // };
+    return enrichEventWithCommonData(ctx, event, userId);
   },
 });
 

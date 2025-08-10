@@ -1,10 +1,9 @@
 'use client';
 
-import { Text } from '@my/ui';
+import { ShareableEventDescriptionScreenScreen } from 'app/screens/shareable-event-description-screen/shareable-event-description-screen-screen';
 import { useParams } from 'solito/navigation';
 
-export default function EventDescriptionScreen() {
+export default function ShareableEventDescriptionScreenPage() {
   const { id } = useParams<{ id: string }>();
-
-  return <Text>Event: {id}</Text>;
+  return <ShareableEventDescriptionScreenScreen id={id} />;
 }
