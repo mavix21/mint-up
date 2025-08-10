@@ -23,8 +23,8 @@
     "@my/backend": "*",
     "@my/ui": "*",
     "@neynar/nodejs-sdk": "^3.27.0",
-    "@tamagui/next-theme": "^1.132.15",
-    "@tamagui/react-native-svg": "^1.132.15",
+    "@tamagui/next-theme": "^1.132.17",
+    "@tamagui/react-native-svg": "^1.132.17",
     "@tanstack/react-query": "5.84.1",
     "@trpc/server": "^10.45.2",
     "app": "*",
@@ -43,7 +43,7 @@
   "devDependencies": {
     "@next/bundle-analyzer": "15.3.2",
     "@next/eslint-plugin-next": "15.3.2",
-    "@tamagui/next-plugin": "^1.132.15",
+    "@tamagui/next-plugin": "^1.132.17",
     "@types/node": "^24.1.0",
     "dotenv-cli": "^8.0.0"
   }
