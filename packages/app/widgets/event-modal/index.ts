@@ -1,6 +1,6 @@
 // Components
-export { FreeTicketCard } from './components/FreeTicketCard';
-export { PaidTicketCard } from './components/PaidTicketCard';
+export { FreeTicketCard } from './ui/FreeTicketCard';
+export { PaidTicketCard } from './ui/PaidTicketCard';
 export { TicketCardRadioButton } from './ticket-card-radio-button';
 export { TicketsEventSheet } from './tickets-event-sheet';
 
