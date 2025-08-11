@@ -592,7 +592,7 @@ export const sendReminderNotification = internalAction({
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ title, body }),
+        body: JSON.stringify({ title, body, notificationId: crypto.randomUUID() }),
       });
       if (!response.ok) {
         const errorText = await response.text();
