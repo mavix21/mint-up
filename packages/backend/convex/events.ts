@@ -6,20 +6,15 @@ import { mutation } from './_generated/server';
 import { vv } from './schema';
 import { omit } from 'convex-helpers';
 import { Doc, Id } from './_generated/dataModel';
-import { baseSepolia } from 'viem/chains'; // Usa la red correcta
+import { base, baseSepolia } from 'viem/chains'; // Usa la red correcta
 import { abi } from '../../app/shared/lib/abi';
 import { pinata } from '../../app/shared/lib/pinata.config';
 
 import { privateKeyToAccount } from 'viem/accounts';
-import {
-  createPublicClient,
-  createWalletClient,
-  decodeEventLog,
-  http,
-  parseEther,
-  parseUnits,
-} from 'viem';
+import { createPublicClient, createWalletClient, decodeEventLog, http, parseUnits } from 'viem';
 import { pick } from 'convex-helpers';
+
+const CHAIN = process.env.ENV === 'development' ? baseSepolia : base;
 
 // --- CONSTANTES ---
 const CONTRACT_ADDRESS = process.env.MINTUP_FACTORY_CONTRACT_ADDRESS as `0x${string}`;
@@ -30,12 +25,12 @@ const account = privateKeyToAccount(process.env.BACKEND_SIGNER_PRIVATE_KEY as `0
 
 const walletClient = createWalletClient({
   account,
-  chain: baseSepolia,
+  chain: CHAIN,
   transport: http(process.env.BASE_SEPOLIA_RPC_URL),
 });
 
 const publicClient = createPublicClient({
-  chain: baseSepolia,
+  chain: CHAIN,
   transport: http(process.env.BASE_SEPOLIA_RPC_URL),
 });
 
@@ -511,7 +506,7 @@ export const createEventOnchain = internalAction({
         convexEventId: args.convexEventId,
         onchainEventId: onchainEventId,
         contractAddress: CONTRACT_ADDRESS,
-        chainId: baseSepolia.id,
+        chainId: CHAIN.id,
         ticketUpdates,
       });
 
