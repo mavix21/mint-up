@@ -1,4 +1,3 @@
-import { useNotification } from '@coinbase/onchainkit/minikit';
 import { api } from '@my/backend/_generated/api';
 import {
   Button,
@@ -29,15 +28,6 @@ export const MyEventsScreen = () => {
   const allUserEvents = useQuery(api.events.getUserEvents);
   const [activeTab, setActiveTab] = React.useState('upcoming');
 
-  const sendNotification = useNotification();
-
-  const handleSendNotification = () => {
-    sendNotification({
-      title: 'Your event is starting soon! ✨',
-      body: 'See you soon',
-    });
-  };
-
   // Memoize filtered events to avoid recalculation on every render
   const { upcomingEvents, pastEvents } = useMemo(() => {
     if (!allUserEvents) {
@@ -63,7 +53,6 @@ export const MyEventsScreen = () => {
       overflowBlock="hidden"
     >
       <View mb="$4" px="$4">
-        <Button onPress={handleSendNotification}>Hola</Button>
         <H3 mb="$2">My Events</H3>
         <Paragraph color="$color11">Your digital experiences collection ✨</Paragraph>
       </View>
