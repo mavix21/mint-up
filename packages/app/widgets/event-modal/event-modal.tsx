@@ -31,7 +31,7 @@ import {
 import { RegistersAvatar } from 'app/screens/explore-events/ui/RegistersAvatar';
 import React, { Dispatch, SetStateAction } from 'react';
 
-import { TicketsEventSheet } from './tickets-event-sheet';
+import TicketsEventSheet from './tickets-event-sheet';
 import { ConvexEventWithExtras } from '../../entities/event.model';
 
 export function EventModal({

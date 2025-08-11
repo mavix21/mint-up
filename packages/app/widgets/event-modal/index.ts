@@ -2,7 +2,7 @@
 export { FreeTicketCard } from './ui/FreeTicketCard';
 export { PaidTicketCard } from './ui/PaidTicketCard';
 export { TicketCardRadioButton } from './ticket-card-radio-button';
-export { TicketsEventSheet } from './tickets-event-sheet';
+export { default as TicketsEventSheet } from './tickets-event-sheet';
 
 // Hooks
 export { useTicketRegistration } from './hooks/use-ticket-registration';

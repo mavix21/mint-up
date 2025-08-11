@@ -1,9 +1,10 @@
 import { LifecycleStatus } from '@coinbase/onchainkit/transaction';
-import { Doc } from '@my/backend/_generated/dataModel';
+import { api } from '@my/backend/_generated/api';
+import { Doc, Id } from '@my/backend/_generated/dataModel';
+import { useMutation } from '@my/backend/react';
 import { Sheet, YStack, H4, View, RadioGroup, Button, useToastController } from '@my/ui';
-import React, { useCallback } from 'react';
+import React, { memo, useCallback } from 'react';
 
-import { useTicketRegistration } from './hooks/use-ticket-registration';
 import { BuyTicketButton } from './ui/BuyTicketButton';
 import { FreeTicketCard } from './ui/FreeTicketCard';
 import { PaidTicketCard } from './ui/PaidTicketCard';
@@ -16,30 +17,23 @@ export interface TicketsEventSheetProps {
   ticketList: Doc<'ticketTemplates'>[];
 }
 
-export function TicketsEventSheet({
-  open,
-  onOpenChange,
-  eventId,
-  ticketList,
-}: TicketsEventSheetProps) {
+const TicketsEventSheet = ({ open, onOpenChange, eventId, ticketList }: TicketsEventSheetProps) => {
   const toast = useToastController();
   const [selectedTicketId, setSelectedTicketId] = React.useState<string | null>(null);
+  const [isProcessing, setIsProcessing] = React.useState(false);
 
+  console.log('selectedTicketId', selectedTicketId);
   // Initialize hooks
-  const registrationHook = useTicketRegistration();
+  const createRegistration = useMutation(api.registrations.createRegistration);
 
   // Get selected ticket
-  const selectedTicket = React.useMemo(
-    () => ticketList.find((ticket) => ticket._id === selectedTicketId) || null,
-    [ticketList, selectedTicketId]
-  );
+  const selectedTicket = ticketList.find((ticket) => ticket._id === selectedTicketId) || null;
+  console.log('selectedTicket', selectedTicket);
 
   // Reset local state when sheet opens
   const handleOpenChange = (isOpen: boolean) => {
     if (!isOpen) {
       setSelectedTicketId(null);
-      registrationHook.resetState();
-      // transactionHook.resetTransaction();
     }
     onOpenChange(isOpen);
   };
@@ -48,41 +42,62 @@ export function TicketsEventSheet({
     setSelectedTicketId(ticketId);
   };
 
-  const handleRegister = async () => {
+  const handleRegister = useCallback(async () => {
     if (!selectedTicket) {
       return;
     }
 
     try {
-      if (isTicketFree(selectedTicket)) {
-        // For free tickets, register directly
-        await registrationHook.registerTicket(eventId, selectedTicket._id);
-
-        if (registrationHook.registrationState.success) {
-          handleOpenChange(false);
-          toast.show('Registration successful!', {
-            type: 'success',
-            preset: 'done',
-          });
-        }
-      } else if (isTicketPaid(selectedTicket)) {
-        // For paid tickets, start transaction
-        // await transactionHook.purchaseTicket(selectedTicket);
-      }
+      await createRegistration({
+        eventId: eventId as Id<'events'>,
+        ticketTemplateId: selectedTicket._id as Id<'ticketTemplates'>,
+      });
+      onOpenChange(false);
+      toast.show('Registration successful!', {
+        type: 'success',
+        preset: 'done',
+      });
     } catch (err) {
       console.error(err);
+      toast.show('Registration failed. Please try again.', {
+        type: 'error',
+        preset: 'error',
+      });
     }
-  };
+  }, [selectedTicket, eventId, createRegistration, onOpenChange, toast]);
 
-  const handleOnStatus = useCallback((status: LifecycleStatus) => {
-    switch (status.statusName) {
-      case 'success':
-        console.log('BUY TICKET SUCCESS');
-        break;
-      default:
-        console.log(status);
-    }
-  }, []);
+  const handleOnStatus = useCallback(
+    async (status: LifecycleStatus) => {
+      switch (status.statusName) {
+        case 'init': {
+          console.log('init');
+          break;
+        }
+        case 'transactionIdle':
+        case 'buildingTransaction': {
+          console.log(status.statusName);
+          setIsProcessing(true);
+          break;
+        }
+        case 'success': {
+          await handleRegister();
+          setIsProcessing(false);
+          break;
+        }
+        case 'error': {
+          setIsProcessing(false);
+          break;
+        }
+        default:
+          console.log(status);
+      }
+    },
+    [handleRegister]
+  );
+
+  const getButtonText = (isProcessing: boolean) => {
+    return isProcessing ? 'Registering...' : 'Register';
+  };
 
   const getButtonType = () => {
     if (!selectedTicket) {
@@ -95,8 +110,8 @@ export function TicketsEventSheet({
 
     if (isTicketFree(selectedTicket)) {
       return (
-        <Button onPress={handleRegister} disabled={isProcessing || !selectedTicketId}>
-          <Button.Text>{isProcessing ? 'Registering...' : 'Register'}</Button.Text>
+        <Button onPress={handleRegister} disabled={isProcessing}>
+          <Button.Text>{getButtonText(isProcessing)}</Button.Text>
         </Button>
       );
     }
@@ -128,8 +143,6 @@ export function TicketsEventSheet({
 
     return null;
   };
-
-  const isProcessing = registrationHook.registrationState.isRegistering;
 
   return (
     <Sheet
@@ -164,8 +177,6 @@ export function TicketsEventSheet({
                 <View flexDirection="column" flex={1} flexWrap="wrap" gap="$2">
                   {ticketList.map((ticket) => {
                     const isSelected = selectedTicketId === ticket._id;
-                    const isTransactionPending = isSelected && isTicketPaid(ticket);
-                    // && transactionHook.transactionState.isPending;
 
                     if (isTicketFree(ticket)) {
                       return (
@@ -187,7 +198,7 @@ export function TicketsEventSheet({
                           selected={isSelected}
                           onSelect={handleTicketSelect}
                           disabled={isProcessing}
-                          isTransactionPending={false}
+                          isTransactionPending={isProcessing}
                         />
                       );
                     }
@@ -212,4 +223,6 @@ export function TicketsEventSheet({
       </Sheet.Frame>
     </Sheet>
   );
-}
+};
+
+export default memo(TicketsEventSheet);

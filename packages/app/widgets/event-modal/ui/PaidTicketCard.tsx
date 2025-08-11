@@ -54,7 +54,7 @@ export function PaidTicketCard({
             >
               {ticket.name}
             </SizableText>
-            {ticket.description && (
+            {ticket.description !== '' && (
               <SizableText flexShrink={1} size="$3" fontWeight="300" color="$color9" marginTop="$1">
                 {ticket.description}
               </SizableText>
@@ -81,13 +81,7 @@ export function PaidTicketCard({
             )}
           </YStack>
 
-          <YStack alignItems="flex-end" gap="$1">
-            <Chip theme="purple" size="$2" rounded>
-              <Chip.Text fontWeight="600">
-                {amount} {currency}
-              </Chip.Text>
-            </Chip>
-
+          <XStack alignItems="center" justifyContent="flex-end" gap="$2">
             {/* Transaction pending indicator */}
             {isTransactionPending && selected && (
               <View
@@ -105,7 +99,12 @@ export function PaidTicketCard({
                 </SizableText>
               </View>
             )}
-          </YStack>
+            <Chip theme="purple" size="$2" rounded>
+              <Chip.Text fontWeight="600">
+                {amount} {currency}
+              </Chip.Text>
+            </Chip>
+          </XStack>
         </XStack>
       </View>
     </Card>
