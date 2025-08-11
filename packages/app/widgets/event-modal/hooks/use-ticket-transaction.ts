@@ -1,8 +1,13 @@
+import { usdcAbi } from 'app/shared/lib/usdc_abi';
 import { useState } from 'react';
+import { parseUnits } from 'viem';
 import { useWriteContract, useWaitForTransactionReceipt } from 'wagmi';
 
 import { abi } from '../../../shared/lib/abi';
-import { MINTUP_FACTORY_CONTRACT_ADDRESS } from '../../../shared/lib/constants';
+import {
+  MINTUP_FACTORY_CONTRACT_ADDRESS,
+  USDC_CONTRACT_ADDRESS,
+} from '../../../shared/lib/constants';
 import { TicketTemplate, isOnchainTicket } from '../utils/ticket-types';
 
 export interface TransactionState {
@@ -74,11 +79,10 @@ export function useTicketTransaction(): UseTicketTransactionReturn {
         // For USDC payments, the contract handles USDC transfer internally
         // We just call mintTicket without ETH value
         writeContract({
-          address: MINTUP_FACTORY_CONTRACT_ADDRESS,
-          abi,
-          functionName: 'mintTicket',
-          args: [BigInt(ticket.ticketType.syncStatus.tokenId)],
-          value: 0n, // No ETH value for USDC payments
+          address: USDC_CONTRACT_ADDRESS,
+          abi: usdcAbi,
+          functionName: 'approve',
+          args: [MINTUP_FACTORY_CONTRACT_ADDRESS, parseUnits(amount.toString(), 6)],
         });
       } else {
         throw new Error(`Unsupported currency: ${currency}`);
