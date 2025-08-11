@@ -1,4 +1,6 @@
 import { useAddFrame, useMiniKit } from '@coinbase/onchainkit/minikit';
+import { api } from '@my/backend/_generated/api';
+import { useMutation } from '@my/backend/react';
 import { createContext, useCallback, useContext, useEffect } from 'react';
 
 interface MiniAppContextType {
@@ -14,10 +16,19 @@ export function MiniAppProvider({ children }: { children: React.ReactNode }) {
   const { isFrameReady, setFrameReady, context } = useMiniKit();
   const addFrame = useAddFrame();
 
+  const storeToken = useMutation(api.notificationTokens.store);
+
   const handleAddFrame = useCallback(async () => {
     try {
       const result = await addFrame();
       if (result) {
+        await storeToken({
+          fid: context?.user.fid.toString() ?? '', // Asegúrate de que el FID sea un string
+          notificationUrl: result.url,
+          token: result.token,
+        });
+        console.log('¡Token y URL de notificación guardados en Convex!');
+
         return result;
       }
 
