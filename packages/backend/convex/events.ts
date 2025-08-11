@@ -48,11 +48,11 @@ async function enrichEventsWithCommonData(
   userId: Id<'users'> | null
 ) {
   // Get user registrations if userId is provided
-  let userRegistrations: any[] = [];
+  let userRegistrations: Doc<'registrations'>[] = [];
   if (userId) {
     userRegistrations = await ctx.db
       .query('registrations')
-      .withIndex('by_user_and_event', (q: any) => q.eq('userId', userId))
+      .withIndex('by_user_and_event', (q) => q.eq('userId', userId))
       .collect();
   }
 
@@ -64,7 +64,7 @@ async function enrichEventsWithCommonData(
       // Get tickets for this event
       const tickets = await ctx.db
         .query('ticketTemplates')
-        .withIndex('by_eventId', (q: any) => q.eq('eventId', event._id))
+        .withIndex('by_eventId', (q) => q.eq('eventId', event._id))
         .collect();
 
       const isHost = userId ? event.creatorId === userId : false;
@@ -91,51 +91,6 @@ async function enrichEventsWithCommonData(
       };
     })
   );
-}
-
-async function enrichEventWithCommonData(
-  ctx: QueryCtx,
-  event: Doc<'events'>,
-  userId: Id<'users'> | null
-) {
-  // Get user registration if userId is provided
-  let userRegistration: any = null;
-  if (userId) {
-    const registrations = await ctx.db
-      .query('registrations')
-      .withIndex('by_user_and_event', (q: any) => q.eq('userId', userId).eq('eventId', event._id))
-      .collect();
-    userRegistration = registrations[0] || null;
-  }
-
-  const user = await ctx.db.get(event.creatorId);
-  const imageUrl = (await ctx.storage.getUrl(event.image)) ?? null;
-
-  // Get tickets for this event
-  const tickets = await ctx.db
-    .query('ticketTemplates')
-    .withIndex('by_eventId', (q: any) => q.eq('eventId', event._id))
-    .collect();
-
-  const isHost = userId ? event.creatorId === userId : false;
-
-  // Get user status if userId is provided
-  let userStatus = null;
-  if (userId && !isHost && userRegistration) {
-    userStatus = userRegistration.status.type;
-  }
-
-  return {
-    ...event,
-    imageUrl,
-    tickets,
-    creator: {
-      name: user?.displayName ?? 'Anonymous',
-      imageUrl: user?.pfpUrl ?? null,
-    },
-    isHost,
-    userStatus,
-  };
 }
 
 export const getAllEvents = query({
@@ -193,7 +148,7 @@ export const getEventById = query({
     //   creatorName: user?.displayName ?? 'Anonymous',
     //   imageUrl,
     // };
-    return enrichEventWithCommonData(ctx, event, userId);
+    return enrichEventsWithCommonData(ctx, [event], userId);
   },
 });
 
