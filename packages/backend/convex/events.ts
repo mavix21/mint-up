@@ -592,7 +592,13 @@ export const sendReminderNotification = internalAction({
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ title, body, notificationId: crypto.randomUUID() }),
+        body: JSON.stringify({
+          title,
+          body,
+          notificationId: crypto.randomUUID(),
+          targetUrl: 'https://mint-up-mini.vercel.app',
+          tokens: [token],
+        }),
       });
       if (!response.ok) {
         const errorText = await response.text();
