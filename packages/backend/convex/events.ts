@@ -14,7 +14,8 @@ import { privateKeyToAccount } from 'viem/accounts';
 import { createPublicClient, createWalletClient, decodeEventLog, http, parseUnits } from 'viem';
 import { pick } from 'convex-helpers';
 
-const CHAIN = process.env.ENV === 'development' ? baseSepolia : base;
+// const CHAIN = process.env.ENV === 'development' ? baseSepolia : base;
+const CHAIN = baseSepolia;
 
 // --- CONSTANTES ---
 const CONTRACT_ADDRESS = process.env.MINTUP_FACTORY_CONTRACT_ADDRESS as `0x${string}`;
