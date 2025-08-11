@@ -13,7 +13,7 @@ export const registrationsTable = defineTable({
       type: v.literal('minted'),
       walletAddress: v.string(),
       transactionHash: v.string(),
-      tokenId: v.number(),
+      tokenId: v.string(),
       mintedAt: v.number(),
     })
   ),
@@ -25,7 +25,7 @@ export const registrationsTable = defineTable({
           v.object({
             type: v.literal('claimed'),
             transactionHash: v.string(),
-            tokenId: v.number(),
+            tokenId: v.string(),
             claimedAt: v.number(),
           }),
           v.object({
