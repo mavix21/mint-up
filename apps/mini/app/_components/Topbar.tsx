@@ -25,12 +25,9 @@ import { ThemeSwitch } from './ThemeSwitch';
 import { useMiniApp } from '@/contexts/mini-app.context';
 
 export const Topbar = memo(() => {
-  const { addFrame, context } = useMiniApp();
+  const { context } = useMiniApp();
   const { data: session } = useSession();
   const [triggerOpen, setTriggerOpen] = useState(false);
-  const handleAddFrame = async () => {
-    await addFrame();
-  };
 
   return (
     <XStack
@@ -72,7 +69,6 @@ export const Topbar = memo(() => {
       </Wallet>
       <XStack gap="$2" alignItems="center">
         {context === undefined && !session && <SignInWithFarcaster />}
-        {/* <Button circular icon={<Plus />} onPress={handleAddFrame} /> */}
         <ThemeSwitch size="$3" />
         <SettingsDropdown triggerOpen={triggerOpen} setTriggerOpen={setTriggerOpen} />
       </XStack>
