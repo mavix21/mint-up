@@ -80,6 +80,13 @@ export const createRegistration = mutation({
   args: {
     eventId: v.id('events'),
     ticketTemplateId: v.id('ticketTemplates'),
+    transactionReceipt: v.optional(
+      v.object({
+        walletAddress: v.string(),
+        transactionHash: v.string(),
+        tokenId: v.string(),
+      })
+    ),
   },
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
@@ -124,6 +131,14 @@ export const createRegistration = mutation({
       ticketTemplateId: args.ticketTemplateId,
       status: ticketTemplate.isApprovalRequired
         ? { type: 'pending' }
+        : args.transactionReceipt
+        ? {
+            type: 'minted',
+            tokenId: args.transactionReceipt.tokenId,
+            walletAddress: args.transactionReceipt.walletAddress,
+            transactionHash: args.transactionReceipt.transactionHash,
+            mintedAt: Date.now(),
+          }
         : { type: 'approved', approvedAt: Date.now() },
     });
 
