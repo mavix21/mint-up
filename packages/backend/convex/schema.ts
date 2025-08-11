@@ -9,6 +9,7 @@ import { usersTable } from './tables/user';
 import { ticketTemplatesTable } from './tables/ticketTemplates';
 import { registrationsTable } from './tables/registrations';
 import { poapTemplatesTable } from './tables/poapTemplates';
+import { notificationTokensTable } from './tables/notificationTokens';
 import { typedV } from 'convex-helpers/validators';
 import { authTables } from './tables/authTables';
 
@@ -22,6 +23,7 @@ const schema = defineSchema({
   ticketTemplates: ticketTemplatesTable,
   poapTemplates: poapTemplatesTable,
   registrations: registrationsTable,
+  notificationTokens: notificationTokensTable,
   ...authTables,
 });
 
