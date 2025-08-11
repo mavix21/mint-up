@@ -5,16 +5,7 @@ import { formatTime } from 'app/shared';
 import { EventModal } from 'app/widgets/event-modal';
 import { useState } from 'react';
 
-export function EventCard({
-  event,
-  isPast = false,
-  index = 0,
-}: {
-  event: ConvexEventWithExtras;
-  isPast?: boolean;
-  index: number;
-}) {
-  //const [managedEventId, setManagedEventId] = useState<string | null>(null);
+export function EventCard({ event }: { event: ConvexEventWithExtras }) {
   const [toggleEvent, setToggleEvent] = useState(false);
 
   const getStatusChip = () => {
@@ -155,19 +146,7 @@ export function EventCard({
             $xxs={{ paddingInline: '$4' }}
           >
             {getStatusChip()}
-            {/* <Button
-            size="$2"
-            onPress={() => {
-              if (event.userRole === 'host') {
-                setManagedEventId(event.id);
-                // setOpen(true);
-                // setId(index);
-              }
-            }}
-            icon={ArrowRight}
-          >
-            {event.userRole === 'host' ? 'Manage Event' : 'View Ticket'}
-          </Button> */}
+
             {/*
             <Link href={`/events/manage/${event._id}`}>
               <Button size="$2" icon={ArrowRight}>
