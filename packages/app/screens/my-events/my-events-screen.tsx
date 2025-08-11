@@ -116,7 +116,7 @@ export const MyEventsScreen = () => {
                       </View>
                       <YStack gap="$2">
                         {events.map((event) => (
-                          <EventCard key={event._id} event={event} isPast index={index} />
+                          <EventCard key={event._id} event={event} />
                         ))}
                       </YStack>
                     </View>
@@ -204,7 +204,7 @@ export const MyEventsScreen = () => {
                       </View>
                       <YStack gap="$2">
                         {events.map((event) => (
-                          <EventCard key={event._id} event={event} isPast index={index} />
+                          <EventCard key={event._id} event={event} />
                         ))}
                       </YStack>
                     </View>
