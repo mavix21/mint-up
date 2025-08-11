@@ -107,8 +107,7 @@ const TicketsEventSheet = ({ open, onOpenChange, eventId, ticketList }: TicketsE
                     },
                   });
 
-                  // Success - close sheet and show success message
-                  onOpenChange(false);
+                  // Success - show success message
                   toast.show('Registration successful!', {
                     type: 'success',
                     preset: 'done',
@@ -126,11 +125,13 @@ const TicketsEventSheet = ({ open, onOpenChange, eventId, ticketList }: TicketsE
                   });
 
                   // Show user-friendly message
-                  onOpenChange(false);
                   toast.show("Payment successful! We're syncing your ticket...", {
                     type: 'success',
                     preset: 'done',
                   });
+                } finally {
+                  onOpenChange(false);
+                  break;
                 }
               }
             }
