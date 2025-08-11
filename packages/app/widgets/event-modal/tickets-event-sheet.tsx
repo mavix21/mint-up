@@ -80,6 +80,8 @@ const TicketsEventSheet = ({ open, onOpenChange, eventId, ticketList }: TicketsE
           break;
         }
         case 'success': {
+          const { transactionReceipts } = status.statusData;
+          console.log('transactionReceipts', transactionReceipts);
           await handleRegister();
           setIsProcessing(false);
           break;

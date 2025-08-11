@@ -49,7 +49,7 @@ export function EventModal({
   const visualViewportHeight = useVisualViewportHeight();
   const tickets = eventData.tickets;
 
-  const allFree = tickets.every((ticket) => ticket.ticketType.type === 'onchain');
+  const allFree = tickets.every((ticket) => ticket.ticketType.type === 'offchain');
 
   const isOnline = eventData.location?.type === 'online';
   const isInPerson = eventData.location?.type === 'in-person';
@@ -58,6 +58,7 @@ export function EventModal({
   // Check if user is already registered
   const isUserRegistered = eventData.userStatus && eventData.userStatus !== 'rejected';
   const isUserHost = eventData.isHost;
+  const canRegister = !isUserHost && !isUserRegistered;
 
   const getStatusChip = () => {
     if (isUserHost) {
@@ -88,22 +89,31 @@ export function EventModal({
     return null;
   };
 
+  const getButtonText = () => {
+    if (tickets.length === 0) return 'Join Waitlist';
+    return allFree ? 'Register' : 'Buy Tickets';
+  };
+
   const handleComposeWithEmbed = () => {
-    composeCast({
-      text: `🎉 ${eventData.name}
+    try {
+      composeCast({
+        text: `🎉 ${eventData.name}
 
 Join me at this amazing event! 
 
 🗓️ ${formatDate(formatRelativeDate(eventData.startDate))}
 📍 ${
-        eventData.location?.type === 'online'
-          ? 'Virtual Event'
-          : eventData.location?.address || 'Location TBD'
-      }
+          eventData.location?.type === 'online'
+            ? 'Virtual Event'
+            : eventData.location?.address || 'Location TBD'
+        }
 
 Check it out 👇`,
-      embeds: [`https://mint-up-mini.vercel.app/events/${eventData._id}`],
-    });
+        embeds: [`https://mint-up-mini.vercel.app/events/${eventData._id}`],
+      });
+    } catch (error) {
+      console.error('Failed to compose cast:', error);
+    }
   };
 
   return (
@@ -191,7 +201,7 @@ Check it out 👇`,
                 {/* Status Badge */}
                 <XStack alignItems="center" gap="$2">
                   {getStatusChip()}
-                  {!isUserHost && !isUserRegistered && (
+                  {canRegister && (
                     <Chip size="$2" rounded>
                       <Chip.Text>
                         {tickets.length > 0 ? 'Tickets Available' : 'Waitlist Open'}
@@ -201,7 +211,7 @@ Check it out 👇`,
                 </XStack>
 
                 {/* Action Buttons - Only show if user is not host and not already registered */}
-                {!isUserHost && !isUserRegistered && (
+                {canRegister && (
                   <XStack gap="$3" justifyContent="space-between" alignItems="stretch">
                     <Button
                       flex={1}
@@ -209,13 +219,7 @@ Check it out 👇`,
                       onPress={() => (tickets.length > 0 ? setShowTicketsSheet(true) : null)}
                       themeInverse
                     >
-                      <Button.Text>
-                        {tickets.length > 0
-                          ? allFree
-                            ? 'Register'
-                            : 'Buy Tickets'
-                          : 'Join Waitlist'}
-                      </Button.Text>
+                      <Button.Text>{getButtonText()}</Button.Text>
                     </Button>
 
                     <Theme name="gray">
@@ -234,7 +238,7 @@ Check it out 👇`,
                 {(isUserHost || isUserRegistered) && (
                   <XStack gap="$3" justifyContent="flex-end" alignItems="stretch">
                     {isUserHost && (
-                      <Theme name="dark_gray">
+                      <Theme name="gray">
                         <Button
                           flex={1}
                           fontWeight="600"
@@ -248,7 +252,7 @@ Check it out 👇`,
                       </Theme>
                     )}
                     {isUserRegistered && (
-                      <Theme name="dark_green">
+                      <Theme name="green">
                         <Button
                           flex={1}
                           fontWeight="600"
@@ -335,7 +339,7 @@ Check it out 👇`,
                     </XStack>
 
                     {/* Map Placeholder for In-person Events */}
-                    {!isOnline && (
+                    {/* {!isOnline && (
                       <View
                         height={120}
                         backgroundColor="$color5"
@@ -348,7 +352,7 @@ Check it out 👇`,
                           Map View
                         </SizableText>
                       </View>
-                    )}
+                    )} */}
                   </YStack>
                 )}
 
@@ -428,7 +432,7 @@ Check it out 👇`,
             </ScrollView>
 
             {/* Bottom Action - Only show if user is not host and not already registered */}
-            {!isUserHost && !isUserRegistered && (
+            {canRegister && (
               <View padding="$4" borderTopWidth={1} borderColor="$borderColor">
                 <Button
                   width="100%"
@@ -436,9 +440,7 @@ Check it out 👇`,
                   themeInverse
                   onPress={() => (tickets.length > 0 ? setShowTicketsSheet(true) : null)}
                 >
-                  <Button.Text>
-                    {tickets.length > 0 ? (allFree ? 'Register' : 'Buy Tickets') : 'Join Waitlist'}
-                  </Button.Text>
+                  <Button.Text>{getButtonText()}</Button.Text>
                 </Button>
               </View>
             )}
@@ -446,7 +448,7 @@ Check it out 👇`,
         </Sheet.Frame>
       </Sheet>
 
-      {tickets.length > 0 && !isUserHost && !isUserRegistered ? (
+      {tickets.length > 0 && canRegister ? (
         <TicketsEventSheet
           open={showTicketsSheet}
           onOpenChange={setShowTicketsSheet}
