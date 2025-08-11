@@ -3,8 +3,11 @@ import { api } from '@my/backend/_generated/api';
 import { Doc, Id } from '@my/backend/_generated/dataModel';
 import { useMutation } from '@my/backend/react';
 import { Sheet, YStack, H4, View, RadioGroup, Button, useToastController } from '@my/ui';
+import { abi } from 'app/shared/lib/abi';
 import React, { memo, useCallback } from 'react';
+import { parseEventLogs } from 'viem';
 
+import { usePendingRegistrationService } from './services/pending-registration.service';
 import { BuyTicketButton } from './ui/BuyTicketButton';
 import { FreeTicketCard } from './ui/FreeTicketCard';
 import { PaidTicketCard } from './ui/PaidTicketCard';
@@ -13,7 +16,7 @@ import { isTicketFree, isTicketPaid, isOnchainTicket } from './utils/ticket-type
 export interface TicketsEventSheetProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  eventId: string;
+  eventId: Id<'events'>;
   ticketList: Doc<'ticketTemplates'>[];
 }
 
@@ -25,6 +28,7 @@ const TicketsEventSheet = ({ open, onOpenChange, eventId, ticketList }: TicketsE
   console.log('selectedTicketId', selectedTicketId);
   // Initialize hooks
   const createRegistration = useMutation(api.registrations.createRegistration);
+  const { storePendingRegistration } = usePendingRegistrationService();
 
   // Get selected ticket
   const selectedTicket = ticketList.find((ticket) => ticket._id === selectedTicketId) || null;
@@ -49,8 +53,8 @@ const TicketsEventSheet = ({ open, onOpenChange, eventId, ticketList }: TicketsE
 
     try {
       await createRegistration({
-        eventId: eventId as Id<'events'>,
-        ticketTemplateId: selectedTicket._id as Id<'ticketTemplates'>,
+        eventId,
+        ticketTemplateId: selectedTicket._id,
       });
       onOpenChange(false);
       toast.show('Registration successful!', {
@@ -81,9 +85,64 @@ const TicketsEventSheet = ({ open, onOpenChange, eventId, ticketList }: TicketsE
         }
         case 'success': {
           const { transactionReceipts } = status.statusData;
-          console.log('transactionReceipts', transactionReceipts);
-          await handleRegister();
-          setIsProcessing(false);
+          try {
+            const { logs, transactionHash } = transactionReceipts[0];
+            const events = parseEventLogs({
+              abi,
+              logs,
+            });
+
+            for (const event of events) {
+              if (event.eventName === 'TransferSingle') {
+                const { id, to } = event.args;
+
+                try {
+                  await createRegistration({
+                    eventId,
+                    ticketTemplateId: selectedTicket!._id,
+                    transactionReceipt: {
+                      tokenId: id.toString(),
+                      walletAddress: to,
+                      transactionHash,
+                    },
+                  });
+
+                  // Success - close sheet and show success message
+                  onOpenChange(false);
+                  toast.show('Registration successful!', {
+                    type: 'success',
+                    preset: 'done',
+                  });
+                } catch (error) {
+                  console.error('Failed to register in Convex:', error);
+
+                  // Store pending registration for background sync
+                  storePendingRegistration({
+                    eventId,
+                    ticketTemplateId: selectedTicket!._id,
+                    transactionHash,
+                    tokenId: id.toString(),
+                    walletAddress: to,
+                  });
+
+                  // Show user-friendly message
+                  onOpenChange(false);
+                  toast.show("Payment successful! We're syncing your ticket...", {
+                    type: 'success',
+                    preset: 'done',
+                  });
+                }
+              }
+            }
+          } catch (error) {
+            console.error('Error parsing transaction logs:', error);
+            toast.show('Error processing transaction', {
+              type: 'error',
+              preset: 'error',
+            });
+          } finally {
+            setIsProcessing(false);
+          }
           break;
         }
         case 'error': {
@@ -94,7 +153,15 @@ const TicketsEventSheet = ({ open, onOpenChange, eventId, ticketList }: TicketsE
           console.log(status);
       }
     },
-    [handleRegister]
+    [
+      handleRegister,
+      selectedTicket,
+      eventId,
+      createRegistration,
+      onOpenChange,
+      toast,
+      storePendingRegistration,
+    ]
   );
 
   const getButtonText = (isProcessing: boolean) => {
