@@ -23,7 +23,7 @@ export function MiniAppProvider({ children }: { children: React.ReactNode }) {
       const result = await addFrame();
       if (result) {
         await storeToken({
-          fid: context?.user.fid.toString() ?? '', // Asegúrate de que el FID sea un string
+          fid: context?.user.fid.toString() ?? '',
           notificationUrl: result.url,
           token: result.token,
         });
@@ -37,7 +37,7 @@ export function MiniAppProvider({ children }: { children: React.ReactNode }) {
       console.error('[Error] adding frame', error);
       return null;
     }
-  }, [addFrame]);
+  }, [addFrame, context?.user.fid, storeToken]);
 
   useEffect(() => {
     if (!isFrameReady) {
