@@ -1,7 +1,13 @@
 import { v } from 'convex/values';
 
 import { internal } from './_generated/api';
-import { internalAction, internalMutation, query, QueryCtx } from './_generated/server';
+import {
+  internalAction,
+  internalMutation,
+  internalQuery,
+  query,
+  QueryCtx,
+} from './_generated/server';
 import { mutation } from './_generated/server';
 import { vv } from './schema';
 import { omit } from 'convex-helpers';
@@ -565,4 +571,87 @@ export const finalizeOnchainSync = internalMutation({
       })
     );
   },
+});
+
+// Query interna para obtener eventos próximos (sin cambios)
+export const getUpcoming = internalQuery({
+  args: {
+    startTime: v.number(),
+    endTime: v.number(),
+  },
+  handler: async (ctx, args) => {
+    return await ctx.db
+      .query('events')
+      .withIndex('by_startDate', (q) =>
+        q.gte('startDate', args.startTime).lte('startDate', args.endTime)
+      )
+      .collect();
+  },
+});
+
+// La función principal que se ejecuta con el Cron Job
+export const sendReminderNotification = internalAction({
+  args: {
+    registrationId: v.id('registrations'),
+    eventId: v.id('events'),
+    userId: v.id('users'),
+  },
+  handler: async (ctx, { registrationId, eventId, userId }) => {
+    // 1. Verificación de Seguridad: ¿El usuario sigue registrado?
+    const registration = await ctx.runQuery(internal.registrations.get, { registrationId });
+    if (!registration) {
+      console.log(
+        `Cancelando notificación: El usuario (ID: ${userId}) ya no está registrado en el evento (ID: ${eventId}).`
+      );
+      return; // El usuario canceló, no se envía nada.
+    }
+
+    // 2. Obtener la información necesaria para la notificación
+    const event = await ctx.runQuery(internal.events.get, { eventId });
+    const user = await ctx.runQuery(internal.users.get, { userId });
+    const fid = await ctx.runQuery(internal.linkedAccounts.getFidByUserId, { userId });
+
+    if (!event || !user || !fid) {
+      console.error('No se pudo obtener la información completa del evento o del usuario.');
+      return;
+    }
+
+    const tokenData = await ctx.runQuery(internal.notificationTokens.get, { fid: fid.toString() });
+
+    if (!tokenData) {
+      console.log(`No se encontró token de notificación para el usuario con FID: ${fid}`);
+      return;
+    }
+
+    // 3. Enviar la notificación
+    const { notificationUrl, token } = tokenData;
+    const title = `¡Recordatorio! "${event.name}" empieza pronto ✨`;
+    const body = `Tu evento comienza en 30 minutos. ¡Nos vemos allí!`;
+
+    console.log(`Enviando recordatorio a FID: ${fid} para el evento: ${event.name}`);
+
+    try {
+      const response = await fetch(notificationUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ title, body }),
+      });
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error(`Error al enviar la notificación: ${response.status} - ${errorText}`);
+      } else {
+        console.log('Notificación de recordatorio enviada exitosamente.');
+      }
+    } catch (error) {
+      console.error('Error en la llamada fetch para la notificación:', error);
+    }
+  },
+});
+
+export const get = internalQuery({
+  args: { eventId: v.id('events') },
+  handler: async (ctx, args) => await ctx.db.get(args.eventId),
 });

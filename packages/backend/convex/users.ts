@@ -1,5 +1,5 @@
 import { omit } from 'convex-helpers';
-import { mutation } from './_generated/server';
+import { internalQuery, mutation } from './_generated/server';
 import { vv } from './schema';
 import { ConvexError, v } from 'convex/values';
 
@@ -50,5 +50,15 @@ export const createUserByFid = mutation({
     });
 
     return userId;
+  },
+});
+
+// Query para obtener un usuario por su ID de la tabla 'users'
+export const get = internalQuery({
+  args: {
+    userId: v.id('users'),
+  },
+  handler: async (ctx, args) => {
+    return await ctx.db.get(args.userId);
   },
 });

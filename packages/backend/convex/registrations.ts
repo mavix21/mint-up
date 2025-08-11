@@ -1,7 +1,8 @@
 import { v } from 'convex/values';
-import { query } from './_generated/server';
+import { internalQuery, query } from './_generated/server';
 import { mutation } from './_generated/server';
 import { Id } from './_generated/dataModel';
+import { internal } from './_generated/api';
 
 export const getRegistrationsByEventId = query({
   args: {
@@ -23,6 +24,11 @@ export const getRegistrationsByEventId = query({
       })
     );
   },
+});
+
+export const get = internalQuery({
+  args: { registrationId: v.id('registrations') },
+  handler: async (ctx, args) => await ctx.db.get(args.registrationId),
 });
 
 export const getRegistrationsByEventIdCount = query({
@@ -108,6 +114,8 @@ export const createRegistration = mutation({
       throw new Error('User is already registered for this event');
     }
 
+    const reminderTime = event.startDate - 30 * 60 * 1000; // 30 minutos antes en milisegundos
+
     // Create new registration with pending status
     // The trigger will automatically update the event metadata
     const registrationId = await ctx.db.insert('registrations', {
@@ -133,6 +141,22 @@ export const createRegistration = mutation({
         },
       ].slice(-5),
     });
+
+    // Solo programar si el evento es en el futuro
+    if (reminderTime > Date.now()) {
+      await ctx.scheduler.runAt(reminderTime, internal.events.sendReminderNotification, {
+        registrationId: registrationId,
+        eventId: args.eventId,
+        userId: userId,
+      });
+      console.log(
+        `Notificación programada para el evento ${args.eventId} a las ${new Date(
+          reminderTime
+        ).toLocaleString()}`
+      );
+    } else {
+      console.log('El evento ya pasó o es en menos de 30 minutos. No se programará recordatorio.');
+    }
 
     return registrationId;
   },
