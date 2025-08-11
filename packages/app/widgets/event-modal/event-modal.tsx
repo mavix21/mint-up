@@ -1,4 +1,6 @@
 import { useComposeCast } from '@coinbase/onchainkit/minikit';
+import { api } from '@my/backend/_generated/api';
+import { useMutation } from '@my/backend/react';
 import {
   View,
   SizableText,
@@ -26,9 +28,9 @@ import {
   User,
   ExternalLink,
   MoreVertical,
-  Sparkles,
 } from '@tamagui/lucide-icons';
 import { RegistersAvatar } from 'app/screens/explore-events/ui/RegistersAvatar';
+import { useSession } from 'next-auth/react';
 import React, { Dispatch, SetStateAction } from 'react';
 
 import TicketsEventSheet from './tickets-event-sheet';
@@ -43,7 +45,9 @@ export function EventModal({
   setToggleEvent: Dispatch<SetStateAction<boolean>>;
   eventData: ConvexEventWithExtras;
 }) {
+  const { data: session } = useSession();
   const { composeCast } = useComposeCast();
+  const deleteRegistration = useMutation(api.registrations.deleteRegistration);
 
   const [showTicketsSheet, setShowTicketsSheet] = React.useState(false);
   const visualViewportHeight = useVisualViewportHeight();
@@ -59,6 +63,7 @@ export function EventModal({
   const isUserRegistered = eventData.userStatus && eventData.userStatus !== 'rejected';
   const isUserHost = eventData.isHost;
   const canRegister = !isUserHost && !isUserRegistered;
+  const canCancelRegistration = session && isUserRegistered && eventData.userStatus !== 'minted';
 
   const getStatusChip = () => {
     if (isUserHost) {
@@ -114,6 +119,12 @@ Check it out 👇`,
     } catch (error) {
       console.error('Failed to compose cast:', error);
     }
+  };
+
+  const handleCancelRegistration = async () => {
+    await deleteRegistration({
+      eventId: eventData._id,
+    });
   };
 
   return (
@@ -199,16 +210,24 @@ Check it out 👇`,
                 </YStack>
 
                 {/* Status Badge */}
-                <XStack alignItems="center" gap="$2">
-                  {getStatusChip()}
-                  {canRegister && (
-                    <Chip size="$2" rounded>
-                      <Chip.Text>
-                        {tickets.length > 0 ? 'Tickets Available' : 'Waitlist Open'}
-                      </Chip.Text>
-                    </Chip>
-                  )}
-                </XStack>
+                {(getStatusChip() || canRegister) && (
+                  <XStack alignItems="center" gap="$2">
+                    {getStatusChip()}
+                    {canRegister && (
+                      <Chip size="$2" rounded>
+                        <Chip.Text>
+                          {tickets.length > 0 ? 'Tickets Available' : 'Waitlist Open'}
+                        </Chip.Text>
+                      </Chip>
+                    )}
+                  </XStack>
+                )}
+
+                {isUserRegistered && (
+                  <Theme name="green">
+                    <SizableText fontWeight="600">You&apos;re in! ✨</SizableText>
+                  </Theme>
+                )}
 
                 {/* Action Buttons - Only show if user is not host and not already registered */}
                 {canRegister && (
@@ -251,17 +270,10 @@ Check it out 👇`,
                         </Button>
                       </Theme>
                     )}
-                    {isUserRegistered && (
-                      <Theme name="green">
-                        <Button
-                          flex={1}
-                          fontWeight="600"
-                          onPress={() => {
-                            console.log('show ticket');
-                          }}
-                          iconAfter={<Sparkles />}
-                        >
-                          <Button.Text>You&apos;re in!</Button.Text>
+                    {canCancelRegistration && (
+                      <Theme name="red">
+                        <Button flex={1} fontWeight="600" onPress={handleCancelRegistration}>
+                          <Button.Text>Cancel Registration</Button.Text>
                         </Button>
                       </Theme>
                     )}
