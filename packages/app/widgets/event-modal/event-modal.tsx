@@ -28,6 +28,7 @@ import {
   User,
   ExternalLink,
   MoreVertical,
+  Eye,
 } from '@tamagui/lucide-icons';
 import { RegistersAvatar } from 'app/screens/explore-events/ui/RegistersAvatar';
 import { useSession } from 'next-auth/react';
@@ -35,6 +36,7 @@ import React, { Dispatch, SetStateAction } from 'react';
 
 import TicketsEventSheet from './tickets-event-sheet';
 import { ConvexEventWithExtras } from '../../entities/event.model';
+import TicketNFT3D from './TicketNFT3D';
 
 export function EventModal({
   toggleEvent,
@@ -50,6 +52,7 @@ export function EventModal({
   const deleteRegistration = useMutation(api.registrations.deleteRegistration);
 
   const [showTicketsSheet, setShowTicketsSheet] = React.useState(false);
+  const [showNFT, setShowNFT] = React.useState(false);
   const visualViewportHeight = useVisualViewportHeight();
   const tickets = eventData.tickets;
 
@@ -246,12 +249,20 @@ Check it out 👇`,
                         <Button.Text onPress={handleComposeWithEmbed}>Share</Button.Text>
                       </Button>
                     </Theme>
-
-                    <Theme name="gray">
-                      <Button height="100%" size="$2" icon={<MoreVertical size={16} />} />
-                    </Theme>
                   </XStack>
                 )}
+
+                {/* NFT Ticket Button - Show for all users */}
+                <XStack gap="$3" justifyContent="center">
+                  <Button
+                    size="$3"
+                    theme="purple"
+                    icon={<Eye size={16} />}
+                    onPress={() => setShowNFT(true)}
+                  >
+                    <Button.Text>View NFT Ticket</Button.Text>
+                  </Button>
+                </XStack>
 
                 {/* Show only share and more buttons if user is host or already registered */}
                 {(isUserHost || isUserRegistered) && (
@@ -468,6 +479,48 @@ Check it out 👇`,
           ticketList={tickets}
         />
       ) : null}
+
+      {/* NFT Ticket Modal */}
+      <Sheet open={showNFT} onOpenChange={setShowNFT}>
+        <Sheet.Overlay animation="lazy" enterStyle={{ opacity: 0 }} exitStyle={{ opacity: 0 }} />
+        <Sheet.Frame
+          backgroundColor="$background"
+          padding="$4"
+          borderRadius="$4"
+          maxWidth={400}
+          maxHeight="80%"
+        >
+          <YStack gap="$4" alignItems="center">
+            <SizableText size="$5" fontWeight="600" textAlign="center">
+              NFT Ticket
+            </SizableText>
+
+            <TicketNFT3D
+              nftURL={
+                eventData.imageUrl ||
+                'https://via.placeholder.com/300x400/6366f1/ffffff?text=NFT+Ticket'
+              }
+              title={eventData.name}
+              onView={() => {
+                // Handle view action
+                console.log('View NFT');
+              }}
+              onDownload={() => {
+                // Handle download action
+                console.log('Download NFT');
+              }}
+              onShare={() => {
+                // Handle share action
+                console.log('Share NFT');
+              }}
+            />
+
+            <Button size="$3" theme="gray" onPress={() => setShowNFT(false)}>
+              <Button.Text>Close</Button.Text>
+            </Button>
+          </YStack>
+        </Sheet.Frame>
+      </Sheet>
     </>
   );
 }

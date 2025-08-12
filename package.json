@@ -92,7 +92,9 @@
     "ultra-runner": "^3.10.5"
   },
   "dependencies": {
+    "@types/three": "^0.179.0",
     "@upstash/redis": "^1.35.3",
-    "pinata": "^2.4.9"
+    "pinata": "^2.4.9",
+    "three": "^0.179.1"
   }
 }

@@ -1846,6 +1846,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@dimforge/rapier3d-compat@npm:~0.12.0":
+  version: 0.12.0
+  resolution: "@dimforge/rapier3d-compat@npm:0.12.0"
+  checksum: 10/56cd538b59d534d2ed91de3eb7efd804af5defe146f65294e8ce81982a4bd6c27d61c1014c15a77bb5f5eff0de7a12fbc9b16bf895a2ec56ea5496fd80c78e26
+  languageName: node
+  linkType: hard
+
 "@discoveryjs/json-ext@npm:0.5.7":
   version: 0.5.7
   resolution: "@discoveryjs/json-ext@npm:0.5.7"
@@ -9859,6 +9866,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@tweenjs/tween.js@npm:~23.1.3":
+  version: 23.1.3
+  resolution: "@tweenjs/tween.js@npm:23.1.3"
+  checksum: 10/10ecaf311c975162459bd016ef7eb1f3118a257050c4886de9737dee823fc829100a0887f3fc298f7a5577140eac054f9609b823eb0748ca7b653ec85ffba75e
+  languageName: node
+  linkType: hard
+
 "@tybys/wasm-util@npm:^0.10.0":
   version: 0.10.0
   resolution: "@tybys/wasm-util@npm:0.10.0"
@@ -10341,6 +10355,28 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/stats.js@npm:*":
+  version: 0.17.4
+  resolution: "@types/stats.js@npm:0.17.4"
+  checksum: 10/6f1a20e09da0c0b371b3c095b2787a91a9397944679aa506a0886160faf0ad185b911a34b4ec325f146810c5be969f085e81264e2dbe39fd57eb8ff98347b5f4
+  languageName: node
+  linkType: hard
+
+"@types/three@npm:^0.179.0":
+  version: 0.179.0
+  resolution: "@types/three@npm:0.179.0"
+  dependencies:
+    "@dimforge/rapier3d-compat": "npm:~0.12.0"
+    "@tweenjs/tween.js": "npm:~23.1.3"
+    "@types/stats.js": "npm:*"
+    "@types/webxr": "npm:*"
+    "@webgpu/types": "npm:*"
+    fflate: "npm:~0.8.2"
+    meshoptimizer: "npm:~0.22.0"
+  checksum: 10/539bc43e53ff2809d174418690b5d641dfb292dc7e250a10c50288e2352dcf19ffd98a2e7fad79fc512ccd6919468a261a0c7cc2f67f12f55817bc662e402665
+  languageName: node
+  linkType: hard
+
 "@types/through@npm:*":
   version: 0.0.33
   resolution: "@types/through@npm:0.0.33"
@@ -10375,6 +10411,13 @@ __metadata:
   version: 9.0.8
   resolution: "@types/uuid@npm:9.0.8"
   checksum: 10/b8c60b7ba8250356b5088302583d1704a4e1a13558d143c549c408bf8920535602ffc12394ede77f8a8083511b023704bc66d1345792714002bfa261b17c5275
+  languageName: node
+  linkType: hard
+
+"@types/webxr@npm:*":
+  version: 0.5.22
+  resolution: "@types/webxr@npm:0.5.22"
+  checksum: 10/69877b65ec2c5afd6d285316dee24001e8e0ec878f82c25e7269f58df0de4724342f8b13c1ef607b9a48b7784114322667196ef14850099b0e129828f895cb49
   languageName: node
   linkType: hard
 
@@ -11645,6 +11688,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@webgpu/types@npm:*":
+  version: 0.1.64
+  resolution: "@webgpu/types@npm:0.1.64"
+  checksum: 10/172029dc907861c15a289f51a05cbc763c2814aef03fa9f331a09af1fc21bc47d50603257e6a68ce815a882b1b904baaf6980ee4b9882294dec95a30a1e6e965
+  languageName: node
+  linkType: hard
+
 "@xmldom/xmldom@npm:^0.8.8":
   version: 0.8.10
   resolution: "@xmldom/xmldom@npm:0.8.10"
@@ -12075,6 +12125,7 @@ __metadata:
     "@tanstack/react-form": "npm:^1.19.1"
     "@tanstack/react-query": "npm:5.84.1"
     "@types/react": "npm:^18.0.27"
+    "@types/three": "npm:^0.179.0"
     base64-arraybuffer: "npm:^1.0.2"
     burnt: "npm:^0.12.1"
     eslint-config-custom: "npm:*"
@@ -12090,6 +12141,7 @@ __metadata:
     react-native-date-picker: "npm:^5.0.13"
     react-native-safe-area-context: "npm:5.4.0"
     solito: "npm:4.4.1"
+    three: "npm:^0.179.1"
     typescript: "npm:~5.8.3"
     zod: "npm:^4.0.14"
     zustand: "npm:5.0.2"
@@ -17614,7 +17666,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fflate@npm:^0.8.2":
+"fflate@npm:^0.8.2, fflate@npm:~0.8.2":
   version: 0.8.2
   resolution: "fflate@npm:0.8.2"
   checksum: 10/2bd26ba6d235d428de793c6a0cd1aaa96a06269ebd4e21b46c8fd1bd136abc631acf27e188d47c3936db090bf3e1ede11d15ce9eae9bffdc4bfe1b9dc66ca9cb
@@ -21206,6 +21258,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"meshoptimizer@npm:~0.22.0":
+  version: 0.22.0
+  resolution: "meshoptimizer@npm:0.22.0"
+  checksum: 10/6def62fe70181f69a2ff2088cfb8aa8137b5cd6a1a952100957f819b2dba42c1cc8afcb7de41e1e1619c8146ef0612f5f71e1ceab1f9b224567ff285af0080e8
+  languageName: node
+  linkType: hard
+
 "methods@npm:~1.1.2":
   version: 1.1.2
   resolution: "methods@npm:1.1.2"
@@ -21839,6 +21898,7 @@ __metadata:
     "@tamagui/config": "npm:^1.132.17"
     "@turbo/gen": "npm:^2.5.3"
     "@types/fs-extra": "npm:^11"
+    "@types/three": "npm:^0.179.0"
     "@upstash/redis": "npm:^1.35.3"
     axios: "npm:^1.7.2"
     check-dependency-version-consistency: "npm:^3.0.3"
@@ -21853,6 +21913,7 @@ __metadata:
     postinstall-postinstall: "npm:^2.1.0"
     prettier: "npm:^2.7.1"
     promise-throttle-all: "npm:^1.1.1"
+    three: "npm:^0.179.1"
     turbo: "npm:^2.5.3"
     typescript: "npm:~5.8.3"
     ultra-runner: "npm:^3.10.5"
@@ -27568,6 +27629,13 @@ __metadata:
   dependencies:
     real-require: "npm:^0.1.0"
   checksum: 10/ca0a4f5bf45db88b48b41af0299455eaa8f01dd3ef8279e7ba6909c295b3ab79ddf576b595cbbceb4dbdf4012b17c6449805092926163fcbf30ac1604cb595b1
+  languageName: node
+  linkType: hard
+
+"three@npm:^0.179.1":
+  version: 0.179.1
+  resolution: "three@npm:0.179.1"
+  checksum: 10/7abe91805f5aa5376fb1c3f47fb888a32a26b38c983cd9c11dc436db4e10c787b37fa8cc2d2dd36e108b27ee05a6515ea0a7c2cf848aeefb4d81f2647ffad84a
   languageName: node
   linkType: hard
 

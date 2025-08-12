@@ -2,6 +2,9 @@
 export { FreeTicketCard } from './ui/FreeTicketCard';
 export { PaidTicketCard } from './ui/PaidTicketCard';
 export { TicketCardRadioButton } from './ticket-card-radio-button';
+export { default as TicketNFT3D } from './TicketNFT3D';
+export { default as TicketNFT3DWeb } from './TicketNFT3DWeb';
+export { default as TicketNFT3DDemo } from './TicketNFT3DDemo';
 export { default as TicketsEventSheet } from './tickets-event-sheet';
 
 // Hooks
