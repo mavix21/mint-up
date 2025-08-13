@@ -14,6 +14,8 @@ export async function generateMetadata({
     eventId: id as Id<'events'>,
   });
 
+  const defaultImageUrl = process.env.NEXT_PUBLIC_APP_HERO_IMAGE!;
+
   return {
     title: event?.name ?? 'Event not found',
     description: event?.description ?? 'Join this amazing event!',
@@ -34,7 +36,7 @@ export async function generateMetadata({
           ]
         : [
             {
-              url: `${process.env.NEXT_PUBLIC_URL}/images/event-image-example-01.jpg`,
+              url: defaultImageUrl,
               width: 1200,
               height: 630,
               alt: 'Default event image',
@@ -46,16 +48,14 @@ export async function generateMetadata({
       card: 'summary_large_image',
       title: event?.name ?? 'Event not found',
       description: event?.description ?? 'Join this amazing event!',
-      images: event?.imageUrl
-        ? [event.imageUrl]
-        : [`${process.env.NEXT_PUBLIC_URL}/images/event-image-example-01.jpg`],
+      images: event?.imageUrl ? [event.imageUrl] : [defaultImageUrl],
       creator: '@mintup',
       site: '@mintup',
     },
     other: {
       'fc:frame': JSON.stringify({
         version: 'next',
-        imageUrl: event?.imageUrl,
+        imageUrl: event?.imageUrl ?? defaultImageUrl,
         button: {
           title: 'Mint your ticket',
           action: {
