@@ -1,8 +1,36 @@
+'use client';
+
 import { api } from '@my/backend/_generated/api';
 import { Id } from '@my/backend/_generated/dataModel';
+import { fetchQuery } from '@my/backend/nextjs';
 import { useQuery } from '@my/backend/react';
 import { EventModal } from 'app/widgets/event-modal';
 import React from 'react';
+
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const event = await fetchQuery(api.events.getEventById, {
+    eventId: id as Id<'events'>,
+  });
+
+  return {
+    title: event?.name ?? 'Event not found',
+    other: {
+      'fc:frame': JSON.stringify({
+        version: 'next',
+        imageUrl: event?.imageUrl,
+        button: {
+          title: 'Mint your ticket',
+          action: {
+            type: 'launch_frame',
+            name: 'Event Invite',
+            url: process.env.NEXT_PUBLIC_URL,
+          },
+        },
+      }),
+    },
+  };
+}
 
 export const ShareableEventDescriptionScreenScreen = ({ id }: { id: string }) => {
   const event = useQuery(api.events.getEventById, {

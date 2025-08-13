@@ -1,9 +1,10 @@
-'use client';
-
 import { ShareableEventDescriptionScreenScreen } from 'app/screens/shareable-event-description-screen/shareable-event-description-screen-screen';
-import { useParams } from 'solito/navigation';
 
-export default function ShareableEventDescriptionScreenPage() {
-  const { id } = useParams<{ id: string }>();
+export default async function ShareableEventDescriptionScreenPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
   return <ShareableEventDescriptionScreenScreen id={id} />;
 }
