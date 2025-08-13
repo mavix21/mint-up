@@ -148,7 +148,7 @@ export const getEventById = query({
     //   creatorName: user?.displayName ?? 'Anonymous',
     //   imageUrl,
     // };
-    return enrichEventsWithCommonData(ctx, [event], userId);
+    return enrichEventsWithCommonData(ctx, [event], userId).then(e => e[0]);
   },
 });
 
