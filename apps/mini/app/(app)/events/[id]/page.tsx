@@ -10,7 +10,7 @@ export async function generateMetadata({
   params: Promise<{ id: string }>;
 }): Promise<Metadata> {
   const { id } = await params;
-  const event = await fetchQuery(api.events.getEventById, {
+  const event = await fetchQuery(api.events.getEventMetadata, {
     eventId: id as Id<'events'>,
   });
 

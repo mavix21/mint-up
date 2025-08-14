@@ -140,15 +140,24 @@ export const getEventById = query({
       return null;
     }
 
-    // const imageUrl = (await ctx.storage.getUrl(event.image)) ?? null;
-    // const user = await ctx.db.get(event.creatorId);
+    return enrichEventsWithCommonData(ctx, [event], userId).then((e) => e[0]);
+  },
+});
 
-    // return {
-    //   ...event,
-    //   creatorName: user?.displayName ?? 'Anonymous',
-    //   imageUrl,
-    // };
-    return enrichEventsWithCommonData(ctx, [event], userId).then(e => e[0]);
+export const getEventMetadata = query({
+  args: {
+    eventId: v.id('events'),
+  },
+  handler: async (ctx, args) => {
+    const event = await ctx.db.get(args.eventId);
+    if (!event) {
+      return null;
+    }
+
+    return {
+      ...event,
+      imageUrl: (await ctx.storage.getUrl(event.image)) ?? null,
+    };
   },
 });
 
