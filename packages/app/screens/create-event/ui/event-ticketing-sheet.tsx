@@ -1,8 +1,3 @@
-import { useVisualViewportHeight } from '@my/ui';
-import { Plus, Trash2, ChevronDown } from '@tamagui/lucide-icons';
-import { useStore } from '@tanstack/react-form';
-import type { Cryptocurrency, TicketType } from 'app/entities';
-import { withForm } from 'app/shared/lib/form';
 import {
   Sheet,
   Button,
@@ -21,7 +16,12 @@ import {
   Group,
   useTheme,
   getTokens,
-} from 'tamagui';
+  useVisualViewportHeight,
+} from '@my/ui';
+import { Plus, Trash2, ChevronDown } from '@tamagui/lucide-icons';
+import { useStore } from '@tanstack/react-form';
+import type { Cryptocurrency, TicketType } from 'app/entities';
+import { withForm } from 'app/shared/lib/form';
 
 import { createEventFormOpts } from '../model/shared-form';
 
@@ -92,21 +92,6 @@ export const EventTicketingSheet = withForm({
                 children={(field) => {
                   const tickets = field.state.value || [];
 
-                  const addTicket = () => {
-                    const newTicket: TicketType = {
-                      id: Date.now().toString(),
-                      name: '',
-                      type: 'free',
-                      description: '',
-                    };
-                    field.handleChange([...tickets, newTicket]);
-                  };
-
-                  const removeTicket = (index: number) => {
-                    const filteredTickets = tickets.filter((_, i) => i !== index);
-                    field.handleChange(filteredTickets);
-                  };
-
                   return (
                     <YStack gap="$4">
                       {tickets.length === 0 ? (
@@ -141,7 +126,7 @@ export const EventTicketingSheet = withForm({
                                       size="$2"
                                       circular
                                       theme="red"
-                                      onPress={() => removeTicket(index)}
+                                      onPress={() => field.removeValue(index)}
                                       icon={<Trash2 size={14} />}
                                     />
                                   )}
@@ -184,8 +169,8 @@ export const EventTicketingSheet = withForm({
                                         // When switching to paid, ensure we have price and currency
                                         form.setFieldValue(`tickets[${index}]`, {
                                           id: ticket.id,
-                                          name: ticket.name,
-                                          description: ticket.description,
+                                          name: ticket.name ?? '',
+                                          description: ticket.description ?? '',
                                           supply: ticket.supply,
                                           type: 'paid',
                                           price: 0,
@@ -195,8 +180,8 @@ export const EventTicketingSheet = withForm({
                                         // When switching to free, remove price and currency
                                         form.setFieldValue(`tickets[${index}]`, {
                                           id: ticket.id,
-                                          name: ticket.name,
-                                          description: ticket.description,
+                                          name: ticket.name ?? '',
+                                          description: ticket.description ?? '',
                                           supply: ticket.supply,
                                           type: 'free',
                                         } as TicketType);
@@ -347,7 +332,14 @@ export const EventTicketingSheet = withForm({
 
                       {/* Add Ticket Button */}
                       <Button
-                        onPress={addTicket}
+                        onPress={() =>
+                          field.pushValue({
+                            id: Date.now().toString(),
+                            name: '',
+                            description: '',
+                            type: 'free',
+                          })
+                        }
                         backgroundColor="$color4"
                         borderColor="$color5"
                         borderWidth={1}
