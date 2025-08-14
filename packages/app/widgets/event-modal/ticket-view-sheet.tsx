@@ -1,5 +1,11 @@
-import { Sheet, YStack, H4, View, RadioGroup, Button, useToastController } from '@my/ui';
+import { FullscreenSpinner, Sheet } from '@my/ui';
+import dynamic from 'next/dynamic';
 import { memo } from 'react';
+
+const NftTicket = dynamic(() => import('../../entities/nft-ticket/nft-ticket'), {
+  loading: () => <FullscreenSpinner />,
+  ssr: false,
+});
 
 export interface TicketViewSheetProps {
   open: boolean;
@@ -18,11 +24,12 @@ const TicketViewSheet = ({ open, onOpenChange }: TicketViewSheetProps) => {
       forceRemoveScrollEnabled={open}
       onOpenChange={handleOpenChange}
       snapPoints={[90]}
+      snapPointsMode="percent"
       zIndex={200_000}
       modal
       dismissOnOverlayPress
       dismissOnSnapToBottom
-      animation="lazy"
+      animation="medium"
     >
       <Sheet.Overlay
         animation="lazy"
@@ -33,9 +40,7 @@ const TicketViewSheet = ({ open, onOpenChange }: TicketViewSheetProps) => {
       <Sheet.Handle />
       <Sheet.Frame flex={1} width="100%" gap="$5">
         <Sheet.ScrollView>
-          <YStack padding="$4" gap="$8" flex={1}>
-            <H4>View your ticket</H4>
-          </YStack>
+          <NftTicket />
         </Sheet.ScrollView>
       </Sheet.Frame>
     </Sheet>
