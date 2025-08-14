@@ -1,16 +1,16 @@
-import { LinearGradient } from '@tamagui/linear-gradient'
-import { ChevronRight } from '@tamagui/lucide-icons'
-import { useState } from 'react'
-import { AnimatePresence, Card, CardProps, ColorTokens, YStack } from 'tamagui'
+import { LinearGradient } from '@tamagui/linear-gradient';
+import { ChevronRight } from '@tamagui/lucide-icons';
+import { useState } from 'react';
+import { AnimatePresence, Card, CardProps, ColorTokens, YStack } from 'tamagui';
 
 export const Banner = ({
   children,
   colors = ['$color4', '$color4', '$color6'],
   ...props
 }: {
-  colors?: ColorTokens[]
+  colors?: ColorTokens[];
 } & CardProps) => {
-  const [hover, setHover] = useState(false)
+  const [hover, setHover] = useState(false);
   return (
     <Card {...props} br="$4" onHoverIn={() => setHover(true)} onHoverOut={() => setHover(false)}>
       <Card.Header padded scale={hover ? 1.01 : 1} animation="bouncy" gap="$2">
@@ -49,5 +49,5 @@ export const Banner = ({
         </AnimatePresence>
       </Card.Background>
     </Card>
-  )
-}
+  );
+};

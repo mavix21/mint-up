@@ -75,6 +75,7 @@
     "@tamagui/config": "^1.132.17",
     "@turbo/gen": "^2.5.3",
     "@types/fs-extra": "^11",
+    "@types/three": "^0",
     "axios": "^1.7.2",
     "check-dependency-version-consistency": "^3.0.3",
     "dotenv": "^16.4.7",
@@ -92,7 +93,10 @@
     "ultra-runner": "^3.10.5"
   },
   "dependencies": {
+    "@react-three/drei": "^10.6.1",
+    "@react-three/fiber": "^9.3.0",
     "@upstash/redis": "^1.35.3",
-    "pinata": "^2.4.9"
+    "pinata": "^2.4.9",
+    "three": "^0.179.1"
   }
 }
