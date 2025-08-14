@@ -34,6 +34,7 @@ import { useSession } from 'next-auth/react';
 import React, { Dispatch, SetStateAction } from 'react';
 
 import TicketsEventSheet from './tickets-event-sheet';
+import TicketViewSheet from './ticket-view-sheet';
 import { ConvexEventWithExtras } from '../../entities/event.model';
 
 export function EventModal({
@@ -50,6 +51,7 @@ export function EventModal({
   const deleteRegistration = useMutation(api.registrations.deleteRegistration);
 
   const [showTicketsSheet, setShowTicketsSheet] = React.useState(false);
+  const [showTicketViewSheet, setShowTicketViewSheet] = React.useState(false);
   const visualViewportHeight = useVisualViewportHeight();
   const tickets = eventData.tickets;
 
@@ -64,6 +66,7 @@ export function EventModal({
   const isUserHost = eventData.isHost;
   const canRegister = !isUserHost && !isUserRegistered;
   const canCancelRegistration = session && isUserRegistered && eventData.userStatus !== 'minted';
+  const canViewTicket = session && isUserRegistered && eventData.userStatus === 'minted';
 
   const getStatusChip = () => {
     if (isUserHost) {
@@ -277,6 +280,17 @@ Check it out 👇`,
                         </Button>
                       </Theme>
                     )}
+                    {canViewTicket && (
+                      <Theme name="orange">
+                        <Button
+                          flex={1}
+                          fontWeight="600"
+                          onPress={() => setShowTicketViewSheet(true)}
+                        >
+                          <Button.Text>View Ticket</Button.Text>
+                        </Button>
+                      </Theme>
+                    )}
                     <Theme name="gray">
                       <Button size="$4" icon={<Share2 size={16} />}>
                         <Button.Text onPress={handleComposeWithEmbed}>Share</Button.Text>
@@ -467,6 +481,9 @@ Check it out 👇`,
           eventId={eventData._id}
           ticketList={tickets}
         />
+      ) : null}
+      {canViewTicket ? (
+        <TicketViewSheet open={showTicketViewSheet} onOpenChange={setShowTicketViewSheet} />
       ) : null}
     </>
   );
