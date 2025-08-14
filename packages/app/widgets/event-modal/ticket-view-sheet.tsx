@@ -22,6 +22,7 @@ const TicketViewSheet = ({ open, onOpenChange }: TicketViewSheetProps) => {
       modal
       dismissOnOverlayPress
       dismissOnSnapToBottom
+      animation="lazy"
     >
       <Sheet.Overlay
         animation="lazy"
