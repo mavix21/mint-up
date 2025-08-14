@@ -22,6 +22,8 @@ import { Plus, Trash2, ChevronDown } from '@tamagui/lucide-icons';
 import { useStore } from '@tanstack/react-form';
 import type { Cryptocurrency, TicketType } from 'app/entities';
 import { withForm } from 'app/shared/lib/form';
+import { FieldInfo } from 'app/shared/ui/FieldInfo';
+import { StyleProp, TextStyle } from 'react-native';
 
 import { createEventFormOpts } from '../model/shared-form';
 
@@ -149,6 +151,7 @@ export const EventTicketingSheet = withForm({
                                         borderColor="$color5"
                                         borderRadius="$4"
                                       />
+                                      <FieldInfo field={nameField} />
                                     </YStack>
                                   )}
                                 />
@@ -176,15 +179,21 @@ export const EventTicketingSheet = withForm({
                                           price: 0,
                                           currency: 'USDC',
                                         } as TicketType);
+                                        form.validateField(`tickets[${index}].price`, 'change');
                                       } else {
                                         // When switching to free, remove price and currency
-                                        form.setFieldValue(`tickets[${index}]`, {
-                                          id: ticket.id,
-                                          name: ticket.name ?? '',
-                                          description: ticket.description ?? '',
-                                          supply: ticket.supply,
-                                          type: 'free',
-                                        } as TicketType);
+                                        form.setFieldValue(
+                                          `tickets[${index}]`,
+                                          {
+                                            id: ticket.id,
+                                            name: ticket.name ?? '',
+                                            description: ticket.description ?? '',
+                                            supply: ticket.supply,
+                                            type: 'free',
+                                          } as TicketType,
+                                          { dontUpdateMeta: false }
+                                        );
+                                        form.validateField(`tickets[${index}].price`, 'change');
                                       }
                                     }}
                                   >
@@ -200,76 +209,81 @@ export const EventTicketingSheet = withForm({
                                 {/* Price and Currency (only for paid tickets) */}
                                 {ticketType === 'paid' && (
                                   <YStack gap="$1">
-                                    <Label>Price & Currency</Label>
-                                    <Group
-                                      orientation="horizontal"
-                                      separator={<Separator vertical />}
-                                    >
-                                      <Group.Item>
-                                        <form.AppField
-                                          name={`tickets[${index}].price`}
-                                          children={(priceField) => (
-                                            <YStack flex={1}>
-                                              <input
-                                                id={`ticket-price-${ticket.id}`}
-                                                placeholder="0.00"
-                                                value={priceField.state.value?.toString() || ''}
-                                                onChange={(e) => {
-                                                  priceField.handleChange(e.target.valueAsNumber);
-                                                }}
-                                                min={0}
-                                                step={0.0001}
-                                                type="number"
-                                                style={{
-                                                  padding: tokens.space.$3.val,
-                                                  backgroundColor: theme.color4.val,
-                                                  borderColor: theme.color5.val,
-                                                  borderRadius: tokens.radius.$4.val,
-                                                  borderTopRightRadius: 0,
-                                                  borderBottomRightRadius: 0,
-                                                }}
-                                              />
-                                            </YStack>
-                                          )}
-                                        />
-                                      </Group.Item>
-                                      <Group.Item>
-                                        <form.AppField
-                                          name={`tickets[${index}].currency`}
-                                          children={(currencyField) => (
-                                            <Select
-                                              id={`ticket-currency-${ticket.id}`}
-                                              value={currencyField.state.value || 'USDC'}
-                                              onValueChange={(value) => {
-                                                currencyField.handleChange(value as Cryptocurrency);
-                                              }}
-                                            >
-                                              <Select.Trigger
-                                                backgroundColor="$color4"
-                                                borderColor="$color5"
-                                                borderRadius="$4"
-                                                borderTopLeftRadius={0}
-                                                borderBottomLeftRadius={0}
-                                                iconAfter={ChevronDown}
-                                                width={120}
-                                              >
-                                                <Select.Value placeholder="USDC" />
-                                              </Select.Trigger>
+                                    <form.AppField
+                                      name={`tickets[${index}].price`}
+                                      children={(priceField) => (
+                                        <YStack gap="$1">
+                                          <Label>Price & Currency</Label>
+                                          <Group
+                                            orientation="horizontal"
+                                            separator={<Separator vertical />}
+                                          >
+                                            <Group.Item>
+                                              <YStack flex={1}>
+                                                <input
+                                                  id={`ticket-price-${ticket.id}`}
+                                                  placeholder="0.00"
+                                                  value={priceField.state.value}
+                                                  onChange={(e) => {
+                                                    priceField.handleChange(e.target.valueAsNumber);
+                                                  }}
+                                                  min={0}
+                                                  step={0.001}
+                                                  type="number"
+                                                  style={{
+                                                    padding: tokens.space.$3.val,
+                                                    backgroundColor: theme.color4.val,
+                                                    borderColor: theme.color5.val,
+                                                    borderRadius: tokens.radius.$4.val,
+                                                    borderTopRightRadius: 0,
+                                                    borderBottomRightRadius: 0,
+                                                  }}
+                                                />
+                                              </YStack>
+                                            </Group.Item>
+                                            <Group.Item>
+                                              <form.AppField
+                                                name={`tickets[${index}].currency`}
+                                                children={(currencyField) => (
+                                                  <Select
+                                                    id={`ticket-currency-${ticket.id}`}
+                                                    value={currencyField.state.value || 'USDC'}
+                                                    onValueChange={(value) => {
+                                                      currencyField.handleChange(
+                                                        value as Cryptocurrency
+                                                      );
+                                                    }}
+                                                  >
+                                                    <Select.Trigger
+                                                      backgroundColor="$color4"
+                                                      borderColor="$color5"
+                                                      borderRadius="$4"
+                                                      borderTopLeftRadius={0}
+                                                      borderBottomLeftRadius={0}
+                                                      iconAfter={ChevronDown}
+                                                      width={120}
+                                                    >
+                                                      <Select.Value placeholder="USDC" />
+                                                    </Select.Trigger>
 
-                                              <Select.Content zIndex={400_000}>
-                                                <Select.ScrollUpButton />
-                                                <Select.Viewport>
-                                                  <Select.Item index={0} value="USDC">
-                                                    <Select.ItemText>USDC</Select.ItemText>
-                                                  </Select.Item>
-                                                </Select.Viewport>
-                                                <Select.ScrollDownButton />
-                                              </Select.Content>
-                                            </Select>
-                                          )}
-                                        />
-                                      </Group.Item>
-                                    </Group>
+                                                    <Select.Content zIndex={400_000}>
+                                                      <Select.ScrollUpButton />
+                                                      <Select.Viewport>
+                                                        <Select.Item index={0} value="USDC">
+                                                          <Select.ItemText>USDC</Select.ItemText>
+                                                        </Select.Item>
+                                                      </Select.Viewport>
+                                                      <Select.ScrollDownButton />
+                                                    </Select.Content>
+                                                  </Select>
+                                                )}
+                                              />
+                                            </Group.Item>
+                                          </Group>
+                                          <FieldInfo field={priceField} />
+                                        </YStack>
+                                      )}
+                                    />
                                   </YStack>
                                 )}
 
@@ -293,7 +307,7 @@ export const EventTicketingSheet = withForm({
                                         style={
                                           {
                                             fieldSizing: 'content',
-                                          } as any
+                                          } as StyleProp<TextStyle>
                                         }
                                       />
                                     </YStack>

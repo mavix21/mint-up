@@ -110,6 +110,7 @@ export function CreateEventForm({
     <form.AppForm>
       <Form
         onSubmit={() => {
+          console.log('form state', { formState: form.state });
           form.handleSubmit();
         }}
       >
@@ -254,7 +255,8 @@ export function CreateEventForm({
                   <form.Subscribe selector={(state) => state.errors[0]?.['endTime']?.[0]}>
                     {(error) => (
                       <XStack
-                        theme={error ? 'red_alt1' : null}
+                        theme={error ? 'red' : null}
+                        themeInverse={theme === 'red'}
                         flex={1}
                         alignItems="center"
                         gap="$2"
@@ -370,21 +372,35 @@ export function CreateEventForm({
             </YGroup>
           </YStack>
           {/* Ticketing */}
-          <YStack gap="$2">
-            <SizableText>Ticketing</SizableText>
-            <form.Field
-              name="tickets"
-              mode="array"
-              children={(field) => {
-                return (
-                  <TicketingButton
-                    tickets={field.state.value}
-                    onPress={() => setShowTicketingSheet(true)}
+          <form.Subscribe
+            selector={(state) => {
+              const tickets = state.values.tickets || [];
+              return tickets.some(
+                (_, index) => state.fieldMeta[`tickets[${index}].price`]?.errors?.length > 0
+              );
+            }}
+          >
+            {(error) => {
+              return (
+                <YStack gap="$2" theme={error ? 'red' : null}>
+                  <SizableText>Ticketing</SizableText>
+                  <form.Field
+                    name="tickets"
+                    mode="array"
+                    children={(field) => {
+                      return (
+                        <TicketingButton
+                          theme={error ? 'red' : undefined}
+                          tickets={field.state.value}
+                          onPress={() => setShowTicketingSheet(true)}
+                        />
+                      );
+                    }}
                   />
-                );
-              }}
-            />
-          </YStack>
+                </YStack>
+              );
+            }}
+          </form.Subscribe>
           {/* Submit Button */}
           <YStack py="$4" borderColor="$color3">
             <Form.Trigger asChild>

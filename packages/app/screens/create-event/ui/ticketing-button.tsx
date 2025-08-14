@@ -1,13 +1,14 @@
 import { Ticket } from '@tamagui/lucide-icons';
 import { TicketType } from 'app/entities';
-import { Button, SizableText } from 'tamagui';
+import { Button, SizableText, Theme, ThemeName } from 'tamagui';
 
 export interface TicketingButtonProps {
   tickets: TicketType[];
   onPress: () => void;
+  theme?: ThemeName;
 }
 
-export function TicketingButton({ tickets, onPress }: TicketingButtonProps) {
+export function TicketingButton({ tickets, onPress, theme }: TicketingButtonProps) {
   const getTicketText = () => {
     if (tickets.length === 0) {
       return 'Free';
@@ -36,18 +37,20 @@ export function TicketingButton({ tickets, onPress }: TicketingButtonProps) {
   };
 
   return (
-    <Button
-      justifyContent="flex-start"
-      backgroundColor="$color3"
-      icon={<Ticket color="$color11" size={16} />}
-      onPress={onPress}
-    >
-      <SizableText flex={1} color="$color11">
-        Tickets{getTicketCount()}
-      </SizableText>
-      <SizableText color="$color11" ml="$2">
-        {getTicketText()}
-      </SizableText>
-    </Button>
+    <Theme name={theme}>
+      <Button
+        justifyContent="flex-start"
+        backgroundColor="$color3"
+        icon={<Ticket color="$color11" size={16} />}
+        onPress={onPress}
+      >
+        <SizableText flex={1} color="$color11">
+          Tickets{getTicketCount()}
+        </SizableText>
+        <SizableText color="$color11" ml="$2">
+          {getTicketText()}
+        </SizableText>
+      </Button>
+    </Theme>
   );
 }
