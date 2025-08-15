@@ -56,9 +56,19 @@
 
 html,
 body {
-  margin: 0;
-  padding: 0;
   overflow: hidden !important;
+}
+
+html {
+  height: 100vh;
+}
+
+body {
+  height: 100%;
+
+  & > div {
+    height: 100%;
+  }
 }
 
 input[type='time']::-webkit-calendar-picker-indicator {
