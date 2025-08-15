@@ -18,7 +18,6 @@ import {
   NumberInput,
 } from '@my/ui';
 import { Plus, Trash2, ChevronDown } from '@tamagui/lucide-icons';
-import { useStore } from '@tanstack/react-form';
 import type { Cryptocurrency, TicketType } from 'app/entities';
 import { withForm } from 'app/shared/lib/form';
 import { FieldInfo } from 'app/shared/ui/FieldInfo';
@@ -42,17 +41,24 @@ export const EventTicketingSheet = withForm({
     console.log('event ticketing sheet open', open);
     const visualViewportHeight = useVisualViewportHeight();
     const [initialTickets, setInitialTickets] = useState<TicketType[]>([]);
-
-    const ticketsFromStore = useStore(form.store, (state) => state.values.tickets || []);
+    const [ticketTypes, setTicketTypes] = useState<Record<string, TicketType['type']>>({});
 
     // Store initial state when sheet opens
     if (open && initialTickets.length === 0) {
-      setInitialTickets([...ticketsFromStore]);
+      const currentTickets = form.state.values.tickets || [];
+      setInitialTickets([...currentTickets]);
+      // Initialize ticket types from current tickets
+      const types: Record<string, TicketType['type']> = {};
+      currentTickets.forEach((ticket) => {
+        types[ticket.id] = ticket.type;
+      });
+      setTicketTypes(types);
     }
 
     // Reset initial state when sheet closes
     if (!open && initialTickets.length > 0) {
       setInitialTickets([]);
+      setTicketTypes({});
     }
 
     const handleSave = () => {
@@ -75,7 +81,49 @@ export const EventTicketingSheet = withForm({
     const handleCancel = () => {
       // Restore initial state
       form.setFieldValue('tickets', initialTickets);
+      // Reset ticket types to initial state
+      const types: Record<string, TicketType['type']> = {};
+      initialTickets.forEach((ticket) => {
+        types[ticket.id] = ticket.type;
+      });
+      setTicketTypes(types);
       onOpenChange(false);
+    };
+
+    const updateTicketType = (ticketId: string, newType: TicketType['type'], index: number) => {
+      // Update local state immediately for UI reactivity
+      setTicketTypes((prev) => ({ ...prev, [ticketId]: newType }));
+
+      // Get current ticket from form
+      const currentTicket = form.state.values.tickets[index];
+
+      if (newType === 'paid') {
+        // When switching to paid, ensure we have price and currency
+        form.setFieldValue(`tickets[${index}]`, {
+          id: currentTicket.id,
+          name: currentTicket.name ?? '',
+          description: currentTicket.description ?? '',
+          supply: currentTicket.supply,
+          type: 'paid',
+          price: 0,
+          currency: 'USDC',
+        } as TicketType);
+        form.validateField(`tickets[${index}].price`, 'change');
+      } else {
+        // When switching to free, remove price and currency
+        form.setFieldValue(
+          `tickets[${index}]`,
+          {
+            id: currentTicket.id,
+            name: currentTicket.name ?? '',
+            description: currentTicket.description ?? '',
+            supply: currentTicket.supply,
+            type: 'free',
+          } as TicketType,
+          { dontUpdateMeta: false }
+        );
+        form.validateField(`tickets[${index}].price`, 'change');
+      }
     };
 
     return (
@@ -132,7 +180,7 @@ export const EventTicketingSheet = withForm({
                         </YStack>
                       ) : (
                         tickets.map((ticket: TicketType, index: number) => {
-                          const ticketType = ticketsFromStore[index]?.type || 'free';
+                          const ticketType = ticketTypes[ticket.id] || 'free';
 
                           return (
                             <Card
@@ -193,33 +241,7 @@ export const EventTicketingSheet = withForm({
                                     onValueChange={(value: TicketType['type']) => {
                                       if (!value) return;
 
-                                      if (value === 'paid') {
-                                        // When switching to paid, ensure we have price and currency
-                                        form.setFieldValue(`tickets[${index}]`, {
-                                          id: ticket.id,
-                                          name: ticket.name ?? '',
-                                          description: ticket.description ?? '',
-                                          supply: ticket.supply,
-                                          type: 'paid',
-                                          price: 0,
-                                          currency: 'USDC',
-                                        } as TicketType);
-                                        form.validateField(`tickets[${index}].price`, 'change');
-                                      } else {
-                                        // When switching to free, remove price and currency
-                                        form.setFieldValue(
-                                          `tickets[${index}]`,
-                                          {
-                                            id: ticket.id,
-                                            name: ticket.name ?? '',
-                                            description: ticket.description ?? '',
-                                            supply: ticket.supply,
-                                            type: 'free',
-                                          } as TicketType,
-                                          { dontUpdateMeta: false }
-                                        );
-                                        form.validateField(`tickets[${index}].price`, 'change');
-                                      }
+                                      updateTicketType(ticket.id, value, index);
                                     }}
                                   >
                                     <ToggleGroup.Item value="free" flex={1} borderRadius="$4">
@@ -366,14 +388,17 @@ export const EventTicketingSheet = withForm({
 
                       {/* Add Ticket Button */}
                       <Button
-                        onPress={() =>
+                        onPress={() => {
+                          const newTicketId = Date.now().toString();
                           field.pushValue({
-                            id: Date.now().toString(),
+                            id: newTicketId,
                             name: '',
                             description: '',
                             type: 'free',
-                          })
-                        }
+                          });
+                          // Initialize ticket type in local state
+                          setTicketTypes((prev) => ({ ...prev, [newTicketId]: 'free' }));
+                        }}
                         backgroundColor="$color4"
                         borderColor="$color5"
                         borderWidth={1}
