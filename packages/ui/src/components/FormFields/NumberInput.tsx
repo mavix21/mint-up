@@ -31,7 +31,7 @@ export const NumberInput = ({
     <input
       id={id}
       ref={ref}
-      value={value}
+      value={value === undefined ? '' : isNaN(value) ? '' : value}
       onChange={onChange}
       min={min}
       max={max}
