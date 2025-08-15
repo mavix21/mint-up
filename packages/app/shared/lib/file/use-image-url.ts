@@ -9,11 +9,9 @@ export function useImageUrl(file: File | undefined) {
       // Only create new blob URL if file has actually changed
       if (fileRef.current !== file) {
         if (blobUrlref.current) {
-          console.log('revoking blobUrlref.current', blobUrlref.current);
           URL.revokeObjectURL(blobUrlref.current);
         }
 
-        console.log('creating new blobUrl', file);
         const url = URL.createObjectURL(file);
         blobUrlref.current = url;
         fileRef.current = file;
@@ -30,7 +28,6 @@ export function useImageUrl(file: File | undefined) {
   useEffect(() => {
     return () => {
       if (blobUrlref.current) {
-        console.log('revoking blobUrlref.current on cleanup', blobUrlref.current);
         URL.revokeObjectURL(blobUrlref.current);
       }
     };
