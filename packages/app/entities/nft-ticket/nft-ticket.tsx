@@ -53,11 +53,11 @@ const getStyleConfig = (style: TicketStyle) => {
         `,
         shimmer:
           'linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.4) 50%, transparent 70%)',
-        textColor: 'text-amber-950',
-        labelColor: 'text-amber-800',
-        secondaryColor: 'text-amber-900',
-        dashedBorder: 'border-amber-800',
-        middleFaces: ['bg-amber-600', 'bg-amber-500', 'bg-amber-400'],
+        textColor: '#7c2d12',
+        labelColor: '#92400e',
+        secondaryColor: '#78350f',
+        dashedBorder: '#92400e',
+        middleFaces: ['#d97706', '#f59e0b', '#fbbf24'],
       };
     case 'copper':
       return {
@@ -75,11 +75,11 @@ const getStyleConfig = (style: TicketStyle) => {
         `,
         shimmer:
           'linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.4) 50%, transparent 70%)',
-        textColor: 'text-orange-950',
-        labelColor: 'text-orange-800',
-        secondaryColor: 'text-orange-900',
-        dashedBorder: 'border-orange-800',
-        middleFaces: ['bg-orange-600', 'bg-orange-500', 'bg-orange-400'],
+        textColor: '#7c2d12',
+        labelColor: '#9a3412',
+        secondaryColor: '#c2410c',
+        dashedBorder: '#9a3412',
+        middleFaces: ['#ea580c', 'fb923c', '#fed7aa'],
       };
     default: // silver
       return {
@@ -97,11 +97,11 @@ const getStyleConfig = (style: TicketStyle) => {
         `,
         shimmer:
           'linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.3) 50%, transparent 70%)',
-        textColor: 'text-gray-900',
-        labelColor: 'text-gray-600',
-        secondaryColor: 'text-gray-700',
-        dashedBorder: 'border-gray-500',
-        middleFaces: ['bg-gray-500', 'bg-gray-500', 'bg-gray-400'],
+        textColor: '#111827',
+        labelColor: '#4b5563',
+        secondaryColor: '#374151',
+        dashedBorder: '#6b7280',
+        middleFaces: ['#6b7280', '#6b7280', '#9ca3af'],
       };
   }
 };
@@ -198,198 +198,421 @@ function TicketMesh({
         }}
       >
         <div
-          className={`w-full h-full rounded-2xl ${styleConfig.textColor} shadow-2xl relative overflow-hidden flex flex-col`}
           style={{
+            width: '100%',
+            height: '100%',
+            borderRadius: '16px',
+            color: styleConfig.textColor,
+            position: 'relative',
+            overflow: 'hidden',
+            display: 'flex',
+            flexDirection: 'column',
             background: styleConfig.background,
             boxShadow: styleConfig.boxShadow,
           }}
         >
           <div
-            className="absolute inset-0 rounded-2xl"
             style={{
+              position: 'absolute',
+              inset: '0',
+              borderRadius: '16px',
               background: styleConfig.shimmer,
               animation: 'shimmer 3s ease-in-out',
             }}
           />
 
-          <div className="absolute -left-2 top-[52%] transform -translate-y-1/2 w-4 h-4 bg-gray-900 rounded-full shadow-lg" />
-          <div className="absolute -right-2 top-[52%] transform -translate-y-1/2 w-4 h-4 bg-gray-900 rounded-full shadow-lg" />
-
           {/* Event Image - Top half, 1:1 aspect ratio */}
-          <div className="p-3 pb-1 relative z-10">
-            <div className="w-full aspect-square rounded-lg overflow-hidden bg-gray-800 mb-2 shadow-inner">
+          <div
+            style={{
+              padding: '12px',
+              paddingBottom: '4px',
+              position: 'relative',
+              zIndex: 10,
+            }}
+          >
+            <div
+              style={{
+                width: '100%',
+                aspectRatio: '1',
+                borderRadius: '8px',
+                overflow: 'hidden',
+                backgroundColor: '#1f2937',
+                marginBottom: '8px',
+                boxShadow: 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.06)',
+              }}
+            >
               <img
                 src={eventImageUrl || '/placeholder.svg'}
                 alt="Event"
-                className="w-full h-full object-cover"
-                style={{ userSelect: 'none', pointerEvents: 'none' }}
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover',
+                  userSelect: 'none',
+                  pointerEvents: 'none',
+                }}
               />
             </div>
           </div>
 
-          <div className="mx-3 my-1 relative z-10">
-            <div className={`border-t-2 border-dashed ${styleConfig.dashedBorder} opacity-60`} />
+          <div
+            style={{
+              margin: '0 12px',
+              marginTop: '4px',
+              marginBottom: '4px',
+              position: 'relative',
+              zIndex: 10,
+            }}
+          >
+            <div
+              style={{
+                borderTop: '2px dashed',
+                borderColor: styleConfig.dashedBorder,
+                opacity: 0.6,
+                position: 'relative',
+              }}
+            />
+
+            {/* Left circular cut-out */}
+            <div
+              style={{
+                position: 'absolute',
+                left: '-20px',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                width: '16px',
+                height: '16px',
+                backgroundColor: '#111827',
+                borderRadius: '50%',
+                boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
+                zIndex: 20,
+              }}
+            />
+
+            {/* Right circular cut-out */}
+            <div
+              style={{
+                position: 'absolute',
+                right: '-20px',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                width: '16px',
+                height: '16px',
+                backgroundColor: '#111827',
+                borderRadius: '50%',
+                boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
+                zIndex: 20,
+              }}
+            />
           </div>
 
-          <div className="px-3 pb-2 relative z-10">
+          <div
+            style={{
+              padding: '0 12px',
+              paddingBottom: '8px',
+              position: 'relative',
+              zIndex: 10,
+            }}
+          >
             <h1
-              className={`text-lg font-black text-center mb-2 leading-tight ${styleConfig.textColor} drop-shadow-sm tracking-wide uppercase`}
+              style={{
+                fontSize: '18px',
+                fontWeight: '900',
+                textAlign: 'center',
+                marginBottom: '8px',
+                lineHeight: '1.25',
+                color: styleConfig.textColor,
+                textShadow: '0 1px 2px rgba(0, 0, 0, 0.05)',
+                letterSpacing: '0.025em',
+                textTransform: 'uppercase',
+              }}
             >
               {eventName}
             </h1>
           </div>
 
-          <div className="px-3 pb-3 space-y-4 flex-1 relative z-10">
+          <div
+            style={{
+              padding: '0 12px',
+              paddingBottom: '12px',
+              gap: '16px',
+              flex: 1,
+              position: 'relative',
+              zIndex: 10,
+              display: 'flex',
+              flexDirection: 'column',
+            }}
+          >
             {/* Date and Time Row */}
-            <div className="grid grid-cols-2 gap-6">
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: '1fr 1fr',
+                gap: '24px',
+              }}
+            >
               <div>
                 <div
-                  className={`text-[10px] ${styleConfig.labelColor} font-medium mb-0.5 uppercase tracking-wide`}
+                  style={{
+                    fontSize: '10px',
+                    color: styleConfig.labelColor,
+                    fontWeight: '500',
+                    marginBottom: '2px',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.05em',
+                  }}
                 >
                   DATE
                 </div>
-                <div className="flex items-start space-x-1">
-                  <div className={`text-3xl font-black ${styleConfig.textColor} leading-none`}>
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    gap: '4px',
+                  }}
+                >
+                  <div
+                    style={{
+                      fontSize: '30px',
+                      fontWeight: '900',
+                      color: styleConfig.textColor,
+                      lineHeight: '1',
+                    }}
+                  >
                     {day}
                   </div>
-                  <div className="flex flex-col leading-none">
-                    <div className={`text-xs font-bold ${styleConfig.textColor}`}>{month}</div>
-                    <div className={`text-[10px] ${styleConfig.secondaryColor}`}>{weekday}</div>
+                  <div
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      lineHeight: '1',
+                    }}
+                  >
+                    <div
+                      style={{
+                        fontSize: '12px',
+                        fontWeight: '700',
+                        color: styleConfig.textColor,
+                      }}
+                    >
+                      {month}
+                    </div>
+                    <div
+                      style={{
+                        fontSize: '10px',
+                        color: styleConfig.secondaryColor,
+                      }}
+                    >
+                      {weekday}
+                    </div>
                   </div>
                 </div>
               </div>
               <div>
                 <div
-                  className={`text-[10px] ${styleConfig.labelColor} font-medium mb-0.5 uppercase tracking-wide`}
+                  style={{
+                    fontSize: '10px',
+                    color: styleConfig.labelColor,
+                    fontWeight: '500',
+                    marginBottom: '2px',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.05em',
+                  }}
                 >
                   TIME
                 </div>
-                <div className="flex items-start space-x-1">
-                  <div className={`text-3xl font-black ${styleConfig.textColor} leading-none`}>
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    gap: '4px',
+                  }}
+                >
+                  <div
+                    style={{
+                      fontSize: '30px',
+                      fontWeight: '900',
+                      color: styleConfig.textColor,
+                      lineHeight: '1',
+                    }}
+                  >
                     {timeStr}
                   </div>
-                  <div className="flex flex-col leading-none">
-                    <div className={`text-xs font-bold ${styleConfig.textColor}`}>{period}</div>
-                    <div className={`text-[10px] ${styleConfig.secondaryColor}`}>{timezone}</div>
+                  <div
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      lineHeight: '1',
+                    }}
+                  >
+                    <div
+                      style={{
+                        fontSize: '12px',
+                        fontWeight: '700',
+                        color: styleConfig.textColor,
+                      }}
+                    >
+                      {period}
+                    </div>
+                    <div
+                      style={{
+                        fontSize: '10px',
+                        color: styleConfig.secondaryColor,
+                      }}
+                    >
+                      {timezone}
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: '1fr 1fr',
+                gap: '16px',
+              }}
+            >
               <div>
                 <div
-                  className={`text-[10px] ${styleConfig.labelColor} font-medium mb-0.5 uppercase tracking-wide`}
+                  style={{
+                    fontSize: '10px',
+                    color: styleConfig.labelColor,
+                    fontWeight: '500',
+                    marginBottom: '2px',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.05em',
+                  }}
                 >
                   TICKET
                 </div>
-                <div className={`text-sm font-bold ${styleConfig.textColor}`}>{ticketType}</div>
+                <div
+                  style={{
+                    fontSize: '14px',
+                    fontWeight: '700',
+                    color: styleConfig.textColor,
+                  }}
+                >
+                  {ticketType}
+                </div>
               </div>
               <div>
                 <div
-                  className={`text-[10px] ${styleConfig.labelColor} font-medium mb-0.5 uppercase tracking-wide`}
+                  style={{
+                    fontSize: '10px',
+                    color: styleConfig.labelColor,
+                    fontWeight: '500',
+                    marginBottom: '2px',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.05em',
+                  }}
                 >
                   VENUE
                 </div>
-                <div className={`text-sm font-bold ${styleConfig.textColor}`}>{location}</div>
+                <div
+                  style={{
+                    fontSize: '14px',
+                    fontWeight: '700',
+                    color: styleConfig.textColor,
+                  }}
+                >
+                  {location}
+                </div>
                 {locationDetails && (
-                  <div className={`text-xs ${styleConfig.secondaryColor}`}>{locationDetails}</div>
+                  <div
+                    style={{
+                      fontSize: '12px',
+                      color: styleConfig.secondaryColor,
+                    }}
+                  >
+                    {locationDetails}
+                  </div>
                 )}
               </div>
             </div>
 
-            <div className="pt-1">
+            <div
+              style={{
+                paddingTop: '4px',
+              }}
+            >
               <div
-                className={`text-[10px] ${styleConfig.labelColor} font-medium mb-1.5 uppercase tracking-wide`}
+                style={{
+                  fontSize: '10px',
+                  color: styleConfig.labelColor,
+                  fontWeight: '500',
+                  marginBottom: '6px',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.05em',
+                }}
               >
                 TICKET HOLDER
               </div>
-              <div className="flex items-center space-x-2">
-                <div className="w-7 h-7 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full flex items-center justify-center shadow-md">
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                }}
+              >
+                <div
+                  style={{
+                    width: '28px',
+                    height: '28px',
+                    background: 'linear-gradient(to bottom right, #60a5fa, #a855f7)',
+                    borderRadius: '50%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+                  }}
+                >
                   {ticketHolderAvatar ? (
                     <img
                       src={ticketHolderAvatar || '/placeholder.svg'}
                       alt="Avatar"
-                      className="w-full h-full rounded-full object-cover"
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        borderRadius: '50%',
+                        objectFit: 'cover',
+                      }}
                     />
                   ) : (
-                    <span className="text-white text-xs font-bold">
+                    <span
+                      style={{
+                        color: 'white',
+                        fontSize: '12px',
+                        fontWeight: '700',
+                      }}
+                    >
                       {getInitials(ticketHolderName)}
                     </span>
                   )}
                 </div>
                 <div>
-                  <div className={`text-sm font-bold ${styleConfig.textColor}`}>
+                  <div
+                    style={{
+                      fontSize: '14px',
+                      fontWeight: '700',
+                      color: styleConfig.textColor,
+                    }}
+                  >
                     {ticketHolderUsername}
                   </div>
-                  <div className={`text-xs ${styleConfig.secondaryColor}`}>Verified Owner</div>
+                  <div
+                    style={{
+                      fontSize: '12px',
+                      color: styleConfig.secondaryColor,
+                    }}
+                  >
+                    Verified Owner
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </Html>
-
-      {/* Gray Middle Face 1 */}
-      <Html
-        transform
-        occlude="blending"
-        position={[0, 0, 0.01]}
-        style={{
-          width: '280px',
-          height: '550px',
-          pointerEvents: 'none',
-          userSelect: 'none',
-          WebkitUserSelect: 'none',
-          MozUserSelect: 'none',
-          msUserSelect: 'none',
-        }}
-      >
-        <div className={`w-full h-full ${styleConfig.middleFaces[0]} rounded-2xl relative`}>
-          <div className="absolute -left-2 top-[52%] transform -translate-y-1/2 w-4 h-4 bg-gray-900 rounded-full shadow-lg" />
-          <div className="absolute -right-2 top-[52%] transform -translate-y-1/2 w-4 h-4 bg-gray-900 rounded-full shadow-lg" />
-        </div>
-      </Html>
-
-      {/* Gray Middle Face 2 */}
-      <Html
-        transform
-        occlude="blending"
-        position={[0, 0, -0.01]}
-        style={{
-          width: '280px',
-          height: '550px',
-          pointerEvents: 'none',
-          userSelect: 'none',
-          WebkitUserSelect: 'none',
-          MozUserSelect: 'none',
-          msUserSelect: 'none',
-        }}
-      >
-        <div className={`w-full h-full ${styleConfig.middleFaces[1]} rounded-2xl relative`}>
-          <div className="absolute -left-2 top-[52%] transform -translate-y-1/2 w-4 h-4 bg-gray-900 rounded-full shadow-lg" />
-          <div className="absolute -right-2 top-[52%] transform -translate-y-1/2 w-4 h-4 bg-gray-900 rounded-full shadow-lg" />
-        </div>
-      </Html>
-
-      {/* Gray Middle Face 3 */}
-      <Html
-        transform
-        occlude="blending"
-        position={[0, 0, 0]}
-        style={{
-          width: '280px',
-          height: '550px',
-          pointerEvents: 'none',
-          userSelect: 'none',
-          WebkitUserSelect: 'none',
-          MozUserSelect: 'none',
-          msUserSelect: 'none',
-        }}
-      >
-        <div className={`w-full h-full ${styleConfig.middleFaces[2]} rounded-2xl relative`}>
-          <div className="absolute -left-2 top-[52%] transform -translate-y-1/2 w-4 h-4 bg-gray-900 rounded-full shadow-lg" />
-          <div className="absolute -right-2 top-[52%] transform -translate-y-1/2 w-4 h-4 bg-gray-900 rounded-full shadow-lg" />
         </div>
       </Html>
 
@@ -414,51 +637,169 @@ function TicketMesh({
         }}
       >
         <div
-          className={`w-full h-full rounded-2xl ${styleConfig.textColor} shadow-2xl relative overflow-hidden flex flex-col`}
           style={{
+            width: '100%',
+            height: '100%',
+            borderRadius: '16px',
+            color: styleConfig.textColor,
+            position: 'relative',
+            overflow: 'hidden',
+            display: 'flex',
+            flexDirection: 'column',
             background: styleConfig.background,
             boxShadow: styleConfig.boxShadow,
           }}
         >
           <div
-            className="absolute inset-0 rounded-2xl"
             style={{
+              position: 'absolute',
+              inset: '0',
+              borderRadius: '16px',
               background: styleConfig.shimmer,
               animation: 'shimmer 3s ease-in-out',
             }}
           />
 
-          <div className="absolute -left-2 top-[52%] transform -translate-y-1/2 w-4 h-4 bg-gray-900 rounded-full shadow-lg" />
-          <div className="absolute -right-2 top-[52%] transform -translate-y-1/2 w-4 h-4 bg-gray-900 rounded-full shadow-lg" />
-
-          <div className="p-3 pb-1 relative z-10">
-            <div className="w-full aspect-square rounded-lg overflow-hidden bg-white mb-2 shadow-inner border border-gray-300 flex items-center justify-center">
+          <div
+            style={{
+              padding: '12px',
+              paddingBottom: '4px',
+              position: 'relative',
+              zIndex: 10,
+            }}
+          >
+            <div
+              style={{
+                width: '100%',
+                aspectRatio: '1',
+                borderRadius: '8px',
+                overflow: 'hidden',
+                backgroundColor: 'white',
+                marginBottom: '8px',
+                boxShadow: 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.06)',
+                border: '1px solid #d1d5db',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
               <img
                 src={qrUrl || '/placeholder.svg'}
                 alt="QR Code for ticket verification"
-                className="w-full h-full object-contain p-4"
-                style={{ userSelect: 'none', pointerEvents: 'none' }}
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'contain',
+                  padding: '16px',
+                  userSelect: 'none',
+                  pointerEvents: 'none',
+                }}
               />
             </div>
           </div>
 
-          <div className="mx-3 my-1 relative z-10">
-            <div className={`border-t-2 border-dashed ${styleConfig.dashedBorder} opacity-60`} />
+          <div
+            style={{
+              margin: '0 12px',
+              marginTop: '4px',
+              marginBottom: '4px',
+              position: 'relative',
+              zIndex: 10,
+            }}
+          >
+            <div
+              style={{
+                borderTop: '2px dashed',
+                borderColor: styleConfig.dashedBorder,
+                opacity: 0.6,
+                position: 'relative',
+              }}
+            />
+
+            {/* Left circular cut-out */}
+            <div
+              style={{
+                position: 'absolute',
+                left: '-20px',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                width: '16px',
+                height: '16px',
+                backgroundColor: '#111827',
+                borderRadius: '50%',
+                boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
+                zIndex: 20,
+              }}
+            />
+
+            {/* Right circular cut-out */}
+            <div
+              style={{
+                position: 'absolute',
+                right: '-20px',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                width: '16px',
+                height: '16px',
+                backgroundColor: '#111827',
+                borderRadius: '50%',
+                boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
+                zIndex: 20,
+              }}
+            />
           </div>
 
-          <div className="px-3 pb-3 flex-1 relative z-10">
-            <div className="h-full flex flex-col space-y-4">
+          <div
+            style={{
+              padding: '0 12px',
+              paddingBottom: '12px',
+              flex: 1,
+              position: 'relative',
+              zIndex: 10,
+            }}
+          >
+            <div
+              style={{
+                height: '100%',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '16px',
+              }}
+            >
               {/* Verification Section */}
-              <div className="text-center">
+              <div
+                style={{
+                  textAlign: 'center',
+                }}
+              >
                 <div
-                  className={`text-[10px] ${styleConfig.labelColor} font-medium mb-1 uppercase tracking-wide`}
+                  style={{
+                    fontSize: '10px',
+                    color: styleConfig.labelColor,
+                    fontWeight: '500',
+                    marginBottom: '4px',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.05em',
+                  }}
                 >
                   VERIFICATION
                 </div>
-                <div className={`text-xs font-bold ${styleConfig.textColor} mb-1`}>
+                <div
+                  style={{
+                    fontSize: '12px',
+                    fontWeight: '700',
+                    color: styleConfig.textColor,
+                    marginBottom: '4px',
+                  }}
+                >
                   BLOCKCHAIN CERTIFIED
                 </div>
-                <div className={`text-[10px] ${styleConfig.secondaryColor}`}>
+                <div
+                  style={{
+                    fontSize: '10px',
+                    color: styleConfig.secondaryColor,
+                  }}
+                >
                   Token ID: {tokenId}
                 </div>
               </div>
@@ -466,36 +807,92 @@ function TicketMesh({
               {/* Event Organizer */}
               <div>
                 <div
-                  className={`text-[10px] ${styleConfig.labelColor} font-medium mb-1 uppercase tracking-wide`}
+                  style={{
+                    fontSize: '10px',
+                    color: styleConfig.labelColor,
+                    fontWeight: '500',
+                    marginBottom: '4px',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.05em',
+                  }}
                 >
                   ORGANIZER
                 </div>
-                <div className="flex items-center space-x-2 mb-1">
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    marginBottom: '4px',
+                  }}
+                >
                   {organizerAvatar && (
-                    <div className="w-4 h-4 rounded-full overflow-hidden">
+                    <div
+                      style={{
+                        width: '16px',
+                        height: '16px',
+                        borderRadius: '50%',
+                        overflow: 'hidden',
+                      }}
+                    >
                       <img
                         src={organizerAvatar || '/placeholder.svg'}
                         alt="Organizer"
-                        className="w-full h-full object-cover"
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                          objectFit: 'cover',
+                        }}
                       />
                     </div>
                   )}
-                  <div className={`text-xs font-bold ${styleConfig.textColor}`}>
+                  <div
+                    style={{
+                      fontSize: '12px',
+                      fontWeight: '700',
+                      color: styleConfig.textColor,
+                    }}
+                  >
                     {organizerName}
                   </div>
                 </div>
-                <div className={`text-[10px] ${styleConfig.secondaryColor}`}>{organizerEmail}</div>
+                <div
+                  style={{
+                    fontSize: '10px',
+                    color: styleConfig.secondaryColor,
+                  }}
+                >
+                  {organizerEmail}
+                </div>
               </div>
 
               {/* Terms */}
-              <div className="flex-1">
+              <div
+                style={{
+                  flex: 1,
+                }}
+              >
                 <div
-                  className={`text-[10px] ${styleConfig.labelColor} font-medium mb-1 uppercase tracking-wide`}
+                  style={{
+                    fontSize: '10px',
+                    color: styleConfig.labelColor,
+                    fontWeight: '500',
+                    marginBottom: '4px',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.05em',
+                  }}
                 >
                   TERMS
                 </div>
                 <div
-                  className={`text-[10px] ${styleConfig.secondaryColor} leading-relaxed space-y-1`}
+                  style={{
+                    fontSize: '10px',
+                    color: styleConfig.secondaryColor,
+                    lineHeight: '1.625',
+                    gap: '4px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                  }}
                 >
                   <p>• Non-transferable without blockchain verification</p>
                   <p>• Valid for single use only</p>
@@ -505,12 +902,34 @@ function TicketMesh({
               </div>
 
               {/* Footer */}
-              <div className={`pt-2 border-t ${styleConfig.dashedBorder} border-dashed`}>
-                <div className="text-center">
-                  <div className={`text-[10px] ${styleConfig.labelColor} font-medium`}>
+              <div
+                style={{
+                  paddingTop: '8px',
+                  borderTop: '1px dashed',
+                  borderColor: styleConfig.dashedBorder,
+                }}
+              >
+                <div
+                  style={{
+                    textAlign: 'center',
+                  }}
+                >
+                  <div
+                    style={{
+                      fontSize: '10px',
+                      color: styleConfig.labelColor,
+                      fontWeight: '500',
+                    }}
+                  >
                     POWERED BY NFT TECHNOLOGY
                   </div>
-                  <div className={`text-[8px] ${styleConfig.secondaryColor} mt-0.5`}>
+                  <div
+                    style={{
+                      fontSize: '8px',
+                      color: styleConfig.secondaryColor,
+                      marginTop: '2px',
+                    }}
+                  >
                     Secure • Authentic • Verifiable
                   </div>
                 </div>
@@ -544,13 +963,6 @@ export default function NFTTicket(props: NFTTicketProps) {
           dampingFactor={0.05}
         />
       </Canvas>
-
-      {/* Instructions */}
-      <View className="absolute bottom-4 left-4 text-white/60 text-sm">
-        <SizableText>
-          🖱️ Drag horizontally to rotate • 🔍 Scroll to zoom • 👆 Click to flip
-        </SizableText>
-      </View>
     </View>
   );
 }
