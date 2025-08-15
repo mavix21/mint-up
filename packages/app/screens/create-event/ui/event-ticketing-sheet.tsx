@@ -58,7 +58,7 @@ export const EventTicketingSheet = withForm({
     const handleSave = () => {
       // Validate only the tickets field - this will validate the entire tickets array
       form.validateField('tickets', 'change');
-      ticketsFromStore.forEach((ticket, index) => {
+      form.state.values.tickets.forEach((ticket, index) => {
         form.validateField(`tickets[${index}].name`, 'change');
         form.validateField(`tickets[${index}].description`, 'change');
         form.validateField(`tickets[${index}].price`, 'change');
