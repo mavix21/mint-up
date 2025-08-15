@@ -38,7 +38,6 @@ export const EventTicketingSheet = withForm({
     onOpenChange: () => {},
   } as EventTicketingSheetProps,
   render: function EventTicketingSheet({ open, onOpenChange, form }) {
-    console.log('event ticketing sheet open', open);
     const visualViewportHeight = useVisualViewportHeight();
     const [initialTickets, setInitialTickets] = useState<TicketType[]>([]);
     const [ticketTypes, setTicketTypes] = useState<Record<string, TicketType['type']>>({});
