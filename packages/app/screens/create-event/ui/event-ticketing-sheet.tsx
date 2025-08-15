@@ -14,15 +14,15 @@ import {
   SizableText,
   Select,
   Group,
-  useTheme,
-  getTokens,
   useVisualViewportHeight,
+  NumberInput,
 } from '@my/ui';
 import { Plus, Trash2, ChevronDown } from '@tamagui/lucide-icons';
 import { useStore } from '@tanstack/react-form';
 import type { Cryptocurrency, TicketType } from 'app/entities';
 import { withForm } from 'app/shared/lib/form';
 import { FieldInfo } from 'app/shared/ui/FieldInfo';
+import { useState } from 'react';
 import { StyleProp, TextStyle } from 'react-native';
 
 import { createEventFormOpts } from '../model/shared-form';
@@ -39,17 +39,42 @@ export const EventTicketingSheet = withForm({
     onOpenChange: () => {},
   } as EventTicketingSheetProps,
   render: function EventTicketingSheet({ open, onOpenChange, form }) {
-    const theme = useTheme();
-    const tokens = getTokens();
+    console.log('event ticketing sheet open', open);
     const visualViewportHeight = useVisualViewportHeight();
+    const [initialTickets, setInitialTickets] = useState<TicketType[]>([]);
 
     const ticketsFromStore = useStore(form.store, (state) => state.values.tickets || []);
 
+    // Store initial state when sheet opens
+    if (open && initialTickets.length === 0) {
+      setInitialTickets([...ticketsFromStore]);
+    }
+
+    // Reset initial state when sheet closes
+    if (!open && initialTickets.length > 0) {
+      setInitialTickets([]);
+    }
+
     const handleSave = () => {
-      onOpenChange(false);
+      // Validate only the tickets field - this will validate the entire tickets array
+      form.validateField('tickets', 'change');
+      ticketsFromStore.forEach((ticket, index) => {
+        form.validateField(`tickets[${index}].name`, 'change');
+        form.validateField(`tickets[${index}].description`, 'change');
+        form.validateField(`tickets[${index}].price`, 'change');
+      });
+
+      const formErrors = form.state.errors[0] || {};
+      const areTicketsValid = !Object.keys(formErrors).some((key) => key.startsWith('tickets'));
+      // Check if tickets field has errors
+      if (areTicketsValid) {
+        onOpenChange(false);
+      }
     };
 
     const handleCancel = () => {
+      // Restore initial state
+      form.setFieldValue('tickets', initialTickets);
       onOpenChange(false);
     };
 
@@ -220,7 +245,7 @@ export const EventTicketingSheet = withForm({
                                           >
                                             <Group.Item>
                                               <YStack flex={1}>
-                                                <input
+                                                <NumberInput
                                                   id={`ticket-price-${ticket.id}`}
                                                   placeholder="0.00"
                                                   value={priceField.state.value}
@@ -229,12 +254,7 @@ export const EventTicketingSheet = withForm({
                                                   }}
                                                   min={0}
                                                   step={0.001}
-                                                  type="number"
                                                   style={{
-                                                    padding: tokens.space.$3.val,
-                                                    backgroundColor: theme.color4.val,
-                                                    borderColor: theme.color5.val,
-                                                    borderRadius: tokens.radius.$4.val,
                                                     borderTopRightRadius: 0,
                                                     borderBottomRightRadius: 0,
                                                   }}
