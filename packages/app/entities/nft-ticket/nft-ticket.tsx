@@ -300,7 +300,7 @@ function TicketMesh({
 
           <div
             style={{
-              padding: '0 12px',
+              padding: '12px 12px',
               paddingBottom: '8px',
               position: 'relative',
               zIndex: 10,
@@ -511,7 +511,7 @@ function TicketMesh({
                 >
                   {location}
                 </div>
-                {locationDetails && (
+                {/* {locationDetails && (
                   <div
                     style={{
                       fontSize: '12px',
@@ -520,13 +520,13 @@ function TicketMesh({
                   >
                     {locationDetails}
                   </div>
-                )}
+                )} */}
               </div>
             </div>
 
             <div
               style={{
-                paddingTop: '4px',
+                paddingTop: '10px',
               }}
             >
               <div
