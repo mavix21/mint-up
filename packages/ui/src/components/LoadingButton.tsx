@@ -1,4 +1,4 @@
-import { Button, ButtonProps, Spinner, useTheme, View } from '@my/ui';
+import { Button, ButtonProps, Spinner, View } from '@my/ui';
 
 export interface LoadingButtonProps extends ButtonProps {
   /**
