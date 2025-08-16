@@ -36,7 +36,7 @@ export const LoadingButton = ({
   const displayLabel = isLoading ? loadingLabel || label : label;
 
   return (
-    <Button themeInverse={themeInverse} disabled={disabled || isLoading} {...props}>
+    <Button icon={icon} themeInverse={themeInverse} disabled={disabled || isLoading} {...props}>
       <View
         flexDirection="row"
         gap="$3"
