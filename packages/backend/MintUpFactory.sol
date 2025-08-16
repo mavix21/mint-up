@@ -66,4 +66,12 @@ contract MintUpFactory is ERC1155, Ownable, ReentrancyGuard {
     _nextEventId = 1;
     _transferOwnership(initialOwner);
   }
+
+  function createEventWithTickets(
+    address _organizer,
+    TicketParams[] calldata _tickets
+  ) external onlyOwner returns (uint256) {
+    require(_organizer != address(0), "Invalid organizer address");
+    require(_tickets.length > 0, "At least one ticket is required");
+  }
 }
