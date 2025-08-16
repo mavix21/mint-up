@@ -71,7 +71,6 @@ const ReadyContent = memo(({ onSignIn, onComplete, isLoading }: OnboardingStepsP
           onPress={onSignIn}
           isLoading={isLoading}
           label="Sign In & Continue"
-          loadingLabel="Signing In..."
         />
         <Button size="$4" theme="gray" onPress={onComplete}>
           <Button.Text>Explore as Guest</Button.Text>
