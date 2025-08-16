@@ -1,4 +1,4 @@
-import { ShareableEventDescriptionScreenScreen } from '@my/app/screens/shareable-event-description-screen/shareable-event-description-screen-screen';
+import { ShareableEventDescriptionScreen } from '@my/app/screens/shareable-event-description-screen/shareable-event-description-screen';
 import { Stack } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -10,7 +10,7 @@ export default function Screen() {
           title: 'Shareable Event Description Screen',
         }}
       />
-      <ShareableEventDescriptionScreenScreen />
+      <ShareableEventDescriptionScreen />
     </SafeAreaView>
   );
 }

@@ -1,7 +1,7 @@
 import { api } from '@my/backend/_generated/api';
 import { Id } from '@my/backend/_generated/dataModel';
 import { fetchQuery } from '@my/backend/nextjs';
-import { ShareableEventDescriptionScreenScreen } from 'app/screens/shareable-event-description-screen/shareable-event-description-screen-screen';
+import { ShareableEventDescriptionScreen } from 'app/screens/shareable-event-description-screen/shareable-event-description-screen';
 import { Metadata } from 'next';
 
 export async function generateMetadata({
@@ -75,5 +75,5 @@ export default async function ShareableEventDescriptionScreenPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  return <ShareableEventDescriptionScreenScreen id={id} />;
+  return <ShareableEventDescriptionScreen id={id} />;
 }

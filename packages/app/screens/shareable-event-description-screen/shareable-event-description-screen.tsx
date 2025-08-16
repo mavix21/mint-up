@@ -6,7 +6,7 @@ import { useQuery } from '@my/backend/react';
 import { EventModal } from 'app/widgets/event-modal';
 import React from 'react';
 
-export const ShareableEventDescriptionScreenScreen = ({ id }: { id: string }) => {
+export const ShareableEventDescriptionScreen = ({ id }: { id: string }) => {
   const event = useQuery(api.events.getEventById, {
     eventId: id as Id<'events'>,
   });
