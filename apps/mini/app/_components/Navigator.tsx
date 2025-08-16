@@ -38,7 +38,13 @@ export const Navigator = memo(function Navigator() {
 
   return (
     <>
-      <YStack width="100%" flex={1} height="100%" position="relative" overflowBlock="hidden">
+      <YStack
+        width="100%"
+        flex={1}
+        height={'100svh' as any}
+        position="relative"
+        overflowBlock="hidden"
+      >
         <Topbar />
         <YStack flex={1} width="100%" height="100%" overflowBlock="hidden">
           <TabSelector activeTab={activeTab} />
