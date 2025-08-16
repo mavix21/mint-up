@@ -77,10 +77,6 @@ const DropdownItem = styled(View, {
   justifyContent: 'flex-start',
   flexDirection: 'row',
   gap: '$2',
-  $xs: {
-    paddingHorizontal: '$2',
-    paddingVertical: '$1',
-  },
 });
 
 const DropdownText = styled(Text, {
