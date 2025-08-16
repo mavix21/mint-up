@@ -1,9 +1,8 @@
 'use client';
 
-import { YStack, LoadingButton, Button, SizableText, Paragraph } from '@my/ui';
-import { Calendar, Users, Sparkles, Wallet } from '@tamagui/lucide-icons';
+import { YStack, LoadingButton, Button, SizableText, Paragraph, Image, ThemeName } from '@my/ui';
+import { Calendar, Users, Wallet } from '@tamagui/lucide-icons';
 import { memo } from 'react';
-import { ThemeName } from 'tamagui';
 
 interface OnboardingStepsProps {
   onSignIn: () => void;
@@ -14,7 +13,7 @@ interface OnboardingStepsProps {
 // Memoize the Content components to prevent unnecessary rerenders
 const WelcomeContent = memo(() => (
   <YStack flex={1} justifyContent="center" alignItems="center" padding="$4" gap="$6">
-    <Sparkles color="$color11" size={80} />
+    <Image src="/icon_no_bg.png" alt="Welcome" width={120} height={120} />
     <YStack alignItems="center" gap="$3">
       <SizableText
         userSelect="none"
@@ -23,9 +22,9 @@ const WelcomeContent = memo(() => (
         textAlign="center"
         color="$color11"
       >
-        Welcome to MintUp
+        Welcome to Mint Up
       </SizableText>
-      <Paragraph userSelect="none" size="$5" textAlign="center" color="$color10" maxWidth={300}>
+      <Paragraph userSelect="none" size="$5" textAlign="center" color="$color11" maxWidth={372}>
         Create, discover, and collect digital experiences with blockchain-powered event tickets
       </Paragraph>
     </YStack>
@@ -34,7 +33,7 @@ const WelcomeContent = memo(() => (
 
 const CreateEventsContent = memo(() => (
   <YStack flex={1} justifyContent="center" alignItems="center" padding="$4" gap="$6">
-    <Calendar color="$color11" size={80} />
+    <Calendar color="$color11" size={120} />
     <YStack alignItems="center" gap="$3">
       <SizableText
         userSelect="none"
@@ -54,7 +53,7 @@ const CreateEventsContent = memo(() => (
 
 const ConnectContent = memo(() => (
   <YStack flex={1} justifyContent="center" alignItems="center" padding="$4" gap="$6">
-    <Users color="$color11" size={80} />
+    <Users color="$color11" size={120} />
     <YStack alignItems="center" gap="$3">
       <SizableText
         userSelect="none"
@@ -74,7 +73,7 @@ const ConnectContent = memo(() => (
 
 const ReadyContent = memo(({ onSignIn, onComplete, isLoading }: OnboardingStepsProps) => (
   <YStack flex={1} justifyContent="center" alignItems="center" padding="$4" gap="$6">
-    <Wallet color="$color11" size={80} />
+    <Wallet color="$color11" size={120} />
     <YStack alignItems="center" gap="$3">
       <SizableText
         userSelect="none"
@@ -85,17 +84,18 @@ const ReadyContent = memo(({ onSignIn, onComplete, isLoading }: OnboardingStepsP
       >
         Ready to Start?
       </SizableText>
-      <Paragraph userSelect="none" size="$5" textAlign="center" color="$color10" maxWidth={300}>
+      <Paragraph userSelect="none" size="$5" textAlign="center" color="$color10" maxWidth={380}>
         Join thousands of creators and collectors in the future of digital experiences
       </Paragraph>
       <YStack gap="$3" mt="$4" width="100%" maxWidth={280}>
         <LoadingButton
+          themeInverse
           size="$4"
           onPress={onSignIn}
           isLoading={isLoading}
           label="Sign In & Continue"
         />
-        <Button size="$4" theme="gray" onPress={onComplete}>
+        <Button size="$4" onPress={onComplete}>
           <Button.Text>Explore as Guest</Button.Text>
         </Button>
       </YStack>
