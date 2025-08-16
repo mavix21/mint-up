@@ -3,12 +3,15 @@ import { Button, Popover, styled, Text, View } from '@my/ui';
 import { LogOut, Settings } from '@tamagui/lucide-icons';
 import { signOut } from 'next-auth/react';
 
+import { useOnboarding } from '@/lib/hooks/useOnboarding';
+
 interface SettingsDropdownProps {
   triggerOpen: boolean;
   setTriggerOpen: (open: boolean) => void;
 }
 
 export function SettingsDropdown({ triggerOpen, setTriggerOpen }: SettingsDropdownProps) {
+  const { resetOnboarding } = useOnboarding();
   const logout = signOut;
 
   const handleLogout = () => {
@@ -47,7 +50,7 @@ export function SettingsDropdown({ triggerOpen, setTriggerOpen }: SettingsDropdo
       >
         <DropdownItem>
           <Settings size={14} color="$color10" />
-          <DropdownText>Settings</DropdownText>
+          <DropdownText onPress={() => resetOnboarding()}>Reset Onboarding</DropdownText>
         </DropdownItem>
 
         <Authenticated>
