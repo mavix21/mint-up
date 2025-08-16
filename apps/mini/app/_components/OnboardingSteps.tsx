@@ -14,12 +14,18 @@ interface OnboardingStepsProps {
 // Memoize the Content components to prevent unnecessary rerenders
 const WelcomeContent = memo(() => (
   <YStack flex={1} justifyContent="center" alignItems="center" padding="$4" gap="$6">
-    <Sparkles size={80} color="$blue10" />
+    <Sparkles color="$color11" size={80} />
     <YStack alignItems="center" gap="$3">
-      <SizableText size="$10" fontWeight="bold" textAlign="center">
+      <SizableText
+        userSelect="none"
+        size="$10"
+        fontWeight="bold"
+        textAlign="center"
+        color="$color11"
+      >
         Welcome to MintUp
       </SizableText>
-      <Paragraph size="$5" textAlign="center" color="$color11" maxWidth={300}>
+      <Paragraph userSelect="none" size="$5" textAlign="center" color="$color10" maxWidth={300}>
         Create, discover, and collect digital experiences with blockchain-powered event tickets
       </Paragraph>
     </YStack>
@@ -28,12 +34,18 @@ const WelcomeContent = memo(() => (
 
 const CreateEventsContent = memo(() => (
   <YStack flex={1} justifyContent="center" alignItems="center" padding="$4" gap="$6">
-    <Calendar size={80} color="$green10" />
+    <Calendar color="$color11" size={80} />
     <YStack alignItems="center" gap="$3">
-      <SizableText size="$10" fontWeight="bold" textAlign="center">
+      <SizableText
+        userSelect="none"
+        size="$10"
+        fontWeight="bold"
+        textAlign="center"
+        color="$color11"
+      >
         Create Amazing Events
       </SizableText>
-      <Paragraph size="$5" textAlign="center" color="$color11" maxWidth={300}>
+      <Paragraph userSelect="none" size="$5" textAlign="center" color="$color10" maxWidth={300}>
         Design unique digital experiences and mint NFT tickets for your community
       </Paragraph>
     </YStack>
@@ -42,12 +54,18 @@ const CreateEventsContent = memo(() => (
 
 const ConnectContent = memo(() => (
   <YStack flex={1} justifyContent="center" alignItems="center" padding="$4" gap="$6">
-    <Users size={80} color="$purple10" />
+    <Users color="$color11" size={80} />
     <YStack alignItems="center" gap="$3">
-      <SizableText size="$10" fontWeight="bold" textAlign="center">
+      <SizableText
+        userSelect="none"
+        size="$10"
+        fontWeight="bold"
+        textAlign="center"
+        color="$color11"
+      >
         Connect & Collect
       </SizableText>
-      <Paragraph size="$5" textAlign="center" color="$color11" maxWidth={300}>
+      <Paragraph userSelect="none" size="$5" textAlign="center" color="$color10" maxWidth={300}>
         Discover events from creators you love and build your digital collection
       </Paragraph>
     </YStack>
@@ -56,12 +74,18 @@ const ConnectContent = memo(() => (
 
 const ReadyContent = memo(({ onSignIn, onComplete, isLoading }: OnboardingStepsProps) => (
   <YStack flex={1} justifyContent="center" alignItems="center" padding="$4" gap="$6">
-    <Wallet size={80} color="$orange10" />
+    <Wallet color="$color11" size={80} />
     <YStack alignItems="center" gap="$3">
-      <SizableText size="$10" fontWeight="bold" textAlign="center">
+      <SizableText
+        userSelect="none"
+        size="$10"
+        fontWeight="bold"
+        textAlign="center"
+        color="$color11"
+      >
         Ready to Start?
       </SizableText>
-      <Paragraph size="$5" textAlign="center" color="$color11" maxWidth={300}>
+      <Paragraph userSelect="none" size="$5" textAlign="center" color="$color10" maxWidth={300}>
         Join thousands of creators and collectors in the future of digital experiences
       </Paragraph>
       <YStack gap="$3" mt="$4" width="100%" maxWidth={280}>
