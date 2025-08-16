@@ -221,7 +221,7 @@ export const EventLocationSheet = withForm({
             </YStack>
 
             {/* Action Buttons */}
-            <XStack gap="$3" py="$4">
+            <XStack gap="$3" py="$4" backgroundColor="$color2">
               <Button flex={1} theme="red" onPress={handleCancel}>
                 Cancel
               </Button>
