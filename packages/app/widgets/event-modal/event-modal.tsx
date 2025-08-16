@@ -35,6 +35,7 @@ import { useSignIn } from 'app/shared/lib/hooks/use-sign-in';
 import React, { Dispatch, SetStateAction } from 'react';
 import { usePathname, useRouter } from 'solito/navigation';
 
+import { EventSettingsDropdown } from './EventSettingsDropdown';
 import TicketViewSheet from './ticket-view-sheet';
 import TicketsEventSheet from './tickets-event-sheet';
 import { ConvexEventWithExtras } from '../../entities/event.model';
@@ -56,6 +57,7 @@ export function EventModal({
 
   const [showTicketsSheet, setShowTicketsSheet] = React.useState(false);
   const [showTicketViewSheet, setShowTicketViewSheet] = React.useState(false);
+  const [triggerOpen, setTriggerOpen] = React.useState(false);
   const visualViewportHeight = useVisualViewportHeight();
   const tickets = eventData.tickets;
 
@@ -71,7 +73,7 @@ export function EventModal({
   const canRegister = session && !isUserHost && !isUserRegistered;
   const needsSignIn = !session;
   const canCancelRegistration = session && isUserRegistered && eventData.userStatus !== 'minted';
-  const canViewTicket = session && isUserRegistered && eventData.userStatus === 'minted';
+  const canViewTicket = session && isUserRegistered && eventData.userStatus !== 'rejected';
 
   const getStatusChip = () => {
     if (isUserHost) {
@@ -294,13 +296,13 @@ Check it out 👇`,
                         </Button>
                       </Theme>
                     )}
-                    {canCancelRegistration && (
+                    {/* {canCancelRegistration && (
                       <Theme name="red">
                         <Button flex={1} fontWeight="600" onPress={handleCancelRegistration}>
                           <Button.Text>Cancel Registration</Button.Text>
                         </Button>
                       </Theme>
-                    )}
+                    )} */}
                     {canViewTicket && (
                       <Theme name="orange">
                         <Button
@@ -318,7 +320,12 @@ Check it out 👇`,
                       </Button>
                     </Theme>
                     <Theme name="gray">
-                      <Button height="100%" size="$2" icon={<MoreVertical size={16} />} />
+                      {/* <Button height="100%" size="$2" icon={<MoreVertical size={16} />} /> */}
+                      <EventSettingsDropdown
+                        triggerOpen={triggerOpen}
+                        setTriggerOpen={setTriggerOpen}
+                        onCancelRegistration={handleCancelRegistration}
+                      />
                     </Theme>
                   </XStack>
                 )}
