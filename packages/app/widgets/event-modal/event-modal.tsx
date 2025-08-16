@@ -49,7 +49,7 @@ export function EventModal({
   setToggleEvent: Dispatch<SetStateAction<boolean>>;
   eventData: ConvexEventWithExtras;
 }) {
-  const { signIn, session, isLoading: signInLoading } = useSignIn();
+  const { signIn, session, isLoading: signInLoading, isSignedIn } = useSignIn();
   const { composeCast } = useComposeCast();
   const deleteRegistration = useMutation(api.registrations.deleteRegistration);
   const router = useRouter();
@@ -68,12 +68,16 @@ export function EventModal({
   const hasLocation = typeof eventData.location === 'string' || isOnline || isInPerson;
 
   // Check if user is already registered
-  const isUserRegistered = eventData.userStatus && eventData.userStatus !== 'rejected';
+  const isUserRegistered =
+    eventData.userStatus !== null &&
+    eventData.userStatus !== undefined &&
+    eventData.userStatus !== 'rejected';
   const isUserHost = eventData.isHost;
-  const canRegister = session && !isUserHost && !isUserRegistered;
-  const needsSignIn = !session;
-  const canCancelRegistration = session && isUserRegistered && eventData.userStatus !== 'minted';
-  const canViewTicket = session && isUserRegistered && eventData.userStatus !== 'rejected';
+  const canRegister = isSignedIn && !isUserHost && !isUserRegistered;
+  const needsSignIn = !isSignedIn;
+  const canCancelRegistration =
+    isSignedIn && isUserRegistered && eventData && eventData.userStatus !== 'minted';
+  const canViewTicket = !!session && isUserRegistered && eventData.userStatus !== 'rejected';
 
   const getStatusChip = () => {
     if (isUserHost) {
