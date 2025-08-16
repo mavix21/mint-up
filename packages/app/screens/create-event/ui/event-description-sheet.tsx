@@ -1,5 +1,5 @@
 import { useVisualViewportHeight } from '@my/ui';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Sheet, Button, XStack, YStack, TextArea } from 'tamagui';
 
 export interface EventDescriptionSheetProps {
@@ -16,7 +16,21 @@ export function EventDescriptionSheet({
   onDescriptionChange,
 }: EventDescriptionSheetProps) {
   const [localDescription, setLocalDescription] = useState(description);
+  const [initialDescription, setInitialDescription] = useState('');
+  const hasInitialized = useRef(false);
   const visualViewportHeight = useVisualViewportHeight();
+
+  // Store initial state when sheet opens
+  if (open && !hasInitialized.current) {
+    setInitialDescription(description);
+    setLocalDescription(description);
+    hasInitialized.current = true;
+  }
+
+  // Reset initial state when sheet closes
+  if (!open && hasInitialized.current) {
+    hasInitialized.current = false;
+  }
 
   const handleSave = () => {
     onDescriptionChange(localDescription);
@@ -24,22 +38,15 @@ export function EventDescriptionSheet({
   };
 
   const handleCancel = () => {
-    setLocalDescription(description);
+    // Restore initial state
+    setLocalDescription(initialDescription);
     onOpenChange(false);
-  };
-
-  // Reset local state when sheet opens
-  const handleOpenChange = (isOpen: boolean) => {
-    if (isOpen) {
-      setLocalDescription(description);
-    }
-    onOpenChange(isOpen);
   };
 
   return (
     <Sheet
       open={open}
-      onOpenChange={handleOpenChange}
+      onOpenChange={onOpenChange}
       snapPoints={[100]}
       defaultPosition={0}
       modal
