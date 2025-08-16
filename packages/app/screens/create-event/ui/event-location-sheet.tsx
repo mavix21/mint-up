@@ -15,7 +15,7 @@ import { MapPin, Globe } from '@tamagui/lucide-icons';
 import { useStore } from '@tanstack/react-form';
 import { EventLocation } from 'app/entities/schemas';
 import { withForm } from 'app/shared/lib/form';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 
 import { createEventFormOpts } from '../model/shared-form';
 
@@ -37,12 +37,29 @@ export const EventLocationSheet = withForm({
       instructions?: string;
       url?: string;
     }>({});
+    const [initialLocation, setInitialLocation] = useState<EventLocation | null>(null);
+    const hasInitialized = useRef(false);
+
+    // Store initial state when sheet opens
+    if (open && !hasInitialized.current) {
+      setInitialLocation(form.state.values.location);
+      hasInitialized.current = true;
+    }
+
+    // Reset initial state when sheet closes
+    if (!open && hasInitialized.current) {
+      hasInitialized.current = false;
+    }
 
     const handleSave = () => {
       onOpenChange(false);
     };
 
     const handleCancel = () => {
+      // Restore initial state
+      if (initialLocation) {
+        form.setFieldValue('location', initialLocation);
+      }
       onOpenChange(false);
     };
 
