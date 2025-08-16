@@ -33,36 +33,40 @@ export const LoadingButton = ({
   ...props
 }: LoadingButtonProps) => {
   const displayLabel = isLoading ? loadingLabel || label : label;
-  const shouldShowIcon = icon && (!isLoading || showIconWhenLoading);
 
   return (
     <Button disabled={disabled || isLoading} {...props}>
       <View
-        animation="bouncy"
         flexDirection="row"
-        x={isLoading ? 0 : 15}
         gap="$3"
         alignItems="center"
         justifyContent="center"
+        position="relative"
       >
-        <Button.Text fontWeight="600">{displayLabel}</Button.Text>
-        <Button.Icon>
-          {shouldShowIcon ? (
-            <View>{icon}</View>
-          ) : (
-            <Spinner
-              key="loading-spinner"
-              animation="slow"
-              enterStyle={{
-                scale: 1,
-              }}
-              exitStyle={{
-                scale: 1,
-              }}
-              opacity={isLoading ? 1 : 0}
-            />
-          )}
-        </Button.Icon>
+        <View
+          animation="bouncy"
+          enterStyle={{
+            transform: [{ translateX: isLoading ? 15 : 0 }],
+          }}
+          transform={[
+            {
+              translateX: isLoading ? 0 : 15,
+            },
+          ]}
+        >
+          <Button.Text fontWeight="600">{displayLabel}</Button.Text>
+        </View>
+        <View
+          animation="bouncy"
+          enterStyle={{
+            opacity: isLoading ? 0 : 1,
+            scale: isLoading ? 0.8 : 1,
+          }}
+          opacity={isLoading ? 1 : 0}
+          scale={isLoading ? 1 : 0.8}
+        >
+          <Spinner key="loading-spinner" animation="slow" />
+        </View>
       </View>
     </Button>
   );
