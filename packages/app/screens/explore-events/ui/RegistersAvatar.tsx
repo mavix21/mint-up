@@ -8,13 +8,20 @@ export function RegistersAvatar({ event }: { event: ConvexEventWithExtras }) {
   // Use registration metadata from event data instead of separate queries
   const registrationCount = event.registrationCount ?? 0;
   const recentRegistrations = event.recentRegistrations ?? [];
+  const isUserHost = event.isHost;
 
   if (registrationCount === 0) {
     return (
       <View height="$1.5" justifyContent="center">
-        <SizableText size="$1" color="$color10">
-          Be the first to join this event.
-        </SizableText>
+        {isUserHost ? (
+          <SizableText size="$1" color="$color10">
+            Your event is live – start inviting attendees today.
+          </SizableText>
+        ) : (
+          <SizableText size="$1" color="$color10">
+            Be the first to join this event.
+          </SizableText>
+        )}
       </View>
     );
   }

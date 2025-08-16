@@ -433,7 +433,13 @@ Check it out 👇`,
                     </YStack>
 
                     <View>
-                      <SizableText size="$1">Be the first to join this event.</SizableText>
+                      {isUserHost ? (
+                        <SizableText size="$1">
+                          Your event is live – start inviting attendees today.
+                        </SizableText>
+                      ) : (
+                        <SizableText size="$1">Be the first to join this event.</SizableText>
+                      )}
                     </View>
                   </YStack>
                 ) : (
