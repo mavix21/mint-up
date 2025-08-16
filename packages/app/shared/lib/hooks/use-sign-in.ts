@@ -1,6 +1,6 @@
 import { useAuthenticate } from '@coinbase/onchainkit/minikit';
 import { getCsrfToken, signIn as nextAuthSignIn, useSession } from 'next-auth/react';
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 
 export const useSignIn = () => {
   const { data: session, status } = useSession();
@@ -35,10 +35,14 @@ export const useSignIn = () => {
     }
   }, [signIn]);
 
-  return {
-    signIn: handleSignIn,
-    session,
-    isSignedIn: status === 'authenticated',
-    isLoading: status === 'loading',
-  };
+  // Memoize the return object to prevent unnecessary rerenders
+  return useMemo(
+    () => ({
+      signIn: handleSignIn,
+      session,
+      isSignedIn: status === 'authenticated',
+      isLoading: status === 'loading',
+    }),
+    [handleSignIn, session, status]
+  );
 };

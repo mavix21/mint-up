@@ -1,15 +1,15 @@
-import { ChevronLeft, ChevronRight } from '@tamagui/lucide-icons'
-import { Button, XStack } from 'tamagui'
+import { ChevronLeft, ChevronRight } from '@tamagui/lucide-icons';
+import { Button, XStack } from 'tamagui';
 
 export type OnboardingControlsProps = {
-  currentIdx: number
-  onChange: (newIdx: number) => void
-  stepsCount: number
+  currentIdx: number;
+  onChange: (newIdx: number) => void;
+  stepsCount: number;
   /**
    * native only
    */
-  onFinish?: () => void
-}
+  onFinish?: () => void;
+};
 
 export const OnboardingControls = ({
   currentIdx,
@@ -19,18 +19,18 @@ export const OnboardingControls = ({
   const handleGoNext = () => {
     if (currentIdx + 1 > stepsCount - 1) {
       // onChange(0)
-      return
+      return;
     }
-    onChange(currentIdx + 1)
-  }
+    onChange(currentIdx + 1);
+  };
 
   const handleGoPrev = () => {
     if (currentIdx - 1 < 0) {
       // onChange(stepsCount - 1)
-      return
+      return;
     }
-    onChange(currentIdx - 1)
-  }
+    onChange(currentIdx - 1);
+  };
 
   return (
     <>
@@ -64,5 +64,5 @@ export const OnboardingControls = ({
         />
       </XStack>
     </>
-  )
-}
+  );
+};

@@ -1,6 +1,6 @@
-import { useSafeAreaInsets } from 'app/utils/useSafeAreaInsets'
-import { useRef, useState } from 'react'
-import { ScrollView as RNScrollView } from 'react-native'
+import { useSafeAreaInsets } from 'app/utils/useSafeAreaInsets';
+import { useRef, useState } from 'react';
+import { ScrollView as RNScrollView } from 'react-native';
 import {
   Circle,
   ScrollView,
@@ -10,42 +10,42 @@ import {
   XStack,
   YStack,
   useWindowDimensions,
-} from 'tamagui'
+} from 'tamagui';
 
-import { OnboardingProps } from './Onboarding'
-import { OnboardingControls } from './OnboardingControls'
+import { OnboardingProps } from './Onboarding';
+import { OnboardingControls } from './OnboardingControls';
 
 export const Onboarding = ({ onOnboarded, steps }: OnboardingProps) => {
-  const dimensions = useWindowDimensions()
-  const safeAreaInsets = useSafeAreaInsets()
+  const dimensions = useWindowDimensions();
+  const safeAreaInsets = useSafeAreaInsets();
 
-  const [stepIdx, _setStepIdx] = useState(0)
+  const [stepIdx, _setStepIdx] = useState(0);
   // prevent a background to ever "continue" animation / try to continue where it left off - cause looks weird
 
-  const [key, setKey] = useState(0)
-  const currentStep = steps[stepIdx]!
-  const stepsCount = steps.length
+  const [key, setKey] = useState(0);
+  const currentStep = steps[stepIdx]!;
+  const stepsCount = steps.length;
 
   const setStepIdx = (newIdx: number) => {
     if (stepIdx !== newIdx) {
-      _setStepIdx(newIdx)
-      setKey(key + 1)
+      _setStepIdx(newIdx);
+      setKey(key + 1);
     }
-  }
+  };
 
   const handleScroll: ScrollViewProps['onScroll'] = (event) => {
-    const val = event.nativeEvent.contentOffset.x / dimensions.width
-    const newIdx = Math.round(val)
+    const val = event.nativeEvent.contentOffset.x / dimensions.width;
+    const newIdx = Math.round(val);
     if (stepIdx !== newIdx) {
-      setStepIdx(newIdx)
+      setStepIdx(newIdx);
     }
-  }
+  };
 
   const changePage = (newStepIdx: number) => {
-    scrollRef.current?.scrollTo({ x: newStepIdx * dimensions.width, animated: true })
-  }
+    scrollRef.current?.scrollTo({ x: newStepIdx * dimensions.width, animated: true });
+  };
 
-  const scrollRef = useRef<RNScrollView>(null)
+  const scrollRef = useRef<RNScrollView>(null);
 
   return (
     <Theme name={currentStep.theme as ThemeName}>
@@ -70,7 +70,7 @@ export const Onboarding = ({ onOnboarded, steps }: OnboardingProps) => {
             onScroll={handleScroll}
           >
             {steps.map((step, idx) => {
-              const isActive = idx === stepIdx
+              const isActive = idx === stepIdx;
               return (
                 <YStack
                   key={idx}
@@ -78,13 +78,13 @@ export const Onboarding = ({ onOnboarded, steps }: OnboardingProps) => {
                 >
                   {isActive && <step.Content key={idx} />}
                 </YStack>
-              )
+              );
             })}
           </ScrollView>
           <XStack gap={10} jc="center" my="$4">
             {Array.from(Array(stepsCount)).map((_, idx) => {
-              const isActive = idx === stepIdx
-              return <Point key={idx} active={isActive} onPress={() => setStepIdx(idx)} />
+              const isActive = idx === stepIdx;
+              return <Point key={idx} active={isActive} onPress={() => setStepIdx(idx)} />;
             })}
           </XStack>
         </YStack>
@@ -96,8 +96,8 @@ export const Onboarding = ({ onOnboarded, steps }: OnboardingProps) => {
         />
       </YStack>
     </Theme>
-  )
-}
+  );
+};
 
 const Point = ({ active, onPress }: { active: boolean; onPress: () => void }) => {
   return (
@@ -108,11 +108,11 @@ const Point = ({ active, onPress }: { active: boolean; onPress: () => void }) =>
       onPress={onPress}
       bg={active ? '$color7' : '$color6'}
     />
-  )
-}
+  );
+};
 
 export const Background = () => {
-  const { height } = useWindowDimensions()
+  const { height } = useWindowDimensions();
   return (
     <YStack fullscreen jc="center" ai="center">
       <Circle
@@ -133,5 +133,5 @@ export const Background = () => {
         h={height * 3}
       />
     </YStack>
-  )
-}
+  );
+};

@@ -5,9 +5,17 @@ import { signOut, useSession } from 'next-auth/react';
 
 import { ThemeSwitch } from '../_components/ThemeSwitch';
 
+import { onboardingUtils } from '@/lib/utils/onboardingUtils';
+
 export default function SettingsPage() {
   const { data: session } = useSession();
-  console.log('[SettingsPage] SESSION', session);
+
+  const handleResetOnboarding = () => {
+    onboardingUtils.resetOnboarding();
+    // Reload the page to trigger onboarding again
+    window.location.reload();
+  };
+
   return (
     <YStack
       flex={1}
@@ -16,12 +24,20 @@ export default function SettingsPage() {
       height="100%"
       maxWidth={600}
       marginInline="auto"
+      gap="$4"
     >
       <Text>Settings</Text>
       <Text>{session?.user.username}</Text>
       <pre>{JSON.stringify(session?.user, null, 2)}</pre>
       <Button onPress={() => signOut()}>Sign Out</Button>
       <ThemeSwitch />
+
+      {/* Development-only reset onboarding button */}
+      {process.env.NODE_ENV === 'development' && (
+        <Button theme="orange" onPress={handleResetOnboarding}>
+          Reset Onboarding (Dev Only)
+        </Button>
+      )}
     </YStack>
   );
 }

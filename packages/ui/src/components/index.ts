@@ -8,6 +8,7 @@ export * from './FormWrapper';
 export * from './FullscreenSpinner';
 export * from './KVTable';
 export * from './Link';
+export * from './LoadingButton';
 export * from './Onboarding';
 export * from './OnboardingControls';
 export * from './OnboardingStepContent';
