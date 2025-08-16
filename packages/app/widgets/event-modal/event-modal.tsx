@@ -483,7 +483,12 @@ Check it out 👇`,
         />
       ) : null}
       {canViewTicket ? (
-        <TicketViewSheet open={showTicketViewSheet} onOpenChange={setShowTicketViewSheet} />
+        <TicketViewSheet
+          open={showTicketViewSheet}
+          onOpenChange={setShowTicketViewSheet}
+          eventId={eventData._id}
+          userId={session?.user.id}
+        />
       ) : null}
     </>
   );
