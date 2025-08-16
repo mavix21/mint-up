@@ -759,42 +759,46 @@ function TicketMesh({
               }}
             >
               {/* Verification Section */}
-              <div
-                style={{
-                  textAlign: 'center',
-                }}
-              >
+              {tokenId !== '' ? (
                 <div
                   style={{
-                    fontSize: '10px',
-                    color: styleConfig.labelColor,
-                    fontWeight: '500',
-                    marginBottom: '4px',
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.05em',
+                    textAlign: 'center',
                   }}
                 >
-                  VERIFICATION
+                  <div
+                    style={{
+                      fontSize: '10px',
+                      color: styleConfig.labelColor,
+                      fontWeight: '500',
+                      marginBottom: '4px',
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.05em',
+                    }}
+                  >
+                    VERIFICATION
+                  </div>
+                  <div
+                    style={{
+                      fontSize: '12px',
+                      fontWeight: '700',
+                      color: styleConfig.textColor,
+                      marginBottom: '4px',
+                    }}
+                  >
+                    BLOCKCHAIN CERTIFIED
+                  </div>
+                  <div
+                    style={{
+                      fontSize: '10px',
+                      color: styleConfig.secondaryColor,
+                    }}
+                  >
+                    Token ID: {tokenId}
+                  </div>
                 </div>
-                <div
-                  style={{
-                    fontSize: '12px',
-                    fontWeight: '700',
-                    color: styleConfig.textColor,
-                    marginBottom: '4px',
-                  }}
-                >
-                  BLOCKCHAIN CERTIFIED
-                </div>
-                <div
-                  style={{
-                    fontSize: '10px',
-                    color: styleConfig.secondaryColor,
-                  }}
-                >
-                  Token ID: {tokenId}
-                </div>
-              </div>
+              ) : (
+                <div style={{ height: '10px' }} />
+              )}
 
               {/* Event Organizer */}
               <div>
