@@ -65,7 +65,7 @@ body {
 }
 */
 
-/* body {
+body {
   height: 100vh !important;
   min-height: 100vh;
 
@@ -74,7 +74,7 @@ body {
     min-height: 100vh;
     overflow: hidden !important;
   }
-} */
+}
 
 input[type='time']::-webkit-calendar-picker-indicator {
   display: none !important;
