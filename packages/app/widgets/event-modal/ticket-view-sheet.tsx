@@ -41,6 +41,7 @@ const TicketViewSheet = ({ open, onOpenChange, eventId, userId }: TicketViewShee
       open={open}
       forceRemoveScrollEnabled={open}
       onOpenChange={handleOpenChange}
+      disableDrag
       snapPoints={[90]}
       snapPointsMode="percent"
       zIndex={200_000}
