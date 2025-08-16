@@ -16,6 +16,7 @@ import {
   Chip,
   Theme,
   Separator,
+  LoadingButton,
 } from '@my/ui';
 import { formatDate, formatDateTime, formatRelativeDate } from '@my/ui/src/lib/dates';
 import {
@@ -30,7 +31,7 @@ import {
   MoreVertical,
 } from '@tamagui/lucide-icons';
 import { RegistersAvatar } from 'app/screens/explore-events/ui/RegistersAvatar';
-import { useSession } from 'next-auth/react';
+import { useSignIn } from 'app/shared/lib/hooks/use-sign-in';
 import React, { Dispatch, SetStateAction } from 'react';
 import { usePathname, useRouter } from 'solito/navigation';
 
@@ -47,7 +48,7 @@ export function EventModal({
   setToggleEvent: Dispatch<SetStateAction<boolean>>;
   eventData: ConvexEventWithExtras;
 }) {
-  const { data: session } = useSession();
+  const { signIn, session, isLoading: signInLoading } = useSignIn();
   const { composeCast } = useComposeCast();
   const deleteRegistration = useMutation(api.registrations.deleteRegistration);
   const router = useRouter();
@@ -67,7 +68,8 @@ export function EventModal({
   // Check if user is already registered
   const isUserRegistered = eventData.userStatus && eventData.userStatus !== 'rejected';
   const isUserHost = eventData.isHost;
-  const canRegister = !isUserHost && !isUserRegistered;
+  const canRegister = session && !isUserHost && !isUserRegistered;
+  const needsSignIn = !session;
   const canCancelRegistration = session && isUserRegistered && eventData.userStatus !== 'minted';
   const canViewTicket = session && isUserRegistered && eventData.userStatus === 'minted';
 
@@ -242,16 +244,26 @@ Check it out 👇`,
                 )}
 
                 {/* Action Buttons - Only show if user is not host and not already registered */}
-                {canRegister && (
+                {(canRegister || needsSignIn) && (
                   <XStack gap="$3" justifyContent="space-between" alignItems="stretch">
-                    <Button
-                      flex={1}
-                      fontWeight="600"
-                      onPress={() => (tickets.length > 0 ? setShowTicketsSheet(true) : null)}
-                      themeInverse
-                    >
-                      <Button.Text>{getButtonText()}</Button.Text>
-                    </Button>
+                    {needsSignIn ? (
+                      <LoadingButton
+                        flex={1}
+                        label="Sign In to Register"
+                        isLoading={signInLoading}
+                        onPress={signIn}
+                        themeInverse
+                      />
+                    ) : (
+                      <Button
+                        flex={1}
+                        fontWeight="600"
+                        onPress={() => (tickets.length > 0 ? setShowTicketsSheet(true) : null)}
+                        themeInverse
+                      >
+                        <Button.Text>{getButtonText()}</Button.Text>
+                      </Button>
+                    )}
 
                     <Theme name="gray">
                       <Button size="$4" icon={<Share2 size={16} />}>
@@ -473,16 +485,26 @@ Check it out 👇`,
             </ScrollView>
 
             {/* Bottom Action - Only show if user is not host and not already registered */}
-            {canRegister && (
+            {(canRegister || needsSignIn) && (
               <View padding="$4" borderTopWidth={1} borderColor="$borderColor">
-                <Button
-                  width="100%"
-                  fontWeight="600"
-                  themeInverse
-                  onPress={() => (tickets.length > 0 ? setShowTicketsSheet(true) : null)}
-                >
-                  <Button.Text>{getButtonText()}</Button.Text>
-                </Button>
+                {needsSignIn ? (
+                  <LoadingButton
+                    width="100%"
+                    label="Sign In to Register"
+                    isLoading={signInLoading}
+                    onPress={signIn}
+                    themeInverse
+                  />
+                ) : (
+                  <Button
+                    width="100%"
+                    fontWeight="600"
+                    themeInverse
+                    onPress={() => (tickets.length > 0 ? setShowTicketsSheet(true) : null)}
+                  >
+                    <Button.Text>{getButtonText()}</Button.Text>
+                  </Button>
+                )}
               </View>
             )}
           </YStack>
@@ -502,7 +524,7 @@ Check it out 👇`,
           open={showTicketViewSheet}
           onOpenChange={setShowTicketViewSheet}
           eventId={eventData._id}
-          userId={session?.user.id}
+          userId={session.user.id}
         />
       ) : null}
     </>
