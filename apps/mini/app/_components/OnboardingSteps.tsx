@@ -22,7 +22,7 @@ const WelcomeContent = memo(() => (
         textAlign="center"
         color="$color11"
       >
-        Welcome to Mint Up
+        Welcome to Mint Up!
       </SizableText>
       <Paragraph userSelect="none" size="$5" textAlign="center" color="$color11" maxWidth={372}>
         Create, discover, and collect digital experiences with blockchain-powered event tickets
