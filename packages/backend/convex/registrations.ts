@@ -366,6 +366,7 @@ export const getRegistrationTicketByEventIdUserId = query({
     const organizer = await ctx.db.get(event.hosts[0].userId);
 
     return {
+      id: registration._id,
       eventId: event._id,
       eventName: event.name,
       eventImageUrl: (await ctx.storage.getUrl(event.image)) ?? '',

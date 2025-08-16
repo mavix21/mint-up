@@ -1,7 +1,8 @@
+import { useComposeCast } from '@coinbase/onchainkit/minikit';
 import { api } from '@my/backend/_generated/api';
 import { Id } from '@my/backend/_generated/dataModel';
 import { useQuery } from '@my/backend/react';
-import { formatRelativeDate, FullscreenSpinner, Sheet } from '@my/ui';
+import { formatRelativeDate, FullscreenSpinner, Sheet, Button, YStack } from '@my/ui';
 import dynamic from 'next/dynamic';
 import { memo } from 'react';
 
@@ -18,6 +19,8 @@ export interface TicketViewSheetProps {
 }
 
 const TicketViewSheet = ({ open, onOpenChange, eventId, userId }: TicketViewSheetProps) => {
+  const { composeCast } = useComposeCast();
+
   // Reset local state when sheet opens
   const handleOpenChange = (isOpen: boolean) => {
     onOpenChange(isOpen);
@@ -35,6 +38,17 @@ const TicketViewSheet = ({ open, onOpenChange, eventId, userId }: TicketViewShee
   const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(
     `https://mint-up-mini.vercel.app/events/${registration.eventId}`
   )}`;
+
+  const handleTicketShare = () => {
+    try {
+      composeCast({
+        text: `It’s official — I’m going to ${registration.eventName}! 🚀 Grab your ticket and join me!`,
+        embeds: [`https://mint-up-mini.vercel.app/registrations/${registration.id}`],
+      });
+    } catch (error) {
+      console.error('Failed to compose cast:', error);
+    }
+  };
 
   return (
     <Sheet
@@ -77,6 +91,12 @@ const TicketViewSheet = ({ open, onOpenChange, eventId, userId }: TicketViewShee
             style="silver"
           />
         </Sheet.ScrollView>
+
+        <YStack paddingBottom="$8" paddingHorizontal="$4">
+          <Button size="$4" theme="active" onPress={handleTicketShare} width="100%">
+            Share my ticket
+          </Button>
+        </YStack>
       </Sheet.Frame>
     </Sheet>
   );

@@ -3,7 +3,7 @@
 import { api } from '@my/backend/_generated/api';
 import { Id } from '@my/backend/_generated/dataModel';
 import { useQuery } from '@my/backend/react';
-import { formatRelativeDate, FullscreenSpinner } from '@my/ui';
+import { formatRelativeDate } from '@my/ui';
 import NFTTicket from 'app/entities/nft-ticket/nft-ticket';
 
 export const ShareableTicketViewScreen = ({ id }: { id: string }) => {
@@ -12,7 +12,7 @@ export const ShareableTicketViewScreen = ({ id }: { id: string }) => {
   });
 
   if (!registration) {
-    return <FullscreenSpinner />;
+    return null;
   }
 
   const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(
