@@ -12,14 +12,6 @@ export default function App() {
   const { hasCompletedOnboarding, isLoading: isOnboardingLoading } = useOnboarding();
   const [userCompletedOnboarding, setUserCompletedOnboarding] = useState(false);
 
-  // Debug logging to track state changes
-  console.log('App render:', {
-    isFrameReady,
-    hasCompletedOnboarding,
-    isOnboardingLoading,
-    userCompletedOnboarding,
-  });
-
   // Show loading spinner while frame is not ready or onboarding status is being determined
   if (!isFrameReady || isOnboardingLoading) {
     return <FullPageSpinner />;
@@ -30,8 +22,6 @@ export default function App() {
     return (
       <OnboardingWrapper
         onComplete={() => {
-          console.log('onComplete called from App component');
-          // Immediately set local state to show Navigator
           setUserCompletedOnboarding(true);
         }}
       />
