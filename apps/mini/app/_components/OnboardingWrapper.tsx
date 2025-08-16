@@ -19,7 +19,6 @@ export function OnboardingWrapper({ onComplete }: OnboardingWrapperProps) {
   // Complete onboarding when user is successfully authenticated
   useEffect(() => {
     if (isSignedIn && session) {
-      console.log('✅ Authentication completed, finishing onboarding');
       completeOnboarding();
       onComplete();
     }
@@ -27,13 +26,11 @@ export function OnboardingWrapper({ onComplete }: OnboardingWrapperProps) {
 
   // Memoize the callback functions to prevent infinite rerenders
   const handleOnboardingComplete = useCallback(() => {
-    console.log('🎉 Onboarding completed (guest mode)');
     completeOnboarding();
     onComplete();
   }, [completeOnboarding, onComplete]);
 
   const handleSignIn = useCallback(() => {
-    console.log('🔐 Sign in initiated');
     signIn();
     // Don't complete onboarding here - wait for authentication to complete
     // The useEffect above will handle completion when user is authenticated
