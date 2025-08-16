@@ -47,9 +47,7 @@ const getStyleConfig = (style: TicketStyle) => {
           inset 0 1px 0 rgba(255,255,255,0.9),
           inset 0 -1px 0 rgba(0,0,0,0.1),
           inset 1px 0 0 rgba(255,255,255,0.5),
-          inset -1px 0 0 rgba(0,0,0,0.1),
-          0 10px 25px rgba(0,0,0,0.3),
-          0 5px 10px rgba(0,0,0,0.2)
+          inset -1px 0 0 rgba(0,0,0,0.1)
         `,
         shimmer:
           'linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.4) 50%, transparent 70%)',
@@ -69,9 +67,7 @@ const getStyleConfig = (style: TicketStyle) => {
           inset 0 1px 0 rgba(255,255,255,0.9),
           inset 0 -1px 0 rgba(0,0,0,0.1),
           inset 1px 0 0 rgba(255,255,255,0.5),
-          inset -1px 0 0 rgba(0,0,0,0.1),
-          0 10px 25px rgba(0,0,0,0.3),
-          0 5px 10px rgba(0,0,0,0.2)
+          inset -1px 0 0 rgba(0,0,0,0.1)
         `,
         shimmer:
           'linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.4) 50%, transparent 70%)',
@@ -91,9 +87,7 @@ const getStyleConfig = (style: TicketStyle) => {
           inset 0 1px 0 rgba(255,255,255,0.9),
           inset 0 -1px 0 rgba(0,0,0,0.1),
           inset 1px 0 0 rgba(255,255,255,0.5),
-          inset -1px 0 0 rgba(0,0,0,0.1),
-          0 10px 25px rgba(0,0,0,0.3),
-          0 5px 10px rgba(0,0,0,0.2)
+          inset -1px 0 0 rgba(0,0,0,0.1)
         `,
         shimmer:
           'linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.3) 50%, transparent 70%)',
@@ -723,7 +717,7 @@ function TicketMesh({
                 transform: 'translateY(-50%)',
                 width: '16px',
                 height: '16px',
-                backgroundColor: '#111827',
+                backgroundColor: 'var(--color2)',
                 borderRadius: '50%',
                 boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
                 zIndex: 20,
@@ -739,7 +733,7 @@ function TicketMesh({
                 transform: 'translateY(-50%)',
                 width: '16px',
                 height: '16px',
-                backgroundColor: '#111827',
+                backgroundColor: 'var(--color2)',
                 borderRadius: '50%',
                 boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
                 zIndex: 20,
@@ -944,7 +938,7 @@ export default function NFTTicket(props: NFTTicketProps) {
   console.log('NFTTicket', props);
   return (
     <View height="100%" w="100%" backgroundColor="$color2">
-      <Canvas camera={{ position: [0, 0, 30], fov: 40 }}>
+      <Canvas camera={{ position: [0, 0, 25], fov: 40 }}>
         <ambientLight intensity={0.8} />
         <pointLight position={[10, 10, 10]} intensity={1.2} />
         <pointLight position={[-10, -10, -10]} intensity={0.8} />
@@ -952,8 +946,8 @@ export default function NFTTicket(props: NFTTicketProps) {
         <OrbitControls
           enablePan={false}
           enableZoom
-          minDistance={18}
-          maxDistance={40}
+          minDistance={12}
+          maxDistance={35}
           autoRotate={false}
           minPolarAngle={Math.PI / 2}
           maxPolarAngle={Math.PI / 2}
