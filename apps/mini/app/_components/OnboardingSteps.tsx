@@ -67,7 +67,6 @@ const ReadyContent = memo(({ onSignIn, onComplete, isLoading }: OnboardingStepsP
       <YStack gap="$3" mt="$4" width="100%" maxWidth={280}>
         <LoadingButton
           size="$4"
-          icon={<LogIn size={16} />}
           onPress={onSignIn}
           isLoading={isLoading}
           label="Sign In & Continue"
