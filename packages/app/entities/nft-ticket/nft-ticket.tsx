@@ -208,7 +208,6 @@ function TicketMesh({
             display: 'flex',
             flexDirection: 'column',
             background: styleConfig.background,
-            boxShadow: styleConfig.boxShadow,
           }}
         >
           <div
@@ -282,9 +281,8 @@ function TicketMesh({
                 transform: 'translateY(-50%)',
                 width: '16px',
                 height: '16px',
-                backgroundColor: '#111827',
+                backgroundColor: 'var(--color2)',
                 borderRadius: '50%',
-                boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
                 zIndex: 20,
               }}
             />
@@ -298,7 +296,7 @@ function TicketMesh({
                 transform: 'translateY(-50%)',
                 width: '16px',
                 height: '16px',
-                backgroundColor: '#111827',
+                backgroundColor: 'var(--color2)',
                 borderRadius: '50%',
                 boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
                 zIndex: 20,
@@ -373,7 +371,7 @@ function TicketMesh({
                 >
                   <div
                     style={{
-                      fontSize: '30px',
+                      fontSize: '24px',
                       fontWeight: '900',
                       color: styleConfig.textColor,
                       lineHeight: '1',
@@ -430,7 +428,7 @@ function TicketMesh({
                 >
                   <div
                     style={{
-                      fontSize: '30px',
+                      fontSize: '24px',
                       fontWeight: '900',
                       color: styleConfig.textColor,
                       lineHeight: '1',
@@ -945,7 +943,7 @@ function TicketMesh({
 export default function NFTTicket(props: NFTTicketProps) {
   console.log('NFTTicket', props);
   return (
-    <View height={'100vh' as any} w="100%" backgroundColor="$color2">
+    <View height="100%" w="100%" backgroundColor="$color2">
       <Canvas camera={{ position: [0, 0, 30], fov: 40 }}>
         <ambientLight intensity={0.8} />
         <pointLight position={[10, 10, 10]} intensity={1.2} />
