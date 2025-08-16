@@ -44,14 +44,7 @@ export const MyEventsScreen = () => {
   if (!allUserEvents) return <FullscreenSpinner />;
 
   return (
-    <YStack
-      fullscreen
-      maxWidth={600}
-      marginInline="auto"
-      height="100%"
-      py="$3"
-      overflowBlock="hidden"
-    >
+    <YStack fullscreen maxWidth={600} marginInline="auto" height="100%" overflowBlock="hidden">
       <View mb="$4" px="$4">
         <H3 mb="$2">My Events</H3>
         <Paragraph color="$color11">Your digital experiences collection ✨</Paragraph>
@@ -62,11 +55,12 @@ export const MyEventsScreen = () => {
         flexDirection="column"
         overflowBlock="hidden"
         height="100%"
+        flex={1}
         size="$3"
         px="$4"
       >
         <Tabs.List
-          mb="$6"
+          mb="$4"
           borderColor="$borderColor"
           borderWidth={1}
           width="100%"
@@ -80,10 +74,10 @@ export const MyEventsScreen = () => {
           </Tabs.Tab>
         </Tabs.List>
 
-        <Tabs.Content value="upcoming" height="100%" paddingBottom={160}>
-          <ScrollView flex={1} height="100%" maxHeight="100%">
-            {upcomingEvents.length > 0 ? (
-              groupByDate(
+        <Tabs.Content value="upcoming" height="100%" overflowBlock="hidden" flex={1}>
+          {upcomingEvents.length > 0 ? (
+            <ScrollView flex={1}>
+              {groupByDate(
                 upcomingEvents,
                 (event) => {
                   const date = new Date(event.startDate);
@@ -122,58 +116,65 @@ export const MyEventsScreen = () => {
                     </View>
                   </View>
                 </View>
-              ))
-            ) : upcomingEvents.length <= 0 ? (
-              <YStack flex={1} justifyContent="center" alignItems="center" gap="$4" padding="$4">
-                <Authenticated>
-                  <YStack gap="$2.5" alignItems="center" justifyContent="center">
-                    <CalendarPlus size="$8" color="$color8" />
-                    <SizableText size="$6" fontWeight="bold" color="$color10" textAlign="center">
-                      No Upcoming Events Yet!
-                    </SizableText>
-                    <SizableText size="$4" color="$color9" textAlign="center" maxWidth={300}>
-                      It looks like you don&apos;t have any events planned. Create a new one or
-                      explore what&apos;s happening!
-                    </SizableText>
-                  </YStack>
-                </Authenticated>
-                <Unauthenticated>
-                  <YStack gap="$2.5" alignItems="center" justifyContent="center">
-                    <LogIn size="$8" color="$color8" />
-                    <SizableText size="$6" fontWeight="bold" color="$color10" textAlign="center">
-                      Sign In to Create Events!
-                    </SizableText>
-                    <SizableText size="$4" color="$color9" textAlign="center" maxWidth={300}>
-                      Join our community to create amazing events and build your digital experiences
-                      collection.
-                    </SizableText>
-                    <Button
-                      theme="green"
-                      size="$4"
-                      icon={<LogIn size={16} />}
-                      onPress={signIn}
-                      mt="$2"
-                    >
-                      Sign In
-                    </Button>
-                  </YStack>
-                </Unauthenticated>
-              </YStack>
-            ) : (
-              <YStack>
-                <CardSkeleton />
-                <CardSkeleton />
-                <CardSkeleton />
-                <CardSkeleton />
-              </YStack>
-            )}
-          </ScrollView>
+              ))}
+            </ScrollView>
+          ) : upcomingEvents.length <= 0 ? (
+            <YStack
+              height="100%"
+              alignItems="center"
+              justifyContent="center"
+              flex={1}
+              gap="$4"
+              padding="$4"
+            >
+              <Authenticated>
+                <YStack gap="$2.5" alignItems="center" justifyContent="center">
+                  <CalendarPlus size="$8" color="$color8" />
+                  <SizableText size="$6" fontWeight="bold" color="$color10" textAlign="center">
+                    No Upcoming Events Yet!
+                  </SizableText>
+                  <SizableText size="$4" color="$color9" textAlign="center" maxWidth={300}>
+                    It looks like you don&apos;t have any events planned. Create a new one or
+                    explore what&apos;s happening!
+                  </SizableText>
+                </YStack>
+              </Authenticated>
+              <Unauthenticated>
+                <YStack gap="$2.5" alignItems="center" justifyContent="center">
+                  <LogIn size="$8" color="$color8" />
+                  <SizableText size="$6" fontWeight="bold" color="$color10" textAlign="center">
+                    Sign In to Create Events!
+                  </SizableText>
+                  <SizableText size="$4" color="$color9" textAlign="center" maxWidth={300}>
+                    Join our community to create amazing events and build your digital experiences
+                    collection.
+                  </SizableText>
+                  <Button
+                    theme="green"
+                    size="$4"
+                    icon={<LogIn size={16} />}
+                    onPress={signIn}
+                    mt="$2"
+                  >
+                    Sign In
+                  </Button>
+                </YStack>
+              </Unauthenticated>
+            </YStack>
+          ) : (
+            <YStack>
+              <CardSkeleton />
+              <CardSkeleton />
+              <CardSkeleton />
+              <CardSkeleton />
+            </YStack>
+          )}
         </Tabs.Content>
 
-        <Tabs.Content value="past" height="100%" paddingBottom={160}>
-          <ScrollView flex={1} height="100%" maxHeight="100%">
-            {pastEvents.length > 0 ? (
-              groupByDate(
+        <Tabs.Content value="past" height="100%" overflowBlock="hidden" flex={1}>
+          {pastEvents.length > 0 ? (
+            <ScrollView flex={1}>
+              {groupByDate(
                 pastEvents,
                 (event) => {
                   const date = new Date(event.startDate);
@@ -210,51 +211,58 @@ export const MyEventsScreen = () => {
                     </View>
                   </View>
                 </View>
-              ))
-            ) : pastEvents.length <= 0 ? (
-              <YStack flex={1} justifyContent="center" alignItems="center" space="$4" padding="$4">
-                <Authenticated>
-                  <YStack gap="$2.5" alignItems="center" justifyContent="center">
-                    <History size="$8" color="$gray8" />
-                    <SizableText size="$6" fontWeight="bold" color="$gray10" textAlign="center">
-                      No Past Events Found
-                    </SizableText>
-                    <SizableText size="$4" color="$gray9" textAlign="center" maxWidth={300}>
-                      Once you attend or create events, they&apos;ll appear here for your review.
-                      Start joining now!
-                    </SizableText>
-                  </YStack>
-                </Authenticated>
-                <Unauthenticated>
-                  <YStack gap="$2.5" alignItems="center" justifyContent="center">
-                    <History size="$8" color="$color8" />
-                    <SizableText size="$6" fontWeight="bold" color="$color10" textAlign="center">
-                      Your Event History Awaits!
-                    </SizableText>
-                    <SizableText size="$4" color="$color9" textAlign="center" maxWidth={300}>
-                      Sign in to view your past events and track your digital experiences journey.
-                    </SizableText>
-                    <Button
-                      theme="green"
-                      size="$4"
-                      icon={<LogIn size={16} />}
-                      onPress={signIn}
-                      mt="$2"
-                    >
-                      Sign In
-                    </Button>
-                  </YStack>
-                </Unauthenticated>
-              </YStack>
-            ) : (
-              <YStack>
-                <CardSkeleton />
-                <CardSkeleton />
-                <CardSkeleton />
-                <CardSkeleton />
-              </YStack>
-            )}
-          </ScrollView>
+              ))}
+            </ScrollView>
+          ) : pastEvents.length <= 0 ? (
+            <YStack
+              flex={1}
+              height="100%"
+              justifyContent="center"
+              alignItems="center"
+              gap="$4"
+              padding="$4"
+            >
+              <Authenticated>
+                <YStack gap="$2.5" alignItems="center" justifyContent="center">
+                  <History size="$8" color="$gray8" />
+                  <SizableText size="$6" fontWeight="bold" color="$gray10" textAlign="center">
+                    No Past Events Found
+                  </SizableText>
+                  <SizableText size="$4" color="$gray9" textAlign="center" maxWidth={300}>
+                    Once you attend or create events, they&apos;ll appear here for your review.
+                    Start joining now!
+                  </SizableText>
+                </YStack>
+              </Authenticated>
+              <Unauthenticated>
+                <YStack gap="$2.5" alignItems="center" justifyContent="center">
+                  <History size="$8" color="$color8" />
+                  <SizableText size="$6" fontWeight="bold" color="$color10" textAlign="center">
+                    Your Event History Awaits!
+                  </SizableText>
+                  <SizableText size="$4" color="$color9" textAlign="center" maxWidth={300}>
+                    Sign in to view your past events and track your digital experiences journey.
+                  </SizableText>
+                  <Button
+                    theme="green"
+                    size="$4"
+                    icon={<LogIn size={16} />}
+                    onPress={signIn}
+                    mt="$2"
+                  >
+                    Sign In
+                  </Button>
+                </YStack>
+              </Unauthenticated>
+            </YStack>
+          ) : (
+            <YStack>
+              <CardSkeleton />
+              <CardSkeleton />
+              <CardSkeleton />
+              <CardSkeleton />
+            </YStack>
+          )}
         </Tabs.Content>
       </Tabs>
     </YStack>
