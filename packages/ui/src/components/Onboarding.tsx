@@ -1,5 +1,5 @@
 import { useSafeAreaInsets } from 'app/utils/useSafeAreaInsets';
-import React, { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useMemo } from 'react';
 import { PanResponder } from 'react-native';
 import {
   AnimatePresence,
@@ -62,7 +62,7 @@ export const Onboarding = ({ onOnboarded, autoSwipe, steps }: OnboardingProps) =
     }
   }, [stepIdx, autoSwipe, stepsCount, setStepIdx]);
 
-  const panResponder = React.useMemo(() => {
+  const panResponder = useMemo(() => {
     return PanResponder.create({
       onMoveShouldSetPanResponderCapture: (_event, gesture) => {
         const THRESHOLD = 100;
