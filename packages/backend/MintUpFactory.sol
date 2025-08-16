@@ -23,7 +23,8 @@ contract MintUpFactory is ERC1155, Ownable, ReentrancyGuard {
 
   struct TicketParams {
     uint256 priceUSDC;
-    uint256 maxSupply; // 0 for unlimited
+    uint256 maxSupply;      // 0 for unlimited
+    uint256 mintsPerWallet; // 0 for unlimited
     string metadataURI;
   }
 
@@ -31,6 +32,7 @@ contract MintUpFactory is ERC1155, Ownable, ReentrancyGuard {
     uint256 priceUSDC;
     uint256 maxSupply;
     uint256 mintedSupply;
+    uint256 mintsPerWallet;
     string metadataURI;
   }
 
@@ -43,7 +45,7 @@ contract MintUpFactory is ERC1155, Ownable, ReentrancyGuard {
 
   mapping(uint256 => EventInfo) public eventInfo;         // eventId => eventInfo
   mapping(uint256 => TicketDetails) public ticketDetails; // eventId => ticketDetails
-  mapping(uint256 => uint256) public pendingUSDC;         // organizer => amount
+  mapping(uint256 => mapping(address => uint256)) public mintsPerWallet; // tokenId => wallet => mints
 
   event EventCreated(uint256 indexed eventId, address indexed organizer, uint256 ticketCount);
   event TicketCreated(
@@ -56,15 +58,13 @@ contract MintUpFactory is ERC1155, Ownable, ReentrancyGuard {
   event TicketMinted(
     uint256 indexed tokenId,
     address indexed buyer,
-    uint256 indexed organizer
+    address indexed organizer
   );
-  event WithdrawUSDC(address indexed to, uint256 amount);
 
-  constructor(address initialOwner, address _usdcContractAddress) ERC1155("") {
+  constructor(address initialOwner, address _usdcContractAddress) ERC1155("") Ownable(initialOwner) {
     require(_usdcContractAddress != address(0), "Invalid USDC address");
     usdcToken = IERC20(_usdcContractAddress);
     _nextEventId = 1;
-    _transferOwnership(initialOwner);
   }
 
   function createEventWithTickets(
@@ -73,5 +73,100 @@ contract MintUpFactory is ERC1155, Ownable, ReentrancyGuard {
   ) external onlyOwner returns (uint256) {
     require(_organizer != address(0), "Invalid organizer address");
     require(_tickets.length > 0, "At least one ticket is required");
+
+    uint256 eventId = _nextEventId;
+    require(eventId < (uint256(1) << TYPE_BITS), "Event ID overflow");
+
+    eventInfo[eventId] = EventInfo({
+      organizer: _organizer,
+      ticketTypeCount: _tickets.length
+    });
+
+    for (uint256 i = 0; i < _tickets.length; i++) {
+      require(i < (uint256(1) << TYPE_BITS), "Ticket index overflow");
+      uint256 tokenId = (eventId << TYPE_BITS) | i;
+
+      ticketDetails[tokenId] = TicketDetails({
+        priceUSDC: _tickets[i].priceUSDC,
+        maxSupply: _tickets[i].maxSupply,
+        mintsPerWallet: _tickets[i].mintsPerWallet,
+        mintedSupply: 0,
+        metadataURI: _tickets[i].metadataURI
+      });
+
+      emit URI(_tickets[i].metadataURI, tokenId);
+      emit TicketCreated(tokenId, eventId, i, _tickets[i].priceUSDC, _tickets[i].maxSupply);
+    }
+
+    emit EventCreated(eventId, _organizer, _tickets.length);
+    _nextEventId++;
+
+    return eventId;
+  }
+
+  function mintTicket(uint256 _tokenId) external nonReentrant {
+    uint256 eventId = _tokenId >> TYPE_BITS;
+    EventInfo storage ev = eventInfo[eventId];
+    require(ev.organizer != address(0), "Event not found");
+
+    uint256 ticketIndex = _tokenId & TYPE_MASK;
+    require(ticketIndex < ev.ticketTypeCount, "Invalid ticket type");
+
+    TicketDetails storage t = ticketDetails[_tokenId];
+    if (t.maxSupply > 0) {
+      require(t.mintedSupply < t.maxSupply, "Ticket sold out");
+    }
+    if (t.mintsPerWallet > 0) {
+      require(mintsPerWallet[_tokenId][msg.sender] < t.mintsPerWallet, "Max tickets per wallet reached");
+    }
+
+    t.mintedSupply++;
+    if (t.mintsPerWallet > 0) {
+      mintsPerWallet[_tokenId][msg.sender]++;
+    }
+
+    uint256 price = t.priceUSDC;
+    if (price > 0) {
+      usdcToken.safeTransferFrom(msg.sender, ev.organizer, price);
+    }
+    
+    _mint(msg.sender, _tokenId, 1, "");
+    emit TicketMinted(_tokenId, msg.sender, ev.organizer);
+  }
+
+  function uri(uint256 _tokenId) public view override returns (string memory) {
+    uint256 eventId = _tokenId >> TYPE_BITS;
+    require(eventInfo[eventId].organizer != address(0), "Token does not exist");
+    return ticketDetails[_tokenId].metadataURI;
+  }
+
+  function getTokenId(uint256 eventId, uint256 ticketIndex) public pure returns (uint256) {
+    require(eventId < (uint256(1) << TYPE_BITS) && ticketIndex < (uint256(1) << TYPE_BITS), "overflow");
+    return (eventId << TYPE_BITS) | ticketIndex;
+  }
+
+  function extractEventId(uint256 tokenId) public pure returns (uint256) {
+    return tokenId >> TYPE_BITS;
+  }
+
+  function extractTicketIndex(uint256 tokenId) public pure returns (uint256) {
+    return tokenId & TYPE_MASK;
+  }
+
+  function getTicketDetails(uint256 tokenId) external view returns (
+    uint256 priceUSDC,
+    uint256 maxSupply,
+    uint256 _mintsPerWallet,
+    uint256 mintedSupply,
+    string memory metadataURI,
+    address organizer
+  ) {
+    TicketDetails storage t = ticketDetails[tokenId];
+    EventInfo storage ev = eventInfo[tokenId >> TYPE_BITS];
+    return (t.priceUSDC, t.maxSupply, t.mintsPerWallet, t.mintedSupply, t.metadataURI, ev.organizer);
+  }
+
+  function rescueERC20(address token, address to, uint256 amount) external onlyOwner {
+    IERC20(token).safeTransfer(to, amount);
   }
 }
