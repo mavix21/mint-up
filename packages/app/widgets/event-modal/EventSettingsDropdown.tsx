@@ -6,20 +6,15 @@ interface EventSettingsDropdownProps {
   triggerOpen: boolean;
   setTriggerOpen: (open: boolean) => void;
   onCancelRegistration: () => void;
+  canCancelRegistration: boolean;
 }
 
 export function EventSettingsDropdown({
   triggerOpen,
   setTriggerOpen,
   onCancelRegistration,
+  canCancelRegistration,
 }: EventSettingsDropdownProps) {
-  const logout = signOut;
-
-  const handleLogout = () => {
-    logout();
-    setTriggerOpen(false);
-  };
-
   return (
     <View position="relative">
       <Button
@@ -44,9 +39,11 @@ export function EventSettingsDropdown({
           marginTop="$1"
         >
           <YStack>
-            <DropdownItem onPress={onCancelRegistration}>
-              <DropdownText ai="center">Cancel Registration</DropdownText>
-            </DropdownItem>
+            {canCancelRegistration && (
+              <DropdownItem onPress={onCancelRegistration}>
+                <DropdownText ai="center">Cancel Registration</DropdownText>
+              </DropdownItem>
+            )}
           </YStack>
         </View>
       )}

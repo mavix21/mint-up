@@ -324,6 +324,7 @@ Check it out 👇`,
                       <EventSettingsDropdown
                         triggerOpen={triggerOpen}
                         setTriggerOpen={setTriggerOpen}
+                        canCancelRegistration={canCancelRegistration}
                         onCancelRegistration={handleCancelRegistration}
                       />
                     </Theme>
