@@ -1,5 +1,5 @@
-import { Button, Dialog, YStack } from '@my/ui';
-import { LogIn, X } from '@tamagui/lucide-icons';
+import { Button, Dialog, LoadingButton, Theme, YStack } from '@my/ui';
+import { X } from '@tamagui/lucide-icons';
 import { useSignIn } from 'app/shared/lib/hooks/use-sign-in';
 import { memo } from 'react';
 
@@ -61,18 +61,18 @@ export const SignInPromptModal = memo(function SignInPromptModal({
           </Dialog.Description>
 
           <YStack gap="$3" mt="$2">
-            <Button
-              theme="green"
-              icon={<LogIn size={16} />}
-              onPress={handleSignIn}
-              disabled={isLoading || isSignedIn}
-            >
-              {isLoading ? 'Signing In...' : isSignedIn ? 'Signed In' : 'Sign In'}
-            </Button>
-
-            <Button onPress={() => onOpenChange(false)} disabled={isLoading}>
-              Maybe Later
-            </Button>
+            <Theme name="green">
+              <LoadingButton
+                themeInverse
+                onPress={handleSignIn}
+                disabled={isLoading || isSignedIn}
+                label="Sign In"
+                isLoading={isLoading}
+              />
+              <Button onPress={() => onOpenChange(false)} disabled={isLoading}>
+                Maybe Later
+              </Button>
+            </Theme>
           </YStack>
 
           <Dialog.Close asChild>
