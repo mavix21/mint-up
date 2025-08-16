@@ -1,4 +1,4 @@
-import { Button, ButtonProps, Spinner, View } from '@my/ui';
+import { Button, ButtonProps, Spinner, useTheme, View } from '@my/ui';
 
 export interface LoadingButtonProps extends ButtonProps {
   /**
@@ -30,12 +30,13 @@ export const LoadingButton = ({
   icon,
   showIconWhenLoading = false,
   disabled,
+  themeInverse,
   ...props
 }: LoadingButtonProps) => {
   const displayLabel = isLoading ? loadingLabel || label : label;
 
   return (
-    <Button disabled={disabled || isLoading} {...props}>
+    <Button themeInverse={themeInverse} disabled={disabled || isLoading} {...props}>
       <View
         flexDirection="row"
         gap="$3"
@@ -46,7 +47,7 @@ export const LoadingButton = ({
         <View
           animation="bouncy"
           enterStyle={{
-            transform: [{ translateX: isLoading ? 15 : 0 }],
+            transform: [{ translateX: 15 }],
           }}
           transform={[
             {
@@ -59,13 +60,13 @@ export const LoadingButton = ({
         <View
           animation="bouncy"
           enterStyle={{
-            opacity: isLoading ? 0 : 1,
-            scale: isLoading ? 0.8 : 1,
+            opacity: 0,
+            scale: 0.8,
           }}
           opacity={isLoading ? 1 : 0}
           scale={isLoading ? 1 : 0.8}
         >
-          <Spinner key="loading-spinner" animation="slow" />
+          <Spinner color="$color11" key="loading-spinner" animation="slow" />
         </View>
       </View>
     </Button>
