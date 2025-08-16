@@ -53,7 +53,7 @@ export const EventLocationSheet = withForm({
         open={open}
         forceRemoveScrollEnabled={open}
         onOpenChange={onOpenChange}
-        snapPoints={[90]}
+        snapPoints={[100]}
         defaultPosition={0}
         modal
         dismissOnOverlayPress
@@ -65,7 +65,6 @@ export const EventLocationSheet = withForm({
           enterStyle={{ opacity: 0 }}
           exitStyle={{ opacity: 0 }}
         />
-        <Sheet.Handle backgroundColor="$color2" />
         <Sheet.Frame
           padding="$4"
           backgroundColor="$color2"
@@ -171,7 +170,7 @@ export const EventLocationSheet = withForm({
                     name="location.instructions"
                     children={(field) => {
                       return (
-                        <YStack gap="$1" flex={1}>
+                        <YStack gap="$1" flex={1} maxHeight={200}>
                           <Label htmlFor="instructions" fontWeight="500">
                             Additional Instructions
                           </Label>
@@ -184,7 +183,6 @@ export const EventLocationSheet = withForm({
                             borderColor="$color5"
                             borderRadius="$4"
                             flex={1}
-                            minHeight={100}
                           />
                         </YStack>
                       );
@@ -221,7 +219,7 @@ export const EventLocationSheet = withForm({
             </YStack>
 
             {/* Action Buttons */}
-            <XStack gap="$3" py="$4" backgroundColor="$color2">
+            <XStack gap="$3" backgroundColor="$color2">
               <Button flex={1} theme="red" onPress={handleCancel}>
                 Cancel
               </Button>

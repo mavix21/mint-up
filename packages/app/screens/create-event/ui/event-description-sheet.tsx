@@ -85,7 +85,7 @@ export function EventDescriptionSheet({
           {/* Fixed Bottom Button */}
           <XStack
             gap="$3"
-            p="$4"
+            px="$4"
             borderTopWidth={1}
             borderTopColor="$color4"
             backgroundColor="$color2"

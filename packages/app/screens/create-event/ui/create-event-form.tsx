@@ -402,7 +402,7 @@ export function CreateEventForm({
             }}
           </form.Subscribe>
           {/* Submit Button */}
-          <YStack py="$4" borderColor="$color3">
+          <YStack borderColor="$color3">
             <Form.Trigger asChild>
               <form.SubmitButton
                 size="$4"
