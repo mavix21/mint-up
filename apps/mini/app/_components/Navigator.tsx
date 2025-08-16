@@ -40,7 +40,7 @@ export const Navigator = memo(function Navigator() {
     <>
       <YStack width="100%" height="100%" position="relative" overflowBlock="hidden">
         <Topbar />
-        <YStack flex={1} width="100%" height="100%" overflow="hidden">
+        <YStack flex={1} width="100%" height="100%" overflowBlock="hidden">
           <TabSelector activeTab={activeTab} />
         </YStack>
         <BottomTabNav activeTab={activeTab} setActiveTab={handleTabChange} />
