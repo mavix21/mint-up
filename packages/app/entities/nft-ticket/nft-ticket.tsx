@@ -927,7 +927,6 @@ function TicketMesh({
 }
 
 export default function NFTTicket(props: NFTTicketProps) {
-  console.log('NFTTicket', props);
   return (
     <View height="100%" w="100%" backgroundColor="$color2">
       <Canvas camera={{ position: [0, 0, 25], fov: 40 }}>
