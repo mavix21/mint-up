@@ -26,19 +26,6 @@ export const ShareableEventDescriptionScreen = ({ id }: { id: string }) => {
     return null; // or an error message
   }
 
-  // Create the ConvexEventWithExtras object
-  // const eventWithExtras: ConvexEventWithExtras = {
-  //   ...event,
-  //   imageUrl: event.imageUrl,
-  //   tickets: tickets || [],
-  //   creator: {
-  //     name: event.creatorName || 'Anonymous',
-  //     imageUrl: null, // We don't have this from getEventById
-  //   },
-  //   isHost: false, // We don't have user context in this component
-  //   userStatus: undefined, // We don't have user context in this component
-  // };
-
   return (
     <EventModal
       toggleEvent={toggleEvent}

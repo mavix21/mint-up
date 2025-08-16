@@ -32,6 +32,7 @@ import {
 import { RegistersAvatar } from 'app/screens/explore-events/ui/RegistersAvatar';
 import { useSession } from 'next-auth/react';
 import React, { Dispatch, SetStateAction } from 'react';
+import { usePathname, useRouter } from 'solito/navigation';
 
 import TicketViewSheet from './ticket-view-sheet';
 import TicketsEventSheet from './tickets-event-sheet';
@@ -49,6 +50,8 @@ export function EventModal({
   const { data: session } = useSession();
   const { composeCast } = useComposeCast();
   const deleteRegistration = useMutation(api.registrations.deleteRegistration);
+  const router = useRouter();
+  const pathname = usePathname();
 
   const [showTicketsSheet, setShowTicketsSheet] = React.useState(false);
   const [showTicketViewSheet, setShowTicketViewSheet] = React.useState(false);
@@ -183,7 +186,13 @@ Check it out 👇`,
                   backgroundColor: '$background05',
                   borderColor: 'transparent',
                 }}
-                onPress={() => setToggleEvent(false)}
+                onPress={() => {
+                  if (pathname?.includes('events/')) {
+                    router.push('/');
+                  } else {
+                    setToggleEvent(false);
+                  }
+                }}
                 icon={<ChevronDown size={20} />}
               />
             </View>
