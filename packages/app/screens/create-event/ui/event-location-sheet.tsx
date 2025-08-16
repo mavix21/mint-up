@@ -68,6 +68,7 @@ export const EventLocationSheet = withForm({
     return (
       <Sheet
         open={open}
+        disableDrag
         forceRemoveScrollEnabled={open}
         onOpenChange={onOpenChange}
         snapPoints={[100]}
