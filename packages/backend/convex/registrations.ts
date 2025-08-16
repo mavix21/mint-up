@@ -220,3 +220,58 @@ export const deleteRegistration = mutation({
     return registration._id;
   },
 });
+
+export const getRegistrationTicketById = query({
+  args: {
+    registrationId: v.id('registrations'),
+  },
+  handler: async (ctx, args) => {
+    const registration = await ctx.db
+      .query('registrations')
+      .withIndex('by_id', (q) => q.eq('_id', args.registrationId))
+      .first();
+
+    if (!registration) {
+      throw new Error('Registration not found');
+    }
+
+    const event = await ctx.db
+      .query('events')
+      .withIndex('by_id', (q) => q.eq('_id', registration.eventId))
+      .first();
+
+    if (!event) {
+      throw new Error('Event not found');
+    }
+
+    const ticketTemplate = await ctx.db
+      .query('ticketTemplates')
+      .withIndex('by_eventId', (q) => q.eq('eventId', registration.eventId))
+      .first();
+
+    const holder = await ctx.db.get(registration.userId);
+    const organizer = await ctx.db.get(event.hosts[0].userId);
+
+    return {
+      eventId: event._id,
+      eventName: event.name,
+      eventImageUrl: (await ctx.storage.getUrl(event.image)) ?? '',
+      startDate: event.startDate,
+      ticketName: ticketTemplate?.name,
+      location: event.location.type === 'online' ? 'Virtual' : event.location.address,
+      locationDetails:
+        event.location.type === 'online' ? event.location.url : event.location.instructions,
+      ticketHolder: {
+        name: holder?.displayName ?? 'Anonymous',
+        username: holder?.username ?? 'Anonymous',
+        avatar: holder?.pfpUrl ?? '',
+      },
+      organizer: {
+        name: organizer?.displayName ?? 'Anonymous',
+        email: organizer?.email ?? 'Anonymous',
+        avatar: organizer?.pfpUrl ?? '',
+      },
+      tokenId: registration.status.type === 'minted' ? registration.status.tokenId : '',
+    };
+  },
+});

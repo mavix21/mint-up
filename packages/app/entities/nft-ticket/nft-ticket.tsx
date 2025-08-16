@@ -1,6 +1,6 @@
 'use client';
 
-import { View, SizableText } from '@my/ui';
+import { View } from '@my/ui';
 import { OrbitControls, Html } from '@react-three/drei';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { useRef, useState } from 'react';
@@ -13,7 +13,7 @@ interface NFTTicketProps {
   eventName?: string;
   eventImageUrl?: string;
   startDate?: Date;
-  ticketType?: string;
+  ticketName?: string;
   location?: string;
   locationDetails?: string;
 
@@ -104,7 +104,7 @@ function TicketMesh({
   eventName = 'Sample Event',
   eventImageUrl = '/images/event-image-example-02.jpg',
   startDate = new Date(),
-  ticketType = 'General Admission',
+  ticketName = 'General Admission',
   location = 'Virtual Event',
   locationDetails = 'Online Platform',
   ticketHolderName = 'John Doe',
@@ -486,7 +486,7 @@ function TicketMesh({
                     color: styleConfig.textColor,
                   }}
                 >
-                  {ticketType}
+                  {ticketName}
                 </div>
               </div>
               <div>
@@ -848,14 +848,6 @@ function TicketMesh({
                     {organizerName}
                   </div>
                 </div>
-                <div
-                  style={{
-                    fontSize: '10px',
-                    color: styleConfig.secondaryColor,
-                  }}
-                >
-                  {organizerEmail}
-                </div>
               </div>
 
               {/* Terms */}
@@ -894,7 +886,7 @@ function TicketMesh({
               </div>
 
               {/* Footer */}
-              <div
+              {/* <div
                 style={{
                   paddingTop: '8px',
                   borderTop: '1px dashed',
@@ -925,7 +917,7 @@ function TicketMesh({
                     Secure • Authentic • Verifiable
                   </div>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
