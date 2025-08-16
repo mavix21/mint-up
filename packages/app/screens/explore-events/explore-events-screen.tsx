@@ -35,7 +35,15 @@ export const ExploreEventsScreen = () => {
   }, []);
 
   return (
-    <YStack gap="$4" width="100%" maxWidth={496} marginInline="auto">
+    <YStack
+      gap="$4"
+      width="100%"
+      maxWidth={496}
+      marginInline="auto"
+      flex={1}
+      height="100%"
+      overflowBlock="hidden"
+    >
       <YStack gap="$3">
         <XStack alignItems="center" gap="$2" px="$4" pt="$2">
           <XStack flex={1} alignItems="center" gap="$2">
@@ -118,7 +126,7 @@ export const ExploreEventsScreen = () => {
         </ScrollView>
       </YStack>
 
-      <YStack gap="$1">
+      <YStack gap="$1" flex={1} overflowBlock="hidden">
         <Paragraph size="$2" height="$1" color="$color10" pl="$4">
           {searchTerm.trim() !== ''
             ? `Search results for "${searchTerm}"${
@@ -130,13 +138,7 @@ export const ExploreEventsScreen = () => {
             ? 'Searching...'
             : 'No events found'}
         </Paragraph>
-        <ScrollView
-          flex={1}
-          p="$0"
-          maxHeight={'75vh' as any}
-          $lg={{ paddingBottom: '$12' }}
-          gap="$2"
-        >
+        <ScrollView flex={1} p="$0" overflowBlock="scroll" paddingBottom="$4" gap="$2">
           {events === undefined ? (
             // Loading state - show placeholder items that will render individual skeletons
             <YStack gap="$2">
