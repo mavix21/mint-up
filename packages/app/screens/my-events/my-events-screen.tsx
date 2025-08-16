@@ -1,6 +1,7 @@
 import { api } from '@my/backend/_generated/api';
 import {
   Button,
+  LoadingButton,
   FullscreenSpinner,
   H3,
   Paragraph,
@@ -24,7 +25,7 @@ import { EventCard } from './ui/event-card';
 import { CardSkeleton } from '../../shared/ui/CardSkeleton';
 
 export const MyEventsScreen = () => {
-  const { signIn } = useSignIn();
+  const { signIn, isLoading } = useSignIn();
   const allUserEvents = useQuery(api.events.getUserEvents);
   const [activeTab, setActiveTab] = React.useState('upcoming');
 
@@ -146,18 +147,17 @@ export const MyEventsScreen = () => {
                     Sign In to Create Events!
                   </SizableText>
                   <SizableText size="$4" color="$color9" textAlign="center" maxWidth={300}>
-                    Join our community to create amazing events and build your digital experiences
-                    collection.
+                    Join our community to create events and build your collection.
                   </SizableText>
-                  <Button
+                  <LoadingButton
                     theme="green"
+                    isLoading={isLoading}
+                    themeInverse
                     size="$4"
-                    icon={<LogIn size={16} />}
                     onPress={signIn}
                     mt="$2"
-                  >
-                    Sign In
-                  </Button>
+                    label="Sign In"
+                  />
                 </YStack>
               </Unauthenticated>
             </YStack>
@@ -241,17 +241,17 @@ export const MyEventsScreen = () => {
                     Your Event History Awaits!
                   </SizableText>
                   <SizableText size="$4" color="$color9" textAlign="center" maxWidth={300}>
-                    Sign in to view your past events and track your digital experiences journey.
+                    Sign in to view your past events and track your journey.
                   </SizableText>
-                  <Button
+                  <LoadingButton
                     theme="green"
+                    isLoading={isLoading}
+                    themeInverse
                     size="$4"
-                    icon={<LogIn size={16} />}
                     onPress={signIn}
                     mt="$2"
-                  >
-                    Sign In
-                  </Button>
+                    label="Sign In"
+                  />
                 </YStack>
               </Unauthenticated>
             </YStack>
