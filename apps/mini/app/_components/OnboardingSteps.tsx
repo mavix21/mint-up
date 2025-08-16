@@ -25,7 +25,7 @@ const WelcomeContent = memo(() => (
         Welcome to Mint Up!
       </SizableText>
       <Paragraph userSelect="none" size="$5" textAlign="center" color="$color11" maxWidth={372}>
-        Create, discover, and collect digital experiences with blockchain-powered event tickets
+        Create, discover, and collect digital experiences with NFT tickets
       </Paragraph>
     </YStack>
   </YStack>
@@ -42,10 +42,10 @@ const CreateEventsContent = memo(() => (
         textAlign="center"
         color="$color11"
       >
-        Create Amazing Events
+        Host Events
       </SizableText>
       <Paragraph userSelect="none" size="$5" textAlign="center" color="$color10" maxWidth={300}>
-        Design unique digital experiences and mint NFT tickets for your community
+        Design unique experiences and mint NFT tickets for your community
       </Paragraph>
     </YStack>
   </YStack>
@@ -65,7 +65,7 @@ const ConnectContent = memo(() => (
         Connect & Collect
       </SizableText>
       <Paragraph userSelect="none" size="$5" textAlign="center" color="$color10" maxWidth={300}>
-        Discover events from creators you love and build your digital collection
+        Discover events from creators you love and build your collection
       </Paragraph>
     </YStack>
   </YStack>
@@ -81,11 +81,12 @@ const ReadyContent = memo(({ onSignIn, onComplete, isLoading }: OnboardingStepsP
         fontWeight="bold"
         textAlign="center"
         color="$color11"
+        maxWidth={300}
       >
         Ready to Start?
       </SizableText>
-      <Paragraph userSelect="none" size="$5" textAlign="center" color="$color10" maxWidth={380}>
-        Join thousands of creators and collectors in the future of digital experiences
+      <Paragraph userSelect="none" size="$5" textAlign="center" color="$color10" maxWidth={340}>
+        Join creators and collectors in the future of digital experiences
       </Paragraph>
       <YStack gap="$3" mt="$4" width="100%" maxWidth={280}>
         <LoadingButton
