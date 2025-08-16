@@ -2,7 +2,7 @@
 
 import { Onboarding, View } from '@my/ui';
 import { useSignIn } from 'app/shared/lib/hooks/use-sign-in';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useEffect } from 'react';
 
 import { createOnboardingSteps } from './OnboardingSteps';
 
@@ -14,7 +14,16 @@ interface OnboardingWrapperProps {
 
 export function OnboardingWrapper({ onComplete }: OnboardingWrapperProps) {
   const { completeOnboarding } = useOnboarding();
-  const { signIn, isLoading } = useSignIn();
+  const { signIn, isLoading, isSignedIn, session } = useSignIn();
+
+  // Complete onboarding when user is successfully authenticated
+  useEffect(() => {
+    if (isSignedIn && session) {
+      console.log('✅ Authentication completed, finishing onboarding');
+      completeOnboarding();
+      onComplete();
+    }
+  }, [isSignedIn, session, completeOnboarding, onComplete]);
 
   // Memoize the callback functions to prevent infinite rerenders
   const handleOnboardingComplete = useCallback(() => {
@@ -27,7 +36,7 @@ export function OnboardingWrapper({ onComplete }: OnboardingWrapperProps) {
     console.log('🔐 Sign in initiated');
     signIn();
     // Don't complete onboarding here - wait for authentication to complete
-    // The user will need to complete onboarding manually after signing in
+    // The useEffect above will handle completion when user is authenticated
   }, [signIn]);
 
   // Memoize the onboarding steps to prevent recreation on every render
