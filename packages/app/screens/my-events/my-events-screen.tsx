@@ -52,7 +52,14 @@ export const MyEventsScreen = () => {
   if (!allUserEvents) return <FullscreenSpinner />;
 
   return (
-    <YStack fullscreen maxWidth={600} marginInline="auto" height="100%" overflowBlock="hidden">
+    <YStack
+      fullscreen
+      maxWidth={600}
+      marginInline="auto"
+      height="100%"
+      overflowBlock="hidden"
+      style={{ overscrollBehavior: 'none' }}
+    >
       <View mb="$4" px="$4">
         <H3 mb="$2">My Events</H3>
         <Paragraph color="$color11">Your digital experiences collection ✨</Paragraph>

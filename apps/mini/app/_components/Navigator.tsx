@@ -43,9 +43,20 @@ export const Navigator = memo(function Navigator() {
         height={'100vh' as any}
         position="relative"
         overflowBlock="hidden"
+        style={{
+          overscrollBehavior: 'none',
+        }}
       >
         <Topbar />
-        <YStack flex={1} width="100%" height="100%" overflowBlock="hidden">
+        <YStack
+          flex={1}
+          width="100%"
+          height="100%"
+          overflowBlock="hidden"
+          style={{
+            overscrollBehavior: 'none',
+          }}
+        >
           <TabSelector activeTab={activeTab} />
         </YStack>
         <BottomTabNav activeTab={activeTab} setActiveTab={handleTabChange} />
