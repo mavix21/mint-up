@@ -54,6 +54,10 @@
   }
 }
 
+html {
+  overscroll-behavior: none !important;
+}
+
 body {
   height: 100vh !important;
   overflow: hidden !important;
@@ -64,10 +68,6 @@ body {
     overflow: hidden !important;
   }
 } /* that's how it was before */
-
-html {
-  overscroll-behavior: none !important;
-}
 
 /* body {
   height: 100vh !important;
