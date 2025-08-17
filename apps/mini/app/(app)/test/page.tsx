@@ -1,5 +1,11 @@
-import { NftTicket } from 'app/entities/nft-ticket';
+'use client';
+
+import { Text, View } from '@my/ui';
 
 export default function TestPage() {
-  return <NftTicket />;
+  return (
+    <View height={500} bg="red">
+      <Text>TestPage</Text>
+    </View>
+  );
 }
