@@ -29,7 +29,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
         {
           url: ticketImageUrl,
           width: 1200,
-          height: 630,
+          height: 800,
           alt: ticket ? `${ticket.ticketName} - ${ticket.eventName}` : 'Event Ticket',
         },
       ],
