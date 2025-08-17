@@ -55,13 +55,15 @@
 }
 
 body {
-  height: 100vh !important;
+  /* height: 100vh !important; */
   overflow: hidden !important;
   overscroll-behavior: none !important;
 
   & > div:first-child {
-    min-height: 100vh;
-    overflow: hidden !important;
+    display: flex;
+    flex-direction: column;
+    height: 100dvh !important;
+    overscroll-behavior: none !important;
   }
 }
 
