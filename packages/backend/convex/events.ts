@@ -21,7 +21,7 @@ import { createPublicClient, createWalletClient, decodeEventLog, http, parseUnit
 import { pick } from 'convex-helpers';
 
 // const CHAIN = process.env.ENV === 'development' ? baseSepolia : base;
-const CHAIN = baseSepolia;
+const CHAIN = base;
 
 // --- CONSTANTES ---
 const CONTRACT_ADDRESS = process.env.MINTUP_FACTORY_CONTRACT_ADDRESS as `0x${string}`;
