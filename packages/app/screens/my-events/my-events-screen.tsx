@@ -91,7 +91,7 @@ export const MyEventsScreen = () => {
                   const date = new Date(event.startDate);
                   return date.toLocaleDateString(); // Uses user's locale and timezone
                 },
-                'desc'
+                'asc'
               ).map(([dateKey, events], index) => (
                 <View key={dateKey} pos="relative">
                   <View pos="absolute" bottom={0} left={4} top={16} w={1} bg="$color8" />
