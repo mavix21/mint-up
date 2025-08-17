@@ -7,7 +7,7 @@ import { base, baseSepolia } from 'viem/chains';
 
 export function MiniKitContextProvider({ children }: { children: ReactNode }) {
   const chain = isDevelopment() ? baseSepolia : base;
-  console.warn('chain', chain);
+
   return (
     <MiniKitProvider apiKey={process.env.NEXT_PUBLIC_CDP_CLIENT_API_KEY} chain={chain}>
       {children}
