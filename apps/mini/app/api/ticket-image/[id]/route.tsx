@@ -23,8 +23,8 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
       (
         <div
           style={{
-            width: '1000px',
-            height: '630px',
+            width: '600px',
+            height: '400px',
             display: 'flex',
             flexDirection: 'row',
             fontFamily: 'system-ui, -apple-system, sans-serif',
@@ -70,7 +70,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
               background: 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)',
               display: 'flex',
               flexDirection: 'column',
-              padding: '40px',
+              padding: '20px',
               justifyContent: 'center',
               position: 'relative',
             }}
@@ -122,7 +122,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
                 </span>
                 <h2
                   style={{
-                    fontSize: '42px',
+                    fontSize: '35px',
                     fontWeight: '800',
                     color: 'black',
                     margin: '0',
@@ -139,7 +139,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
                 style={{
                   display: 'flex',
                   flexDirection: 'column',
-                  gap: '32px',
+                  gap: '22px',
                   width: '100%',
                   maxWidth: '450px',
                 }}
@@ -175,7 +175,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
                     </span>
                     <span
                       style={{
-                        fontSize: '24px',
+                        fontSize: '18px',
                         fontWeight: '800',
                         color: 'black',
                         lineHeight: '1.1',
@@ -206,7 +206,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
                     </span>
                     <span
                       style={{
-                        fontSize: '24px',
+                        fontSize: '18px',
                         fontWeight: '800',
                         color: 'black',
                         lineHeight: '1.1',
@@ -249,7 +249,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
                     </span>
                     <span
                       style={{
-                        fontSize: '24px',
+                        fontSize: '18px',
                         fontWeight: '800',
                         color: 'black',
                         lineHeight: '1.1',
@@ -280,7 +280,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
                     </span>
                     <span
                       style={{
-                        fontSize: '24px',
+                        fontSize: '18px',
                         fontWeight: '800',
                         color: 'black',
                         lineHeight: '1.1',
@@ -360,8 +360,8 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
         </div>
       ),
       {
-        width: 1000,
-        height: 630,
+        width: 600,
+        height: 400,
       }
     );
   } catch (error) {
