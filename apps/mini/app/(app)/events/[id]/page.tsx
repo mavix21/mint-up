@@ -1,5 +1,4 @@
 import { api } from '@my/backend/_generated/api';
-import { Id } from '@my/backend/_generated/dataModel';
 import { fetchQuery } from '@my/backend/nextjs';
 import { ShareableEventDescriptionScreen } from 'app/screens/shareable-event-description-screen/shareable-event-description-screen';
 import { Metadata } from 'next';
@@ -11,7 +10,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { id } = await params;
   const event = await fetchQuery(api.events.getEventMetadata, {
-    eventId: id as Id<'events'>,
+    eventId: id,
   });
 
   const defaultImageUrl = process.env.NEXT_PUBLIC_APP_HERO_IMAGE!;

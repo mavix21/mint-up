@@ -126,38 +126,59 @@ export const getPastEvents = query({
 
 export const getEventById = query({
   args: {
-    eventId: v.id('events'),
+    eventId: v.string(),
   },
   handler: async (ctx, args) => {
-    const identity = await ctx.auth.getUserIdentity();
-    const userId = identity !== null ? (identity.subject as Id<'users'>) : null;
-    const event = await ctx.db
-      .query('events')
-      .withIndex('by_id', (q) => q.eq('_id', args.eventId))
-      .first();
+    try {
+      const identity = await ctx.auth.getUserIdentity();
+      const userId = identity !== null ? (identity.subject as Id<'users'>) : null;
 
-    if (!event) {
+      // Try to get the event by ID, but handle invalid IDs gracefully
+      let event = null;
+      try {
+        event = await ctx.db
+          .query('events')
+          .withIndex('by_id', (q) => q.eq('_id', args.eventId as Id<'events'>))
+          .first();
+      } catch (idError) {
+        // If the ID is invalid, return null instead of throwing
+        console.log('Invalid event ID provided:', args.eventId);
+        return null;
+      }
+
+      if (!event) {
+        return null;
+      }
+
+      return enrichEventsWithCommonData(ctx, [event], userId).then((e) => e[0]);
+    } catch (error) {
+      console.error('Error getting event by id:', error);
       return null;
     }
-
-    return enrichEventsWithCommonData(ctx, [event], userId).then((e) => e[0]);
   },
 });
 
 export const getEventMetadata = query({
   args: {
-    eventId: v.id('events'),
+    eventId: v.string(),
   },
   handler: async (ctx, args) => {
-    const event = await ctx.db.get(args.eventId);
-    if (!event) {
+    try {
+      // Try to get the event by ID, but handle invalid IDs gracefully
+      const event = await ctx.db.get(args.eventId as Id<'events'>);
+      if (!event) {
+        return null;
+      }
+
+      return {
+        ...event,
+        imageUrl: (await ctx.storage.getUrl(event.image)) ?? null,
+      };
+    } catch (idError) {
+      // If the ID is invalid, return null instead of throwing
+      console.log('Invalid event ID provided for metadata:', args.eventId);
       return null;
     }
-
-    return {
-      ...event,
-      imageUrl: (await ctx.storage.getUrl(event.image)) ?? null,
-    };
   },
 });
 
