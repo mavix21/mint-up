@@ -23,7 +23,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
       (
         <div
           style={{
-            width: '1200px',
+            width: '1000px',
             height: '630px',
             display: 'flex',
             flexDirection: 'row',
@@ -360,7 +360,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
         </div>
       ),
       {
-        width: 1200,
+        width: 1000,
         height: 630,
       }
     );
