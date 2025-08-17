@@ -46,7 +46,7 @@ export function OnboardingWrapper({ onComplete }: OnboardingWrapperProps) {
   }, [handleSignIn, handleOnboardingComplete, isLoading]);
 
   return (
-    <View flex={1} height="100%">
+    <View flex={1} height={'100vh' as any}>
       <Onboarding steps={onboardingSteps} autoSwipe={false} />
     </View>
   );
