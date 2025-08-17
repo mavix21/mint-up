@@ -26,6 +26,7 @@ interface BuyTicketButtonProps {
 
 export function BuyTicketButton({ handleOnStatus, price, tokenId }: BuyTicketButtonProps) {
   const { address } = useAccount();
+  console.warn('ADDRESS', 'BASE_CHAIN_ID', { BASE_CHAIN_ID, address });
 
   const calls = useMemo(
     () => [
