@@ -41,7 +41,7 @@ export function MiniAppProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (!isFrameReady) {
-      setFrameReady();
+      setFrameReady({ disableNativeGestures: true });
     }
   }, [isFrameReady, setFrameReady]);
 
