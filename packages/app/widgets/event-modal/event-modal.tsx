@@ -466,7 +466,7 @@ Check it out 👇`,
                               User Not Found
                             </SizableText>
                             <SizableText size="$2" color="$color10">
-                              This user's profile is no longer available
+                              This user&apos;s profile is no longer available
                             </SizableText>
                           </YStack>
                         )}
