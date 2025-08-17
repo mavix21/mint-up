@@ -1,7 +1,6 @@
 import { Authenticated } from '@my/backend/react';
 import { Button, Popover, styled, Text, View } from '@my/ui';
 import { LogOut, Settings } from '@tamagui/lucide-icons';
-import { useRouter } from 'next/navigation';
 import { signOut } from 'next-auth/react';
 
 import { useOnboarding } from '@/lib/hooks/useOnboarding';
@@ -14,7 +13,6 @@ interface SettingsDropdownProps {
 export function SettingsDropdown({ triggerOpen, setTriggerOpen }: SettingsDropdownProps) {
   const { resetOnboarding } = useOnboarding();
   const logout = signOut;
-  const router = useRouter();
 
   const handleLogout = () => {
     logout();
@@ -61,11 +59,6 @@ export function SettingsDropdown({ triggerOpen, setTriggerOpen }: SettingsDropdo
             <DropdownText>Logout</DropdownText>
           </DropdownItem>
         </Authenticated>
-
-        <DropdownItem onPress={() => router.push('/test')}>
-          <Settings size={14} color="$color10" />
-          <DropdownText>Test</DropdownText>
-        </DropdownItem>
       </Popover.Content>
     </Popover>
   );
@@ -82,7 +75,7 @@ const DropdownItem = styled(View, {
   },
   cursor: 'pointer',
   paddingHorizontal: '$4',
-  paddingVertical: '$2',
+  paddingVertical: '$2.5',
   alignItems: 'center',
   justifyContent: 'flex-start',
   flexDirection: 'row',
