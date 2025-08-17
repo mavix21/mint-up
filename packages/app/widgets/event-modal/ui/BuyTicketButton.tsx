@@ -7,6 +7,7 @@ import {
 } from '@coinbase/onchainkit/transaction';
 import type { LifecycleStatus } from '@coinbase/onchainkit/transaction';
 import { ConnectWallet } from '@coinbase/onchainkit/wallet';
+import { SizableText, YStack } from '@my/ui';
 import { abi } from 'app/shared/lib/abi';
 import {
   BASE_CHAIN_ID,
@@ -25,7 +26,7 @@ interface BuyTicketButtonProps {
 }
 
 export function BuyTicketButton({ handleOnStatus, price, tokenId }: BuyTicketButtonProps) {
-  const { address } = useAccount();
+  const { address, isConnected, isConnecting, isDisconnected } = useAccount();
   console.warn('ADDRESS', 'BASE_CHAIN_ID', { BASE_CHAIN_ID, address });
 
   const calls = useMemo(
@@ -52,12 +53,21 @@ export function BuyTicketButton({ handleOnStatus, price, tokenId }: BuyTicketBut
   }
 
   return (
-    <Transaction calls={calls} chainId={BASE_CHAIN_ID} onStatus={handleOnStatus}>
-      <TransactionButton className="text-center" />
-      <TransactionStatus>
-        <TransactionStatusLabel />
-        <TransactionStatusAction />
-      </TransactionStatus>
-    </Transaction>
+    <YStack>
+      <YStack>
+        <SizableText>Connection Information</SizableText>
+        <SizableText>{'Address: ' + address}</SizableText>
+        <SizableText>{'Is Connected: ' + isConnected}</SizableText>
+        <SizableText>{'Is Connecting: ' + isConnecting}</SizableText>
+        <SizableText>{'Is Disconnected: ' + isDisconnected}</SizableText>
+      </YStack>
+      <Transaction calls={calls} chainId={BASE_CHAIN_ID} onStatus={handleOnStatus}>
+        <TransactionButton className="text-center" />
+        <TransactionStatus>
+          <TransactionStatusLabel />
+          <TransactionStatusAction />
+        </TransactionStatus>
+      </Transaction>
+    </YStack>
   );
 }
