@@ -71,6 +71,7 @@ body {
     width: 100%;
     margin-inline: auto;
     display: flex;
+    height: 100%;
     flex-direction: column;
     flex: 1;
     overscroll-behavior: none !important;
