@@ -1,3 +1,4 @@
+import { useToastController } from '@my/ui';
 import { Image as ImageIcon } from '@tamagui/lucide-icons';
 import { useFileInput, useImageCrop, useImageUrl } from 'app/shared/lib/file';
 import { useDefaultImage } from 'app/shared/lib/file/use-default-image';
@@ -12,6 +13,7 @@ export interface EventImageProps {
 }
 
 export function EventImage({ image, onImageChange, autoLoadDefaultImage = true }: EventImageProps) {
+  const toast = useToastController();
   const defaultImagePath = useDefaultImage({
     currentImage: image,
     onImageChange,
@@ -24,7 +26,30 @@ export function EventImage({ image, onImageChange, autoLoadDefaultImage = true }
     onImageChange,
   });
 
-  const { FileInput, openFilePicker } = useFileInput(openCropSheet);
+  const validateImageSize = (file: File): boolean | string => {
+    const maxSize = 2 * 1024 * 1024; // 2MB in bytes
+    if (file.size > maxSize) {
+      return 'Image size must be less than 2MB';
+    }
+    return true;
+  };
+
+  const handleFileSelect = (file: File) => {
+    const validationResult = validateImageSize(file);
+    if (validationResult !== true) {
+      toast.show('Image too large', {
+        message:
+          typeof validationResult === 'string'
+            ? validationResult
+            : 'Image size must be less than 2MB',
+        type: 'error',
+      });
+      return;
+    }
+    openCropSheet(file);
+  };
+
+  const { FileInput, openFilePicker } = useFileInput(handleFileSelect);
 
   return (
     <>

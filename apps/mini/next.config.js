@@ -88,6 +88,9 @@ module.exports = () => {
     experimental: {
       scrollRestoration: true,
       viewTransition: true,
+      serverActions: {
+        bodySizeLimit: '2mb',
+      },
       // optimizeCss: true,
     },
     // async redirects() {
