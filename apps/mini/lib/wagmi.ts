@@ -4,10 +4,10 @@ import { coinbaseWallet } from 'wagmi/connectors';
 
 export function getConfig() {
   return createConfig({
-    chains: [base], // add baseSepolia for testing
+    chains: [base, baseSepolia], // add baseSepolia for testing
     connectors: [
       coinbaseWallet({
-        appName: 'OnchainKit',
+        appName: 'Mint Up!',
         preference: 'smartWalletOnly',
         version: '4',
       }),
@@ -18,6 +18,7 @@ export function getConfig() {
     ssr: true,
     transports: {
       [base.id]: http(),
+      [baseSepolia.id]: http(),
     },
   });
 }
