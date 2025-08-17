@@ -54,6 +54,11 @@
   }
 }
 
+html {
+  overflow: hidden !important;
+  overscroll-behavior: none !important;
+}
+
 body {
   /* height: 100vh !important; */
   display: flex;
