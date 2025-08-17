@@ -40,9 +40,9 @@ export const Navigator = memo(function Navigator() {
       <YStack
         width="100%"
         flex={1}
-        height={'100vh' as any}
         position="relative"
-        overflowBlock="hidden"
+        overflowBlock="auto"
+        overflowInline="hidden"
         style={{
           overscrollBehavior: 'none',
         }}
@@ -52,7 +52,8 @@ export const Navigator = memo(function Navigator() {
           flex={1}
           width="100%"
           height="100%"
-          overflowBlock="hidden"
+          overflowBlock="auto"
+          overflowInline="hidden"
           style={{
             overscrollBehavior: 'none',
           }}
