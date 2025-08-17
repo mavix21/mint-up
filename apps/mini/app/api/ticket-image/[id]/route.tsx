@@ -1,6 +1,7 @@
 import { api } from '@my/backend/_generated/api';
 import { Id } from '@my/backend/_generated/dataModel';
 import { fetchQuery } from '@my/backend/nextjs';
+import { formatDate, formatRelativeDate } from '@my/ui/src/lib/dates';
 import { ImageResponse } from '@vercel/og';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -22,390 +23,621 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
       (
         <div
           style={{
+            width: '1200px',
+            height: '630px',
             display: 'flex',
-            flexDirection: 'column',
-            width: '100%',
-            height: '100%',
-            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-            padding: '40px',
-            fontFamily: 'Inter, system-ui, sans-serif',
-            position: 'relative',
+            flexDirection: 'row',
+            fontFamily: 'system-ui, -apple-system, sans-serif',
             overflow: 'hidden',
           }}
         >
-          {/* Background Pattern */}
+          {/* Left Section - Dark with Neon Text */}
           <div
             style={{
-              position: 'absolute',
-              top: '-50%',
-              right: '-50%',
-              width: '200%',
-              height: '200%',
-              background: 'radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px)',
-              backgroundSize: '20px 20px',
-              opacity: 0.3,
-            }}
-          />
-
-          {/* Header Card */}
-          <div
-            style={{
+              width: '50%',
+              height: '100%',
+              background: '#fff',
               display: 'flex',
               flexDirection: 'column',
-              alignItems: 'center',
               justifyContent: 'center',
-              height: '200px',
-              backgroundColor: 'rgba(255, 255, 255, 0.95)',
-              borderRadius: '20px',
-              padding: '32px',
-              marginBottom: '32px',
-              boxShadow: '0 20px 40px rgba(0, 0, 0, 0.1)',
-              backdropFilter: 'blur(10px)',
+              alignItems: 'center',
+              position: 'relative',
+              padding: '40px',
             }}
           >
-            <h1
+            {/* Ticket Image */}
+            <img
+              src={ticket.eventImageUrl}
+              alt="Ticket"
               style={{
-                fontSize: '48px',
-                fontWeight: 'bold',
-                color: '#1f2937',
-                textAlign: 'center',
-                margin: '0 0 20px 0',
-                lineHeight: '1.2',
-                textShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+                width: '90%',
+                maxWidth: '420px',
+                maxHeight: '520px',
+                borderRadius: '24px',
+                boxShadow: '0 8px 32px rgba(30,41,59,0.18), 0 1.5px 6px rgba(0,0,0,0.08)',
+                objectFit: 'cover',
+                border: '4px solid #e2e8f0',
+                background: '#f1f5f9',
               }}
-            >
-              {ticket.eventName}
-            </h1>
-            <div
-              style={{
-                background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
-                border: 'none',
-                borderRadius: '16px',
-                padding: '12px 24px',
-                fontSize: '20px',
-                fontWeight: '700',
-                color: 'white',
-                boxShadow: '0 8px 16px rgba(245, 158, 11, 0.3)',
-                textTransform: 'uppercase',
-                letterSpacing: '0.5px',
-              }}
-            >
-              {ticket.ticketName}
-            </div>
+            />
           </div>
 
-          {/* Content */}
+          {/* Right Section - Light with Ticket Details */}
           <div
             style={{
+              width: '50%',
+              height: '100%',
+              background: 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)',
               display: 'flex',
               flexDirection: 'column',
-              flex: 1,
-              gap: '20px',
-              justifyContent: 'space-between',
+              padding: '40px',
+              justifyContent: 'center',
+              position: 'relative',
             }}
           >
-            {/* Date and Time Section */}
             <div
               style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                background: `
+                radial-gradient(circle at 20% 20%, rgba(59, 130, 246, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(16, 185, 129, 0.05) 0%, transparent 50%)
+              `,
                 display: 'flex',
-                alignItems: 'center',
-                gap: '24px',
-                backgroundColor: 'rgba(255, 255, 255, 0.95)',
-                padding: '24px',
-                borderRadius: '16px',
-                boxShadow: '0 10px 30px rgba(0, 0, 0, 0.1)',
-                backdropFilter: 'blur(10px)',
               }}
-            >
-              <div
-                style={{
-                  background: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)',
-                  padding: '20px',
-                  borderRadius: '16px',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  minWidth: '90px',
-                  textAlign: 'center',
-                  boxShadow: '0 8px 16px rgba(59, 130, 246, 0.3)',
-                }}
-              >
-                <div
-                  style={{
-                    fontSize: '16px',
-                    fontWeight: '700',
-                    color: 'rgba(255, 255, 255, 0.9)',
-                    textTransform: 'uppercase',
-                    letterSpacing: '1px',
-                  }}
-                >
-                  {new Date(ticket.startDate).toLocaleDateString('en-US', { month: 'short' })}
-                </div>
-                <div
-                  style={{
-                    fontSize: '36px',
-                    fontWeight: 'bold',
-                    color: 'white',
-                    textShadow: '0 2px 4px rgba(0, 0, 0, 0.2)',
-                  }}
-                >
-                  {new Date(ticket.startDate).getDate()}
-                </div>
-                <div
-                  style={{
-                    fontSize: '16px',
-                    color: 'rgba(255, 255, 255, 0.9)',
-                    fontWeight: '600',
-                  }}
-                >
-                  {new Date(ticket.startDate).getFullYear()}
-                </div>
-              </div>
+            />
 
-              <div style={{ flex: 1 }}>
-                <div
-                  style={{
-                    fontSize: '24px',
-                    fontWeight: '700',
-                    color: '#1f2937',
-                    marginBottom: '8px',
-                  }}
-                >
-                  {new Date(ticket.startDate).toLocaleDateString('en-US', { weekday: 'long' })}
-                </div>
-                <div
-                  style={{
-                    fontSize: '18px',
-                    color: '#6b7280',
-                    fontWeight: '500',
-                  }}
-                >
-                  {new Date(ticket.startDate).toLocaleTimeString('en-US', {
-                    hour: 'numeric',
-                    minute: '2-digit',
-                    hour12: true,
-                  })}
-                </div>
-              </div>
-            </div>
-
-            {/* Info Sections */}
             <div
               style={{
                 display: 'flex',
                 flexDirection: 'column',
-                gap: '16px',
-              }}
-            >
-              {/* Location Section */}
-              {ticket.location && (
-                <div
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '20px',
-                    padding: '20px',
-                    backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                    borderRadius: '16px',
-                    boxShadow: '0 8px 25px rgba(0, 0, 0, 0.08)',
-                    backdropFilter: 'blur(10px)',
-                  }}
-                >
-                  <div
-                    style={{
-                      width: '24px',
-                      height: '24px',
-                      background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
-                      borderRadius: '50%',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      boxShadow: '0 4px 12px rgba(16, 185, 129, 0.3)',
-                    }}
-                  >
-                    <div
-                      style={{
-                        width: '8px',
-                        height: '8px',
-                        backgroundColor: 'white',
-                        borderRadius: '50%',
-                      }}
-                    />
-                  </div>
-                  <div style={{ flex: 1 }}>
-                    <div
-                      style={{
-                        fontSize: '14px',
-                        color: '#6b7280',
-                        marginBottom: '6px',
-                        fontWeight: '600',
-                        textTransform: 'uppercase',
-                        letterSpacing: '0.5px',
-                      }}
-                    >
-                      Location
-                    </div>
-                    <div
-                      style={{
-                        fontSize: '18px',
-                        color: '#1f2937',
-                        fontWeight: '600',
-                      }}
-                    >
-                      {ticket.location}
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {/* Ticket Holder Section */}
-              {ticket.ticketHolder?.name && (
-                <div
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '20px',
-                    padding: '20px',
-                    backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                    borderRadius: '16px',
-                    boxShadow: '0 8px 25px rgba(0, 0, 0, 0.08)',
-                    backdropFilter: 'blur(10px)',
-                  }}
-                >
-                  <div
-                    style={{
-                      width: '24px',
-                      height: '24px',
-                      background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
-                      borderRadius: '50%',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      boxShadow: '0 4px 12px rgba(245, 158, 11, 0.3)',
-                    }}
-                  >
-                    <div
-                      style={{
-                        width: '8px',
-                        height: '8px',
-                        backgroundColor: 'white',
-                        borderRadius: '50%',
-                      }}
-                    />
-                  </div>
-                  <div style={{ flex: 1 }}>
-                    <div
-                      style={{
-                        fontSize: '14px',
-                        color: '#6b7280',
-                        marginBottom: '6px',
-                        fontWeight: '600',
-                        textTransform: 'uppercase',
-                        letterSpacing: '0.5px',
-                      }}
-                    >
-                      Ticket Holder
-                    </div>
-                    <div
-                      style={{
-                        fontSize: '18px',
-                        color: '#1f2937',
-                        fontWeight: '600',
-                      }}
-                    >
-                      {ticket.ticketHolder.name}
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {/* Organizer Section */}
-              {ticket.organizer?.name && (
-                <div
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '20px',
-                    padding: '20px',
-                    backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                    borderRadius: '16px',
-                    boxShadow: '0 8px 25px rgba(0, 0, 0, 0.08)',
-                    backdropFilter: 'blur(10px)',
-                  }}
-                >
-                  <div
-                    style={{
-                      width: '24px',
-                      height: '24px',
-                      background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
-                      borderRadius: '50%',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      boxShadow: '0 4px 12px rgba(139, 92, 246, 0.3)',
-                    }}
-                  >
-                    <div
-                      style={{
-                        width: '8px',
-                        height: '8px',
-                        backgroundColor: 'white',
-                        borderRadius: '50%',
-                      }}
-                    />
-                  </div>
-                  <div style={{ flex: 1 }}>
-                    <div
-                      style={{
-                        fontSize: '14px',
-                        color: '#6b7280',
-                        marginBottom: '6px',
-                        fontWeight: '600',
-                        textTransform: 'uppercase',
-                        letterSpacing: '0.5px',
-                      }}
-                    >
-                      Organized by
-                    </div>
-                    <div
-                      style={{
-                        fontSize: '18px',
-                        color: '#1f2937',
-                        fontWeight: '600',
-                      }}
-                    >
-                      {ticket.organizer.name}
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {/* Footer */}
-            <div
-              style={{
-                textAlign: 'center',
-                padding: '20px',
-                backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                borderRadius: '16px',
-                boxShadow: '0 8px 25px rgba(0, 0, 0, 0.08)',
-                backdropFilter: 'blur(10px)',
+                alignItems: 'center',
+                justifyContent: 'center',
+                height: '100%',
+                zIndex: 1,
               }}
             >
               <div
                 style={{
-                  fontSize: '16px',
-                  color: '#6b7280',
-                  fontWeight: '600',
-                  textTransform: 'uppercase',
-                  letterSpacing: '1px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  marginBottom: '50px',
                 }}
               >
-                Powered by Mint Up
+                <span
+                  style={{
+                    fontSize: '14px',
+                    fontWeight: '600',
+                    color: '#64748b',
+                    marginBottom: '8px',
+                    letterSpacing: '0.1em',
+                    textTransform: 'uppercase',
+                  }}
+                >
+                  TICKET
+                </span>
+                <h2
+                  style={{
+                    fontSize: '42px',
+                    fontWeight: '800',
+                    color: 'black',
+                    margin: '0',
+                    textAlign: 'center',
+                    letterSpacing: '-0.02em',
+                    lineHeight: '1.1',
+                  }}
+                >
+                  {ticket.ticketName}
+                </h2>
+              </div>
+
+              <div
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '32px',
+                  width: '100%',
+                  maxWidth: '450px',
+                }}
+              >
+                {/* First Row - Date and Event */}
+                <div
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'flex-start',
+                    width: '100%',
+                  }}
+                >
+                  <div
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'flex-start',
+                      flex: 1,
+                    }}
+                  >
+                    <span
+                      style={{
+                        fontSize: '12px',
+                        fontWeight: '700',
+                        color: '#64748b',
+                        marginBottom: '8px',
+                        letterSpacing: '0.1em',
+                        textTransform: 'uppercase',
+                      }}
+                    >
+                      DATE
+                    </span>
+                    <span
+                      style={{
+                        fontSize: '24px',
+                        fontWeight: '800',
+                        color: 'black',
+                        lineHeight: '1.1',
+                      }}
+                    >
+                      {formatDate(formatRelativeDate(ticket.startDate))}
+                    </span>
+                  </div>
+                  <div
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'flex-end',
+                      flex: 1,
+                    }}
+                  >
+                    <span
+                      style={{
+                        fontSize: '12px',
+                        fontWeight: '700',
+                        color: '#64748b',
+                        marginBottom: '8px',
+                        letterSpacing: '0.1em',
+                        textTransform: 'uppercase',
+                      }}
+                    >
+                      EVENT
+                    </span>
+                    <span
+                      style={{
+                        fontSize: '24px',
+                        fontWeight: '800',
+                        color: 'black',
+                        lineHeight: '1.1',
+                        textAlign: 'right',
+                      }}
+                    >
+                      {ticket.eventName}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Second Row - Ticket Type and Venue */}
+                <div
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'flex-start',
+                    width: '100%',
+                  }}
+                >
+                  <div
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'flex-start',
+                      flex: 1,
+                    }}
+                  >
+                    <span
+                      style={{
+                        fontSize: '12px',
+                        fontWeight: '700',
+                        color: '#64748b',
+                        marginBottom: '8px',
+                        letterSpacing: '0.1em',
+                        textTransform: 'uppercase',
+                      }}
+                    >
+                      LOCATION
+                    </span>
+                    <span
+                      style={{
+                        fontSize: '24px',
+                        fontWeight: '800',
+                        color: 'black',
+                        lineHeight: '1.1',
+                      }}
+                    >
+                      {ticket.location}
+                    </span>
+                  </div>
+                  <div
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'flex-end',
+                      flex: 1,
+                    }}
+                  >
+                    <span
+                      style={{
+                        fontSize: '12px',
+                        fontWeight: '700',
+                        color: '#64748b',
+                        marginBottom: '8px',
+                        letterSpacing: '0.1em',
+                        textTransform: 'uppercase',
+                      }}
+                    >
+                      VENUE
+                    </span>
+                    <span
+                      style={{
+                        fontSize: '24px',
+                        fontWeight: '800',
+                        color: 'black',
+                        lineHeight: '1.1',
+                        textAlign: 'right',
+                      }}
+                    >
+                      {ticket.locationDetails}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Third Row - Ticket Holder (centered) */}
+
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '12px',
+                    marginTop: '20px',
+                    padding: '16px 0',
+                    borderTop: '1px solid #cbd5e1',
+                  }}
+                >
+                  <div
+                    style={{
+                      width: '40px',
+                      height: '40px',
+                      borderRadius: '50%',
+                      background: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      color: 'white',
+                      fontSize: '16px',
+                      fontWeight: '600',
+                    }}
+                  >
+                    {ticket.ticketHolder.avatar ? (
+                      <img
+                        src={ticket.ticketHolder.avatar || '/placeholder.svg'}
+                        alt="Avatar"
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                          borderRadius: '50%',
+                          objectFit: 'cover',
+                        }}
+                      />
+                    ) : (
+                      <span
+                        style={{
+                          color: 'white',
+                          fontSize: '12px',
+                          fontWeight: '700',
+                        }}
+                      >
+                        {ticket.ticketHolder.name.charAt(0).toUpperCase()}
+                      </span>
+                    )}
+                  </div>
+                  <div style={{ display: 'flex', flexDirection: 'column' }}>
+                    <span
+                      style={{
+                        fontSize: '16px',
+                        fontWeight: '600',
+                        color: '#1e293b',
+                        lineHeight: '1.2',
+                      }}
+                    >
+                      {ticket.ticketHolder.name}
+                    </span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
       ),
+      // <div
+      //   style={{
+      //     width: '1200px',
+      //     height: '630px',
+      //     display: 'flex',
+      //     flexDirection: 'row',
+      //     fontFamily: 'system-ui, -apple-system, sans-serif',
+      //     overflow: 'hidden',
+      //   }}
+      // >
+      //   {/* Left Section - Dark with Neon Text */}
+      //   <div
+      //     style={{
+      //       width: '50%',
+      //       height: '100%',
+      //       background: '#fff',
+      //       display: 'flex',
+      //       flexDirection: 'column',
+      //       justifyContent: 'center',
+      //       alignItems: 'center',
+      //       position: 'relative',
+      //       padding: '40px',
+      //     }}
+      //   >
+      //     {/* Ticket Image */}
+      //     <img
+      //       src={ticket.eventImageUrl}
+      //       alt="Ticket"
+      //       style={{
+      //         width: '90%',
+      //         maxWidth: '420px',
+      //         maxHeight: '520px',
+      //         borderRadius: '24px',
+      //         boxShadow: '0 8px 32px rgba(30,41,59,0.18), 0 1.5px 6px rgba(0,0,0,0.08)',
+      //         objectFit: 'cover',
+      //         border: '4px solid #e2e8f0',
+      //         background: '#f1f5f9',
+      //       }}
+      //     />
+      //   </div>
+
+      //   {/* Right Section - Light with Ticket Details */}
+      //   <div
+      //     style={{
+      //       width: '50%',
+      //       height: '100%',
+      //       background: 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)',
+      //       display: 'flex',
+      //       flexDirection: 'column',
+      //       padding: '50px 40px',
+      //       justifyContent: 'space-between',
+      //     }}
+      //   >
+      //     {/* Ticket Title */}
+      //     <div
+      //       style={{
+      //         display: 'flex',
+      //         flexDirection: 'column',
+      //         alignItems: 'center',
+      //         marginBottom: '30px',
+      //       }}
+      //     >
+      //       <h2
+      //         style={{
+      //           fontSize: '32px',
+      //           fontWeight: '800',
+      //           color: '#1e293b',
+      //           margin: '0 0 8px 0',
+      //           textAlign: 'center',
+      //           letterSpacing: '-0.01em',
+      //         }}
+      //       >
+      //         Ticket {ticket.ticketName}
+      //       </h2>
+      //       <div
+      //         style={{
+      //           width: '60px',
+      //           height: '2px',
+      //           background: '#64748b',
+      //           display: 'flex',
+      //         }}
+      //       />
+      //     </div>
+
+      //     {/* Ticket Details Grid */}
+      //     <div
+      //       style={{
+      //         display: 'flex',
+      //         flexDirection: 'column',
+      //         gap: '25px',
+      //         flex: 1,
+      //       }}
+      //     >
+      //       {/* Date and Time Row */}
+      //       <div
+      //         style={{
+      //           display: 'flex',
+      //           justifyContent: 'space-between',
+      //         }}
+      //       >
+      //         <div style={{ display: 'flex', flexDirection: 'column' }}>
+      //           <span
+      //             style={{
+      //               fontSize: '14px',
+      //               fontWeight: '600',
+      //               color: '#64748b',
+      //               marginBottom: '4px',
+      //               letterSpacing: '0.05em',
+      //               textTransform: 'uppercase',
+      //             }}
+      //           >
+      //             DATE
+      //           </span>
+      //           <span
+      //             style={{
+      //               fontSize: '24px',
+      //               fontWeight: '700',
+      //               color: '#1e293b',
+      //               lineHeight: '1.1',
+      //             }}
+      //           >
+      //             {formatDate(formatRelativeDate(ticket.startDate))}
+      //           </span>
+      //         </div>
+      //         <div style={{ display: 'flex', flexDirection: 'column', textAlign: 'right' }}>
+      //           <span
+      //             style={{
+      //               fontSize: '14px',
+      //               fontWeight: '600',
+      //               color: '#64748b',
+      //               marginBottom: '4px',
+      //               letterSpacing: '0.05em',
+      //               textTransform: 'uppercase',
+      //             }}
+      //           >
+      //             EVENT
+      //           </span>
+      //           <span
+      //             style={{
+      //               fontSize: '20px',
+      //               fontWeight: '600',
+      //               color: '#1e293b',
+      //               lineHeight: '1.1',
+      //             }}
+      //           >
+      //             {ticket.eventName}
+      //           </span>
+      //         </div>
+      //       </div>
+
+      //       {/* Ticket Type and Venue Row */}
+      //       <div
+      //         style={{
+      //           display: 'flex',
+      //           justifyContent: 'space-between',
+      //         }}
+      //       >
+      //         <div style={{ display: 'flex', flexDirection: 'column' }}>
+      //           <span
+      //             style={{
+      //               fontSize: '14px',
+      //               fontWeight: '600',
+      //               color: '#64748b',
+      //               marginBottom: '4px',
+      //               letterSpacing: '0.05em',
+      //               textTransform: 'uppercase',
+      //             }}
+      //           >
+      //             LOCATION
+      //           </span>
+      //           <span
+      //             style={{
+      //               fontSize: '18px',
+      //               fontWeight: '600',
+      //               color: '#1e293b',
+      //             }}
+      //           >
+      //             {ticket.location}
+      //           </span>
+      //         </div>
+      //         <div style={{ display: 'flex', flexDirection: 'column', textAlign: 'right' }}>
+      //           <span
+      //             style={{
+      //               fontSize: '14px',
+      //               fontWeight: '600',
+      //               color: '#64748b',
+      //               marginBottom: '4px',
+      //               letterSpacing: '0.05em',
+      //               textTransform: 'uppercase',
+      //             }}
+      //           >
+      //             VENUE
+      //           </span>
+      //           <span
+      //             style={{
+      //               fontSize: '18px',
+      //               fontWeight: '600',
+      //               color: '#1e293b',
+      //             }}
+      //           >
+      //             {ticket.locationDetails}
+      //           </span>
+      //         </div>
+      //       </div>
+      //     </div>
+
+      //     {/* Ticket Holder Section */}
+      //     <div
+      //       style={{
+      //         display: 'flex',
+      //         alignItems: 'center',
+      //         gap: '12px',
+      //         marginTop: '20px',
+      //         padding: '16px 0',
+      //         borderTop: '1px solid #cbd5e1',
+      //       }}
+      //     >
+      //       <div
+      //         style={{
+      //           width: '40px',
+      //           height: '40px',
+      //           borderRadius: '50%',
+      //           background: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)',
+      //           display: 'flex',
+      //           alignItems: 'center',
+      //           justifyContent: 'center',
+      //           color: 'white',
+      //           fontSize: '16px',
+      //           fontWeight: '600',
+      //         }}
+      //       >
+      //         {ticket.ticketHolder.avatar ? (
+      //           <img
+      //             src={ticket.ticketHolder.avatar || '/placeholder.svg'}
+      //             alt="Avatar"
+      //             style={{
+      //               width: '100%',
+      //               height: '100%',
+      //               borderRadius: '50%',
+      //               objectFit: 'cover',
+      //             }}
+      //           />
+      //         ) : (
+      //           <span
+      //             style={{
+      //               color: 'white',
+      //               fontSize: '12px',
+      //               fontWeight: '700',
+      //             }}
+      //           >
+      //             {ticket.ticketHolder.name.charAt(0).toUpperCase()}
+      //           </span>
+      //         )}
+      //       </div>
+      //       <div style={{ display: 'flex', flexDirection: 'column' }}>
+      //         <span
+      //           style={{
+      //             fontSize: '16px',
+      //             fontWeight: '600',
+      //             color: '#1e293b',
+      //             lineHeight: '1.2',
+      //           }}
+      //         >
+      //           {ticket.ticketHolder.name}
+      //         </span>
+      //         <span
+      //           style={{
+      //             fontSize: '14px',
+      //             fontWeight: '500',
+      //             color: '#64748b',
+      //             lineHeight: '1.2',
+      //           }}
+      //         >
+      //           Verified Owner
+      //         </span>
+      //       </div>
+      //     </div>
+      //   </div>
+      // </div>
       {
         width: 1200,
         height: 630,
