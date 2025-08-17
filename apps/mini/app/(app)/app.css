@@ -55,6 +55,7 @@
 }
 
 body {
+  height: 100vh !important;
   overflow: hidden !important;
   overscroll-behavior: none !important;
 
