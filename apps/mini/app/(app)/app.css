@@ -54,7 +54,7 @@
   }
 }
 
-/* body {
+body {
   height: 100vh !important;
   overflow: hidden !important;
   overscroll-behavior: none !important;
@@ -63,13 +63,13 @@
     min-height: 100vh;
     overflow: hidden !important;
   }
-} that's how it was before */
+} /* that's how it was before */
 
 html {
   overscroll-behavior: none !important;
 }
 
-body {
+/* body {
   height: 100vh !important;
   display: flex;
   flex: 1;
@@ -78,8 +78,6 @@ body {
   overscroll-behavior: none !important;
 
   & > div:first-child {
-    width: 100%;
-    margin-inline: auto;
     display: flex;
     height: 100vh;
     min-height: 100vh;
@@ -88,7 +86,7 @@ body {
     overflow: hidden !important;
     overscroll-behavior: none !important;
   }
-}
+} */
 
 input[type='time']::-webkit-calendar-picker-indicator {
   display: none !important;
