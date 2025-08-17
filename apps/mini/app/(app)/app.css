@@ -54,16 +54,9 @@
   }
 }
 
-/* html,
 body {
   overflow: hidden !important;
   overscroll-behavior: none !important;
-} */
-
-body {
-  height: 100vh !important;
-  overflow: auto;
-  min-height: 100vh;
 
   & > div:first-child {
     min-height: 100vh;
