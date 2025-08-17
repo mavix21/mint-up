@@ -13,10 +13,10 @@ export const MINTUP_FACTORY_CONTRACT_ADDRESS = (() => {
 // Use different USDC contract addresses based on environment
 export const USDC_CONTRACT_ADDRESS = (() => {
   if (isDevelopment()) {
-    // Development USDC contract address
+    // Testnet USDC contract address
     return '0x036CbD53842c5426634e7929541eC2318f3dCF7e' as const;
   } else {
-    // Production USDC contract address
+    // Mainnet USDC contract address
     return '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913' as const;
   }
 })();
