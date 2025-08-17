@@ -24,10 +24,9 @@ export const Navigator = memo(function Navigator() {
     }
 
     if (tab === 'create') {
-      // Check authentication before opening create event sheet
       if (!isSignedIn) {
-        // Show sign-in prompt modal for better UX
         setShowSignInPrompt(true);
+
         return;
       }
       setOpen(true);
