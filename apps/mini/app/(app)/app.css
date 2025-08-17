@@ -56,10 +56,14 @@
 
 body {
   /* height: 100vh !important; */
+  display: flex;
+  justify-content: center;
   overflow: hidden !important;
   overscroll-behavior: none !important;
 
   & > div:first-child {
+    width: 100%;
+    margin-inline: auto;
     display: flex;
     flex-direction: column;
     height: 100dvh !important;
