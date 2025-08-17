@@ -207,6 +207,7 @@ Check it out 👇`,
                 }}
                 onPress={() => {
                   if (pathname?.includes('events/')) {
+                    setToggleEvent(false);
                     router.push('/');
                   } else {
                     setToggleEvent(false);
@@ -437,7 +438,7 @@ Check it out 👇`,
                     <Separator />
                   </YStack>
                   <YStack gap="$3">
-                    {/* Placeholder Host - Replace with actual host data */}
+                    {/* Host information - Show user not found indication if needed */}
                     <XStack alignItems="center" gap="$3">
                       {eventData.creator.imageUrl ? (
                         <Avatar circular size="$4">
@@ -448,9 +449,20 @@ Check it out 👇`,
                         <User size={16} color="$color" />
                       )}
                       <YStack flex={1}>
-                        <SizableText size="$3" fontWeight="600">
-                          {eventData.creator.name}
-                        </SizableText>
+                        {eventData.creator.name ? (
+                          <SizableText size="$3" fontWeight="600">
+                            {eventData.creator.name}
+                          </SizableText>
+                        ) : (
+                          <YStack gap="$1">
+                            <SizableText size="$3" fontWeight="600" color="$color11">
+                              User Not Found
+                            </SizableText>
+                            <SizableText size="$2" color="$color10">
+                              This user's profile is no longer available
+                            </SizableText>
+                          </YStack>
+                        )}
                         {/* <SizableText color="$color8" size="$2" /> */}
                       </YStack>
                     </XStack>
