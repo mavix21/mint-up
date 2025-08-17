@@ -33,12 +33,12 @@ const account = privateKeyToAccount(process.env.BACKEND_SIGNER_PRIVATE_KEY as `0
 const walletClient = createWalletClient({
   account,
   chain: CHAIN,
-  transport: http(process.env.BASE_SEPOLIA_RPC_URL),
+  transport: http(process.env.BASE_RPC_URL),
 });
 
 const publicClient = createPublicClient({
   chain: CHAIN,
-  transport: http(process.env.BASE_SEPOLIA_RPC_URL),
+  transport: http(process.env.BASE_RPC_URL),
 });
 
 // Shared helper function to enrich events with common data
@@ -378,11 +378,7 @@ export const createEventOnchain = internalAction({
     ),
   },
   handler: async (ctx, args) => {
-    if (
-      !process.env.BACKEND_SIGNER_PRIVATE_KEY ||
-      !process.env.BASE_SEPOLIA_RPC_URL ||
-      !CONTRACT_ADDRESS
-    ) {
+    if (!process.env.BACKEND_SIGNER_PRIVATE_KEY || !process.env.BASE_RPC_URL || !CONTRACT_ADDRESS) {
       throw new Error('Missing required environment variables for on-chain interaction.');
     }
 
