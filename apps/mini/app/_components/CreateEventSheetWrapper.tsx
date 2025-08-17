@@ -9,14 +9,13 @@ interface CreateEventSheetWrapperProps {
 }
 
 export function CreateEventSheetWrapper({ open, setOpen }: CreateEventSheetWrapperProps) {
-  const visualViewportHeight = useVisualViewportHeight();
+  // const visualViewportHeight = useVisualViewportHeight();
   const closeSheet = useCallback(() => setOpen(false), [setOpen]);
 
   return (
     <Sheet
       dismissOnSnapToBottom
       forceRemoveScrollEnabled={open}
-      disableDrag
       modal
       open={open}
       onOpenChange={setOpen}
@@ -31,11 +30,7 @@ export function CreateEventSheetWrapper({ open, setOpen }: CreateEventSheetWrapp
         enterStyle={{ opacity: 0 }}
         exitStyle={{ opacity: 0 }}
       />
-      <Sheet.Frame
-        key={visualViewportHeight}
-        alignItems="center"
-        style={{ height: visualViewportHeight }}
-      >
+      <Sheet.Frame alignItems="center">
         <YStack flex={1} width="100%">
           {/* Close Button */}
           <XStack
