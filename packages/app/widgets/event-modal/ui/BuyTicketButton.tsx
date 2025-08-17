@@ -15,6 +15,7 @@ import {
   USDC_CONTRACT_ADDRESS,
 } from 'app/shared/lib/constants';
 import { usdcAbi } from 'app/shared/lib/usdc_abi';
+import { useSession } from 'next-auth/react';
 import { useMemo } from 'react';
 import { parseUnits } from 'viem';
 import { useAccount } from 'wagmi';
@@ -27,6 +28,7 @@ interface BuyTicketButtonProps {
 
 export function BuyTicketButton({ handleOnStatus, price, tokenId }: BuyTicketButtonProps) {
   const { address, isConnected, isConnecting, isDisconnected } = useAccount();
+  const { data: session } = useSession();
   console.warn('ADDRESS', 'BASE_CHAIN_ID', { BASE_CHAIN_ID, address });
 
   const calls = useMemo(
@@ -54,9 +56,10 @@ export function BuyTicketButton({ handleOnStatus, price, tokenId }: BuyTicketBut
         <YStack gap="$2">
           <SizableText>Connection Information</SizableText>
           <SizableText>{'Address: ' + address}</SizableText>
-          <SizableText>{'Is Connected: ' + isConnected}</SizableText>
-          <SizableText>{'Is Connecting: ' + isConnecting}</SizableText>
-          <SizableText>{'Is Disconnected: ' + isDisconnected}</SizableText>
+          <SizableText>
+            {'address from session: ' + (session?.user.currentWalletAddress ?? 'no session')}
+          </SizableText>
+          <SizableText>{'session: ' + JSON.stringify(session)}</SizableText>
         </YStack>
         <ConnectWallet />
       </YStack>
