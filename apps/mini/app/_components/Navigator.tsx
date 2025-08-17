@@ -39,7 +39,7 @@ export const Navigator = memo(function Navigator() {
     <>
       <YStack
         width="100%"
-        height="100%"
+        height={'100vh' as any}
         position="relative"
         flex={1}
         overflow="hidden"
