@@ -193,28 +193,35 @@ Check it out 👇`,
               )}
 
               {/* Close Button */}
-              <Button
+              <XStack
                 position="absolute"
-                top="$3"
-                left="$3"
-                circular
-                chromeless
-                borderWidth={1}
-                backgroundColor="$background025"
-                pressStyle={{
-                  backgroundColor: '$background05',
-                  borderColor: 'transparent',
-                }}
-                onPress={() => {
-                  if (pathname?.includes('events/')) {
-                    setToggleEvent(false);
-                    router.push('/');
-                  } else {
-                    setToggleEvent(false);
-                  }
-                }}
-                icon={<ChevronDown size={20} />}
-              />
+                top="$5"
+                left="$5"
+                zIndex={1000}
+                alignItems="center"
+                justifyContent="center"
+              >
+                <Button
+                  size="$3"
+                  circular
+                  chromeless
+                  borderWidth={1}
+                  backgroundColor="$background075"
+                  pressStyle={{
+                    backgroundColor: '$background',
+                    borderColor: 'transparent',
+                  }}
+                  onPress={() => {
+                    if (pathname?.includes('events/')) {
+                      setToggleEvent(false);
+                      router.push('/');
+                    } else {
+                      setToggleEvent(false);
+                    }
+                  }}
+                  icon={<ChevronDown size={24} />}
+                />
+              </XStack>
             </View>
 
             {/* Event Content */}

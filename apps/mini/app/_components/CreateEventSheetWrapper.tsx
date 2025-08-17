@@ -16,6 +16,7 @@ export function CreateEventSheetWrapper({ open, setOpen }: CreateEventSheetWrapp
     <Sheet
       dismissOnSnapToBottom
       forceRemoveScrollEnabled={open}
+      disableDrag
       modal
       open={open}
       onOpenChange={setOpen}
@@ -50,9 +51,9 @@ export function CreateEventSheetWrapper({ open, setOpen }: CreateEventSheetWrapp
               circular
               chromeless
               borderWidth={1}
-              backgroundColor="$background025"
+              backgroundColor="$background075"
               pressStyle={{
-                backgroundColor: '$background05',
+                backgroundColor: '$background',
                 borderColor: 'transparent',
               }}
               onPress={() => setOpen(false)}
