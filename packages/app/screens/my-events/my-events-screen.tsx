@@ -34,9 +34,17 @@ export const MyEventsScreen = () => {
       return { upcomingEvents: [], pastEvents: [] };
     }
 
-    const today = Date.now();
-    const upcoming = allUserEvents.filter((event) => event.startDate > today);
-    const past = allUserEvents.filter((event) => event.startDate <= today);
+    const now = Date.now();
+    const upcoming = allUserEvents.filter((event) => {
+      // Event is upcoming if it hasn't ended yet (endDate > now)
+      // If no endDate, fall back to startDate > now
+      return event.endDate ? event.endDate > now : event.startDate > now;
+    });
+    const past = allUserEvents.filter((event) => {
+      // Event is past if it has ended (endDate <= now)
+      // If no endDate, fall back to startDate <= now
+      return event.endDate ? event.endDate <= now : event.startDate <= now;
+    });
 
     return { upcomingEvents: upcoming, pastEvents: past };
   }, [allUserEvents]);
