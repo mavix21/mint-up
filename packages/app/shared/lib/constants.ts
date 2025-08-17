@@ -6,7 +6,7 @@ export const MINTUP_FACTORY_CONTRACT_ADDRESS = (() => {
   if (isDevelopment()) {
     return '0x5Bf66d335822BEAD0848AaA92A15fe842b554871' as const;
   } else {
-    return '0x46BdA2742EAcD9f90b75295E86cF5Af0928d7496' as const;
+    return '0x5bf66d335822bead0848aaa92a15fe842b554871' as const;
   }
 })();
 
