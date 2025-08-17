@@ -3,7 +3,7 @@ import { base, baseSepolia } from 'viem/chains';
 import { isDevelopment } from './environment';
 
 export const MINTUP_FACTORY_CONTRACT_ADDRESS =
-  '0x5d6983aDCaF1dc403B824308eB82005d2318e133' as const;
+  '0x46BdA2742EAcD9f90b75295E86cF5Af0928d7496' as const;
 
 // Use different USDC contract addresses based on environment
 export const USDC_CONTRACT_ADDRESS = (() => {

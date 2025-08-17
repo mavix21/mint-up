@@ -416,6 +416,7 @@ export const createEventOnchain = internalAction({
                 ? parseUnits(t.ticketType.price.amount.toString(), 6)
                 : 0n,
             maxSupply: BigInt(t.totalSupply || 0),
+            mintsPerWallet: 1n, // TODO: organizer should be able to set this
             metadataURI,
           };
         })
