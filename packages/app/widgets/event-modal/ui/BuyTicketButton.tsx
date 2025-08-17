@@ -6,7 +6,6 @@ import {
   TransactionStatusLabel,
 } from '@coinbase/onchainkit/transaction';
 import type { LifecycleStatus } from '@coinbase/onchainkit/transaction';
-import { ConnectWallet } from '@coinbase/onchainkit/wallet';
 import { SizableText, YStack } from '@my/ui';
 import { abi } from 'app/shared/lib/abi';
 import {
@@ -18,7 +17,6 @@ import { usdcAbi } from 'app/shared/lib/usdc_abi';
 import { useSession } from 'next-auth/react';
 import { useMemo } from 'react';
 import { parseUnits } from 'viem';
-import { useAccount } from 'wagmi';
 
 interface BuyTicketButtonProps {
   handleOnStatus: (status: LifecycleStatus) => void;
@@ -27,9 +25,7 @@ interface BuyTicketButtonProps {
 }
 
 export function BuyTicketButton({ handleOnStatus, price, tokenId }: BuyTicketButtonProps) {
-  const { address, isConnected, isConnecting, isDisconnected } = useAccount();
   const { data: session } = useSession();
-  console.warn('ADDRESS', 'BASE_CHAIN_ID', { BASE_CHAIN_ID, address });
 
   const calls = useMemo(
     () => [
@@ -50,18 +46,10 @@ export function BuyTicketButton({ handleOnStatus, price, tokenId }: BuyTicketBut
     [tokenId]
   );
 
-  if (!address) {
+  if (!session) {
     return (
-      <YStack>
-        <YStack gap="$2">
-          <SizableText>Connection Information</SizableText>
-          <SizableText>{'Address: ' + address}</SizableText>
-          <SizableText>
-            {'address from session: ' + (session?.user.currentWalletAddress ?? 'no session')}
-          </SizableText>
-          <SizableText>{'session: ' + JSON.stringify(session)}</SizableText>
-        </YStack>
-        <ConnectWallet />
+      <YStack flex={1} justifyContent="center" alignItems="center">
+        <SizableText>Please sign in to buy a ticket</SizableText>
       </YStack>
     );
   }
