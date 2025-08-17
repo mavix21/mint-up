@@ -49,25 +49,27 @@ export function BuyTicketButton({ handleOnStatus, price, tokenId }: BuyTicketBut
   );
 
   if (!address) {
-    return <ConnectWallet />;
+    return (
+      <YStack>
+        <YStack gap="$2">
+          <SizableText>Connection Information</SizableText>
+          <SizableText>{'Address: ' + address}</SizableText>
+          <SizableText>{'Is Connected: ' + isConnected}</SizableText>
+          <SizableText>{'Is Connecting: ' + isConnecting}</SizableText>
+          <SizableText>{'Is Disconnected: ' + isDisconnected}</SizableText>
+        </YStack>
+        <ConnectWallet />
+      </YStack>
+    );
   }
 
   return (
-    <YStack>
-      <YStack>
-        <SizableText>Connection Information</SizableText>
-        <SizableText>{'Address: ' + address}</SizableText>
-        <SizableText>{'Is Connected: ' + isConnected}</SizableText>
-        <SizableText>{'Is Connecting: ' + isConnecting}</SizableText>
-        <SizableText>{'Is Disconnected: ' + isDisconnected}</SizableText>
-      </YStack>
-      <Transaction calls={calls} chainId={BASE_CHAIN_ID} onStatus={handleOnStatus}>
-        <TransactionButton className="text-center" />
-        <TransactionStatus>
-          <TransactionStatusLabel />
-          <TransactionStatusAction />
-        </TransactionStatus>
-      </Transaction>
-    </YStack>
+    <Transaction calls={calls} chainId={BASE_CHAIN_ID} onStatus={handleOnStatus}>
+      <TransactionButton className="text-center" />
+      <TransactionStatus>
+        <TransactionStatusLabel />
+        <TransactionStatusAction />
+      </TransactionStatus>
+    </Transaction>
   );
 }
