@@ -56,7 +56,7 @@ export function BuyTicketButton({ handleOnStatus, price, tokenId }: BuyTicketBut
 
   return (
     <Transaction calls={calls} chainId={BASE_CHAIN_ID} onStatus={handleOnStatus}>
-      <TransactionButton className="text-center" />
+      <TransactionButton className="text-center" text="Mint Ticket" />
       <TransactionStatus>
         <TransactionStatusLabel />
         <TransactionStatusAction />
