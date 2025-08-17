@@ -12,6 +12,7 @@ import {
 } from '@my/ui';
 import { formatDate, formatDateTime, formatRelativeDate } from '@my/ui/src/lib/dates';
 import { ConvexEventWithExtras } from 'app/entities';
+import { isEventLive } from 'app/shared/lib/utils';
 import { EventModal } from 'app/widgets/event-modal';
 import React from 'react';
 
@@ -20,11 +21,8 @@ import { RegistersAvatar } from './RegistersAvatar';
 export function ItemCardList({ event }: { event: ConvexEventWithExtras }) {
   const [toggleEvent, setToggleEvent] = React.useState(false);
 
-  // Check if event is currently live (between start and end date)
-  const isEventLive = () => {
-    const now = Date.now();
-    return now >= event.startDate && now <= event.endDate;
-  };
+  // Check if event is currently live using the shared utility
+  const eventIsLive = isEventLive(event.startDate, event.endDate);
 
   return (
     <Theme name={event.theme as ThemeName}>
@@ -52,7 +50,7 @@ export function ItemCardList({ event }: { event: ConvexEventWithExtras }) {
               backgroundColor="white"
               src={event.imageUrl ?? ''}
             />
-            {isEventLive() && (
+            {eventIsLive && (
               <View position="absolute" top="$1" right="$1" zIndex={1}>
                 <LiveIndicator size="small" />
               </View>

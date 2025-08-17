@@ -33,6 +33,7 @@ import {
 } from '@tamagui/lucide-icons';
 import { RegistersAvatar } from 'app/screens/explore-events/ui/RegistersAvatar';
 import { useSignIn } from 'app/shared/lib/hooks/use-sign-in';
+import { isEventLive } from 'app/shared/lib/utils';
 import React, { Dispatch, SetStateAction } from 'react';
 import { usePathname, useRouter } from 'solito/navigation';
 
@@ -52,11 +53,8 @@ export function EventModal({
 }) {
   const { signIn, session, isLoading: signInLoading, isSignedIn } = useSignIn();
 
-  // Check if event is currently live (between start and end date)
-  const isEventLive = () => {
-    const now = Date.now();
-    return now >= eventData.startDate && now <= eventData.endDate;
-  };
+  // Check if event is currently live using the shared utility
+  const eventIsLive = isEventLive(eventData.startDate, eventData.endDate);
   const { composeCast } = useComposeCast();
   const deleteRegistration = useMutation(api.registrations.deleteRegistration);
   const router = useRouter();
@@ -153,7 +151,6 @@ Check it out 👇`,
       <Sheet
         dismissOnSnapToBottom
         forceRemoveScrollEnabled={toggleEvent}
-        disableDrag
         modal
         open={toggleEvent}
         onOpenChange={setToggleEvent}
@@ -189,7 +186,7 @@ Check it out 👇`,
               />
 
               {/* Live Indicator */}
-              {isEventLive() && (
+              {eventIsLive && (
                 <View position="absolute" top="$7" right="$7" zIndex={2}>
                   <LiveIndicator size="medium" />
                 </View>
@@ -220,7 +217,7 @@ Check it out 👇`,
             </View>
 
             {/* Event Content */}
-            <ScrollView flex={1} showsVerticalScrollIndicator={false}>
+            <ScrollView flex={1} bounces={false}>
               <YStack gap="$4" padding="$4" pt="$0">
                 {/* Event Header */}
                 <YStack gap="$2">

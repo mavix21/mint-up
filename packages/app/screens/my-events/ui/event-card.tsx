@@ -12,17 +12,15 @@ import {
 import { Clock, Globe, MapPin } from '@tamagui/lucide-icons';
 import { ConvexEventWithExtras } from 'app/entities';
 import { formatTime } from 'app/shared';
+import { isEventLive } from 'app/shared/lib/utils';
 import { EventModal } from 'app/widgets/event-modal';
 import { useState } from 'react';
 
 export function EventCard({ event }: { event: ConvexEventWithExtras }) {
   const [toggleEvent, setToggleEvent] = useState(false);
 
-  // Check if event is currently live (between start and end date)
-  const isEventLive = () => {
-    const now = Date.now();
-    return now >= event.startDate && now <= event.endDate;
-  };
+  // Check if event is currently live using the shared utility
+  const eventIsLive = isEventLive(event.startDate, event.endDate);
 
   const getStatusChip = () => {
     if (event.isHost) {
@@ -102,7 +100,7 @@ export function EventCard({ event }: { event: ConvexEventWithExtras }) {
                 }}
                 source={{ uri: event.imageUrl ?? '' }}
               />
-              {isEventLive() && (
+              {eventIsLive && (
                 <View position="absolute" top="$2" right="$2" zIndex={1}>
                   <LiveIndicator size="small" />
                 </View>
