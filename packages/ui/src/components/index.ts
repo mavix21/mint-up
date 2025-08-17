@@ -22,3 +22,4 @@ export * from './elements/timepicker/TimePicker';
 export * from './atoms';
 export * from './Drawer';
 export * from './FormFields/NumberInput';
+export * from './LiveIndicator';

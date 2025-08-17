@@ -1,4 +1,14 @@
-import { View, YStack, XStack, Image, Theme, SizableText, ThemeName, Chip } from '@my/ui';
+import {
+  View,
+  YStack,
+  XStack,
+  Image,
+  Theme,
+  SizableText,
+  ThemeName,
+  Chip,
+  LiveIndicator,
+} from '@my/ui';
 import { Clock, Globe, MapPin } from '@tamagui/lucide-icons';
 import { ConvexEventWithExtras } from 'app/entities';
 import { formatTime } from 'app/shared';
@@ -7,6 +17,12 @@ import { useState } from 'react';
 
 export function EventCard({ event }: { event: ConvexEventWithExtras }) {
   const [toggleEvent, setToggleEvent] = useState(false);
+
+  // Check if event is currently live (between start and end date)
+  const isEventLive = () => {
+    const now = Date.now();
+    return now >= event.startDate && now <= event.endDate;
+  };
 
   const getStatusChip = () => {
     if (event.isHost) {
@@ -69,6 +85,7 @@ export function EventCard({ event }: { event: ConvexEventWithExtras }) {
               $xxs={{
                 width: '100%',
               }}
+              position="relative"
             >
               <Image
                 borderRadius={10}
@@ -85,6 +102,11 @@ export function EventCard({ event }: { event: ConvexEventWithExtras }) {
                 }}
                 source={{ uri: event.imageUrl ?? '' }}
               />
+              {isEventLive() && (
+                <View position="absolute" top="$2" right="$2" zIndex={1}>
+                  <LiveIndicator size="small" />
+                </View>
+              )}
             </View>
             <YStack flex={1} justifyContent="flex-start" gap="$2" $xxs={{ paddingInline: '$4' }}>
               <View

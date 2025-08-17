@@ -1,4 +1,4 @@
-import { createAnimations } from '@tamagui/animations-moti'
+import { createAnimations } from '@tamagui/animations-moti';
 
 export const animations = createAnimations({
   '100ms': {
@@ -40,4 +40,4 @@ export const animations = createAnimations({
     mass: 0.9,
     stiffness: 100,
   },
-})
+});

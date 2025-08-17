@@ -17,6 +17,7 @@ import {
   Theme,
   Separator,
   LoadingButton,
+  LiveIndicator,
 } from '@my/ui';
 import { formatDate, formatDateTime, formatRelativeDate } from '@my/ui/src/lib/dates';
 import {
@@ -50,6 +51,12 @@ export function EventModal({
   eventData: ConvexEventWithExtras;
 }) {
   const { signIn, session, isLoading: signInLoading, isSignedIn } = useSignIn();
+
+  // Check if event is currently live (between start and end date)
+  const isEventLive = () => {
+    const now = Date.now();
+    return now >= eventData.startDate && now <= eventData.endDate;
+  };
   const { composeCast } = useComposeCast();
   const deleteRegistration = useMutation(api.registrations.deleteRegistration);
   const router = useRouter();
@@ -180,6 +187,13 @@ Check it out 👇`,
                 borderRadius="$6"
                 overflow="hidden"
               />
+
+              {/* Live Indicator */}
+              {isEventLive() && (
+                <View position="absolute" top="$7" right="$7" zIndex={2}>
+                  <LiveIndicator size="medium" />
+                </View>
+              )}
 
               {/* Close Button */}
               <Button
