@@ -23,13 +23,19 @@ export async function GET() {
       name: process.env.NEXT_PUBLIC_ONCHAINKIT_PROJECT_NAME,
       subtitle: process.env.NEXT_PUBLIC_APP_SUBTITLE,
       description: process.env.NEXT_PUBLIC_APP_DESCRIPTION,
-      screenshotUrls: [],
+      screenshotUrls: [
+        `${URL}/screenshots/shot-02.png`,
+        `${URL}/screenshots/shot-03.png`,
+        `${URL}/screenshots/shot-04.png`,
+        `${URL}/screenshots/shot-05.png`,
+        `${URL}/screenshots/shot-06.png`,
+      ],
       iconUrl: process.env.NEXT_PUBLIC_APP_ICON,
       splashImageUrl: process.env.NEXT_PUBLIC_APP_SPLASH_IMAGE,
       splashBackgroundColor: process.env.NEXT_PUBLIC_SPLASH_BACKGROUND_COLOR,
       homeUrl: URL,
       primaryCategory: process.env.NEXT_PUBLIC_APP_PRIMARY_CATEGORY,
-      tags: [],
+      tags: ['social', 'events', 'nft'],
       heroImageUrl: process.env.NEXT_PUBLIC_APP_HERO_IMAGE,
       tagline: process.env.NEXT_PUBLIC_APP_TAGLINE,
       ogTitle: process.env.NEXT_PUBLIC_APP_OG_TITLE,
@@ -37,5 +43,8 @@ export async function GET() {
       ogImageUrl: process.env.NEXT_PUBLIC_APP_OG_IMAGE,
       webhookUrl: process.env.NEXT_PUBLIC_APP_WEBHOOK,
     }),
+    baseBuilder: {
+      allowedAddresses: ['0x7d9A95C46D50231016f12A79c5bDeA2936570b05'],
+    },
   });
 }
