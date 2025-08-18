@@ -26,9 +26,9 @@ export function EventImage({ image, onImageChange, autoLoadDefaultImage = true }
     onImageChange,
   });
 
-  const validateImageSize = (file: File): boolean | string => {
+  const validateImageSize = (file: File): true | string => {
     const maxSize = 1.8 * 1024 * 1024; // 2MB in bytes
-    if (file.size > maxSize) {
+    if (file.size >= maxSize) {
       return 'Image size must be less than 2MB';
     }
     return true;
@@ -38,10 +38,7 @@ export function EventImage({ image, onImageChange, autoLoadDefaultImage = true }
     const validationResult = validateImageSize(file);
     if (validationResult !== true) {
       toast.show('Image too large', {
-        message:
-          typeof validationResult === 'string'
-            ? validationResult
-            : 'Image size must be less than 2MB',
+        message: validationResult,
         type: 'error',
       });
       return false;

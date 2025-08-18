@@ -28,6 +28,7 @@ export function useFileInput(
       // Validation failed
       if (validationResult !== true) return;
 
+      console.warn('Image size is valid', `${(file.size / (1024 * 1024)).toFixed(2)}MB`);
       onFileSelect(file);
     },
     [onFileSelect, validateFile]
