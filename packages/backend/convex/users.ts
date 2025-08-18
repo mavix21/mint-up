@@ -1,9 +1,9 @@
 import { omit } from 'convex-helpers';
-import { internalQuery, mutation } from './_generated/server';
+import { internalQuery, mutation, query } from './_generated/server';
 import { vv } from './schema';
 import { ConvexError, v } from 'convex/values';
 
-export const createUserByFid = mutation({
+export const upsertUserByFid = mutation({
   args: {
     ...omit(vv.doc('users').fields, ['_id', '_creationTime']),
     currentWalletAddress: v.optional(v.string()),
@@ -50,6 +50,37 @@ export const createUserByFid = mutation({
     });
 
     return userId;
+  },
+});
+
+export const getUserByFid = query({
+  args: {
+    fid: v.number(),
+  },
+  handler: async (ctx, args) => {
+    const linkedAccount = await ctx.db
+      .query('linkedAccounts')
+      .withIndex('by_farcaster_fid', (q) => q.eq('account.fid', args.fid))
+      .unique();
+
+    if (!linkedAccount) {
+      return null;
+    }
+
+    const user = await ctx.db.get(linkedAccount.userId);
+
+    if (!user) {
+      return null;
+    }
+
+    return {
+      username: user.username,
+      pfpUrl: user.pfpUrl,
+      currentWalletAddress: user.currentWalletAddress,
+      fid: args.fid,
+      userId: user._id,
+      linkedAt: linkedAccount.linkedAt,
+    };
   },
 });
 

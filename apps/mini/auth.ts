@@ -7,7 +7,8 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 import { parseSiweMessage } from 'viem/siwe';
 
 import { getNeynarUser } from './lib/neynar';
-import { createUserByFid } from './src/users/create-user.action';
+import { upsertUserByFid } from './src/users/create-user.action';
+import { getUserByFid } from './src/users/get-user-by-id';
 
 declare module 'next-auth' {
   interface Session {
@@ -122,19 +123,53 @@ export const authOptions: AuthOptions = {
         }
 
         try {
+          const existingUser = await getUserByFid(fid);
+          const isRecentlyLinked =
+            existingUser?.linkedAt && existingUser.linkedAt > Date.now() - 1000 * 60 * 60 * 24;
+
+          // If user exists and was recently linked, return existing data
+          if (existingUser && isRecentlyLinked) {
+            console.warn('User already linked, returning existing data', { fid });
+            return {
+              id: existingUser.userId,
+              fid,
+              name: existingUser.username,
+              username: existingUser.username,
+              image: existingUser.pfpUrl,
+              currentWalletAddress:
+                existingUser.currentWalletAddress !== undefined
+                  ? (existingUser.currentWalletAddress as `0x${string}`)
+                  : address ?? '0x0',
+            };
+          }
+
+          // Fetch fresh data from Neynar (for both new and existing users)
           const user = await getNeynarUser(fid);
           if (!user) {
             console.error('Failed to get Neynar user', { fid });
-            return null;
+            return existingUser
+              ? {
+                  id: existingUser.userId,
+                  fid,
+                  name: existingUser.username,
+                  username: existingUser.username,
+                  image: existingUser.pfpUrl,
+                  currentWalletAddress:
+                    existingUser.currentWalletAddress !== undefined
+                      ? (existingUser.currentWalletAddress as `0x${string}`)
+                      : address ?? '0x0',
+                }
+              : null;
           }
 
-          const userId = await createUserByFid({
+          // Update or create user
+          const userId = await upsertUserByFid({
             fid,
-            displayName: user.display_name,
             username: user.username,
-            pfpUrl: user.pfp_url ?? '',
+            pfpUrl: user.pfp_url ?? existingUser?.pfpUrl ?? '',
             currentWalletAddress: address,
             bio: user.profile.bio.text,
+            ...(existingUser ? {} : { displayName: user.display_name }),
           });
 
           return {
@@ -142,7 +177,7 @@ export const authOptions: AuthOptions = {
             fid,
             name: user.username,
             username: user.username,
-            image: user.pfp_url ?? '',
+            image: user.pfp_url ?? existingUser?.pfpUrl ?? '',
             currentWalletAddress: address ?? '0x0',
           };
         } catch (error) {
