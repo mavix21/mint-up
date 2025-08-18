@@ -61,9 +61,11 @@ export function CreateEventScreen({ closeSheet }: { closeSheet: () => void }) {
       return true;
     } catch (error) {
       console.error('Error creating event:', error);
-      toast.show('Error creating event', {
+      const message = error instanceof Error ? error.message.slice(0, 100) : 'Unknown error';
+      toast.show(message, {
         type: 'error',
         preset: 'error',
+        message,
       });
       return false;
     }
