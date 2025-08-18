@@ -21,17 +21,7 @@ export function CreateEventScreen({ closeSheet }: { closeSheet: () => void }) {
   ) => {
     console.log('Creating event with data:', data);
     try {
-      const file = data.image;
-
-      if (!file) {
-        toast.show('Please upload an image', {
-          type: 'error',
-          preset: 'error',
-        });
-        return;
-      }
-
-      const { storageId, url } = await uploadFile(file);
+      const { storageId, url } = await uploadFile(data.image);
 
       await createEvent({
         event: {
@@ -68,12 +58,14 @@ export function CreateEventScreen({ closeSheet }: { closeSheet: () => void }) {
         preset: 'done',
       });
       closeSheet();
+      return true;
     } catch (error) {
       console.error('Error creating event:', error);
       toast.show('Error creating event', {
         type: 'error',
         preset: 'error',
       });
+      return false;
     }
   };
 

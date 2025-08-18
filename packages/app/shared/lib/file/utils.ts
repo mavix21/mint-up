@@ -63,3 +63,13 @@ export function formatFileSize(bytes: number): string {
 
   return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
 }
+
+/**
+ * Validate if a file size is less than the max size in MB
+ */
+export function validateImageSize(file: File, maxSize = 1.8 * 1024 * 1024): true | string {
+  if (file.size >= maxSize) {
+    return `Image size must be less than ${maxSize / 1024 / 1024}MB`;
+  }
+  return true;
+}

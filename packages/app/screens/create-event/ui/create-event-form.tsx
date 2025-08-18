@@ -14,8 +14,10 @@ import {
   YGroup,
   Form,
   Theme,
+  useToastController,
 } from '@my/ui';
 import { Globe, Clock4, Clock2 } from '@tamagui/lucide-icons';
+import { validateImageSize } from 'app/shared/lib/file';
 import { useAppForm } from 'app/shared/lib/form';
 import { FieldInfo } from 'app/shared/ui/FieldInfo';
 import { useState } from 'react';
@@ -36,9 +38,9 @@ import { getClientTimezone, calculateDefaultEventTimes } from '../../../utils';
 import { createEventFormOpts } from '../model/shared-form';
 
 export interface CreateEventFormProps {
-  onSubmit?: (
+  onSubmit: (
     data: CreateEventFormData & { startTimestamp: number; endTimestamp: number }
-  ) => Promise<void>;
+  ) => Promise<boolean>;
   theme?: string;
   onThemeChange?: (theme: string) => void;
   showThemeSheet?: boolean;
@@ -59,6 +61,7 @@ export function CreateEventForm({
   onShowThemeSheetChange,
 }: CreateEventFormProps) {
   const tamaguiTokens = getTokens();
+  const toast = useToastController();
   const [showLocationSheet, setShowLocationSheet] = useState(false);
   const [showDescriptionSheet, setShowDescriptionSheet] = useState(false);
   const [showTicketingSheet, setShowTicketingSheet] = useState(false);
@@ -87,22 +90,34 @@ export function CreateEventForm({
       const endTimestamp = toTimestamp(value.endDate, value.endTime);
       const image = value.image;
       if (!image) {
-        throw new Error('Image is required');
+        toast.show('Please upload an image', {
+          type: 'error',
+          preset: 'error',
+        });
+        return;
       }
 
-      await onSubmit?.({
+      const validationResult = validateImageSize(image);
+
+      if (validationResult !== true) {
+        toast.show('Image too large', {
+          type: 'error',
+          preset: 'error',
+          message: validationResult,
+        });
+        return;
+      }
+
+      const result = await onSubmit({
         ...value,
         startTimestamp,
         endTimestamp,
         image,
       });
 
-      form.reset();
-    },
-    onSubmitInvalid: ({ formApi }) => {
-      console.log('onSubmitInvalid');
-      console.log('form values', formApi.state.values);
-      console.log('errors', formApi.state.errors);
+      if (result) {
+        form.reset();
+      }
     },
   });
 

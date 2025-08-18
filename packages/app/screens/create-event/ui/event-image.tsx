@@ -1,6 +1,6 @@
 import { useToastController } from '@my/ui';
 import { Image as ImageIcon } from '@tamagui/lucide-icons';
-import { useFileInput, useImageCrop, useImageUrl } from 'app/shared/lib/file';
+import { useFileInput, useImageCrop, useImageUrl, validateImageSize } from 'app/shared/lib/file';
 import { useDefaultImage } from 'app/shared/lib/file/use-default-image';
 import { YStack, Image, View, Button } from 'tamagui';
 
@@ -25,14 +25,6 @@ export function EventImage({ image, onImageChange, autoLoadDefaultImage = true }
   const { cropState, openCropSheet, closeCropSheet, handleCropComplete } = useImageCrop({
     onImageChange,
   });
-
-  const validateImageSize = (file: File): true | string => {
-    const maxSize = 1.8 * 1024 * 1024; // 2MB in bytes
-    if (file.size >= maxSize) {
-      return 'Image size must be less than 2MB';
-    }
-    return true;
-  };
 
   const validateAndShowError = (file: File): boolean => {
     const validationResult = validateImageSize(file);
