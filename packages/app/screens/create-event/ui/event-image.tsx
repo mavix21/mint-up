@@ -27,14 +27,14 @@ export function EventImage({ image, onImageChange, autoLoadDefaultImage = true }
   });
 
   const validateImageSize = (file: File): boolean | string => {
-    const maxSize = 2 * 1024 * 1024; // 2MB in bytes
+    const maxSize = 1.8 * 1024 * 1024; // 2MB in bytes
     if (file.size > maxSize) {
       return 'Image size must be less than 2MB';
     }
     return true;
   };
 
-  const handleFileSelect = (file: File) => {
+  const validateAndShowError = (file: File): boolean => {
     const validationResult = validateImageSize(file);
     if (validationResult !== true) {
       toast.show('Image too large', {
@@ -44,12 +44,16 @@ export function EventImage({ image, onImageChange, autoLoadDefaultImage = true }
             : 'Image size must be less than 2MB',
         type: 'error',
       });
-      return;
+      return false;
     }
+    return true;
+  };
+
+  const handleFileSelect = (file: File) => {
     openCropSheet(file);
   };
 
-  const { FileInput, openFilePicker } = useFileInput(handleFileSelect);
+  const { FileInput, openFilePicker } = useFileInput(handleFileSelect, validateAndShowError);
 
   return (
     <>

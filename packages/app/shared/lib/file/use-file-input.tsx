@@ -13,20 +13,22 @@ export function useFileInput(
   const handleFileChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       const file = event.target.files?.[0];
-      if (file) {
-        if (validateFile) {
-          const validationResult = validateFile(file);
-          if (validationResult !== true) {
-            // If validation returns a string, it's an error message
-            if (typeof validationResult === 'string') {
-              // We'll need to handle this error in the component that uses this hook
-              return;
-            }
-            return; // Validation failed
-          }
-        }
+      if (!file) return;
+
+      if (!validateFile) {
         onFileSelect(file);
+        return;
       }
+
+      const validationResult = validateFile(file);
+
+      // If validation returns a string, it's an error message
+      if (typeof validationResult === 'string') return;
+
+      // Validation failed
+      if (validationResult !== true) return;
+
+      onFileSelect(file);
     },
     [onFileSelect, validateFile]
   );
