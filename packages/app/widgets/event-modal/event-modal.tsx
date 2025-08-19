@@ -19,7 +19,12 @@ import {
   LoadingButton,
   LiveIndicator,
 } from '@my/ui';
-import { formatDate, formatDateTime, formatRelativeDate } from '@my/ui/src/lib/dates';
+import {
+  formatDate,
+  formatDateTime,
+  formatRelativeDate,
+  formatDateWithLogicYear,
+} from '@my/ui/src/lib/dates';
 import {
   Clock,
   MapPin,
@@ -146,6 +151,10 @@ Check it out 👇`,
     });
   };
 
+  const startDate = new Date(eventData.startDate);
+  const endDate = new Date(eventData.endDate);
+  const isSameDate = startDate.toDateString() === endDate.toDateString();
+
   return (
     <>
       <Sheet
@@ -234,19 +243,21 @@ Check it out 👇`,
                     {eventData?.name}
                   </H2>
 
-                  <XStack alignItems="center" gap="$2">
-                    <Calendar size={16} opacity={0.8} />
-                    <SizableText size="$2" opacity={0.8}>
-                      {formatDate(formatRelativeDate(eventData.startDate))}
-                    </SizableText>
-                  </XStack>
-
-                  <XStack alignItems="center" gap="$2">
-                    <Clock size={16} opacity={0.8} />
-                    <SizableText size="$2" opacity={0.8}>
-                      {formatDateTime(formatRelativeDate(eventData.startDate))}
-                    </SizableText>
-                  </XStack>
+                  <SizableText size="$2" opacity={0.8}>
+                    {isSameDate
+                      ? `${formatDateWithLogicYear(
+                          formatRelativeDate(eventData.startDate)
+                        )}, ${formatDateTime(
+                          formatRelativeDate(eventData.startDate)
+                        )} - ${formatDateTime(formatRelativeDate(eventData.endDate))}`
+                      : `${formatDateWithLogicYear(
+                          formatRelativeDate(eventData.startDate)
+                        )}, ${formatDateTime(
+                          formatRelativeDate(eventData.startDate)
+                        )} - ${formatDateWithLogicYear(
+                          formatRelativeDate(eventData.endDate)
+                        )}, ${formatDateTime(formatRelativeDate(eventData.endDate))}`}
+                  </SizableText>
                 </YStack>
 
                 {/* Status Badge */}
