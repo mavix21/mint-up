@@ -320,9 +320,7 @@ Check it out 👇`,
                         <Button
                           flex={1}
                           fontWeight="600"
-                          onPress={() => {
-                            console.log('show ticket');
-                          }}
+                          onPress={() => router.push(`/events/${eventData._id}/manage`)}
                           iconAfter={ExternalLink}
                         >
                           <Button.Text>Manage</Button.Text>
