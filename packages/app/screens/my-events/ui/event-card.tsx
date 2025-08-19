@@ -70,21 +70,47 @@ export function EventCard({ event }: { event: ConvexEventWithExtras }) {
           borderStyle="solid"
           backgroundColor="$color1"
           justifyContent="space-between"
+          alignItems="center"
           onPress={() => setToggleEvent(true)}
         >
           <XStack
             flexDirection="row-reverse"
+            flex={1}
             $xxs={{ flexDirection: 'column', alignItems: 'stretch' }}
             alignItems="center"
             gap="$4"
           >
+            <YStack
+              borderRadius="$4"
+              $xxs={{
+                width: '100%',
+              }}
+              position="relative"
+              alignItems="flex-end"
+            >
+              <Image
+                borderRadius={10}
+                backgroundColor="$color5"
+                objectFit="cover"
+                height={108}
+                aspectRatio={1}
+                $xxs={{
+                  height: 140,
+                  width: '100%',
+                }}
+                $group-window-gtMd={{
+                  minWidth: 'inherit',
+                }}
+                source={{ uri: event.imageUrl ?? '' }}
+              />
+              {eventIsLive && (
+                <View position="absolute" top="$2" right="$2" zIndex={1}>
+                  <LiveIndicator size="small" />
+                </View>
+              )}
+            </YStack>
             <YStack flex={1} justifyContent="flex-start" gap="$2" $xxs={{ paddingInline: '$4' }}>
-              <View
-                alignSelf="flex-start"
-                justifyContent="center"
-                gap="$5"
-                $xxs={{ paddingInline: '$4' }}
-              >
+              <View alignSelf="flex-start" justifyContent="center" gap="$5">
                 {getStatusChip()}
               </View>
               <View
@@ -138,36 +164,6 @@ export function EventCard({ event }: { event: ConvexEventWithExtras }) {
               )}
             </YStack>
           </XStack>
-
-          <View
-            flexDirection="column"
-            borderRadius="$4"
-            $xxs={{
-              width: '100%',
-            }}
-            position="relative"
-          >
-            <Image
-              borderRadius={10}
-              backgroundColor="$color5"
-              objectFit="cover"
-              height={108}
-              aspectRatio={1}
-              $xxs={{
-                height: 140,
-                width: '100%',
-              }}
-              $group-window-gtMd={{
-                minWidth: 'inherit',
-              }}
-              source={{ uri: event.imageUrl ?? '' }}
-            />
-            {eventIsLive && (
-              <View position="absolute" top="$2" right="$2" zIndex={1}>
-                <LiveIndicator size="small" />
-              </View>
-            )}
-          </View>
         </XStack>
 
         <EventModal toggleEvent={toggleEvent} setToggleEvent={setToggleEvent} eventData={event} />
