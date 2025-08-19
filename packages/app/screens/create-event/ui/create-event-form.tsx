@@ -436,20 +436,10 @@ export function CreateEventForm({
             onOpenChange={setShowLocationSheet}
           />
           {/* Description Sheet */}
-          <form.Field
-            name="description"
-            children={(field) => {
-              return (
-                <EventDescriptionSheet
-                  open={showDescriptionSheet}
-                  onOpenChange={setShowDescriptionSheet}
-                  description={field.state.value}
-                  onDescriptionChange={(description) => {
-                    field.handleChange(description);
-                  }}
-                />
-              );
-            }}
+          <EventDescriptionSheet
+            form={form}
+            open={showDescriptionSheet}
+            onOpenChange={setShowDescriptionSheet}
           />
           {/* Ticketing Sheet */}
           <EventTicketingSheet
