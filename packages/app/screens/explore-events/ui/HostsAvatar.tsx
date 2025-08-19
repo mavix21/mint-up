@@ -1,15 +1,11 @@
 import { Circle, XStack, Avatar } from '@my/ui';
-import { ConvexEventWithExtras } from 'app/entities';
 
-export function HostsAvatar({ event }: { event: ConvexEventWithExtras }) {
+export function HostsAvatar({ name, imageUrl }: { name: string; imageUrl: string | null }) {
   return (
     <XStack gap="$2" alignItems="center">
-      {event.creator.imageUrl ? (
+      {imageUrl ? (
         <Avatar circular size="$2">
-          <Avatar.Image
-            accessibilityLabel={event.creator.name}
-            src={event.creator.imageUrl ?? ''}
-          />
+          <Avatar.Image accessibilityLabel={name} src={imageUrl ?? ''} />
           <Avatar.Fallback delayMs={600} backgroundColor="$background" />
         </Avatar>
       ) : (

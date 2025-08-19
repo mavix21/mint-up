@@ -37,7 +37,7 @@ export function ItemCardList({ event }: { event: ConvexEventWithExtras }) {
         pressStyle={{ scale: 0.975 }}
         hoverStyle={{ borderColor: '$borderColorHover' }}
         py="$3"
-        pl="$3"
+        px="$3"
         // onPress={() => router.push(`/events/detail/${event._id}`)}
         onPress={() => setToggleEvent(true)}
       >
@@ -69,8 +69,8 @@ export function ItemCardList({ event }: { event: ConvexEventWithExtras }) {
                 {event.name}
               </SizableText>
 
-              <XStack gap="$6">
-                <YStack flex={1} gap="$2">
+              <XStack gap="$2" alignItems="center">
+                <YStack flex={1} gap="$1">
                   <View alignItems="flex-start">
                     <Chip size="$1" rounded paddingInline="$2">
                       <Chip.Text fontWeight="600">{event.category}</Chip.Text>
@@ -78,15 +78,15 @@ export function ItemCardList({ event }: { event: ConvexEventWithExtras }) {
                   </View>
                   <RegistersAvatar event={event} />
                 </YStack>
-                <YStack gap="$1.5" $xs={{ display: 'none' }} $gtSm={{ display: 'flex' }} pr="$3">
-                  <SizableText size="$1" color="$color10" fontWeight="600">
+                <YStack gap="$1.5" $gtSm={{ display: 'flex' }}>
+                  <SizableText size="$1" color="$color11" fontWeight="600">
                     Host
                   </SizableText>
                   <XStack gap="$2" alignItems="center">
-                    <HostsAvatar event={event} />
-                    <SizableText size="$1" color="$color10" fontWeight="$5">
-                      {event.creator.username}
-                    </SizableText>
+                    <HostsAvatar name={event.creator.username} imageUrl={event.creator.imageUrl} />
+                    {/* <SizableText size="$1" color="$color10" fontWeight="$5">
+                      // {event.creator.username}
+                    </SizableText> */}
                   </XStack>
                 </YStack>
               </XStack>
