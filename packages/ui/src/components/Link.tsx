@@ -1,12 +1,12 @@
-import { Link as SolitoLink, LinkProps as SolitoLinkProps } from 'solito/link'
-import { SizableText, TextProps } from 'tamagui'
+import { Link as SolitoLink, LinkProps as SolitoLinkProps } from 'solito/link';
+import { SizableText, TextProps } from 'tamagui';
 
 export type LinkProps = Omit<SolitoLinkProps, 'passHref' | 'as' | 'color'> &
   TextProps & {
-    target?: string
-    rel?: string
-    title?: string
-  }
+    target?: string;
+    rel?: string;
+    title?: string;
+  };
 
 export const Link = ({
   href = '',
@@ -18,12 +18,12 @@ export const Link = ({
   children,
   ...props
 }: LinkProps) => {
-  const linkProps = { href, replace, scroll, shallow, prefetch, locale }
+  const linkProps = { href, replace, scroll, shallow, prefetch, locale };
   return (
     <SolitoLink {...linkProps}>
       <SizableText tag="span" {...props}>
         {children}
       </SizableText>
     </SolitoLink>
-  )
-}
+  );
+};
