@@ -44,7 +44,7 @@ export const OverviewTab = ({ event }: OverviewTabProps) => {
                 Date & Time
               </SizableText>
             </XStack>
-            <YStack gap="$1" paddingLeft="$6">
+            <YStack gap="$1" paddingLeft="$6" alignItems="flex-end">
               <SizableText size="$3" color="$color11">
                 {new Date(event.startDate).toLocaleDateString('en-US', {
                   weekday: 'long',
@@ -88,7 +88,7 @@ export const OverviewTab = ({ event }: OverviewTabProps) => {
                 Location
               </SizableText>
             </XStack>
-            <YStack gap="$1" paddingLeft="$6">
+            <YStack gap="$1" paddingLeft="$6" alignItems="flex-end">
               <SizableText size="$3" fontWeight="600" color="$color11">
                 {event.location.type === 'online'
                   ? event.location.url
