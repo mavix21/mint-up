@@ -16,6 +16,7 @@ import { isEventLive } from 'app/shared/lib/utils';
 import { EventModal } from 'app/widgets/event-modal';
 import React from 'react';
 
+import { HostsAvatar } from './HostsAvatar';
 import { RegistersAvatar } from './RegistersAvatar';
 
 export function ItemCardList({ event }: { event: ConvexEventWithExtras }) {
@@ -72,7 +73,27 @@ export function ItemCardList({ event }: { event: ConvexEventWithExtras }) {
                   <Chip.Text fontWeight="600">{event.category}</Chip.Text>
                 </Chip>
               </View>
-              <RegistersAvatar event={event} />
+              <XStack gap="$1">
+                <YStack width="$15">
+                  <SizableText size="$1" color="$color10" fontWeight="600">
+                    Attendees
+                  </SizableText>
+                  <View justifyContent="center">
+                    <RegistersAvatar event={event} />
+                  </View>
+                </YStack>
+                <YStack>
+                  <SizableText size="$1" color="$color10" fontWeight="600">
+                    Host
+                  </SizableText>
+                  <XStack gap="$2" alignItems="center">
+                    <HostsAvatar event={event} />
+                    <SizableText size="$1" color="$color10" fontWeight="$5">
+                      {event.creator.username}
+                    </SizableText>
+                  </XStack>
+                </YStack>
+              </XStack>
             </YStack>
           </YStack>
         </XStack>

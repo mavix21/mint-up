@@ -15,7 +15,7 @@ export function RegistersAvatar({ event }: { event: ConvexEventWithExtras }) {
       <View height="$1.5" justifyContent="center">
         {isUserHost ? (
           <SizableText size="$1" color="$color10">
-            Your event is live – start inviting attendees today.
+            Start inviting attendees today.
           </SizableText>
         ) : (
           <SizableText size="$1" color="$color10">

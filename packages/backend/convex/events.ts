@@ -84,6 +84,7 @@ async function enrichEventsWithCommonData(
         tickets,
         creator: {
           name: user?.displayName ?? 'Anonymous',
+          username: user?.username ?? 'Anonymous',
           imageUrl: user?.pfpUrl ?? null,
         },
         isHost,
