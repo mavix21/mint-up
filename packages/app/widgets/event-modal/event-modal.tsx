@@ -447,7 +447,7 @@ Check it out 👇`,
                   <YStack gap="$2">
                     <XStack alignItems="center" justifyContent="space-between">
                       <SizableText size="$4" fontWeight="600">
-                        Hosts
+                        Host
                       </SizableText>
                     </XStack>
                     <Separator />

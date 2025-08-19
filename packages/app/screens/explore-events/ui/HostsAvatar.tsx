@@ -13,7 +13,7 @@ export function HostsAvatar({ event }: { event: ConvexEventWithExtras }) {
           <Avatar.Fallback delayMs={600} backgroundColor="$background" />
         </Avatar>
       ) : (
-        <Circle size="$2" backgroundColor="$backgroundHover" />
+        <Circle size="$2" backgroundColor="$color10" />
       )}
     </XStack>
   );

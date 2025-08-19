@@ -70,7 +70,7 @@ export function ItemCardList({ event }: { event: ConvexEventWithExtras }) {
               </SizableText>
 
               <XStack gap="$6">
-                <YStack minWidth="$14" gap="$2">
+                <YStack flex={1} gap="$2">
                   <View alignItems="flex-start">
                     <Chip size="$1" rounded paddingInline="$2">
                       <Chip.Text fontWeight="600">{event.category}</Chip.Text>
@@ -78,7 +78,7 @@ export function ItemCardList({ event }: { event: ConvexEventWithExtras }) {
                   </View>
                   <RegistersAvatar event={event} />
                 </YStack>
-                <YStack gap="$2">
+                <YStack gap="$1.5" $xs={{ display: 'none' }} $gtSm={{ display: 'flex' }} pr="$3">
                   <SizableText size="$1" color="$color10" fontWeight="600">
                     Host
                   </SizableText>
