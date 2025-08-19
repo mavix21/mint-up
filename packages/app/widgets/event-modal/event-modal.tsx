@@ -26,12 +26,10 @@ import {
   formatDateWithLogicYear,
 } from '@my/ui/src/lib/dates';
 import {
-  Clock,
   MapPin,
   Globe,
   ChevronDown,
   Share2,
-  Calendar,
   User,
   ExternalLink,
   MoreVertical,

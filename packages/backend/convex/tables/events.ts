@@ -6,7 +6,7 @@ export const eventsTable = defineTable({
   image: v.id('_storage'),
   description: v.optional(v.string()),
   startDate: v.number(),
-  endDate: v.optional(v.number()),
+  endDate: v.number(),
   creatorId: v.id('users'),
   organizationId: v.optional(v.id('organizations')),
   theme: v.optional(v.string()),
