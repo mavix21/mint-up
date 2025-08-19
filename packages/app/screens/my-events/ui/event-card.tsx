@@ -25,7 +25,7 @@ export function EventCard({ event }: { event: ConvexEventWithExtras }) {
   const getStatusChip = () => {
     if (event.isHost) {
       return (
-        <Chip size="$2" theme="green">
+        <Chip size="$1" theme="pink">
           <Chip.Text>Hosting</Chip.Text>
         </Chip>
       );
@@ -41,7 +41,7 @@ export function EventCard({ event }: { event: ConvexEventWithExtras }) {
       const config = statusConfig[event.userStatus as keyof typeof statusConfig];
       if (config) {
         return (
-          <Chip size="$2" theme={config.theme}>
+          <Chip size="$1" theme={config.theme}>
             <Chip.Text>{config.label}</Chip.Text>
           </Chip>
         );
@@ -54,7 +54,7 @@ export function EventCard({ event }: { event: ConvexEventWithExtras }) {
   return (
     <>
       <Theme name={event.theme as ThemeName}>
-        <YStack
+        <XStack
           gap="$1"
           $xxs={{
             padding: '$0',
@@ -69,6 +69,7 @@ export function EventCard({ event }: { event: ConvexEventWithExtras }) {
           borderWidth={1}
           borderStyle="solid"
           backgroundColor="$color1"
+          justifyContent="space-between"
           onPress={() => setToggleEvent(true)}
         >
           <XStack
@@ -77,36 +78,15 @@ export function EventCard({ event }: { event: ConvexEventWithExtras }) {
             alignItems="center"
             gap="$4"
           >
-            <View
-              flexDirection="column"
-              borderRadius="$4"
-              $xxs={{
-                width: '100%',
-              }}
-              position="relative"
-            >
-              <Image
-                borderRadius={10}
-                backgroundColor="$color5"
-                objectFit="cover"
-                height={108}
-                aspectRatio={1}
-                $xxs={{
-                  height: 140,
-                  width: '100%',
-                }}
-                $group-window-gtMd={{
-                  minWidth: 'inherit',
-                }}
-                source={{ uri: event.imageUrl ?? '' }}
-              />
-              {eventIsLive && (
-                <View position="absolute" top="$2" right="$2" zIndex={1}>
-                  <LiveIndicator size="small" />
-                </View>
-              )}
-            </View>
             <YStack flex={1} justifyContent="flex-start" gap="$2" $xxs={{ paddingInline: '$4' }}>
+              <View
+                alignSelf="flex-start"
+                justifyContent="center"
+                gap="$5"
+                $xxs={{ paddingInline: '$4' }}
+              >
+                {getStatusChip()}
+              </View>
               <View
                 flexDirection="row"
                 alignItems="center"
@@ -160,23 +140,35 @@ export function EventCard({ event }: { event: ConvexEventWithExtras }) {
           </XStack>
 
           <View
-            alignSelf="flex-start"
-            justifyContent="center"
-            gap="$5"
-            $xxs={{ paddingInline: '$4' }}
+            flexDirection="column"
+            borderRadius="$4"
+            $xxs={{
+              width: '100%',
+            }}
+            position="relative"
           >
-            {getStatusChip()}
-
-            {/*
-            <Link href={`/events/manage/${event._id}`}>
-              <Button size="$2" icon={ArrowRight}>
-                // {event.userRole === 'host' ? 'Manage Event' : 'View Ticket'}
-                Manage Event
-              </Button>
-            </Link>
-            */}
+            <Image
+              borderRadius={10}
+              backgroundColor="$color5"
+              objectFit="cover"
+              height={108}
+              aspectRatio={1}
+              $xxs={{
+                height: 140,
+                width: '100%',
+              }}
+              $group-window-gtMd={{
+                minWidth: 'inherit',
+              }}
+              source={{ uri: event.imageUrl ?? '' }}
+            />
+            {eventIsLive && (
+              <View position="absolute" top="$2" right="$2" zIndex={1}>
+                <LiveIndicator size="small" />
+              </View>
+            )}
           </View>
-        </YStack>
+        </XStack>
 
         <EventModal toggleEvent={toggleEvent} setToggleEvent={setToggleEvent} eventData={event} />
       </Theme>

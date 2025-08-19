@@ -4,7 +4,6 @@ import {
   Card,
   Image,
   View,
-  Chip,
   Theme,
   SizableText,
   ThemeName,
@@ -12,6 +11,7 @@ import {
 } from '@my/ui';
 import { formatDate, formatDateTime, formatRelativeDate } from '@my/ui/src/lib/dates';
 import { ConvexEventWithExtras } from 'app/entities';
+import { CategoryChip } from 'app/entities/event-category/ui/CategoryChip';
 import { isEventLive } from 'app/shared/lib/utils';
 import { EventModal } from 'app/widgets/event-modal';
 import React from 'react';
@@ -70,11 +70,9 @@ export function ItemCardList({ event }: { event: ConvexEventWithExtras }) {
               </SizableText>
 
               <XStack gap="$2" alignItems="center">
-                <YStack flex={1} gap="$1">
+                <YStack flex={1} gap="$1.5">
                   <View alignItems="flex-start">
-                    <Chip size="$1" rounded paddingInline="$2">
-                      <Chip.Text fontWeight="600">{event.category}</Chip.Text>
-                    </Chip>
+                    <CategoryChip category={event.category} />
                   </View>
                   <RegistersAvatar event={event} />
                 </YStack>

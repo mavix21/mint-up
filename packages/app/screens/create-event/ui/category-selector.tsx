@@ -6,110 +6,22 @@ import {
   SizableText,
   XStack,
   Theme,
-  ThemeName,
   AnimatePresence,
 } from '@my/ui';
-import {
-  Music,
-  Briefcase,
-  Palette,
-  Code,
-  Gamepad2,
-  Utensils,
-  Heart,
-  Dumbbell,
-  GraduationCap,
-  Users,
-  PartyPopper,
-  Sparkles,
-} from '@tamagui/lucide-icons';
 import { AnyFieldApi } from '@tanstack/react-form';
+import { EVENT_CATEGORIES } from 'app/entities/event-category/models/event-categories';
 import { EventCategory } from 'app/entities/schemas';
 import { FieldInfo } from 'app/shared/ui/FieldInfo';
 import { useState, useCallback, useMemo } from 'react';
 import { LinearGradient } from 'tamagui/linear-gradient';
 
-// Import the type from the schema
-
-const categoryData: {
-  value: EventCategory;
-  label: string;
-  icon: any;
-  theme: ThemeName;
-}[] = [
-  {
-    value: 'music & performing arts',
-    label: 'Music & Performing Arts',
-    icon: Music,
-    theme: 'blue',
-  },
-  {
-    value: 'business & professional',
-    label: 'Business & Professional',
-    icon: Briefcase,
-    theme: 'gray',
-  },
-  {
-    value: 'arts & culture',
-    label: 'Arts & Culture',
-    icon: Palette,
-    theme: 'purple',
-  },
-  {
-    value: 'tech',
-    label: 'Tech',
-    icon: Code,
-    theme: 'green',
-  },
-  {
-    value: 'gaming',
-    label: 'Gaming',
-    icon: Gamepad2,
-    theme: 'orange',
-  },
-  {
-    value: 'food & drink',
-    label: 'Food & Drink',
-    icon: Utensils,
-    theme: 'red',
-  },
-  {
-    value: 'health & wellness',
-    label: 'Health & Wellness',
-    icon: Heart,
-    theme: 'pink',
-  },
-  {
-    value: 'sports & fitness',
-    label: 'Sports & Fitness',
-    icon: Dumbbell,
-    theme: 'yellow',
-  },
-  {
-    value: 'education & learning',
-    label: 'Education & Learning',
-    icon: GraduationCap,
-    theme: 'orange',
-  },
-  {
-    value: 'community & causes',
-    label: 'Community & Causes',
-    icon: Users,
-    theme: 'blue',
-  },
-  {
-    value: 'parties & socials',
-    label: 'Parties & Socials',
-    icon: PartyPopper,
-    theme: 'purple',
-  },
-  {
-    value: 'hobbies & interests',
-    label: 'Hobbies & Interests',
-    icon: Sparkles,
-    theme: 'blue',
-  },
-];
+// Use the centralized category configuration
+const categoryData = Object.entries(EVENT_CATEGORIES).map(([value, config]) => ({
+  value: value as EventCategory,
+  label: value.charAt(0).toUpperCase() + value.slice(1), // Capitalize first letter
+  icon: config.icon,
+  theme: config.theme,
+}));
 
 export interface CategorySelectorProps {
   value?: string;

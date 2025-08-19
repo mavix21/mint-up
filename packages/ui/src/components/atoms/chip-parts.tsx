@@ -55,6 +55,7 @@ const ChipImpl = styled(View, {
         return {
           paddingHorizontal: tokens.space[val],
           paddingVertical: tokens.space[val].val * 0.2,
+          gap: tokens.space[val].val,
         };
       },
     },

@@ -33,6 +33,7 @@ import {
   User,
   ExternalLink,
   MoreVertical,
+  ChevronLeft,
 } from '@tamagui/lucide-icons';
 import { RegistersAvatar } from 'app/screens/explore-events/ui/RegistersAvatar';
 import { useSignIn } from 'app/shared/lib/hooks/use-sign-in';
@@ -90,7 +91,7 @@ export function EventModal({
   const getStatusChip = () => {
     if (isUserHost) {
       return (
-        <Chip size="$2" theme="green">
+        <Chip size="$2" theme="pink">
           <Chip.Text>Hosting</Chip.Text>
         </Chip>
       );
@@ -99,7 +100,7 @@ export function EventModal({
     if (eventData.userStatus) {
       const statusConfig = {
         pending: { label: 'Pending Approval', theme: 'yellow' as const },
-        minted: { label: 'Ticket Minted', theme: 'green' as const },
+        // minted: { label: 'Ticket Minted', theme: 'green' as const },
         rejected: { label: 'Registration Rejected', theme: 'red' as const },
       };
 
@@ -227,7 +228,13 @@ Check it out 👇`,
                       setToggleEvent(false);
                     }
                   }}
-                  icon={<ChevronDown size={24} />}
+                  icon={
+                    pathname?.includes('events/') ? (
+                      <ChevronLeft size={24} />
+                    ) : (
+                      <ChevronDown size={24} />
+                    )
+                  }
                 />
               </XStack>
             </View>
@@ -241,7 +248,7 @@ Check it out 👇`,
                     {eventData?.name}
                   </H2>
 
-                  <SizableText size="$2" opacity={0.8}>
+                  <SizableText size="$2" color="$color11">
                     {isSameDate
                       ? `${formatDateWithLogicYear(
                           formatRelativeDate(eventData.startDate)
