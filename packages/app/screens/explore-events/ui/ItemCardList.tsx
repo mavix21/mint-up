@@ -59,30 +59,26 @@ export function ItemCardList({ event }: { event: ConvexEventWithExtras }) {
           </View>
 
           {/* App Info */}
-          <YStack flex={1} gap="$3">
-            <SizableText size="$2" color="$color10" numberOfLines={1}>
-              {formatDate(formatRelativeDate(event.startDate ?? 0))} •{' '}
-              {formatDateTime(formatRelativeDate(event.startDate ?? 0))}
-            </SizableText>
+          <YStack flex={1}>
             <YStack gap="$2">
+              <SizableText size="$2" color="$color10" numberOfLines={1}>
+                {formatDate(formatRelativeDate(event.startDate ?? 0))} •{' '}
+                {formatDateTime(formatRelativeDate(event.startDate ?? 0))}
+              </SizableText>
               <SizableText size="$5" color="$color" numberOfLines={3}>
                 {event.name}
               </SizableText>
-              <View alignItems="flex-start">
-                <Chip size="$1" rounded paddingInline="$2">
-                  <Chip.Text fontWeight="600">{event.category}</Chip.Text>
-                </Chip>
-              </View>
-              <XStack gap="$1">
-                <YStack width="$15">
-                  <SizableText size="$1" color="$color10" fontWeight="600">
-                    Attendees
-                  </SizableText>
-                  <View justifyContent="center">
-                    <RegistersAvatar event={event} />
+
+              <XStack gap="$6">
+                <YStack minWidth="$14" gap="$2">
+                  <View alignItems="flex-start">
+                    <Chip size="$1" rounded paddingInline="$2">
+                      <Chip.Text fontWeight="600">{event.category}</Chip.Text>
+                    </Chip>
                   </View>
+                  <RegistersAvatar event={event} />
                 </YStack>
-                <YStack>
+                <YStack gap="$2">
                   <SizableText size="$1" color="$color10" fontWeight="600">
                     Host
                   </SizableText>
@@ -95,6 +91,14 @@ export function ItemCardList({ event }: { event: ConvexEventWithExtras }) {
                 </YStack>
               </XStack>
             </YStack>
+            {/* 
+            <XStack>
+              <YStack width="$15">
+                <SizableText size="$1"> </SizableText>
+                <View justifyContent="center"></View>
+              </YStack>
+              <YStack></YStack>
+            </XStack> */}
           </YStack>
         </XStack>
       </Card>
