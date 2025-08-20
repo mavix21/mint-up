@@ -75,8 +75,8 @@ const ImageCropSheet = ({ isOpen, onClose, imageSrc, onCropComplete }: ImageCrop
           const url = URL.createObjectURL(blob);
           resolve(url);
         },
-        'image/png', // Use PNG for better quality
-        0.85
+        'image/jpeg', // Use PNG for better quality
+        0.8
       );
     });
   }, [completedCrop]);
