@@ -17,6 +17,7 @@ import {
   Separator,
   LoadingButton,
   LiveIndicator,
+  ScrollView,
 } from '@my/ui';
 import {
   formatDate,
@@ -239,7 +240,7 @@ Check it out 👇`,
             </View>
 
             {/* Event Content */}
-            <Sheet.ScrollView flex={1} bounces={false}>
+            <ScrollView flex={1} bounces={false}>
               <YStack gap="$4" padding="$4" pt="$0">
                 {/* Event Header */}
                 <YStack gap="$2">
@@ -533,7 +534,7 @@ Check it out 👇`,
                   </SizableText>
                 </YStack>
               </YStack>
-            </Sheet.ScrollView>
+            </ScrollView>
 
             {/* Bottom Action - Only show if user is not host and not already registered */}
             {(canRegister || needsSignIn) && (
