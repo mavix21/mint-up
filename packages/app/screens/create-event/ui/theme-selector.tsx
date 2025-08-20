@@ -1,21 +1,33 @@
+import { useState } from 'react';
 import { Button, XStack, Stack, Sheet, ToggleGroup, Text as TamaguiText } from 'tamagui';
 
 import { getThemeOptions, getThemeColor } from '../../../utils';
 
 export interface ThemeSelectorProps {
   theme?: string;
-  onThemeChange: (theme: string) => void;
-  showThemeSheet: boolean;
-  onShowThemeSheetChange: (show: boolean) => void;
+  onThemeChange?: (theme: string) => void;
+  showThemeSheet?: boolean;
+  onShowThemeSheetChange?: (show: boolean) => void;
 }
 
 export function ThemeSelector({
   theme,
   onThemeChange,
-  showThemeSheet,
-  onShowThemeSheetChange,
+  showThemeSheet: externalShowThemeSheet,
+  onShowThemeSheetChange: externalOnShowThemeSheetChange,
 }: ThemeSelectorProps) {
   const themeOptions = getThemeOptions();
+
+  // Internal state for sheet if not controlled externally
+  const [internalShowThemeSheet, setInternalShowThemeSheet] = useState(false);
+
+  // Use external state if provided, otherwise use internal state
+  const showThemeSheet = externalShowThemeSheet ?? internalShowThemeSheet;
+  const onShowThemeSheetChange = externalOnShowThemeSheetChange ?? setInternalShowThemeSheet;
+
+  const handleThemeChange = (newTheme: string) => {
+    onThemeChange?.(newTheme);
+  };
 
   return (
     <>
@@ -52,7 +64,7 @@ export function ThemeSelector({
           <ToggleGroup
             type="single"
             value={theme}
-            onValueChange={onThemeChange}
+            onValueChange={handleThemeChange}
             backgroundColor="$color3"
             orientation="horizontal"
             gap="$3"

@@ -11,11 +11,7 @@ import {
   YStack,
 } from '@my/ui';
 import { CalendarPlus, History, LogIn } from '@tamagui/lucide-icons';
-import {
-  formatRelativeDate as formatRelativeDateShared,
-  getDayOfWeek,
-  groupByDate,
-} from 'app/shared';
+import { dateUtils } from 'app/shared/lib/date';
 import { useSignIn } from 'app/shared/lib/hooks/use-sign-in';
 import { Authenticated, Unauthenticated, useQuery } from 'convex/react';
 import React, { useMemo } from 'react';
@@ -92,46 +88,48 @@ export const MyEventsScreen = () => {
         <Tabs.Content value="upcoming" height="100%" overflowBlock="hidden" flex={1}>
           {upcomingEvents.length > 0 ? (
             <ScrollView flex={1}>
-              {groupByDate(
-                upcomingEvents,
-                (event) => {
-                  const date = new Date(event.startDate);
-                  return date.toLocaleDateString(); // Uses user's locale and timezone
-                },
-                'asc'
-              ).map(([dateKey, events], index) => (
-                <View key={dateKey} pos="relative">
-                  <View pos="absolute" bottom={0} left={4} top={16} w={1} bg="$color8" />
+              {dateUtils
+                .groupByDate(
+                  upcomingEvents,
+                  (event) => {
+                    const date = new Date(event.startDate);
+                    return date.toLocaleDateString(); // Uses user's locale and timezone
+                  },
+                  'asc'
+                )
+                .map(([dateKey, events], index) => (
+                  <View key={dateKey} pos="relative">
+                    <View pos="absolute" bottom={0} left={4} top={16} w={1} bg="$color8" />
 
-                  <View mb="$5">
-                    <View pos="relative" pl="$5">
-                      <View
-                        theme="green"
-                        bg="$color8"
-                        pos="absolute"
-                        left={1}
-                        top={3}
-                        h="$0.75"
-                        w="$0.75"
-                        borderRadius="$5"
-                      />
-                      <View mb="$4">
-                        <SizableText fontSize="$2" color="$color11">
-                          {formatRelativeDateShared(events[0]?.startDate)}
-                        </SizableText>
-                        <SizableText fontSize="$2">
-                          {getDayOfWeek(events[0]?.startDate)}
-                        </SizableText>
+                    <View mb="$5">
+                      <View pos="relative" pl="$5">
+                        <View
+                          theme="green"
+                          bg="$color8"
+                          pos="absolute"
+                          left={1}
+                          top={3}
+                          h="$0.75"
+                          w="$0.75"
+                          borderRadius="$5"
+                        />
+                        <View mb="$4">
+                          <SizableText fontSize="$2" color="$color11">
+                            {dateUtils.formatRelativeDate(events[0]?.startDate)}
+                          </SizableText>
+                          <SizableText fontSize="$2">
+                            {dateUtils.getDayOfWeek(events[0]?.startDate)}
+                          </SizableText>
+                        </View>
+                        <YStack gap="$2">
+                          {events.map((event) => (
+                            <EventCard key={event._id} event={event} />
+                          ))}
+                        </YStack>
                       </View>
-                      <YStack gap="$2">
-                        {events.map((event) => (
-                          <EventCard key={event._id} event={event} />
-                        ))}
-                      </YStack>
                     </View>
                   </View>
-                </View>
-              ))}
+                ))}
             </ScrollView>
           ) : upcomingEvents.length <= 0 ? (
             <YStack
@@ -188,44 +186,48 @@ export const MyEventsScreen = () => {
         <Tabs.Content value="past" height="100%" overflowBlock="hidden" flex={1}>
           {pastEvents.length > 0 ? (
             <ScrollView flex={1}>
-              {groupByDate(
-                pastEvents,
-                (event) => {
-                  const date = new Date(event.startDate);
-                  return date.toLocaleDateString(); // Uses user's locale and timezone
-                },
-                'desc'
-              ).map(([dateKey, events], index) => (
-                <View key={dateKey} pos="relative">
-                  <View pos="absolute" bottom={0} left={4} top={16} w={1} bg="$color6" />
+              {dateUtils
+                .groupByDate(
+                  pastEvents,
+                  (event) => {
+                    const date = new Date(event.startDate);
+                    return date.toLocaleDateString(); // Uses user's locale and timezone
+                  },
+                  'desc'
+                )
+                .map(([dateKey, events], index) => (
+                  <View key={dateKey} pos="relative">
+                    <View pos="absolute" bottom={0} left={4} top={16} w={1} bg="$color6" />
 
-                  <View mb="$5">
-                    <View pos="relative" pl="$5">
-                      <View
-                        bg="$color8"
-                        pos="absolute"
-                        theme="green"
-                        left={1}
-                        top={3}
-                        h="$0.75"
-                        w="$0.75"
-                        borderRadius="$5"
-                      />
-                      <View mb="$4">
-                        <SizableText size="$2" color="$color11">
-                          {formatRelativeDateShared(events[0]?.startDate)}
-                        </SizableText>
-                        <SizableText size="$2">{getDayOfWeek(events[0]?.startDate)}</SizableText>
+                    <View mb="$5">
+                      <View pos="relative" pl="$5">
+                        <View
+                          bg="$color8"
+                          pos="absolute"
+                          theme="green"
+                          left={1}
+                          top={3}
+                          h="$0.75"
+                          w="$0.75"
+                          borderRadius="$5"
+                        />
+                        <View mb="$4">
+                          <SizableText size="$2" color="$color11">
+                            {dateUtils.formatRelativeDate(events[0]?.startDate)}
+                          </SizableText>
+                          <SizableText size="$2">
+                            {dateUtils.getDayOfWeek(events[0]?.startDate)}
+                          </SizableText>
+                        </View>
+                        <YStack gap="$2">
+                          {events.map((event) => (
+                            <EventCard key={event._id} event={event} />
+                          ))}
+                        </YStack>
                       </View>
-                      <YStack gap="$2">
-                        {events.map((event) => (
-                          <EventCard key={event._id} event={event} />
-                        ))}
-                      </YStack>
                     </View>
                   </View>
-                </View>
-              ))}
+                ))}
             </ScrollView>
           ) : pastEvents.length <= 0 ? (
             <YStack

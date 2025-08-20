@@ -5,7 +5,6 @@ import {
   View,
   SizableText,
   Image,
-  ScrollView,
   useVisualViewportHeight,
   Button,
   Sheet,
@@ -159,7 +158,6 @@ Check it out 👇`,
       <Sheet
         dismissOnSnapToBottom
         forceRemoveScrollEnabled={toggleEvent}
-        disableDrag
         modal
         open={toggleEvent}
         onOpenChange={setToggleEvent}
@@ -240,7 +238,7 @@ Check it out 👇`,
             </View>
 
             {/* Event Content */}
-            <ScrollView flex={1} bounces={false}>
+            <Sheet.ScrollView flex={1} bounces={false}>
               <YStack gap="$4" padding="$4" pt="$0">
                 {/* Event Header */}
                 <YStack gap="$2">
@@ -323,16 +321,15 @@ Check it out 👇`,
                 {(isUserHost || isUserRegistered) && (
                   <XStack gap="$3" justifyContent="flex-end" alignItems="stretch">
                     {isUserHost && (
-                      <Theme name="gray">
-                        <Button
-                          flex={1}
-                          fontWeight="600"
-                          onPress={() => router.push(`/events/${eventData._id}/manage`)}
-                          iconAfter={ExternalLink}
-                        >
-                          <Button.Text>Manage</Button.Text>
-                        </Button>
-                      </Theme>
+                      <Button
+                        flex={1}
+                        fontWeight="600"
+                        themeInverse
+                        onPress={() => router.push(`/events/${eventData._id}/manage`)}
+                        iconAfter={ExternalLink}
+                      >
+                        <Button.Text>Manage</Button.Text>
+                      </Button>
                     )}
                     {/* {canCancelRegistration && (
                       <Theme name="red">
@@ -352,20 +349,16 @@ Check it out 👇`,
                         </Button>
                       </Theme>
                     )}
-                    <Theme name="gray">
-                      <Button size="$4" icon={<Share2 size={16} />}>
-                        <Button.Text onPress={handleComposeWithEmbed}>Share</Button.Text>
-                      </Button>
-                    </Theme>
-                    <Theme name="gray">
-                      {/* <Button height="100%" size="$2" icon={<MoreVertical size={16} />} /> */}
-                      <EventSettingsDropdown
-                        triggerOpen={triggerOpen}
-                        setTriggerOpen={setTriggerOpen}
-                        canCancelRegistration={canCancelRegistration}
-                        onCancelRegistration={handleCancelRegistration}
-                      />
-                    </Theme>
+                    <Button size="$4" icon={<Share2 size={16} />}>
+                      <Button.Text onPress={handleComposeWithEmbed}>Share</Button.Text>
+                    </Button>
+                    {/* <Button height="100%" size="$2" icon={<MoreVertical size={16} />} /> */}
+                    <EventSettingsDropdown
+                      triggerOpen={triggerOpen}
+                      setTriggerOpen={setTriggerOpen}
+                      canCancelRegistration={canCancelRegistration}
+                      onCancelRegistration={handleCancelRegistration}
+                    />
                   </XStack>
                 )}
 
@@ -539,7 +532,7 @@ Check it out 👇`,
                   </SizableText>
                 </YStack>
               </YStack>
-            </ScrollView>
+            </Sheet.ScrollView>
 
             {/* Bottom Action - Only show if user is not host and not already registered */}
             {(canRegister || needsSignIn) && (

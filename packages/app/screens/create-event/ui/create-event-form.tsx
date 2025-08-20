@@ -1,7 +1,6 @@
 import {
   TimePicker,
   Chip,
-  Shake,
   Label,
   XStack,
   YStack,
@@ -17,6 +16,7 @@ import {
   useToastController,
 } from '@my/ui';
 import { Globe, Clock4, Clock2 } from '@tamagui/lucide-icons';
+import { dateUtils, timeUtils, timezoneUtils } from 'app/shared/lib/date';
 import { validateImageSize } from 'app/shared/lib/file';
 import { useAppForm } from 'app/shared/lib/form';
 import { FieldInfo } from 'app/shared/ui/FieldInfo';
@@ -34,43 +34,28 @@ import {
   CategorySelector,
 } from './index';
 import { CreateEventFormData, createEventFormSchema, EventCategory } from '../../../entities';
-import { getClientTimezone, calculateDefaultEventTimes } from '../../../utils';
 import { createEventFormOpts } from '../model/shared-form';
 
 export interface CreateEventFormProps {
   onSubmit: (
     data: CreateEventFormData & { startTimestamp: number; endTimestamp: number }
   ) => Promise<boolean>;
-  theme?: string;
   onThemeChange?: (theme: string) => void;
-  showThemeSheet?: boolean;
-  onShowThemeSheetChange?: (show: boolean) => void;
 }
 
-function toTimestamp(date: string, time: string) {
-  const localDateTimeString = `${date}T${time}`;
-  const localDateTime = new Date(localDateTimeString);
-  return localDateTime.getTime();
-}
-
-export function CreateEventForm({
-  onSubmit,
-  theme,
-  onThemeChange,
-  showThemeSheet = false,
-  onShowThemeSheetChange,
-}: CreateEventFormProps) {
+export function CreateEventForm({ onSubmit, onThemeChange }: CreateEventFormProps) {
   const tamaguiTokens = getTokens();
   const toast = useToastController();
   const [showLocationSheet, setShowLocationSheet] = useState(false);
   const [showDescriptionSheet, setShowDescriptionSheet] = useState(false);
   const [showTicketingSheet, setShowTicketingSheet] = useState(false);
+  const [showThemeSheet, setShowThemeSheet] = useState(false);
 
   // Get client timezone
-  const clientTimezone = getClientTimezone();
+  const clientTimezone = timezoneUtils.getClientTimezone();
 
   // Calculate default event times and dates
-  const { startTime, endTime, startDate, endDate } = calculateDefaultEventTimes();
+  const { startTime, endTime, startDate, endDate } = timeUtils.calculateDefaultEventTimes();
 
   // form
   const form = useAppForm({
@@ -86,8 +71,8 @@ export function CreateEventForm({
     },
     onSubmit: async ({ value }) => {
       console.log('value', value);
-      const startTimestamp = toTimestamp(value.startDate, value.startTime);
-      const endTimestamp = toTimestamp(value.endDate, value.endTime);
+      const startTimestamp = dateUtils.toTimestamp(value.startDate)(value.startTime);
+      const endTimestamp = dateUtils.toTimestamp(value.endDate)(value.endTime);
       const image = value.image;
       if (!image) {
         toast.show('Please upload an image', {
@@ -145,11 +130,21 @@ export function CreateEventForm({
             }}
           />
           {/* Theme Selector */}
-          <ThemeSelector
-            theme={theme}
-            onThemeChange={onThemeChange || (() => {})}
-            showThemeSheet={showThemeSheet}
-            onShowThemeSheetChange={onShowThemeSheetChange || (() => {})}
+          <form.Field
+            name="theme"
+            children={(field) => {
+              return (
+                <ThemeSelector
+                  theme={field.state.value}
+                  onThemeChange={(theme) => {
+                    field.handleChange(theme);
+                    onThemeChange?.(theme);
+                  }}
+                  showThemeSheet={showThemeSheet}
+                  onShowThemeSheetChange={setShowThemeSheet}
+                />
+              );
+            }}
           />
           {/* Event Name */}
           <form.Field
@@ -166,30 +161,28 @@ export function CreateEventForm({
                   }
                   forceClassName
                 >
-                  <Shake shakeKey={field.state.meta.errors[0]?.message}>
-                    <YStack gap="$1">
-                      <VisuallyHidden>
-                        <Label htmlFor={field.name}>Event Name</Label>
-                      </VisuallyHidden>
-                      <TextArea
-                        id={field.name}
-                        value={field.state.value}
-                        onChangeText={field.handleChange}
-                        placeholder="Event Name"
-                        flexGrow={1}
-                        unstyled
-                        fontWeight="700"
-                        placeholderTextColor="$color7"
-                        style={
-                          {
-                            fontSize: tamaguiTokens.size.$3.val,
-                            fieldSizing: 'content',
-                          } as any
-                        }
-                      />
-                      <FieldInfo field={field} />
-                    </YStack>
-                  </Shake>
+                  <YStack gap="$1">
+                    <VisuallyHidden>
+                      <Label htmlFor={field.name}>Event Name</Label>
+                    </VisuallyHidden>
+                    <TextArea
+                      id={field.name}
+                      value={field.state.value}
+                      onChangeText={field.handleChange}
+                      placeholder="Event Name"
+                      flexGrow={1}
+                      unstyled
+                      fontWeight="700"
+                      placeholderTextColor="$color7"
+                      style={
+                        {
+                          fontSize: tamaguiTokens.size.$3.val,
+                          fieldSizing: 'content',
+                        } as any
+                      }
+                    />
+                    <FieldInfo field={field} />
+                  </YStack>
                 </Theme>
               );
             }}
@@ -271,7 +264,6 @@ export function CreateEventForm({
                     {(error) => (
                       <XStack
                         theme={error ? 'red' : null}
-                        themeInverse={theme === 'red'}
                         flex={1}
                         alignItems="center"
                         gap="$2"

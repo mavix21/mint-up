@@ -95,6 +95,7 @@ export const createEventFormSchema = z
       .max(200, 'Event name too long')
       .transform((val) => val.trim()),
 
+    theme: z.union([z.undefined(), z.string()]),
     category: eventCategorySchema,
 
     image: z.instanceof(File),

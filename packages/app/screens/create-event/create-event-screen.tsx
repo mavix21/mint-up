@@ -6,14 +6,13 @@ import { useToastController } from '@my/ui';
 import { CreateEventFormData } from 'app/entities';
 import { uploadFile } from 'app/shared/lib/file';
 import { useState } from 'react';
-import { YStack, Theme, ScrollView, ThemeName } from 'tamagui';
+import { YStack, ScrollView, Theme, ThemeName } from 'tamagui';
 
 import { CreateEventForm } from './ui';
 
 export function CreateEventScreen({ closeSheet }: { closeSheet: () => void }) {
   const toast = useToastController();
   const [theme, setTheme] = useState<string | undefined>(undefined);
-  const [showThemeSheet, setShowThemeSheet] = useState(false);
   const createEvent = useMutation(api.events.createEvent);
 
   const handleSubmit = async (
@@ -35,7 +34,7 @@ export function CreateEventScreen({ closeSheet }: { closeSheet: () => void }) {
           image: storageId,
           automatedFlows: [],
           hosts: [],
-          theme,
+          theme: data.theme,
         },
         tickets: data.tickets.map((ticket) => ({
           name: ticket.name,
@@ -58,6 +57,7 @@ export function CreateEventScreen({ closeSheet }: { closeSheet: () => void }) {
         preset: 'done',
       });
       closeSheet();
+      setTheme(undefined);
       return true;
     } catch (error) {
       console.error('Error creating event:', error);
@@ -77,13 +77,7 @@ export function CreateEventScreen({ closeSheet }: { closeSheet: () => void }) {
         <YStack flex={1}>
           <ScrollView flex={1} width="100%">
             <YStack gap="$4" px="$4" py="$4" marginHorizontal="auto" width="100%" maxWidth={496}>
-              <CreateEventForm
-                onSubmit={handleSubmit}
-                theme={theme}
-                onThemeChange={setTheme}
-                showThemeSheet={showThemeSheet}
-                onShowThemeSheetChange={setShowThemeSheet}
-              />
+              <CreateEventForm onSubmit={handleSubmit} onThemeChange={setTheme} />
             </YStack>
           </ScrollView>
         </YStack>

@@ -24,5 +24,6 @@ export const createEventFormOpts = formOptions({
     startTime: '',
     endDate: '',
     endTime: '',
+    theme: undefined as string | undefined,
   },
 });

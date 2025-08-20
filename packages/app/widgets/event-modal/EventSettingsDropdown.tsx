@@ -1,6 +1,5 @@
-import { Button, styled, Text, View, YStack, Theme } from '@my/ui';
+import { Button, styled, Text, View, YStack } from '@my/ui';
 import { MoreVertical } from '@tamagui/lucide-icons';
-import { signOut } from 'next-auth/react';
 
 interface EventSettingsDropdownProps {
   triggerOpen: boolean;

@@ -11,7 +11,7 @@ import {
 } from '@my/ui';
 import { Clock, Globe, MapPin } from '@tamagui/lucide-icons';
 import { ConvexEventWithExtras } from 'app/entities';
-import { formatTime } from 'app/shared';
+import { dateUtils } from 'app/shared/lib/date';
 import { isEventLive } from 'app/shared/lib/utils';
 import { EventModal } from 'app/widgets/event-modal';
 import { useState } from 'react';
@@ -135,7 +135,7 @@ export function EventCard({ event }: { event: ConvexEventWithExtras }) {
               <XStack mt={4} display="flex" ai="center" gap="$2">
                 <Clock size={15} color="$color11" />
                 <SizableText size="$1" color="$color11">
-                  {formatTime(event.startDate)}
+                  {dateUtils.formatTime(event.startDate)}
                 </SizableText>
               </XStack>
 

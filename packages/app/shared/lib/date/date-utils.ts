@@ -74,3 +74,12 @@ export const groupByDate = <T>(
     sortDirection === 'asc' ? a.localeCompare(b) : b.localeCompare(a)
   );
 };
+
+/**
+ * Converts a date and time to a timestamp
+ * @param date - Date string
+ * @param time - Time string
+ * @returns The date as a timestamp
+ */
+export const toTimestamp = (date: string) => (time: string) =>
+  new Date(`${date}T${time}`).getTime();
