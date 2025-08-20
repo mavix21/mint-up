@@ -205,6 +205,11 @@ export const createRegistration = mutation({
           displayName: user.username,
           pfpUrl: user.pfpUrl,
           registrationTime: Date.now(),
+          status: ticketTemplate.isApprovalRequired
+            ? { type: 'pending' as const }
+            : args.transactionReceipt
+            ? { type: 'minted' as const }
+            : { type: 'approved' as const },
         },
       ].slice(-5),
     });

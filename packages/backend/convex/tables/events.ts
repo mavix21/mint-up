@@ -52,6 +52,11 @@ export const eventsTable = defineTable({
       pfpUrl: v.optional(v.string()),
       displayName: v.string(),
       registrationTime: v.number(),
+      status: v.union(
+        v.object({ type: v.literal('pending') }),
+        v.object({ type: v.literal('approved') }),
+        v.object({ type: v.literal('minted') })
+      ),
     })
   ),
 

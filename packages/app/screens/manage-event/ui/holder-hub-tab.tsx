@@ -167,9 +167,9 @@ export const HolderHubTab = ({ event }: HolderHubTabProps) => {
           </SizableText>
 
           <YStack gap="$2">
-            {registrations.map((registration) => (
+            {event.recentRegistrations.map((registration) => (
               <Card
-                key={registration.id}
+                key={registration.userId}
                 backgroundColor="$background"
                 padding="$3"
                 borderRadius="$3"
@@ -177,23 +177,20 @@ export const HolderHubTab = ({ event }: HolderHubTabProps) => {
                 <XStack justifyContent="space-between" alignItems="center">
                   <YStack gap="$1">
                     <SizableText size="$3" fontWeight="bold" color="$color12">
-                      {registration.name}
-                    </SizableText>
-                    <SizableText size="$2" color="$color11">
-                      {registration.email}
+                      {registration.displayName}
                     </SizableText>
                     <SizableText size="$2" color="$color10">
-                      Registered: {new Date(registration.registeredAt).toLocaleDateString()}
+                      Registered: {new Date(registration.registrationTime).toLocaleDateString()}
                     </SizableText>
                   </YStack>
 
                   <XStack gap="$2" alignItems="center">
                     <SizableText
                       size="$2"
-                      color={registration.status === 'confirmed' ? '$color10' : '$color9'}
+                      color={registration.status.type === 'approved' ? '$color10' : '$color9'}
                       fontWeight="bold"
                     >
-                      {registration.status.toUpperCase()}
+                      {registration.status.type.toUpperCase()}
                     </SizableText>
                     <Button
                       size="$2"
