@@ -51,11 +51,13 @@ export const eventsTable = defineTable({
       userId: v.id('users'),
       pfpUrl: v.optional(v.string()),
       displayName: v.string(),
-      registrationTime: v.number(),
-      status: v.union(
-        v.object({ type: v.literal('pending') }),
-        v.object({ type: v.literal('approved') }),
-        v.object({ type: v.literal('minted') })
+      registrationTime: v.optional(v.number()),
+      status: v.optional(
+        v.union(
+          v.object({ type: v.literal('pending') }),
+          v.object({ type: v.literal('approved') }),
+          v.object({ type: v.literal('minted') })
+        )
       ),
     })
   ),
