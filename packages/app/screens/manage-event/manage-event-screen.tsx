@@ -10,9 +10,9 @@ import {
   Tabs,
   FullscreenSpinner,
   Separator,
+  View,
   Theme,
   ThemeName,
-  View,
 } from '@my/ui';
 import { ArrowLeft, BarChart3, Users, Eye } from '@tamagui/lucide-icons';
 import { useRouter } from 'next/navigation';
@@ -77,8 +77,8 @@ export const ManageEventScreen = ({ id }: { id: string }) => {
                 paddingHorizontal="$4"
               >
                 <XStack gap="$2" alignItems="center" justifyContent="center">
-                  <Eye size={18} color="$color10" />
-                  <SizableText size="$3" color="$color11">
+                  <Eye size={18} color="$color12" />
+                  <SizableText size="$3" color="$color12">
                     Overview
                   </SizableText>
                 </XStack>
@@ -90,11 +90,10 @@ export const ManageEventScreen = ({ id }: { id: string }) => {
                 borderWidth={0}
                 paddingVertical="$3"
                 paddingHorizontal="$4"
-                opacity={0.5}
               >
                 <XStack gap="$2" alignItems="center" justifyContent="center">
-                  <Users size={18} color="$color10" />
-                  <SizableText size="$3" color="$color11">
+                  <Users size={18} color="$color12" />
+                  <SizableText size="$3" color="$color12">
                     Holder Hub
                   </SizableText>
                 </XStack>
@@ -110,7 +109,7 @@ export const ManageEventScreen = ({ id }: { id: string }) => {
                 opacity={0.5}
               >
                 <XStack gap="$2" alignItems="center" justifyContent="center">
-                  <BarChart3 size={18} color="$color10" />
+                  <BarChart3 size={18} color="$color11" />
                   <SizableText size="$3" color="$color11">
                     Insights
                   </SizableText>

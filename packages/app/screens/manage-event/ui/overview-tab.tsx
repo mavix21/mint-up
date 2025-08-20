@@ -32,14 +32,14 @@ export const OverviewTab = ({ event }: OverviewTabProps) => {
           {/* Date & Time */}
           <XStack
             gap="$2"
-            backgroundColor="$color3"
+            backgroundColor="$color2"
             justifyContent="space-between"
             borderRadius="$4"
             paddingInline="$4"
             paddingBlock="$2"
           >
             <XStack alignItems="center" gap="$2">
-              <Calendar size={18} color="$color10" />
+              <Calendar size={18} color="$color11" />
               <SizableText size="$4" fontWeight="600" color="$color12">
                 Date & Time
               </SizableText>
@@ -72,7 +72,7 @@ export const OverviewTab = ({ event }: OverviewTabProps) => {
           {/* Location */}
           <XStack
             gap="$2"
-            backgroundColor="$color3"
+            backgroundColor="$color2"
             borderRadius="$4"
             paddingInline="$4"
             paddingBlock="$2"
@@ -80,9 +80,9 @@ export const OverviewTab = ({ event }: OverviewTabProps) => {
           >
             <XStack alignItems="center" gap="$2">
               {event.location.type === 'online' ? (
-                <Globe size={18} color="$color10" />
+                <Globe size={18} color="$color11" />
               ) : (
-                <MapPin size={18} color="$color10" />
+                <MapPin size={18} color="$color11" />
               )}
               <SizableText size="$4" fontWeight="600" color="$color12">
                 Location
@@ -103,14 +103,14 @@ export const OverviewTab = ({ event }: OverviewTabProps) => {
           {/* Attendees */}
           <XStack
             gap="$2"
-            backgroundColor="$color3"
+            backgroundColor="$color2"
             borderRadius="$4"
             paddingInline="$4"
             paddingBlock="$3.5"
             justifyContent="space-between"
           >
             <XStack alignItems="center" gap="$2">
-              <Users size={18} color="$color10" />
+              <Users size={18} color="$color11" />
               <SizableText size="$4" fontWeight="600" color="$color12">
                 Attendees
               </SizableText>
@@ -131,13 +131,13 @@ export const OverviewTab = ({ event }: OverviewTabProps) => {
           <XStack
             gap="$2"
             justifyContent="space-between"
-            backgroundColor="$color3"
+            backgroundColor="$color2"
             borderRadius="$4"
             paddingInline="$4"
             paddingBlock="$3.5"
           >
             <XStack alignItems="center" gap="$2">
-              <Tag size={18} color="$color10" />
+              <Tag size={18} color="$color11" />
               <SizableText size="$4" fontWeight="600" color="$color12">
                 Category
               </SizableText>
@@ -183,7 +183,7 @@ export const OverviewTab = ({ event }: OverviewTabProps) => {
 
         <YStack gap="$4">
           <XStack
-            backgroundColor="$color3"
+            backgroundColor="$color2"
             borderRadius="$4"
             paddingInline="$4"
             paddingBlock="$2"
@@ -191,7 +191,7 @@ export const OverviewTab = ({ event }: OverviewTabProps) => {
             justifyContent="space-between"
           >
             <XStack alignItems="center" gap="$2">
-              <Eye size={18} color="$color10" />
+              <Eye size={18} color="$color11" />
               <SizableText size="$4" fontWeight="600" color="$color12">
                 Visibility
               </SizableText>

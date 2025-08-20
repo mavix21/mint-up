@@ -47,15 +47,9 @@ export const HolderHubTab = ({ event }: HolderHubTabProps) => {
       <YStack gap="$4" padding="$4">
         {/* Statistics Cards */}
         <XStack gap="$3" flexWrap="wrap">
-          <Card
-            backgroundColor="$background"
-            padding="$4"
-            borderRadius="$4"
-            flex={1}
-            minWidth={150}
-          >
+          <Card backgroundColor="$color2" padding="$4" borderRadius="$4" flex={1} minWidth={150}>
             <YStack alignItems="center" gap="$2">
-              <UserCheck size={24} color="$color10" />
+              <UserCheck size={24} color="$color11" />
               <SizableText size="$4" fontWeight="bold" color="$color12">
                 {registrationCounts ? (
                   registrationCounts.approved
@@ -69,15 +63,9 @@ export const HolderHubTab = ({ event }: HolderHubTabProps) => {
             </YStack>
           </Card>
 
-          <Card
-            backgroundColor="$background"
-            padding="$4"
-            borderRadius="$4"
-            flex={1}
-            minWidth={150}
-          >
+          <Card backgroundColor="$color2" padding="$4" borderRadius="$4" flex={1} minWidth={150}>
             <YStack alignItems="center" gap="$2">
-              <UserX size={24} color="$color10" />
+              <UserX size={24} color="$color11" />
               <SizableText size="$4" fontWeight="bold" color="$color12">
                 {registrationCounts ? (
                   registrationCounts.pending
@@ -91,15 +79,9 @@ export const HolderHubTab = ({ event }: HolderHubTabProps) => {
             </YStack>
           </Card>
 
-          <Card
-            backgroundColor="$background"
-            padding="$4"
-            borderRadius="$4"
-            flex={1}
-            minWidth={150}
-          >
+          <Card backgroundColor="$color2" padding="$4" borderRadius="$4" flex={1} minWidth={150}>
             <YStack alignItems="center" gap="$2">
-              <Users size={24} color="$color10" />
+              <Users size={24} color="$color11" />
               <SizableText size="$4" fontWeight="bold" color="$color12">
                 {registrationCounts ? (
                   registrationCounts.total
@@ -123,36 +105,15 @@ export const HolderHubTab = ({ event }: HolderHubTabProps) => {
           </SizableText>
 
           <XStack gap="$3" flexWrap="wrap">
-            <Button
-              backgroundColor="$color3"
-              borderColor="$borderColor"
-              borderWidth={1}
-              icon={<Download size={16} />}
-              flex={1}
-              minWidth={120}
-            >
+            <Button borderWidth={1} icon={<Download size={16} />} flex={1} minWidth={120}>
               <SizableText size="$3">Export List</SizableText>
             </Button>
 
-            <Button
-              backgroundColor="$color3"
-              borderColor="$borderColor"
-              borderWidth={1}
-              icon={<Mail size={16} />}
-              flex={1}
-              minWidth={120}
-            >
+            <Button borderWidth={1} icon={<Mail size={16} />} flex={1} minWidth={120}>
               <SizableText size="$3">Send Email</SizableText>
             </Button>
 
-            <Button
-              backgroundColor="$color3"
-              borderColor="$borderColor"
-              borderWidth={1}
-              icon={<MessageSquare size={16} />}
-              flex={1}
-              minWidth={120}
-            >
+            <Button borderWidth={1} icon={<MessageSquare size={16} />} flex={1} minWidth={120}>
               <SizableText size="$3">Send SMS</SizableText>
             </Button>
           </XStack>
@@ -192,12 +153,7 @@ export const HolderHubTab = ({ event }: HolderHubTabProps) => {
                     >
                       {registration.status.type.toUpperCase()}
                     </SizableText>
-                    <Button
-                      size="$2"
-                      backgroundColor="$color3"
-                      borderColor="$borderColor"
-                      borderWidth={1}
-                    >
+                    <Button size="$2" borderWidth={1}>
                       <SizableText size="$2">View</SizableText>
                     </Button>
                   </XStack>
