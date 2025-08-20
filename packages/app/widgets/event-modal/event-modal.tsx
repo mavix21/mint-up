@@ -158,6 +158,7 @@ Check it out 👇`,
       <Sheet
         dismissOnSnapToBottom
         forceRemoveScrollEnabled={toggleEvent}
+        disableDrag
         modal
         open={toggleEvent}
         onOpenChange={setToggleEvent}
