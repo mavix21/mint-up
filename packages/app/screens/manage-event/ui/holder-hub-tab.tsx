@@ -1,6 +1,9 @@
+import { api } from '@my/backend/_generated/api';
 import { Doc } from '@my/backend/_generated/dataModel';
-import { YStack, XStack, SizableText, Button, Card, Separator, ScrollView } from '@my/ui';
+import { useQuery } from '@my/backend/react';
+import { YStack, XStack, SizableText, Button, Card, Separator, ScrollView, Spinner } from '@my/ui';
 import { Users, UserCheck, UserX, Download, Mail, MessageSquare } from '@tamagui/lucide-icons';
+import { SkeletonLine } from 'app/shared/ui/SkeletonLine';
 
 interface HolderHubTabProps {
   event: Doc<'events'>;
@@ -32,8 +35,12 @@ export const HolderHubTab = ({ event }: HolderHubTabProps) => {
     },
   ];
 
-  const confirmedCount = registrations.filter((r) => r.status === 'confirmed').length;
-  const pendingCount = registrations.filter((r) => r.status === 'pending').length;
+  // const confirmedCount = registrations.filter((r) => r.status === 'confirmed').length;
+  // const pendingCount = registrations.filter((r) => r.status === 'pending').length;
+
+  const registrationCounts = useQuery(api.registrations.getRegistrationCountsByEventId, {
+    eventId: event._id,
+  });
 
   return (
     <ScrollView>
@@ -50,7 +57,11 @@ export const HolderHubTab = ({ event }: HolderHubTabProps) => {
             <YStack alignItems="center" gap="$2">
               <UserCheck size={24} color="$color10" />
               <SizableText size="$4" fontWeight="bold" color="$color12">
-                {confirmedCount}
+                {registrationCounts ? (
+                  registrationCounts.approved
+                ) : (
+                  <SkeletonLine width={30} height={20} />
+                )}
               </SizableText>
               <SizableText size="$2" color="$color11" textAlign="center">
                 Confirmed
@@ -68,7 +79,11 @@ export const HolderHubTab = ({ event }: HolderHubTabProps) => {
             <YStack alignItems="center" gap="$2">
               <UserX size={24} color="$color10" />
               <SizableText size="$4" fontWeight="bold" color="$color12">
-                {pendingCount}
+                {registrationCounts ? (
+                  registrationCounts.pending
+                ) : (
+                  <SkeletonLine width={30} height={20} />
+                )}
               </SizableText>
               <SizableText size="$2" color="$color11" textAlign="center">
                 Pending
@@ -86,7 +101,11 @@ export const HolderHubTab = ({ event }: HolderHubTabProps) => {
             <YStack alignItems="center" gap="$2">
               <Users size={24} color="$color10" />
               <SizableText size="$4" fontWeight="bold" color="$color12">
-                {registrations.length}
+                {registrationCounts ? (
+                  registrationCounts.total
+                ) : (
+                  <SkeletonLine width={30} height={20} />
+                )}
               </SizableText>
               <SizableText size="$2" color="$color11" textAlign="center">
                 Total

@@ -45,6 +45,58 @@ export const getRegistrationsByEventIdCount = query({
   },
 });
 
+// Get registration counts by status for a specific event (optimized for performance)
+export const getRegistrationCountsByEventId = query({
+  args: {
+    eventId: v.id('events'),
+  },
+  returns: v.object({
+    total: v.number(),
+    pending: v.number(),
+    approved: v.number(),
+    rejected: v.number(),
+    minted: v.number(),
+  }),
+  handler: async (ctx, args) => {
+    // Use a single query with collect() to get all registrations for the event
+    // This is more efficient than multiple separate queries
+    const registrations = await ctx.db
+      .query('registrations')
+      .withIndex('by_event', (q) => q.eq('eventId', args.eventId))
+      .collect();
+
+    // Count by status using efficient array operations
+    const counts = registrations.reduce(
+      (acc, registration) => {
+        acc.total++;
+
+        switch (registration.status.type) {
+          case 'pending':
+            acc.pending++;
+            break;
+          case 'approved':
+            acc.approved++;
+            break;
+          case 'rejected':
+            acc.rejected++;
+            break;
+          case 'minted':
+            acc.minted++;
+            break;
+          default:
+            // Handle any unexpected status types
+            break;
+        }
+
+        return acc;
+      },
+      { total: 0, pending: 0, approved: 0, rejected: 0, minted: 0 }
+    );
+
+    return counts;
+  },
+});
+
 // Get detailed registration data for a specific event (for modals/detail views)
 export const getDetailedRegistrationsByEventId = query({
   args: {
