@@ -90,7 +90,6 @@ export const ManageEventScreen = ({ id }: { id: string }) => {
                 borderWidth={0}
                 paddingVertical="$3"
                 paddingHorizontal="$4"
-                disabled
                 opacity={0.5}
               >
                 <XStack gap="$2" alignItems="center" justifyContent="center">
