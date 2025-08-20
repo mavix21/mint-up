@@ -3,31 +3,57 @@
 import { api } from '@my/backend/_generated/api';
 import { Id } from '@my/backend/_generated/dataModel';
 import { useQuery } from '@my/backend/react';
-import { Button, View, formatRelativeDate } from '@my/ui';
+import {
+  Button,
+  View,
+  formatRelativeDate,
+  Link,
+  SizableText,
+  YStack,
+  FullscreenSpinner,
+} from '@my/ui';
 import NFTTicket from 'app/entities/nft-ticket/nft-ticket';
-import { useRouter } from 'solito/router';
 
 export const ShareableTicketViewScreen = ({ id }: { id: string }) => {
-  const router = useRouter();
   const registration = useQuery(api.registrations.getRegistrationTicketById, {
     registrationId: id as Id<'registrations'>,
   });
 
-  if (!registration) {
-    return null;
+  if (registration === undefined) {
+    return <FullscreenSpinner />;
+  }
+
+  if (registration === null) {
+    return (
+      <View
+        height={'100vh' as any}
+        display="flex"
+        flexDirection="column"
+        justifyContent="center"
+        alignItems="center"
+        padding="$4"
+      >
+        <YStack gap="$4" alignItems="center" maxWidth={400}>
+          <SizableText size="$8" fontWeight="bold" textAlign="center">
+            Ticket Not Found
+          </SizableText>
+          <SizableText size="$4" textAlign="center" color="$color11">
+            Sorry, we couldn&apos;t find the ticket you&apos;re looking for. It may have been
+            removed or the link might be incorrect.
+          </SizableText>
+          <Link asChild href="/">
+            <Button size="$4" marginTop="$2">
+              Return to Mini App
+            </Button>
+          </Link>
+        </YStack>
+      </View>
+    );
   }
 
   const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(
     `https://mint-up-mini.vercel.app/events/${registration.eventId}`
   )}`;
-
-  const handleGoToMiniApp = () => {
-    router.push('/');
-  };
-
-  const handleViewEvent = () => {
-    router.push(`/events/${registration.eventId}`);
-  };
 
   return (
     <View
@@ -63,10 +89,12 @@ export const ShareableTicketViewScreen = ({ id }: { id: string }) => {
         borderTopColor="$borderColor"
         backgroundColor="$background"
       >
-        <Button onPress={handleGoToMiniApp}>Go to Mini App</Button>
-        <Button themeInverse onPress={handleViewEvent}>
-          View Event
-        </Button>
+        <Link asChild href="/">
+          <Button>Go to Mini App</Button>
+        </Link>
+        <Link asChild href={`/events/${registration.eventId}`}>
+          <Button themeInverse>View Event</Button>
+        </Link>
       </View>
     </View>
   );

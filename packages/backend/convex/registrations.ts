@@ -289,7 +289,7 @@ export const getRegistrationTicketById = query({
       .first();
 
     if (!registration) {
-      throw new Error('Registration not found');
+      return null;
     }
 
     const event = await ctx.db
@@ -298,7 +298,7 @@ export const getRegistrationTicketById = query({
       .first();
 
     if (!event) {
-      throw new Error('Event not found');
+      return null;
     }
 
     const ticketTemplate = await ctx.db
