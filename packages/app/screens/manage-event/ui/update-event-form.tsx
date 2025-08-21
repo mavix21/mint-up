@@ -42,6 +42,7 @@ export function UpdateEventForm({ event, onSubmit, onThemeChange }: UpdateEventF
       onChange: updateEventFormSchema,
     },
     onSubmit: async ({ value }) => {
+      console.log('value', value);
       const startTimestamp = new Date(`${value.startDate}T${value.startTime}`).getTime();
       const endTimestamp = new Date(`${value.endDate}T${value.endTime}`).getTime();
 
@@ -81,7 +82,12 @@ export function UpdateEventForm({ event, onSubmit, onThemeChange }: UpdateEventF
 
   return (
     <form.AppForm>
-      <Form onSubmit={() => form.handleSubmit()}>
+      <Form
+        onSubmit={() => {
+          console.log('form', form.state);
+          form.handleSubmit();
+        }}
+      >
         <YStack gap="$4">
           {/* Event Image (optional) */}
           <form.Field

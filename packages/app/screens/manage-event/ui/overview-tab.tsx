@@ -1,5 +1,5 @@
 import { Doc } from '@my/backend/_generated/dataModel';
-import { YStack, XStack, SizableText, Button, Separator, Sheet } from '@my/ui';
+import { YStack, XStack, SizableText, Button, Separator, Sheet, ScrollView } from '@my/ui';
 import { Calendar, MapPin, Users, Edit3, Share2, Globe, Tag, Eye } from '@tamagui/lucide-icons';
 import { useState } from 'react';
 
@@ -222,10 +222,12 @@ export const OverviewTab = ({ event }: OverviewTabProps) => {
           enterStyle={{ opacity: 0 }}
           exitStyle={{ opacity: 0 }}
         />
-        <Sheet.Frame padding="$4" backgroundColor="$color1">
-          <YStack gap="$4" width="100%" maxWidth={496} marginHorizontal="auto">
-            <UpdateEventForm event={event} onSubmit={async () => true} onThemeChange={() => {}} />
-          </YStack>
+        <Sheet.Frame pt="$4" backgroundColor="$color1">
+          <ScrollView flex={1}>
+            <YStack gap="$4" width="100%" maxWidth={496} marginHorizontal="auto" pb="$4">
+              <UpdateEventForm event={event} onSubmit={async () => true} onThemeChange={() => {}} />
+            </YStack>
+          </ScrollView>
         </Sheet.Frame>
       </Sheet>
     </>
