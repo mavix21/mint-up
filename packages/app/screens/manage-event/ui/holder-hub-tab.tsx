@@ -1,6 +1,6 @@
 import { api } from '@my/backend/_generated/api';
-import { Doc } from '@my/backend/_generated/dataModel';
-import { useQuery } from '@my/backend/react';
+import { Doc, Id } from '@my/backend/_generated/dataModel';
+import { useMutation, useQuery } from '@my/backend/react';
 import { YStack, XStack, SizableText, Button, Card, Separator, ScrollView, Spinner } from '@my/ui';
 import { Users, UserCheck, UserX, X, Check } from '@tamagui/lucide-icons';
 import { SkeletonLine } from 'app/shared/ui/SkeletonLine';
@@ -10,9 +10,6 @@ interface HolderHubTabProps {
 }
 
 export const HolderHubTab = ({ event }: HolderHubTabProps) => {
-  // const confirmedCount = registrations.filter((r) => r.status === 'confirmed').length;
-  // const pendingCount = registrations.filter((r) => r.status === 'pending').length;
-
   const registrationCounts = useQuery(api.registrations.getRegistrationCountsByEventId, {
     eventId: event._id,
   });
@@ -20,6 +17,17 @@ export const HolderHubTab = ({ event }: HolderHubTabProps) => {
   const registrations = useQuery(api.registrations.getDetailedRegistrationsByEventId, {
     eventId: event._id,
   });
+
+  const approveRegistration = useMutation(api.registrations.approveRegistration);
+  const rejectRegistration = useMutation(api.registrations.rejectRegistration);
+
+  const handleApproveRegistration = (registrationId: Id<'registrations'>) => {
+    approveRegistration({ registrationId });
+  };
+
+  const handleRejectRegistration = (registrationId: Id<'registrations'>) => {
+    rejectRegistration({ registrationId });
+  };
 
   return (
     <ScrollView>
@@ -77,29 +85,6 @@ export const HolderHubTab = ({ event }: HolderHubTabProps) => {
 
         <Separator />
 
-        {/* Actions */}
-        {/* <YStack gap="$3">
-          <SizableText size="$5" fontWeight="bold" color="$color12">
-            Manage Registrations
-          </SizableText>
-
-          <XStack gap="$3" flexWrap="wrap">
-            <Button borderWidth={1} icon={<Download size={16} />} flex={1} minWidth={120}>
-              <SizableText size="$3">Export List</SizableText>
-            </Button>
-
-            <Button borderWidth={1} icon={<Mail size={16} />} flex={1} minWidth={120}>
-              <SizableText size="$3">Send Email</SizableText>
-            </Button>
-
-            <Button borderWidth={1} icon={<MessageSquare size={16} />} flex={1} minWidth={120}>
-              <SizableText size="$3">Send SMS</SizableText>
-            </Button>
-          </XStack>
-        </YStack>
-
-        <Separator /> */}
-
         {/* Registrations List */}
         <YStack gap="$3">
           <SizableText size="$5" fontWeight="bold" color="$color12">
@@ -142,8 +127,7 @@ export const HolderHubTab = ({ event }: HolderHubTabProps) => {
                             borderWidth={1}
                             theme="green"
                             onPress={() => {
-                              // Handle approve action
-                              console.log('Approving registration for user:', registration.userId);
+                              handleApproveRegistration(registration._id);
                             }}
                           >
                             <Check size={12} />
@@ -154,8 +138,7 @@ export const HolderHubTab = ({ event }: HolderHubTabProps) => {
                             borderWidth={1}
                             theme="red"
                             onPress={() => {
-                              // Handle reject action
-                              console.log('Rejecting registration for user:', registration.userId);
+                              handleRejectRegistration(registration._id);
                             }}
                           >
                             <X size={12} />
