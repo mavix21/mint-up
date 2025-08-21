@@ -446,3 +446,37 @@ export const getRegistrationTicketByEventIdUserId = query({
     };
   },
 });
+
+export const approveRegistration = mutation({
+  args: { registrationId: v.id('registrations') },
+  handler: async (ctx, args) => {
+    const registration = await ctx.db.get(args.registrationId);
+    if (!registration) {
+      throw new Error('Registration not found');
+    }
+
+    if (registration.status.type !== 'pending') {
+      throw new Error('Registration is not pending');
+    }
+
+    await ctx.db.patch(args.registrationId, {
+      status: { type: 'approved', approvedAt: Date.now() },
+    });
+  },
+});
+
+export const rejectRegistration = mutation({
+  args: { registrationId: v.id('registrations') },
+  handler: async (ctx, args) => {
+    const registration = await ctx.db.get(args.registrationId);
+    if (!registration) {
+      throw new Error('Registration not found');
+    }
+
+    if (registration.status.type !== 'pending') {
+      throw new Error('Registration is not pending');
+    }
+
+    await ctx.db.patch(args.registrationId, { status: { type: 'rejected' } });
+  },
+});
