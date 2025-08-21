@@ -99,7 +99,7 @@ export const HolderHubTab = ({ event }: HolderHubTabProps) => {
         <Separator />
 
         {/* Actions */}
-        <YStack gap="$3">
+        {/* <YStack gap="$3">
           <SizableText size="$5" fontWeight="bold" color="$color12">
             Manage Registrations
           </SizableText>
@@ -119,7 +119,7 @@ export const HolderHubTab = ({ event }: HolderHubTabProps) => {
           </XStack>
         </YStack>
 
-        <Separator />
+        <Separator /> */}
 
         {/* Registrations List */}
         <YStack gap="$3">
