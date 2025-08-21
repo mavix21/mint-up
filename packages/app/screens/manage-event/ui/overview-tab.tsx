@@ -1,16 +1,6 @@
 import { Doc } from '@my/backend/_generated/dataModel';
 import { YStack, XStack, SizableText, Button, Separator } from '@my/ui';
-import {
-  Calendar,
-  MapPin,
-  Users,
-  Edit3,
-  Share2,
-  Globe,
-  Tag,
-  Eye,
-  FileText,
-} from '@tamagui/lucide-icons';
+import { Calendar, MapPin, Users, Edit3, Share2, Globe, Tag, Eye } from '@tamagui/lucide-icons';
 
 interface OverviewTabProps {
   event: Doc<'events'>;
@@ -40,7 +30,7 @@ export const OverviewTab = ({ event }: OverviewTabProps) => {
           >
             <XStack alignItems="center" gap="$2">
               <Calendar size={18} color="$color11" />
-              <SizableText size="$4" fontWeight="600" color="$color12">
+              <SizableText size="$4" color="$color12">
                 Date & Time
               </SizableText>
             </XStack>
@@ -71,7 +61,7 @@ export const OverviewTab = ({ event }: OverviewTabProps) => {
 
           {/* Location */}
           <XStack
-            gap="$2"
+            gap="$6"
             backgroundColor="$color2"
             borderRadius="$4"
             paddingInline="$4"
@@ -84,12 +74,12 @@ export const OverviewTab = ({ event }: OverviewTabProps) => {
               ) : (
                 <MapPin size={18} color="$color11" />
               )}
-              <SizableText size="$4" fontWeight="600" color="$color12">
+              <SizableText size="$4" color="$color12">
                 Location
               </SizableText>
             </XStack>
-            <YStack gap="$1" paddingLeft="$6" alignItems="flex-end">
-              <SizableText size="$3" fontWeight="600" color="$color11">
+            <YStack flex={1} gap="$1" alignItems="flex-end">
+              <SizableText size="$3" fontWeight="600" color="$color11" numberOfLines={1}>
                 {event.location.type === 'online'
                   ? event.location.url
                   : event.location.address || 'Location TBD'}
@@ -111,19 +101,14 @@ export const OverviewTab = ({ event }: OverviewTabProps) => {
           >
             <XStack alignItems="center" gap="$2">
               <Users size={18} color="$color11" />
-              <SizableText size="$4" fontWeight="600" color="$color12">
+              <SizableText size="$4" color="$color12">
                 Attendees
               </SizableText>
             </XStack>
-            <YStack gap="$1" paddingLeft="$6">
+            <YStack gap="$1" alignItems="flex-end">
               <SizableText size="$3" color="$color11">
                 {event.registrationCount} registered
               </SizableText>
-              {event.recentRegistrations && event.recentRegistrations.length > 0 && (
-                <SizableText size="$2" color="$color10">
-                  {event.recentRegistrations.length} recent registrations
-                </SizableText>
-              )}
             </YStack>
           </XStack>
 
@@ -138,7 +123,7 @@ export const OverviewTab = ({ event }: OverviewTabProps) => {
           >
             <XStack alignItems="center" gap="$2">
               <Tag size={18} color="$color11" />
-              <SizableText size="$4" fontWeight="600" color="$color12">
+              <SizableText size="$4" color="$color12">
                 Category
               </SizableText>
             </XStack>
@@ -192,7 +177,7 @@ export const OverviewTab = ({ event }: OverviewTabProps) => {
           >
             <XStack alignItems="center" gap="$2">
               <Eye size={18} color="$color11" />
-              <SizableText size="$4" fontWeight="600" color="$color12">
+              <SizableText size="$4" color="$color12">
                 Visibility
               </SizableText>
             </XStack>

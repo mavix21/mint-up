@@ -13,6 +13,7 @@ import {
   View,
   Theme,
   ThemeName,
+  ScrollView,
 } from '@my/ui';
 import { ArrowLeft, BarChart3, Users, Eye } from '@tamagui/lucide-icons';
 import { useRouter } from 'next/navigation';
@@ -35,8 +36,21 @@ export const ManageEventScreen = ({ id }: { id: string }) => {
 
   return (
     <Theme name={event.theme as ThemeName}>
-      <View width="100%" height="100%" backgroundColor="$background" flex={1} marginInline="auto">
-        <YStack height="100%" flex={1} maxWidth={800} marginInline="auto" width="100%">
+      <View
+        width="100%"
+        height={'100vh' as any}
+        backgroundColor="$background"
+        flex={1}
+        marginInline="auto"
+      >
+        <YStack
+          height="100%"
+          overflowBlock="hidden"
+          flex={1}
+          maxWidth={800}
+          marginInline="auto"
+          width="100%"
+        >
           {/* Header */}
           <YStack padding="$4" gap="$3" borderColor="$borderColor">
             {/* Back Link */}
@@ -66,6 +80,8 @@ export const ManageEventScreen = ({ id }: { id: string }) => {
             flexDirection="column"
             backgroundColor="$background"
             size="$4"
+            height="100%"
+            overflowBlock="hidden"
           >
             <Tabs.List backgroundColor="$background" paddingHorizontal="$4" paddingVertical="$2">
               <Tabs.Tab
@@ -117,14 +133,20 @@ export const ManageEventScreen = ({ id }: { id: string }) => {
               </Tabs.Tab>
             </Tabs.List>
             {/* Tab Content */}
-            <Tabs.Content value="overview" flex={1} overflow="hidden">
-              <OverviewTab event={event} />
+            <Tabs.Content value="overview" flex={1} overflowBlock="hidden" height="100%">
+              <ScrollView flex={1}>
+                <OverviewTab event={event} />
+              </ScrollView>
             </Tabs.Content>
-            <Tabs.Content value="holder-hub" flex={1} overflow="hidden">
-              <HolderHubTab event={event} />
+            <Tabs.Content value="holder-hub" flex={1} overflowBlock="hidden" height="100%">
+              <ScrollView flex={1}>
+                <HolderHubTab event={event} />
+              </ScrollView>
             </Tabs.Content>
-            <Tabs.Content value="insights" flex={1} overflow="hidden">
-              <InsightsTab event={event} />
+            <Tabs.Content value="insights" flex={1} overflowBlock="hidden" height="100%">
+              <ScrollView flex={1}>
+                <InsightsTab event={event} />
+              </ScrollView>
             </Tabs.Content>
           </Tabs>
         </YStack>
