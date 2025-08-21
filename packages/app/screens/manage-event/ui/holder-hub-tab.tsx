@@ -10,35 +10,14 @@ interface HolderHubTabProps {
 }
 
 export const HolderHubTab = ({ event }: HolderHubTabProps) => {
-  // Mock data - in real app this would come from the backend
-  const registrations = [
-    {
-      id: '1',
-      name: 'John Doe',
-      email: 'john@example.com',
-      status: 'confirmed',
-      registeredAt: '2024-01-15',
-    },
-    {
-      id: '2',
-      name: 'Jane Smith',
-      email: 'jane@example.com',
-      status: 'pending',
-      registeredAt: '2024-01-16',
-    },
-    {
-      id: '3',
-      name: 'Bob Johnson',
-      email: 'bob@example.com',
-      status: 'confirmed',
-      registeredAt: '2024-01-17',
-    },
-  ];
-
   // const confirmedCount = registrations.filter((r) => r.status === 'confirmed').length;
   // const pendingCount = registrations.filter((r) => r.status === 'pending').length;
 
   const registrationCounts = useQuery(api.registrations.getRegistrationCountsByEventId, {
+    eventId: event._id,
+  });
+
+  const registrations = useQuery(api.registrations.getDetailedRegistrationsByEventId, {
     eventId: event._id,
   });
 
@@ -128,38 +107,43 @@ export const HolderHubTab = ({ event }: HolderHubTabProps) => {
           </SizableText>
 
           <YStack gap="$2">
-            {event.recentRegistrations.map((registration) => (
-              <Card
-                key={registration.userId}
-                backgroundColor="$background"
-                padding="$3"
-                borderRadius="$3"
-              >
-                <XStack justifyContent="space-between" alignItems="center">
-                  <YStack gap="$1">
-                    <SizableText size="$3" fontWeight="bold" color="$color12">
-                      {registration.displayName}
-                    </SizableText>
-                    <SizableText size="$2" color="$color10">
-                      Registered: {new Date(registration.registrationTime).toLocaleDateString()}
-                    </SizableText>
-                  </YStack>
+            {registrations && registrations.length > 0 ? (
+              registrations.map((registration) => (
+                <Card
+                  key={registration.userId}
+                  backgroundColor="$background"
+                  padding="$3"
+                  borderRadius="$3"
+                >
+                  <XStack justifyContent="space-between" alignItems="center">
+                    <YStack gap="$1">
+                      <SizableText size="$3" fontWeight="bold" color="$color12">
+                        {registration.user.displayName}
+                      </SizableText>
+                      <SizableText size="$2" color="$color10">
+                        Registered: {new Date(registration._creationTime).toLocaleDateString()}
+                      </SizableText>
+                    </YStack>
 
-                  <XStack gap="$2" alignItems="center">
-                    <SizableText
-                      size="$2"
-                      color={registration.status.type === 'approved' ? '$color10' : '$color9'}
-                      fontWeight="bold"
-                    >
-                      {registration.status.type.toUpperCase()}
-                    </SizableText>
-                    <Button size="$2" borderWidth={1}>
-                      <SizableText size="$2">View</SizableText>
-                    </Button>
+                    <XStack gap="$2" alignItems="center">
+                      <SizableText
+                        size="$2"
+                        color={registration.status.type === 'approved' ? '$color10' : '$color9'}
+                        fontWeight="bold"
+                      >
+                        {registration.status.type.toUpperCase()}
+                      </SizableText>
+                    </XStack>
                   </XStack>
-                </XStack>
-              </Card>
-            ))}
+                </Card>
+              ))
+            ) : registrations === undefined ? (
+              <Spinner size="large" />
+            ) : (
+              <SizableText size="$2" color="$color10">
+                No registrations found
+              </SizableText>
+            )}
           </YStack>
         </YStack>
       </YStack>
