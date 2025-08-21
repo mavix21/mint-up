@@ -55,8 +55,10 @@ export const ManageEventScreen = ({ id }: { id: string }) => {
           <YStack padding="$4" gap="$3" borderColor="$borderColor">
             {/* Back Link */}
             <Button
+              themeInverse
               backgroundColor="transparent"
               hoverStyle={{ backgroundColor: 'transparent' }}
+              pressStyle={{ backgroundColor: 'transparent' }}
               padding={0}
               borderWidth={0}
               chromeless

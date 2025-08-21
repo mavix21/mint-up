@@ -333,6 +333,53 @@ export const createEvent = mutation({
   },
 });
 
+export const updateEvent = mutation({
+  args: {
+    eventId: v.id('events'),
+    event: v.object({
+      name: v.optional(v.string()),
+      description: v.optional(v.string()),
+      startDate: v.optional(v.number()),
+      endDate: v.optional(v.number()),
+      category: v.optional(vv.doc('events').fields.category),
+      location: v.optional(
+        v.union(
+          v.object({
+            type: v.literal('online'),
+            url: v.string(),
+          }),
+          v.object({
+            type: v.literal('in-person'),
+            address: v.string(),
+            instructions: v.optional(v.string()),
+          })
+        )
+      ),
+      visibility: v.optional(v.union(v.literal('public'), v.literal('unlisted'))),
+      theme: v.optional(v.string()),
+      image: v.optional(v.id('_storage')),
+    }),
+  },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) throw new Error('Unauthorized');
+
+    const existing = await ctx.db.get(args.eventId);
+    if (!existing) throw new Error('Event not found');
+
+    // Optionally restrict to creator/hosts; for now, allow creator only
+    if (existing.creatorId !== (identity.subject as Id<'users'>)) {
+      throw new Error('Forbidden');
+    }
+
+    await ctx.db.patch(args.eventId, {
+      ...args.event,
+    });
+
+    return args.eventId;
+  },
+});
+
 export const getUserEvents = query({
   handler: async (ctx) => {
     const identity = await ctx.auth.getUserIdentity();
