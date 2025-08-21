@@ -8,4 +8,3 @@ export { EventDescriptionSheet } from './event-description-sheet';
 export { DescriptionButton } from './description-button';
 export { EventTicketingSheet } from './event-ticketing-sheet';
 export { TicketingButton } from './ticketing-button';
-export { CategorySelector } from './category-selector';

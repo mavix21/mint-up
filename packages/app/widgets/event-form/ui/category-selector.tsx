@@ -13,6 +13,7 @@ import { EVENT_CATEGORIES } from 'app/entities/event-category/models/event-categ
 import { EventCategory } from 'app/entities/schemas';
 import { FieldInfo } from 'app/shared/ui/FieldInfo';
 import { useState, useCallback, useMemo } from 'react';
+import { LayoutChangeEvent, NativeScrollEvent, NativeSyntheticEvent } from 'react-native';
 import { LinearGradient } from 'tamagui/linear-gradient';
 
 // Use the centralized category configuration
@@ -43,7 +44,7 @@ export function CategorySelector({ value, onValueChange, fieldApi }: CategorySel
 
   // Debounced scroll handler to reduce re-renders
   const handleScroll = useCallback(
-    (e: any) => {
+    (e: NativeSyntheticEvent<NativeScrollEvent>) => {
       const newScrollX = e.nativeEvent.contentOffset.x;
       // Only update if the change is significant (more than 5px)
       if (Math.abs(newScrollX - scrollX) > 5) {
@@ -57,7 +58,7 @@ export function CategorySelector({ value, onValueChange, fieldApi }: CategorySel
     setContentWidth(width);
   }, []);
 
-  const handleLayout = useCallback((e: any) => {
+  const handleLayout = useCallback((e: LayoutChangeEvent) => {
     setContainerWidth(e.nativeEvent.layout.width);
   }, []);
 

@@ -13,10 +13,9 @@ import {
   Users,
   PartyPopper,
   Puzzle,
-  HelpCircle,
 } from '@tamagui/lucide-icons';
 
-export type EventCategory = Doc<'events'>['category'];
+export type EventCategory = Exclude<Doc<'events'>['category'], 'other'>;
 
 export interface CategoryConfig {
   icon: React.ComponentType<any>;
@@ -72,14 +71,10 @@ export const EVENT_CATEGORIES: Record<EventCategory, CategoryConfig> = {
     icon: Puzzle,
     theme: 'blue',
   },
-  other: {
-    icon: HelpCircle,
-    theme: 'gray',
-  },
 };
 
 export function getCategoryConfig(category: EventCategory): CategoryConfig {
-  return EVENT_CATEGORIES[category] || EVENT_CATEGORIES.other;
+  return EVENT_CATEGORIES[category];
 }
 
 export function getCategoryIcon(category: EventCategory) {

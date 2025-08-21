@@ -16,10 +16,12 @@ import {
   useToastController,
 } from '@my/ui';
 import { Globe, Clock4, Clock2 } from '@tamagui/lucide-icons';
+import { CreateEventFormData, createEventFormSchema, EventCategory } from 'app/entities';
 import { dateUtils, timeUtils, timezoneUtils } from 'app/shared/lib/date';
 import { validateImageSize } from 'app/shared/lib/file';
 import { useAppForm } from 'app/shared/lib/form';
 import { FieldInfo } from 'app/shared/ui/FieldInfo';
+import { CategorySelector } from 'app/widgets/event-form';
 import { useState } from 'react';
 
 import {
@@ -31,9 +33,7 @@ import {
   DescriptionButton,
   EventTicketingSheet,
   TicketingButton,
-  CategorySelector,
 } from './index';
-import { CreateEventFormData, createEventFormSchema, EventCategory } from '../../../entities';
 import { createEventFormOpts } from '../model/shared-form';
 
 export interface CreateEventFormProps {
