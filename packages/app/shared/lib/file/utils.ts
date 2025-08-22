@@ -8,11 +8,15 @@ export const getRandomDefaultImage = (): string => {
   return DEFAULT_IMAGES[Math.floor(Math.random() * DEFAULT_IMAGES.length)];
 };
 
-export const convertImagePathToFile = async (imagePath: string): Promise<File> => {
+export const convertImagePathToFile = async (
+  imagePath: string,
+  fileName = 'image'
+): Promise<File> => {
   try {
     const response = await fetch(imagePath);
     const blob = await response.blob();
-    return new File([blob], 'default-image.jpg', { type: blob.type });
+    const extension = getExtensionFromMimeType(blob.type);
+    return new File([blob], `${fileName}.${extension}`, { type: blob.type });
   } catch (error) {
     console.error('Error converting image to file:', error);
     throw error;
