@@ -7,6 +7,11 @@ export const linkedAccountsTable = defineTable({
     v.object({
       protocol: v.literal('farcaster'),
       fid: v.number(),
+      username: v.string(),
+      pfpUrl: v.string(),
+      displayName: v.string(),
+      bio: v.string(),
+      lastSyncedAt: v.optional(v.number()),
     }),
     v.object({
       protocol: v.literal('wallet'),

@@ -9,6 +9,7 @@ export const usersTable = defineTable({
   email: v.optional(v.string()),
   emailVerified: v.optional(v.number()),
   currentWalletAddress: v.optional(v.string()),
+  profileInitializedAt: v.optional(v.number()),
 })
   .index('by_currentWalletAddress', ['currentWalletAddress'])
   .index('by_email', ['email']);
