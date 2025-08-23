@@ -74,6 +74,7 @@ export const getUserByFid = query({
     }
 
     return {
+      displayName: user.displayName,
       username: user.username,
       pfpUrl: user.pfpUrl,
       currentWalletAddress: user.currentWalletAddress,
