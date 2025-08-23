@@ -3,31 +3,34 @@
 import { api } from '@my/backend/_generated/api';
 import { fetchMutation } from '@my/backend/nextjs';
 
-interface UpsertUserByFidArgs {
+interface InsertUserByFidArgs {
   fid: number;
   username: string;
   pfpUrl: string;
   displayName?: string;
   bio?: string;
   currentWalletAddress?: string;
+  initializedAt?: number | undefined;
 }
 
-export async function upsertUserByFid({
+export async function insertUserByFid({
   fid,
   currentWalletAddress,
   username,
   pfpUrl,
   displayName,
   bio,
-}: UpsertUserByFidArgs) {
+  initializedAt,
+}: InsertUserByFidArgs) {
   const normalizedCurrentWalletAddress = currentWalletAddress?.toLowerCase();
 
-  return await fetchMutation(api.users.upsertUserByFid, {
+  return await fetchMutation(api.users.insertUserByFid, {
     fid,
     currentWalletAddress: normalizedCurrentWalletAddress,
     username,
     pfpUrl,
     displayName,
     bio,
+    initializedAt,
   });
 }

@@ -9,8 +9,8 @@ export const linkedAccountsTable = defineTable({
       fid: v.number(),
       username: v.string(),
       pfpUrl: v.string(),
-      displayName: v.string(),
-      bio: v.string(),
+      displayName: v.optional(v.string()),
+      bio: v.optional(v.string()),
       lastSyncedAt: v.optional(v.number()),
     }),
     v.object({

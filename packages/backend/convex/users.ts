@@ -3,11 +3,12 @@ import { internalQuery, mutation, query } from './_generated/server';
 import { vv } from './schema';
 import { ConvexError, v } from 'convex/values';
 
-export const upsertUserByFid = mutation({
+export const insertUserByFid = mutation({
   args: {
     ...omit(vv.doc('users').fields, ['_id', '_creationTime']),
     currentWalletAddress: v.optional(v.string()),
     fid: v.number(),
+    initializedAt: v.optional(v.number()),
   },
   handler: async (ctx, args) => {
     const linkedAccount = await ctx.db
@@ -22,16 +23,16 @@ export const upsertUserByFid = mutation({
           message: 'User not found',
         });
       }
-      await ctx.db.patch(linkedAccount.userId, {
-        username: args.username,
-        pfpUrl: args.pfpUrl,
-        displayName: args.displayName,
-        bio: args.bio,
-        currentWalletAddress: args.currentWalletAddress,
-      });
-      await ctx.db.patch(linkedAccount._id, {
-        linkedAt: Date.now(),
-      });
+      // await ctx.db.patch(linkedAccount.userId, {
+      //   username: args.username,
+      //   pfpUrl: args.pfpUrl,
+      //   displayName: args.displayName,
+      //   bio: args.bio,
+      //   currentWalletAddress: args.currentWalletAddress,
+      // });
+      // await ctx.db.patch(linkedAccount._id, {
+      //   linkedAt: Date.now(),
+      // });
       return linkedAccount.userId;
     }
 
@@ -41,10 +42,19 @@ export const upsertUserByFid = mutation({
       displayName: args.displayName,
       bio: args.bio,
       currentWalletAddress: args.currentWalletAddress,
+      profileInitializedAt: args.initializedAt,
     });
 
     await ctx.db.insert('linkedAccounts', {
-      account: { protocol: 'farcaster', fid: args.fid },
+      account: {
+        protocol: 'farcaster',
+        fid: args.fid,
+        username: args.username,
+        pfpUrl: args.pfpUrl,
+        displayName: args.displayName,
+        bio: args.bio,
+        lastSyncedAt: args.initializedAt,
+      },
       userId,
       linkedAt: Date.now(),
     });

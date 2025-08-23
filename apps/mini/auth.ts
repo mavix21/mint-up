@@ -7,8 +7,8 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 import { parseSiweMessage } from 'viem/siwe';
 
 import { getNeynarUser } from './lib/neynar';
-import { upsertUserByFid } from './src/users/create-user.action';
 import { getUserByFid } from './src/users/get-user-by-id';
+import { insertUserByFid } from './src/users/insert-user-by-fid.action';
 
 declare module 'next-auth' {
   interface Session {
@@ -124,11 +124,9 @@ export const authOptions: AuthOptions = {
 
         try {
           const existingUser = await getUserByFid(fid);
-          const isRecentlyLinked =
-            existingUser?.linkedAt && existingUser.linkedAt > Date.now() - 1000 * 60 * 60 * 24;
 
-          // If user exists and was recently linked, return existing data
-          if (existingUser && isRecentlyLinked) {
+          // If user exists, return existing data
+          if (existingUser) {
             console.warn('User already linked, returning existing data', { fid });
             return {
               id: existingUser.userId,
@@ -143,42 +141,32 @@ export const authOptions: AuthOptions = {
             };
           }
 
-          // Fetch fresh data from Neynar (for both new and existing users)
-          const user = await getNeynarUser(fid);
-          if (!user) {
+          // Fetch fresh data from Neynar ONLY FOR NEW USERS
+          const neynarUser = await getNeynarUser(fid);
+          if (!neynarUser) {
             console.error('Failed to get Neynar user', { fid });
-            return existingUser
-              ? {
-                  id: existingUser.userId,
-                  fid,
-                  name: existingUser.username,
-                  username: existingUser.username,
-                  image: existingUser.pfpUrl,
-                  currentWalletAddress:
-                    existingUser.currentWalletAddress !== undefined
-                      ? (existingUser.currentWalletAddress as `0x${string}`)
-                      : address ?? '0x0',
-                }
-              : null;
           }
 
-          // Update or create user
-          const userId = await upsertUserByFid({
+          const userData = {
+            username: neynarUser?.username ?? credentials?.name ?? '',
+            pfpUrl: neynarUser?.pfp_url ?? credentials?.pfp ?? '',
+            bio: neynarUser?.profile.bio.text ?? '',
+            displayName: neynarUser?.display_name ?? '',
+            currentWalletAddress: address ?? '0x0',
+          };
+
+          // Create user idempotently
+          const userId = await insertUserByFid({
             fid,
-            username: user.username,
-            pfpUrl: user.pfp_url ?? existingUser?.pfpUrl ?? '',
-            currentWalletAddress: address,
-            bio: user.profile.bio.text,
-            ...(existingUser ? {} : { displayName: user.display_name }),
+            initializedAt: neynarUser ? Date.now() : undefined, // if neynar user failed
+            ...userData,
           });
 
           return {
             id: userId,
             fid,
-            name: user.username,
-            username: user.username,
-            image: user.pfp_url ?? existingUser?.pfpUrl ?? '',
-            currentWalletAddress: address ?? '0x0',
+            image: userData.pfpUrl,
+            ...userData,
           };
         } catch (error) {
           console.error('Error getting Neynar user', { fid, error });
