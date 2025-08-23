@@ -51,7 +51,7 @@ export const MyEventsScreen = () => {
 
   return (
     <YStack
-      fullscreen
+      width="100%"
       maxWidth={600}
       marginInline="auto"
       height="100%"
