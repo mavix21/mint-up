@@ -1,6 +1,5 @@
 'use client';
 
-import { useMiniKit } from '@coinbase/onchainkit/minikit';
 import { FullscreenSpinner, YStack } from '@my/ui';
 import { useSignIn } from 'app/shared/lib/hooks/use-sign-in';
 import { useState } from 'react';
@@ -10,8 +9,10 @@ import { CreateEventSheetWrapper } from './CreateEventSheetWrapper';
 import { SignInPromptModal } from './SignInPromptModal';
 import { Topbar } from './Topbar';
 
+import { useMiniApp } from '@/contexts/mini-app.context';
+
 export function Navigator({ children }: { children: React.ReactNode }) {
-  const { isFrameReady } = useMiniKit();
+  const { isFrameReady } = useMiniApp();
   const [open, setOpen] = useState(false);
   const [showSignInPrompt, setShowSignInPrompt] = useState(false);
 
