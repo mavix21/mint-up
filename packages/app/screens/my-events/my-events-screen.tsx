@@ -101,7 +101,7 @@ export const MyEventsScreen = () => {
                   <View key={dateKey} pos="relative">
                     <View pos="absolute" bottom={0} left={4} top={16} w={1} bg="$color8" />
 
-                    <View mb="$5">
+                    <View mb="$4">
                       <View pos="relative" pl="$5">
                         <View
                           theme="green"
@@ -113,7 +113,7 @@ export const MyEventsScreen = () => {
                           w="$0.75"
                           borderRadius="$5"
                         />
-                        <View mb="$4">
+                        <View mb="$3">
                           <SizableText fontSize="$2" color="$color11">
                             {dateUtils.formatRelativeDate(events[0]?.startDate)}
                           </SizableText>
@@ -199,7 +199,7 @@ export const MyEventsScreen = () => {
                   <View key={dateKey} pos="relative">
                     <View pos="absolute" bottom={0} left={4} top={16} w={1} bg="$color6" />
 
-                    <View mb="$5">
+                    <View mb="$4">
                       <View pos="relative" pl="$5">
                         <View
                           bg="$color8"
@@ -211,7 +211,7 @@ export const MyEventsScreen = () => {
                           w="$0.75"
                           borderRadius="$5"
                         />
-                        <View mb="$4">
+                        <View mb="$3">
                           <SizableText size="$2" color="$color11">
                             {dateUtils.formatRelativeDate(events[0]?.startDate)}
                           </SizableText>

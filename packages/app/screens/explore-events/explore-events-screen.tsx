@@ -1,10 +1,11 @@
 'use client';
 
 import { api } from '@my/backend/_generated/api';
-import { Button, Input, ScrollView, Paragraph, SizableText, XStack, YStack } from '@my/ui';
+import { Button, Input, ScrollView, Paragraph, SizableText, XStack, YStack, View } from '@my/ui';
 import { X } from '@tamagui/lucide-icons';
 import { useForm } from '@tanstack/react-form';
 import { validCategories } from 'app/entities';
+import { dateUtils } from 'app/shared/lib/date';
 import { SmallCardSkeleton } from 'app/shared/ui/SmallCardSkeleton';
 import { useQuery } from 'convex/react';
 import React from 'react';
@@ -160,9 +161,48 @@ export const ExploreEventsScreen = () => {
           ) : (
             // Events list
             <YStack gap="$4" px="$4">
-              {events.map((event) => {
-                return <ItemCardList key={event._id} event={event} />;
-              })}
+              {dateUtils
+                .groupByDate(
+                  events,
+                  (event) => {
+                    const date = new Date(event.startDate);
+                    return date.toLocaleDateString();
+                  },
+                  'asc'
+                )
+                .map(([dateKey, groupedEvents]) => (
+                  <View key={dateKey} pos="relative">
+                    <View pos="absolute" bottom={-15} left={4} top={16} w={1} bg="$color8" />
+
+                    <View mb="$1.5">
+                      <View pos="relative" pl="$5">
+                        <View
+                          theme="green"
+                          bg="$color8"
+                          pos="absolute"
+                          left={1}
+                          top={3}
+                          h="$0.75"
+                          w="$0.75"
+                          borderRadius="$5"
+                        />
+                        <View mb="$4">
+                          <SizableText fontSize="$2" color="$color11">
+                            {dateUtils.formatRelativeDate(groupedEvents[0]?.startDate)}
+                          </SizableText>
+                          <SizableText fontSize="$2">
+                            {dateUtils.getDayOfWeek(groupedEvents[0]?.startDate)}
+                          </SizableText>
+                        </View>
+                        <YStack gap="$2">
+                          {groupedEvents.map((event) => (
+                            <ItemCardList key={event._id} event={event} />
+                          ))}
+                        </YStack>
+                      </View>
+                    </View>
+                  </View>
+                ))}
             </YStack>
           )}
         </ScrollView>
