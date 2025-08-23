@@ -1,4 +1,4 @@
-import { Button, YStack, Link } from '@my/ui';
+import { Button, YStack, Link, Avatar } from '@my/ui';
 import { usePathname } from 'app/utils';
 
 interface MainButtonTabProps {
@@ -13,13 +13,21 @@ interface LinkTabProps {
   Icon: React.ComponentProps<typeof Button>['icon'];
 }
 
-type BottomTabProps = MainButtonTabProps | LinkTabProps;
+interface ProfileTabProps {
+  type: 'profile';
+  avatarUrl: string | undefined;
+  href: string;
+}
+
+type BottomTabProps = MainButtonTabProps | LinkTabProps | ProfileTabProps;
 
 export const BottomTab = (props: BottomTabProps) => {
   const pathname = usePathname();
 
   // Determine if the route is active based on pathname matching
-  const isActive = props.type === 'link' && pathname === props.href;
+  const isActive =
+    (props.type === 'link' && pathname === props.href) ||
+    (props.type === 'profile' && pathname === props.href);
 
   return (
     <YStack flex={1} alignItems="center" justifyContent="center" minWidth={0} position="relative">
@@ -40,6 +48,21 @@ export const BottomTab = (props: BottomTabProps) => {
             size="$6"
           />
         </YStack>
+      ) : props.type === 'profile' ? (
+        <Link asChild href={props.href}>
+          <Avatar
+            outlineOffset={1}
+            outlineStyle={isActive ? 'solid' : 'none'}
+            outlineColor="green"
+            circular
+            size="$3"
+            pressStyle={{ elevation: 2, scale: 0.97 }}
+            animation="100ms"
+          >
+            <Avatar.Image src={props.avatarUrl} />
+            <Avatar.Fallback bc="$color10" />
+          </Avatar>
+        </Link>
       ) : (
         // Regular tabs
         <Link asChild href={props.href}>
