@@ -140,7 +140,7 @@ export const ProfileScreen = ({ id }: { id: string }) => {
                   <SizableText>Profile</SizableText>
                 </XStack>
               </Tabs.Tab>
-              <Tabs.Tab value="settings" $sm={{ flexBasis: '50%' }}>
+              <Tabs.Tab value="linked-accounts" $sm={{ flexBasis: '50%' }}>
                 <XStack gap="$2" alignItems="center">
                   <Link2 size={16} />
                   <SizableText>Linked accounts</SizableText>
@@ -244,7 +244,7 @@ export const ProfileScreen = ({ id }: { id: string }) => {
             </Tabs.Content>
 
             {/* Settings Tab Content */}
-            <Tabs.Content value="settings" height="100%" overflowBlock="hidden" flex={1}>
+            <Tabs.Content value="linked-accounts" height="100%" overflowBlock="hidden" flex={1}>
               <ScrollView flex={1} contentContainerStyle={{ paddingBottom: 20 }}>
                 <YStack gap="$4" marginHorizontal="auto" width="100%">
                   <Card backgroundColor="$background" borderRadius="$4" padding="$4">

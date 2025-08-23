@@ -1,5 +1,5 @@
 import { v } from 'convex/values';
-import { internalQuery } from './_generated/server';
+import { internalQuery, query } from './_generated/server';
 
 export const getFidByUserId = internalQuery({
   args: {
@@ -17,5 +17,19 @@ export const getFidByUserId = internalQuery({
     }
 
     return null;
+  },
+});
+
+export const getLinkedAccountsByUserId = query({
+  args: {
+    userId: v.id('users'),
+  },
+  handler: async (ctx, args) => {
+    const linkedAccounts = await ctx.db
+      .query('linkedAccounts')
+      .withIndex('by_userId', (q) => q.eq('userId', args.userId))
+      .collect();
+
+    return linkedAccounts;
   },
 });
