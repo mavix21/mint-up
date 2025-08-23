@@ -128,13 +128,12 @@ export const MyEventsScreen = () => {
                             <View
                               key={event._id}
                               animation={[
-                                'bouncy',
+                                'medium',
                                 {
-                                  opacity: { delay: i * 60 },
                                   y: { delay: i * 60 },
                                 },
                               ]}
-                              enterStyle={{ o: 0, y: 6 }}
+                              enterStyle={{ y: 6 }}
                             >
                               <EventCard event={event} />
                             </View>
@@ -238,13 +237,12 @@ export const MyEventsScreen = () => {
                             <View
                               key={event._id}
                               animation={[
-                                'bouncy',
+                                'medium',
                                 {
-                                  opacity: { delay: i * 60 },
                                   y: { delay: i * 60 },
                                 },
                               ]}
-                              enterStyle={{ o: 0, y: 6 }}
+                              enterStyle={{ y: 6 }}
                             >
                               <EventCard event={event} />
                             </View>
