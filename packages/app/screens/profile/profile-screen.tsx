@@ -1,63 +1,416 @@
 'use client';
-import { useViewProfile } from '@coinbase/onchainkit/minikit';
+
 import { api } from '@my/backend/_generated/api';
 import { useQuery } from '@my/backend/react';
-import { YStack, XStack, Avatar, H2, Paragraph, Button, Text } from '@my/ui';
-import { useSession } from 'next-auth/react';
+import {
+  YStack,
+  XStack,
+  Avatar,
+  H2,
+  H4,
+  Paragraph,
+  Button,
+  Text,
+  Input,
+  Card,
+  Separator,
+  Form,
+  useToastController,
+  ScrollView,
+  TextArea,
+} from '@my/ui';
+import { Edit3, Mail, Phone, Users, ChevronRight, Save } from '@tamagui/lucide-icons';
+import { useAppForm } from 'app/shared/lib/form';
+import { SkeletonLine } from 'app/shared/ui/SkeletonLine';
+import { useState } from 'react';
 
-export const ProfileScreen = () => {
-  const { data: session } = useSession();
+// Helper function to safely get error message
+const getErrorMessage = (error: unknown): string => {
+  if (typeof error === 'string') return error;
+  if (error && typeof error === 'object' && 'message' in error) {
+    return String(error.message);
+  }
+  return 'Invalid input';
+};
+
+export const ProfileScreen = ({ id }: { id: string }) => {
   const profile = useQuery(api.users.getUserByFid, {
-    fid: session?.user.fid ?? 0,
+    fid: Number(id),
   });
 
-  const viewProfile = useViewProfile();
+  const toast = useToastController();
+
+  const [isEditing, setIsEditing] = useState(false);
+
+  // Initialize form with default values from profile or defaults
+  const form = useAppForm({
+    defaultValues: {
+      bio: profile?.bio ?? 'Hi, there!',
+      personalEmail: 'michael@example.com',
+      phoneNumber: '(209) 555-0104',
+      team: 'Project Operation Team',
+      leadsBy: 'Darrell Steward',
+    },
+    onSubmit: async ({ value }) => {
+      try {
+        // Here you would implement the actual save logic
+        console.log('Saving changes:', value);
+
+        // Simulate API call
+        await new Promise((resolve) => setTimeout(resolve, 500));
+
+        toast.show('Profile updated successfully!', {
+          type: 'success',
+          preset: 'success',
+        });
+
+        setIsEditing(false);
+      } catch {
+        toast.show('Failed to update profile', {
+          type: 'error',
+          preset: 'error',
+        });
+      }
+    },
+  });
 
   return (
-    <YStack flex={1}>
-      {/* Profile Content */}
-      <YStack flex={1} alignItems="center" paddingHorizontal="$6" paddingTop="$4" gap="$4">
-        {/* Profile Avatar */}
-        <Avatar size="$12" circular>
-          <Avatar.Image src={profile?.pfpUrl ?? ''} />
-          <Avatar.Fallback>
-            <Text fontSize="$9" fontWeight="600">
-              OC
-            </Text>
-          </Avatar.Fallback>
-        </Avatar>
+    <form.AppForm>
+      <Form
+        onSubmit={() => {
+          console.log('form state', { formState: form.state });
+          form.handleSubmit();
+        }}
+      >
+        <YStack height="100%" width="100%" maxWidth={800} gap="$3" px="$4" py="$4">
+          {/* Avatar Section - Fixed */}
+          <YStack alignItems="center" gap="$2">
+            <Avatar size="$12" circular>
+              {profile?.pfpUrl ? (
+                <Avatar.Image src={profile.pfpUrl} />
+              ) : (
+                <Avatar.Fallback backgroundColor="$color2" />
+              )}
+            </Avatar>
 
-        {/* User Information */}
-        <YStack gap="$2" alignItems="center">
-          {/* Full Name */}
-          <H2 fontSize="$8" fontWeight="700" textAlign="center">
-            {profile?.displayName ?? 'Guest'}
-          </H2>
+            {/* Name and Title */}
+            <YStack alignItems="center">
+              {profile ? (
+                <>
+                  <H2 fontSize="$8" fontWeight="700" textAlign="center">
+                    {profile.displayName}
+                  </H2>
+                  <Paragraph fontSize="$4" color="$color10" textAlign="center">
+                    @{profile.username}
+                  </Paragraph>
+                </>
+              ) : (
+                <YStack alignItems="center" gap="$1">
+                  <SkeletonLine width={90} height={20} />
+                  <SkeletonLine width={90} height={20} />
+                </YStack>
+              )}
+            </YStack>
+          </YStack>
 
-          {/* Username */}
-          <Paragraph fontSize="$4" color="$color10" textAlign="center">
-            {profile?.username ?? '@guest'}
-          </Paragraph>
+          <XStack alignItems="center" justifyContent="space-between">
+            <H4 fontSize="$6" fontWeight="600" color="$gray12">
+              Información de contacto
+            </H4>
+            {!isEditing && (
+              <Button
+                size="$3"
+                circular
+                borderWidth={0}
+                chromeless
+                onPress={() => setIsEditing(true)}
+              >
+                <Edit3 size={20} />
+              </Button>
+            )}
+
+            {isEditing && <YStack width={40} />}
+          </XStack>
+
+          <ScrollView flex={1} contentContainerStyle={{ paddingBottom: 20 }}>
+            <YStack gap="$4" marginHorizontal="auto" width="100%">
+              {/* Contact Information Section Header */}
+
+              <Card backgroundColor="$background" borderRadius="$4" padding="$4">
+                <YStack gap="$4">
+                  {/* Bio */}
+                  <form.Field
+                    name="bio"
+                    validators={{
+                      onChange: ({ value }) => {
+                        if (!value) return undefined;
+                        if (value.length > 500) return 'Bio must be less than 500 characters';
+                        return undefined;
+                      },
+                    }}
+                    children={(field) => (
+                      <XStack alignItems="center" gap="$3" paddingVertical="$2">
+                        <Mail size={20} color="$gray10" />
+                        <YStack flex={1}>
+                          <Text fontSize="$3" color="$gray10" marginBottom="$1">
+                            Bio
+                          </Text>
+                          {isEditing ? (
+                            <YStack>
+                              <TextArea
+                                value={field.state.value || ''}
+                                onChangeText={field.handleChange}
+                                onBlur={field.handleBlur}
+                                placeholder="Tell us about yourself..."
+                                size="$3"
+                                borderWidth={1}
+                                borderColor={
+                                  field.state.meta.errors.length > 0 ? '$red8' : '$color9'
+                                }
+                                minHeight={80}
+                              />
+                              {field.state.meta.errors.length > 0 && (
+                                <Text fontSize="$2" color="$red10" marginTop="$1">
+                                  {getErrorMessage(field.state.meta.errors[0])}
+                                </Text>
+                              )}
+                            </YStack>
+                          ) : (
+                            <Text fontSize="$4" color="$gray12">
+                              {field.state.value}
+                            </Text>
+                          )}
+                        </YStack>
+                      </XStack>
+                    )}
+                  />
+
+                  <Separator />
+
+                  {/* Personal Email */}
+                  <form.Field
+                    name="personalEmail"
+                    validators={{
+                      onChange: ({ value }) => {
+                        if (!value) return undefined;
+                        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                        if (!emailRegex.test(value)) return 'Please enter a valid email address';
+                        return undefined;
+                      },
+                    }}
+                    children={(field) => (
+                      <XStack alignItems="center" gap="$3" paddingVertical="$2">
+                        <Mail size={20} color="$gray10" />
+                        <YStack flex={1}>
+                          <Text fontSize="$3" color="$gray10" marginBottom="$1">
+                            Email personal
+                          </Text>
+                          {isEditing ? (
+                            <YStack>
+                              <Input
+                                value={field.state.value || ''}
+                                onChangeText={field.handleChange}
+                                onBlur={field.handleBlur}
+                                size="$3"
+                                borderWidth={1}
+                                borderColor={
+                                  field.state.meta.errors.length > 0 ? '$red8' : '$color9'
+                                }
+                                keyboardType="email-address"
+                              />
+                              {field.state.meta.errors.length > 0 && (
+                                <Text fontSize="$2" color="$red10" marginTop="$1">
+                                  {getErrorMessage(field.state.meta.errors[0])}
+                                </Text>
+                              )}
+                            </YStack>
+                          ) : (
+                            <Text fontSize="$4" color="$gray12">
+                              {field.state.value}
+                            </Text>
+                          )}
+                        </YStack>
+                      </XStack>
+                    )}
+                  />
+
+                  <Separator />
+
+                  {/* Phone Number */}
+                  <form.Field
+                    name="phoneNumber"
+                    validators={{
+                      onChange: ({ value }) => {
+                        if (!value) return 'Phone number is required';
+                        if (value.length < 3) return 'Please enter a valid phone number';
+                        return undefined;
+                      },
+                    }}
+                    children={(field) => (
+                      <XStack alignItems="center" gap="$3" paddingVertical="$2">
+                        <Phone size={20} color="$gray10" />
+                        <YStack flex={1}>
+                          <Text fontSize="$3" color="$gray10" marginBottom="$1">
+                            Número de móvil
+                          </Text>
+                          {isEditing ? (
+                            <YStack>
+                              <Input
+                                value={field.state.value || ''}
+                                onChangeText={field.handleChange}
+                                onBlur={field.handleBlur}
+                                size="$3"
+                                borderWidth={1}
+                                borderColor={
+                                  field.state.meta.errors.length > 0 ? '$red8' : '$color9'
+                                }
+                                keyboardType="phone-pad"
+                              />
+                              {field.state.meta.errors.length > 0 && (
+                                <Text fontSize="$2" color="$red10" marginTop="$1">
+                                  {getErrorMessage(field.state.meta.errors[0])}
+                                </Text>
+                              )}
+                            </YStack>
+                          ) : (
+                            <Text fontSize="$4" color="$gray12">
+                              {field.state.value}
+                            </Text>
+                          )}
+                        </YStack>
+                      </XStack>
+                    )}
+                  />
+
+                  <Separator />
+
+                  {/* Team */}
+                  <form.Field
+                    name="team"
+                    validators={{
+                      onChange: ({ value }) => {
+                        if (!value) return 'Team is required';
+                        if (value.length > 100) return 'Team name must be less than 100 characters';
+                        return undefined;
+                      },
+                    }}
+                    children={(field) => (
+                      <XStack alignItems="center" gap="$3" paddingVertical="$2">
+                        <Users size={20} color="$gray10" />
+                        <YStack flex={1}>
+                          <Text fontSize="$3" color="$gray10" marginBottom="$1">
+                            Team
+                          </Text>
+                          {isEditing ? (
+                            <YStack>
+                              <Input
+                                value={field.state.value || ''}
+                                onChangeText={field.handleChange}
+                                onBlur={field.handleBlur}
+                                size="$3"
+                                borderWidth={1}
+                                borderColor={
+                                  field.state.meta.errors.length > 0 ? '$red8' : '$color9'
+                                }
+                              />
+                              {field.state.meta.errors.length > 0 && (
+                                <Text fontSize="$2" color="$red10" marginTop="$1">
+                                  {getErrorMessage(field.state.meta.errors[0])}
+                                </Text>
+                              )}
+                            </YStack>
+                          ) : (
+                            <XStack alignItems="center" justifyContent="space-between">
+                              <Text fontSize="$4" color="$gray12">
+                                {field.state.value}
+                              </Text>
+                              <ChevronRight size={16} color="$gray10" />
+                            </XStack>
+                          )}
+                        </YStack>
+                      </XStack>
+                    )}
+                  />
+
+                  <Separator />
+
+                  {/* Leads By */}
+                  <form.Field
+                    name="leadsBy"
+                    validators={{
+                      onChange: ({ value }) => {
+                        if (!value) return 'Lead is required';
+                        if (value.length > 100) return 'Lead name must be less than 100 characters';
+                        return undefined;
+                      },
+                    }}
+                    children={(field) => (
+                      <XStack alignItems="center" gap="$3" paddingVertical="$2">
+                        <Users size={20} color="$gray10" />
+                        <YStack flex={1}>
+                          <Text fontSize="$3" color="$gray10" marginBottom="$1">
+                            Leads By
+                          </Text>
+                          {isEditing ? (
+                            <YStack>
+                              <Input
+                                value={field.state.value || ''}
+                                onChangeText={field.handleChange}
+                                onBlur={field.handleBlur}
+                                size="$3"
+                                borderWidth={1}
+                                borderColor={
+                                  field.state.meta.errors.length > 0 ? '$red8' : '$color9'
+                                }
+                              />
+                              {field.state.meta.errors.length > 0 && (
+                                <Text fontSize="$2" color="$red10" marginTop="$1">
+                                  {getErrorMessage(field.state.meta.errors[0])}
+                                </Text>
+                              )}
+                            </YStack>
+                          ) : (
+                            <Text fontSize="$4" color="$gray12">
+                              {field.state.value}
+                            </Text>
+                          )}
+                        </YStack>
+                      </XStack>
+                    )}
+                  />
+                </YStack>
+              </Card>
+
+              {/* Farcaster Profile Button */}
+              {/* <Button
+                size="$4"
+                fontWeight="600"
+                borderRadius="$4"
+                backgroundColor="$blue8"
+                color="white"
+                onPress={() => {}}
+                marginTop="$2"
+              >
+                Ver mi perfil en Farcaster
+              </Button> */}
+
+              {/* Save Button (only visible when editing) */}
+              {isEditing && (
+                <Form.Trigger asChild>
+                  <form.SubmitButton
+                    size="$4"
+                    fontWeight="600"
+                    borderRadius="$4"
+                    icon={Save}
+                    themeInverse
+                    label="Guardar"
+                  />
+                </Form.Trigger>
+              )}
+            </YStack>
+          </ScrollView>
         </YStack>
-
-        {/* Bio */}
-        <Paragraph fontSize="$4" color="$color" textAlign="center" lineHeight="$5" maxWidth={280}>
-          {profile?.bio ?? 'No bio yet'}
-        </Paragraph>
-
-        {/* Action Buttons */}
-        <XStack marginTop="$4" alignItems="center">
-          <Button
-            size="$4"
-            fontWeight="600"
-            borderRadius="$8"
-            paddingHorizontal="$6"
-            onPress={() => viewProfile()}
-          >
-            View my profile on Farcaster
-          </Button>
-        </XStack>
-      </YStack>
-    </YStack>
+      </Form>
+    </form.AppForm>
   );
 };
