@@ -1,6 +1,7 @@
 'use client';
 
-import { YStack } from '@my/ui';
+import { useMiniKit } from '@coinbase/onchainkit/minikit';
+import { FullscreenSpinner, YStack } from '@my/ui';
 import { useSignIn } from 'app/shared/lib/hooks/use-sign-in';
 import { useState } from 'react';
 
@@ -9,11 +10,16 @@ import { CreateEventSheetWrapper } from './CreateEventSheetWrapper';
 import { SignInPromptModal } from './SignInPromptModal';
 import { Topbar } from './Topbar';
 
-export const Navigator = function Navigator({ children }: { children: React.ReactNode }) {
+export function Navigator({ children }: { children: React.ReactNode }) {
+  const { isFrameReady } = useMiniKit();
   const [open, setOpen] = useState(false);
   const [showSignInPrompt, setShowSignInPrompt] = useState(false);
 
   const { isSignedIn, isLoading } = useSignIn();
+
+  if (!isFrameReady) {
+    return <FullscreenSpinner />;
+  }
 
   const openCreateEventFormSheet = () => {
     // Prevent actions while authentication is loading
@@ -61,4 +67,4 @@ export const Navigator = function Navigator({ children }: { children: React.Reac
       <SignInPromptModal open={showSignInPrompt} onOpenChange={setShowSignInPrompt} />
     </>
   );
-};
+}
