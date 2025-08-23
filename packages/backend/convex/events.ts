@@ -682,8 +682,8 @@ export const sendReminderNotification = internalAction({
 
     // 3. Enviar la notificación
     const { notificationUrl, token } = tokenData;
-    const title = `¡Recordatorio! "${event.name}" empieza pronto ✨`;
-    const body = `Tu evento comienza en 30 minutos. ¡Nos vemos allí!`;
+    const title = `Reminder! "${event.name}" starts soon ✨`;
+    const body = `Your event starts in 30 minutes. See you there!`;
 
     console.log(`Enviando recordatorio a FID: ${fid} para el evento: ${event.name}`);
 
