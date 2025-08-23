@@ -192,6 +192,7 @@ export const searchEvents = query({
     const identity = await ctx.auth.getUserIdentity();
     const userId = identity !== null ? (identity.subject as Id<'users'>) : null;
 
+    const now = Date.now();
     let events: Doc<'events'>[];
 
     // Use search index for efficient full-text search with relevance ranking
@@ -203,12 +204,28 @@ export const searchEvents = query({
           .withSearchIndex('search_events', (q) =>
             q.search('name', args.searchTerm!).eq('category', args.category as any)
           )
+          .filter((q) =>
+            q.or(
+              // Events that haven't started yet
+              q.gte(q.field('startDate'), now),
+              // Events that are currently happening
+              q.and(q.lte(q.field('startDate'), now), q.gte(q.field('endDate'), now))
+            )
+          )
           .collect();
       } else {
         // Search without category filter
         events = await ctx.db
           .query('events')
           .withSearchIndex('search_events', (q) => q.search('name', args.searchTerm!))
+          .filter((q) =>
+            q.or(
+              // Events that haven't started yet
+              q.gte(q.field('startDate'), now),
+              // Events that are currently happening
+              q.and(q.lte(q.field('startDate'), now), q.gte(q.field('endDate'), now))
+            )
+          )
           .collect();
       }
     } else {
@@ -217,7 +234,17 @@ export const searchEvents = query({
       if (args.category && args.category !== 'All') {
         q = q.filter((q) => q.eq(q.field('category'), args.category));
       }
-      events = await q.order('desc').collect();
+      events = await q
+        .filter((q) =>
+          q.or(
+            // Events that haven't started yet
+            q.gte(q.field('startDate'), now),
+            // Events that are currently happening
+            q.and(q.lte(q.field('startDate'), now), q.gte(q.field('endDate'), now))
+          )
+        )
+        .order('desc')
+        .collect();
     }
 
     return enrichEventsWithCommonData(ctx, events, userId);
