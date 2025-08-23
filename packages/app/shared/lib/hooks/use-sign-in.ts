@@ -15,7 +15,6 @@ export const useSignIn = () => {
       if (!csrfToken) {
         throw new Error('Could not get CSRF token');
       }
-      console.warn('csrfToken', csrfToken);
       const result = await signIn({
         nonce: csrfToken,
       });
