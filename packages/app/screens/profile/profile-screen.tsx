@@ -86,7 +86,15 @@ export const ProfileScreen = ({ id }: { id: string }) => {
           form.handleSubmit();
         }}
       >
-        <YStack height="100%" width="100%" maxWidth={800} gap="$3" px="$4" py="$4">
+        <YStack
+          height="100%"
+          width="100%"
+          maxWidth={800}
+          marginInline="auto"
+          gap="$3"
+          px="$4"
+          py="$4"
+        >
           {/* Avatar Section - Fixed */}
           <YStack alignItems="center" gap="$2">
             <Avatar size="$12" circular>
