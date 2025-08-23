@@ -149,8 +149,8 @@ export const ProfileScreen = ({ id }: { id: string }) => {
                       },
                     }}
                     children={(field) => (
-                      <XStack alignItems="center" gap="$3" paddingVertical="$2">
-                        <Mail size={20} color="$gray10" />
+                      <XStack alignItems="flex-start" gap="$3" paddingVertical="$2">
+                        <Mail size={15} color="$color10" mt="$1.5" />
                         <YStack flex={1}>
                           <Text fontSize="$3" color="$gray10" marginBottom="$1">
                             Bio
