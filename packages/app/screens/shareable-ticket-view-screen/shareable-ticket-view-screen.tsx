@@ -3,16 +3,9 @@
 import { api } from '@my/backend/_generated/api';
 import { Id } from '@my/backend/_generated/dataModel';
 import { useQuery } from '@my/backend/react';
-import {
-  Button,
-  View,
-  formatRelativeDate,
-  Link,
-  SizableText,
-  YStack,
-  FullscreenSpinner,
-} from '@my/ui';
+import { Button, View, Link, SizableText, YStack, FullscreenSpinner } from '@my/ui';
 import NFTTicket from 'app/entities/nft-ticket/nft-ticket';
+import { dateUtils } from 'app/shared/lib/date';
 
 export const ShareableTicketViewScreen = ({ id }: { id: string }) => {
   const registration = useQuery(api.registrations.getRegistrationTicketById, {
@@ -66,7 +59,7 @@ export const ShareableTicketViewScreen = ({ id }: { id: string }) => {
         <NFTTicket
           eventName={registration.eventName}
           eventImageUrl={registration.eventImageUrl}
-          startDate={new Date(formatRelativeDate(registration.startDate))}
+          startDate={new Date(dateUtils.formatRelativeDateFromMilliseconds(registration.startDate))}
           ticketName={registration.ticketName}
           location={registration.location}
           locationDetails={registration.locationDetails}
