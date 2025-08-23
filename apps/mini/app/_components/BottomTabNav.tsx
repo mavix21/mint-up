@@ -24,7 +24,7 @@ export function BottomTabNav({ mainButtonAction: openCreateEventFormSheet }: Bot
         <BottomTab
           type="profile"
           avatarUrl={context?.user.pfpUrl ?? session?.user.image}
-          href={`/profile/${session?.user.fid}`}
+          href={`/profile/${session?.user.id}`}
         />
       </XStack>
     </YStack>
