@@ -194,7 +194,7 @@ export const ExploreEventsScreen = () => {
                             {dateUtils.getDayOfWeek(groupedEvents[0]?.startDate)}
                           </SizableText>
                         </View>
-                        <YStack gap="$2">
+                        <YStack gap="$4">
                           {groupedEvents.map((event) => (
                             <ItemCardList key={event._id} event={event} />
                           ))}
