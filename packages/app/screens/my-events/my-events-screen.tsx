@@ -124,8 +124,20 @@ export const MyEventsScreen = () => {
                           </SizableText>
                         </View>
                         <YStack gap="$2">
-                          {events.map((event) => (
-                            <EventCard key={event._id} event={event} />
+                          {events.map((event, i) => (
+                            <View
+                              key={event._id}
+                              animation={[
+                                'bouncy',
+                                {
+                                  opacity: { delay: i * 60 },
+                                  y: { delay: i * 60 },
+                                },
+                              ]}
+                              enterStyle={{ o: 0, y: 6 }}
+                            >
+                              <EventCard event={event} />
+                            </View>
                           ))}
                         </YStack>
                       </View>
@@ -222,8 +234,20 @@ export const MyEventsScreen = () => {
                           </SizableText>
                         </View>
                         <YStack gap="$2">
-                          {events.map((event) => (
-                            <EventCard key={event._id} event={event} />
+                          {events.map((event, i) => (
+                            <View
+                              key={event._id}
+                              animation={[
+                                'bouncy',
+                                {
+                                  opacity: { delay: i * 60 },
+                                  y: { delay: i * 60 },
+                                },
+                              ]}
+                              enterStyle={{ o: 0, y: 6 }}
+                            >
+                              <EventCard event={event} />
+                            </View>
                           ))}
                         </YStack>
                       </View>
