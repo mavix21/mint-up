@@ -128,7 +128,7 @@ export const MyEventsScreen = () => {
                             <View
                               key={event._id}
                               animation={[
-                                'medium',
+                                'bouncy',
                                 {
                                   y: { delay: i * 60 },
                                 },
@@ -237,7 +237,7 @@ export const MyEventsScreen = () => {
                             <View
                               key={event._id}
                               animation={[
-                                'medium',
+                                'bouncy',
                                 {
                                   y: { delay: i * 60 },
                                 },
