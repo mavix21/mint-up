@@ -11,6 +11,14 @@ export const linkedAccountsTable = defineTable({
     v.object({
       protocol: v.literal('wallet'),
       address: v.string(),
+    }),
+    v.object({
+      protocol: v.literal('email'),
+      email: v.string(),
+    }),
+    v.object({
+      protocol: v.literal('phone'),
+      phone: v.string(),
     })
   ),
   linkedAt: v.number(),
