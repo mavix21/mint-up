@@ -1,3 +1,5 @@
+'use client';
+
 import { YStack } from '@my/ui';
 
 export const ProfileScreen = () => {
