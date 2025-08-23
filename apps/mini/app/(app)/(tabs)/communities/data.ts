@@ -13,7 +13,7 @@ export const communityListData: CommunityListItem[] = [
     name: 'Dev3Pack',
     logoUrl: 'url_to_logo_1.png',
     memberCount: 150,
-    eventCount: 12,
+    eventCount: 14,
     description: 'A community for the next generation of onchain builders.',
   },
   {
