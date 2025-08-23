@@ -1,3 +1,5 @@
+'use client';
+
 import { api } from '@my/backend/_generated/api';
 import {
   LoadingButton,
