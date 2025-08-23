@@ -14,11 +14,11 @@ export function RegistersAvatar({ event }: { event: ConvexEventWithExtras }) {
     return (
       <View height="$1.5" justifyContent="center">
         {isUserHost ? (
-          <SizableText size="$1" color="$color10">
+          <SizableText theme="gray" size="$1" color="$color10">
             Start inviting attendees today.
           </SizableText>
         ) : (
-          <SizableText size="$1" color="$color10">
+          <SizableText theme="gray" size="$1" color="$color10">
             Be the first to join this event.
           </SizableText>
         )}

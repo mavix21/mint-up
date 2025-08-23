@@ -9,9 +9,9 @@ import {
   ThemeName,
   LiveIndicator,
 } from '@my/ui';
-import { formatDate, formatDateTime, formatRelativeDate } from '@my/ui/src/lib/dates';
 import { ConvexEventWithExtras } from 'app/entities';
 import { CategoryChip } from 'app/entities/event-category/ui/CategoryChip';
+import { dateUtils } from 'app/shared/lib/date';
 import { isEventLive } from 'app/shared/lib/utils';
 import { EventModal } from 'app/widgets/event-modal';
 import React from 'react';
@@ -32,13 +32,12 @@ export function ItemCardList({ event }: { event: ConvexEventWithExtras }) {
         elevate
         size="$4"
         bordered
-        backgroundColor="$background"
+        backgroundColor="$background075"
         borderRadius="$4"
         pressStyle={{ scale: 0.975 }}
         hoverStyle={{ borderColor: '$borderColorHover' }}
         py="$3"
         px="$3"
-        // onPress={() => router.push(`/events/detail/${event._id}`)}
         onPress={() => setToggleEvent(true)}
       >
         <XStack gap="$3" alignItems="center">
@@ -61,9 +60,14 @@ export function ItemCardList({ event }: { event: ConvexEventWithExtras }) {
           {/* App Info */}
           <YStack flex={1}>
             <YStack gap="$2">
-              <SizableText size="$2" color="$color10" numberOfLines={1}>
-                {formatDate(formatRelativeDate(event.startDate ?? 0))} •{' '}
-                {formatDateTime(formatRelativeDate(event.startDate ?? 0))}
+              <SizableText theme="gray" size="$2" color="$color10" numberOfLines={1}>
+                {dateUtils.formatDate(
+                  dateUtils.formatRelativeDateFromMilliseconds(event.startDate)
+                )}{' '}
+                •{' '}
+                {dateUtils.formatDateTime(
+                  dateUtils.formatRelativeDateFromMilliseconds(event.startDate)
+                )}
               </SizableText>
               <SizableText size="$5" color="$color" numberOfLines={3}>
                 {event.name}

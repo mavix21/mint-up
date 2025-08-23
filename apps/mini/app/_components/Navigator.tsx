@@ -2,37 +2,31 @@
 
 import { YStack } from '@my/ui';
 import { useSignIn } from 'app/shared/lib/hooks/use-sign-in';
-import { memo, useState } from 'react';
+import { useState } from 'react';
 
 import { BottomTabNav } from './BottomTabNav';
 import { CreateEventSheetWrapper } from './CreateEventSheetWrapper';
 import { SignInPromptModal } from './SignInPromptModal';
-import { TabSelector } from './TabSelector';
 import { Topbar } from './Topbar';
 
-export const Navigator = memo(function Navigator() {
-  const [activeTab, setActiveTab] = useState('my-events');
+export const Navigator = function Navigator({ children }: { children: React.ReactNode }) {
   const [open, setOpen] = useState(false);
   const [showSignInPrompt, setShowSignInPrompt] = useState(false);
 
   const { isSignedIn, isLoading } = useSignIn();
 
-  const handleTabChange = (tab: string) => {
+  const openCreateEventFormSheet = () => {
     // Prevent actions while authentication is loading
     if (isLoading) {
       return;
     }
 
-    if (tab === 'create') {
-      if (!isSignedIn) {
-        setShowSignInPrompt(true);
+    if (!isSignedIn) {
+      setShowSignInPrompt(true);
 
-        return;
-      }
-      setOpen(true);
-    } else {
-      setActiveTab(tab);
+      return;
     }
+    setOpen(true);
   };
 
   return (
@@ -58,12 +52,13 @@ export const Navigator = memo(function Navigator() {
             overscrollBehavior: 'none',
           }}
         >
-          <TabSelector activeTab={activeTab} />
+          {/* <TabSelector activeTab={activeTab} /> */}
+          {children}
         </YStack>
-        <BottomTabNav activeTab={activeTab} setActiveTab={handleTabChange} />
+        <BottomTabNav mainButtonAction={openCreateEventFormSheet} />
       </YStack>
       <CreateEventSheetWrapper open={open} setOpen={setOpen} />
       <SignInPromptModal open={showSignInPrompt} onOpenChange={setShowSignInPrompt} />
     </>
   );
-});
+};

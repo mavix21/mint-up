@@ -4,39 +4,22 @@ import { Calendar, Plus, Search } from '@tamagui/lucide-icons';
 import { BottomTab } from './BottomTab';
 
 interface BottomTabNavProps {
-  activeTab: string;
-  setActiveTab: (tab: string) => void;
+  mainButtonAction: () => void;
 }
 
-export function BottomTabNav({ activeTab, setActiveTab }: BottomTabNavProps) {
+export function BottomTabNav({ mainButtonAction: openCreateEventFormSheet }: BottomTabNavProps) {
   return (
     <YStack bg="$color2" borderTopWidth={1} borderColor="$borderColor" py="$3">
       <XStack alignItems="center">
-        <BottomTab
-          onClick={() => setActiveTab('my-events')}
-          isActive={activeTab === 'my-events'}
-          label="My Events"
-          Icon={Calendar}
-        />
+        <BottomTab type="link" href="/my-events" Icon={Calendar} />
         {/* <BottomTab
           onClick={() => setActiveTab('casts')}
           isActive={activeTab === 'casts'}
           label="Casts"
           Icon={Cast}
         /> */}
-        <BottomTab
-          onClick={() => setActiveTab('create')}
-          isActive={activeTab === 'create'}
-          isCenter
-          label="Create"
-          Icon={Plus}
-        />
-        <BottomTab
-          onClick={() => setActiveTab('explore-events')}
-          isActive={activeTab === 'explore-events'}
-          label="Explore"
-          Icon={Search}
-        />
+        <BottomTab type="main" mainButtonAction={openCreateEventFormSheet} Icon={Plus} />
+        <BottomTab type="link" href="/explore-events" Icon={Search} />
       </XStack>
     </YStack>
   );

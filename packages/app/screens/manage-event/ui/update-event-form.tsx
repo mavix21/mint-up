@@ -71,7 +71,7 @@ export function UpdateEventForm({ event, onThemeChange, closeSheet }: UpdateEven
             description: value.description,
             startDate: startTimestamp,
             endDate: endTimestamp,
-            category: value.category === '' ? 'other' : value.category,
+            category: value.category === '' ? 'hobbies & interests' : value.category,
             location: value.location,
             theme: value.theme,
             image: imageId,

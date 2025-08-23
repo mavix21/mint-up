@@ -1,7 +1,6 @@
 import { useState } from 'react';
 
 import { FullPageSpinner } from './FullPageSpinner';
-import { Navigator } from './Navigator';
 import { OnboardingWrapper } from './OnboardingWrapper';
 
 import { useMiniApp } from '@/contexts/mini-app.context';
@@ -29,5 +28,6 @@ export default function App() {
   }
 
   // Show main app navigation
-  return <Navigator />;
+  // return <Navigator />;
+  return null;
 }

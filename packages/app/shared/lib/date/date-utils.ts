@@ -28,6 +28,16 @@ export const formatRelativeDate = (dateInput: string | number | Date): string =>
 };
 
 /**
+ * Formats a date from milliseconds to ISO string
+ * @param fromMilliseconds - Date in milliseconds
+ * @returns Formatted date string
+ */
+export function formatRelativeDateFromMilliseconds(fromMilliseconds: number) {
+  const fromDate = new Date(fromMilliseconds);
+  return fromDate.toISOString();
+}
+
+/**
  * Gets the day of the week from a date
  * @param dateInput - Date string, timestamp, or Date object
  * @returns Day of the week (e.g., "Monday")

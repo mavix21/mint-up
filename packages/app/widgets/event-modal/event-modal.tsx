@@ -20,12 +20,6 @@ import {
   ScrollView,
 } from '@my/ui';
 import {
-  formatDate,
-  formatDateTime,
-  formatRelativeDate,
-  formatDateWithLogicYear,
-} from '@my/ui/src/lib/dates';
-import {
   MapPin,
   Globe,
   ChevronDown,
@@ -36,6 +30,7 @@ import {
   ChevronLeft,
 } from '@tamagui/lucide-icons';
 import { RegistersAvatar } from 'app/screens/explore-events/ui/RegistersAvatar';
+import { dateUtils } from 'app/shared/lib/date';
 import { useSignIn } from 'app/shared/lib/hooks/use-sign-in';
 import { isEventLive } from 'app/shared/lib/utils';
 import React, { Dispatch, SetStateAction } from 'react';
@@ -129,7 +124,9 @@ export function EventModal({
 
 Join me at this amazing event! 
 
-🗓️ ${formatDate(formatRelativeDate(eventData.startDate))}
+🗓️ ${dateUtils.formatRelativeDate(
+          dateUtils.formatRelativeDateFromMilliseconds(eventData.startDate)
+        )}
 📍 ${
           eventData.location?.type === 'online'
             ? 'Virtual Event'
@@ -250,18 +247,22 @@ Check it out 👇`,
 
                   <SizableText size="$2" color="$color11">
                     {isSameDate
-                      ? `${formatDateWithLogicYear(
-                          formatRelativeDate(eventData.startDate)
-                        )}, ${formatDateTime(
-                          formatRelativeDate(eventData.startDate)
-                        )} - ${formatDateTime(formatRelativeDate(eventData.endDate))}`
-                      : `${formatDateWithLogicYear(
-                          formatRelativeDate(eventData.startDate)
-                        )}, ${formatDateTime(
-                          formatRelativeDate(eventData.startDate)
-                        )} - ${formatDateWithLogicYear(
-                          formatRelativeDate(eventData.endDate)
-                        )}, ${formatDateTime(formatRelativeDate(eventData.endDate))}`}
+                      ? `${dateUtils.formatDateWithLogicYear(
+                          dateUtils.formatRelativeDateFromMilliseconds(eventData.startDate)
+                        )}, ${dateUtils.formatDateTime(
+                          dateUtils.formatRelativeDateFromMilliseconds(eventData.startDate)
+                        )} - ${dateUtils.formatDateTime(
+                          dateUtils.formatRelativeDateFromMilliseconds(eventData.endDate)
+                        )}`
+                      : `${dateUtils.formatDateWithLogicYear(
+                          dateUtils.formatRelativeDateFromMilliseconds(eventData.startDate)
+                        )}, ${dateUtils.formatDateTime(
+                          dateUtils.formatRelativeDateFromMilliseconds(eventData.startDate)
+                        )} - ${dateUtils.formatDateWithLogicYear(
+                          dateUtils.formatRelativeDateFromMilliseconds(eventData.endDate)
+                        )}, ${dateUtils.formatDateTime(
+                          dateUtils.formatRelativeDateFromMilliseconds(eventData.endDate)
+                        )}`}
                   </SizableText>
                 </YStack>
 
