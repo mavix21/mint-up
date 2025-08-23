@@ -1,8 +1,8 @@
 import { api } from '@my/backend/_generated/api';
 import { Id } from '@my/backend/_generated/dataModel';
 import { fetchQuery } from '@my/backend/nextjs';
-import { formatDate, formatRelativeDate } from '@my/ui/src/lib/dates';
 import { ImageResponse } from '@vercel/og';
+import { dateUtils } from 'app/shared/lib/date';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
@@ -181,7 +181,9 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
                         lineHeight: '1.1',
                       }}
                     >
-                      {formatDate(formatRelativeDate(ticket.startDate))}
+                      {dateUtils.formatDate(
+                        dateUtils.formatRelativeDateFromMilliseconds(ticket.startDate)
+                      )}
                     </span>
                   </div>
                   <div
