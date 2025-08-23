@@ -31,8 +31,7 @@ export const ExploreEventsScreen = () => {
 
   // Add 'All' at the start of the categories list
   const categoryList = React.useMemo(() => {
-    console.log('run');
-    return [{ label: 'All' }, ...validCategories.map((cat) => ({ label: cat }))];
+    return [{ label: 'All' }, ...validCategories.filter(Boolean).map((cat) => ({ label: cat }))];
   }, []);
 
   return (
