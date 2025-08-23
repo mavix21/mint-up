@@ -1,12 +1,12 @@
 import { createAppClient, viemConnector } from '@farcaster/auth-client';
 import { Id } from '@my/backend/_generated/dataModel';
+import { getNeynarUser } from '@my/backend/neynar';
 import { SignJWT, importPKCS8 } from 'jose';
 import type { AuthOptions } from 'next-auth';
 import { getServerSession } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { parseSiweMessage } from 'viem/siwe';
 
-import { getNeynarUser } from './lib/neynar';
 import { getUserByFid } from './src/users/get-user-by-id';
 import { insertUserByFid } from './src/users/insert-user-by-fid.action';
 

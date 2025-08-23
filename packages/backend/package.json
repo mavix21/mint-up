@@ -34,6 +34,10 @@
     "./server": {
       "types": "./convex/server.ts",
       "default": "./convex/server.ts"
+    },
+    "./neynar": {
+      "types": "./neynar.ts",
+      "default": "./neynar.ts"
     }
   }
 }
