@@ -334,7 +334,15 @@ export const ProfileScreen = ({ id }: { id: string }) => {
                                 @{linkedAccount.account.username}
                               </SizableText>
                             </YStack>
-                            <Button onPress={handleSyncWithFarcaster} disabled={isSyncing}>
+                            <Button
+                              onPress={handleSyncWithFarcaster}
+                              disabled={
+                                (linkedAccount.account.lastSyncedAt !== undefined &&
+                                  linkedAccount.account.lastSyncedAt <
+                                    Date.now() - 1000 * 60 * 60 * 1) ||
+                                isSyncing
+                              }
+                            >
                               {isSyncing ? 'Syncing...' : 'Sync using Farcaster'}
                             </Button>
                           </XStack>

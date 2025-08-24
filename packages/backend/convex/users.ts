@@ -200,25 +200,18 @@ export const updateUserSocials = mutation({
  * Internal mutation to update user profile with Neynar data
  * This is specifically for syncing user information from Farcaster/Neynar
  */
-export const updateUserProfileInternal = internalMutation({
+export const updateUserProfileInternalWithFarcaster = internalMutation({
   args: {
     userId: v.id('users'),
+    fid: v.number(),
     bio: v.optional(v.string()),
     displayName: v.optional(v.string()),
     username: v.optional(v.string()),
     pfpUrl: v.optional(v.string()),
+    linkedAccountId: v.id('linkedAccounts'),
   },
   handler: async (ctx, args) => {
-    const { userId, ...updateFields } = args;
-
-    // Check if user exists
-    const existingUser = await ctx.db.get(userId);
-    if (!existingUser) {
-      throw new ConvexError({
-        message: 'User not found',
-        code: 'USER_NOT_FOUND',
-      });
-    }
+    const { userId, linkedAccountId, ...updateFields } = args;
 
     // Filter out undefined values to avoid removing fields unintentionally
     const fieldsToUpdate = Object.fromEntries(
@@ -231,6 +224,14 @@ export const updateUserProfileInternal = internalMutation({
       return;
     }
 
+    await ctx.db.patch(linkedAccountId, {
+      account: {
+        protocol: 'farcaster',
+        fid: args.fid,
+        ...fieldsToUpdate,
+        lastSyncedAt: Date.now(),
+      },
+    });
     await ctx.db.patch(userId, fieldsToUpdate);
   },
 });

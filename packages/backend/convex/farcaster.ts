@@ -62,6 +62,7 @@ export const syncWithFarcaster = mutation({
     await ctx.scheduler.runAfter(0, internal.farcaster.syncUserInformationWithFarcaster, {
       userId: args.userId,
       fid: linkedAccount.account.fid,
+      linkedAccountId: linkedAccount._id,
     });
   },
 });
@@ -70,6 +71,7 @@ export const syncUserInformationWithFarcaster = internalAction({
   args: {
     userId: v.id('users'),
     fid: v.number(),
+    linkedAccountId: v.id('linkedAccounts'),
   },
   handler: async (ctx, args) => {
     if (!process.env.NEYNAR_API_KEY) {
@@ -133,8 +135,10 @@ export const syncUserInformationWithFarcaster = internalAction({
       }
 
       // Use internal mutation to update user profile since this is an internalAction
-      await ctx.runMutation(internal.users.updateUserProfileInternal, {
+      await ctx.runMutation(internal.users.updateUserProfileInternalWithFarcaster, {
         userId: args.userId,
+        fid: args.fid,
+        linkedAccountId: args.linkedAccountId,
         ...fieldsToUpdate,
       });
 
