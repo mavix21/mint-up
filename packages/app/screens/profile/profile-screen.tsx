@@ -54,11 +54,13 @@ export const ProfileScreen = ({ id }: { id: string }) => {
   });
 
   const updateUserProfile = useMutation(api.users.updateUserProfile);
+  const syncWithFarcaster = useMutation(api.users.syncWithFarcaster);
 
   const toast = useToastController();
 
   const [isEditing, setIsEditing] = useState(false);
   const [activeTab, setActiveTab] = useState('profile');
+  const [isSyncing, setIsSyncing] = useState(false);
 
   // Initialize form with default values from profile or defaults
   const form = useAppForm({
@@ -94,6 +96,28 @@ export const ProfileScreen = ({ id }: { id: string }) => {
   const handleCancel = () => {
     form.reset();
     setIsEditing(false);
+  };
+
+  const handleSyncWithFarcaster = async () => {
+    setIsSyncing(true);
+    try {
+      await syncWithFarcaster({
+        userId: id as Id<'users'>,
+      });
+
+      toast.show('Successfully synced with Farcaster!', {
+        type: 'success',
+        preset: 'success',
+      });
+    } catch (error) {
+      console.error('Error syncing with Farcaster:', error);
+      toast.show('Failed to sync with Farcaster', {
+        type: 'error',
+        preset: 'error',
+      });
+    } finally {
+      setIsSyncing(false);
+    }
   };
 
   return (
@@ -292,7 +316,13 @@ export const ProfileScreen = ({ id }: { id: string }) => {
                             </Text>
                           </YStack>
                           <YStack justifyContent="center" themeInverse>
-                            <Button size="$3">Sync using Farcaster</Button>
+                            <Button
+                              size="$3"
+                              onPress={handleSyncWithFarcaster}
+                              disabled={isSyncing}
+                            >
+                              {isSyncing ? 'Syncing...' : 'Sync using Farcaster'}
+                            </Button>
                           </YStack>
                         </XStack>
                       );
