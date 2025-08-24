@@ -135,7 +135,7 @@ export const ProfileScreen = ({ id }: { id: string }) => {
   };
 
   return (
-    <Container size="wide" gap="$4" px="$4" py="$4" overflow="hidden">
+    <Container size="wide" gap="$4" px="$4" pt="$4" overflow="hidden">
       {/* Avatar Section - Fixed */}
       <YStack alignItems="center" gap="$2">
         <Avatar size="$12" circular>
@@ -173,6 +173,7 @@ export const ProfileScreen = ({ id }: { id: string }) => {
         flexDirection="column"
         overflowBlock="hidden"
         height="100%"
+        flex={1}
         size="$3"
       >
         <Tabs.List mb="$4" borderWidth={1} borderColor="$borderColor">
