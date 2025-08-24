@@ -14,6 +14,7 @@ import {
   XStack,
   YStack,
   Link,
+  Container,
 } from '@my/ui';
 import { Filter } from '@tamagui/lucide-icons';
 
@@ -77,7 +78,7 @@ function CommunityCard({ community }: { community: CommunityListItem }) {
 
 export default function CommunitiesPage() {
   return (
-    <YStack width="100%" maxWidth={800} marginInline="auto" height="100%" gap="$4" px="$4" py="$4">
+    <Container size="wide" gap="$4" px="$4" py="$4">
       <YStack gap="$1">
         <SizableText size="$8" fontWeight="bold">
           Communities
@@ -116,6 +117,6 @@ export default function CommunitiesPage() {
           ))}
         </XStack>
       </ScrollView>
-    </YStack>
+    </Container>
   );
 }

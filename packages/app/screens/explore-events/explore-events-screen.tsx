@@ -1,7 +1,18 @@
 'use client';
 
 import { api } from '@my/backend/_generated/api';
-import { Button, Input, ScrollView, Paragraph, SizableText, XStack, YStack, View } from '@my/ui';
+import {
+  Button,
+  Input,
+  ScrollView,
+  Paragraph,
+  SizableText,
+  XStack,
+  YStack,
+  View,
+  Timeline,
+  Container,
+} from '@my/ui';
 import { X } from '@tamagui/lucide-icons';
 import { useForm } from '@tanstack/react-form';
 import { validCategories } from 'app/entities';
@@ -35,15 +46,7 @@ export const ExploreEventsScreen = () => {
   }, []);
 
   return (
-    <YStack
-      gap="$4"
-      width="100%"
-      maxWidth={496}
-      marginInline="auto"
-      flex={1}
-      height="100%"
-      overflowBlock="hidden"
-    >
+    <Container gap="$4" size="wide">
       <YStack gap="$3">
         <XStack alignItems="center" gap="$2" px="$4" pt="$2">
           <XStack flex={1} alignItems="center" gap="$2">
@@ -170,42 +173,31 @@ export const ExploreEventsScreen = () => {
                   'asc'
                 )
                 .map(([dateKey, groupedEvents]) => (
-                  <View key={dateKey} pos="relative">
-                    <View pos="absolute" bottom={-15} left={4} top={16} w={1} bg="$color8" />
+                  <Timeline key={dateKey}>
+                    <Timeline.Line />
 
-                    <View mb="$1.5">
-                      <View pos="relative" pl="$5">
-                        <View
-                          theme="green"
-                          bg="$color8"
-                          pos="absolute"
-                          left={1}
-                          top={3}
-                          h="$0.75"
-                          w="$0.75"
-                          borderRadius="$5"
-                        />
-                        <View mb="$4">
-                          <SizableText fontSize="$2" color="$color11">
-                            {dateUtils.formatRelativeDate(groupedEvents[0]?.startDate)}
-                          </SizableText>
-                          <SizableText fontSize="$2">
-                            {dateUtils.getDayOfWeek(groupedEvents[0]?.startDate)}
-                          </SizableText>
-                        </View>
-                        <YStack gap="$4">
-                          {groupedEvents.map((event) => (
-                            <ItemCardList key={event._id} event={event} />
-                          ))}
-                        </YStack>
+                    <Timeline.Content>
+                      <Timeline.Dot />
+                      <View mb="$3">
+                        <SizableText fontSize="$2" color="$color11">
+                          {dateUtils.formatRelativeDate(groupedEvents[0]?.startDate)}
+                        </SizableText>
+                        <SizableText fontSize="$2">
+                          {dateUtils.getDayOfWeek(groupedEvents[0]?.startDate)}
+                        </SizableText>
                       </View>
-                    </View>
-                  </View>
+                      <YStack gap="$4">
+                        {groupedEvents.map((event) => (
+                          <ItemCardList key={event._id} event={event} />
+                        ))}
+                      </YStack>
+                    </Timeline.Content>
+                  </Timeline>
                 ))}
             </YStack>
           )}
         </ScrollView>
       </YStack>
-    </YStack>
+    </Container>
   );
 };

@@ -1,6 +1,6 @@
 'use client';
 
-import { FullscreenSpinner, YStack } from '@my/ui';
+import { FullscreenSpinner, PageContainer, YStack } from '@my/ui';
 import { useSignIn } from 'app/shared/lib/hooks/use-sign-in';
 import { useState } from 'react';
 
@@ -38,32 +38,14 @@ export function Navigator({ children }: { children: React.ReactNode }) {
 
   return (
     <>
-      <YStack
-        width="100%"
-        height={'100vh' as any}
-        position="relative"
-        flex={1}
-        overflow="hidden"
-        style={{
-          overscrollBehavior: 'none',
-        }}
-      >
+      <PageContainer position="relative">
         <Topbar />
-        <YStack
-          flex={1}
-          width="100%"
-          height="100%"
-          overflow="hidden"
-          isolation="isolate"
-          style={{
-            overscrollBehavior: 'none',
-          }}
-        >
+        <YStack flex={1} width="100%" height="100%" overflow="hidden">
           {/* <TabSelector activeTab={activeTab} /> */}
           {children}
         </YStack>
         <BottomTabNav mainButtonAction={openCreateEventFormSheet} />
-      </YStack>
+      </PageContainer>
       <CreateEventSheetWrapper open={open} setOpen={setOpen} />
       <SignInPromptModal open={showSignInPrompt} onOpenChange={setShowSignInPrompt} />
     </>

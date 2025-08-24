@@ -11,6 +11,8 @@ import {
   Tabs,
   View,
   YStack,
+  Container,
+  Timeline,
 } from '@my/ui';
 import { CalendarPlus, History, LogIn } from '@tamagui/lucide-icons';
 import { dateUtils } from 'app/shared/lib/date';
@@ -50,14 +52,7 @@ export const MyEventsScreen = () => {
   if (!allUserEvents) return <FullscreenSpinner />;
 
   return (
-    <YStack
-      width="100%"
-      maxWidth={600}
-      marginInline="auto"
-      height="100%"
-      overflowBlock="hidden"
-      style={{ overscrollBehavior: 'none' }}
-    >
+    <Container overflow="hidden" size="wide">
       <View mb="$4" px="$4">
         <H3 mb="$2">My Events</H3>
         <Paragraph color="$color11">Your digital experiences collection ✨</Paragraph>
@@ -100,59 +95,41 @@ export const MyEventsScreen = () => {
                   'asc'
                 )
                 .map(([dateKey, events], index) => (
-                  <View key={dateKey} pos="relative">
-                    <View pos="absolute" bottom={0} left={4} top={16} w={1} bg="$color8" />
+                  <Timeline key={dateKey}>
+                    <Timeline.Line />
 
-                    <View mb="$4">
-                      <View pos="relative" pl="$5">
-                        <View
-                          theme="green"
-                          bg="$color8"
-                          pos="absolute"
-                          left={1}
-                          top={3}
-                          h="$0.75"
-                          w="$0.75"
-                          borderRadius="$5"
-                        />
-                        <View mb="$3">
-                          <SizableText fontSize="$2" color="$color11">
-                            {dateUtils.formatRelativeDate(events[0]?.startDate)}
-                          </SizableText>
-                          <SizableText fontSize="$2">
-                            {dateUtils.getDayOfWeek(events[0]?.startDate)}
-                          </SizableText>
-                        </View>
-                        <YStack gap="$2">
-                          {events.map((event, i) => (
-                            <View
-                              key={event._id}
-                              animation={[
-                                'bouncy',
-                                {
-                                  y: { delay: i * 60 },
-                                },
-                              ]}
-                              enterStyle={{ y: 6 }}
-                            >
-                              <EventCard event={event} />
-                            </View>
-                          ))}
-                        </YStack>
+                    <Timeline.Content>
+                      <Timeline.Dot />
+                      <View mb="$3">
+                        <SizableText fontSize="$2" color="$color11">
+                          {dateUtils.formatRelativeDate(events[0]?.startDate)}
+                        </SizableText>
+                        <SizableText fontSize="$2">
+                          {dateUtils.getDayOfWeek(events[0]?.startDate)}
+                        </SizableText>
                       </View>
-                    </View>
-                  </View>
+                      <YStack gap="$2">
+                        {events.map((event, i) => (
+                          <View
+                            key={event._id}
+                            animation={[
+                              'bouncy',
+                              {
+                                y: { delay: i * 60 },
+                              },
+                            ]}
+                            enterStyle={{ y: 6 }}
+                          >
+                            <EventCard event={event} />
+                          </View>
+                        ))}
+                      </YStack>
+                    </Timeline.Content>
+                  </Timeline>
                 ))}
             </ScrollView>
           ) : upcomingEvents.length <= 0 ? (
-            <YStack
-              height="100%"
-              alignItems="center"
-              justifyContent="center"
-              flex={1}
-              gap="$4"
-              padding="$4"
-            >
+            <Container center gap="$4" padding="$4">
               <Authenticated>
                 <YStack gap="$2.5" alignItems="center" justifyContent="center">
                   <CalendarPlus size="$8" color="$color8" />
@@ -185,7 +162,7 @@ export const MyEventsScreen = () => {
                   />
                 </YStack>
               </Unauthenticated>
-            </YStack>
+            </Container>
           ) : (
             <YStack>
               <CardSkeleton />
@@ -209,59 +186,41 @@ export const MyEventsScreen = () => {
                   'desc'
                 )
                 .map(([dateKey, events], index) => (
-                  <View key={dateKey} pos="relative">
-                    <View pos="absolute" bottom={0} left={4} top={16} w={1} bg="$color6" />
+                  <Timeline key={dateKey}>
+                    <Timeline.Line />
 
-                    <View mb="$4">
-                      <View pos="relative" pl="$5">
-                        <View
-                          bg="$color8"
-                          pos="absolute"
-                          theme="green"
-                          left={1}
-                          top={3}
-                          h="$0.75"
-                          w="$0.75"
-                          borderRadius="$5"
-                        />
-                        <View mb="$3">
-                          <SizableText size="$2" color="$color11">
-                            {dateUtils.formatRelativeDate(events[0]?.startDate)}
-                          </SizableText>
-                          <SizableText size="$2">
-                            {dateUtils.getDayOfWeek(events[0]?.startDate)}
-                          </SizableText>
-                        </View>
-                        <YStack gap="$2">
-                          {events.map((event, i) => (
-                            <View
-                              key={event._id}
-                              animation={[
-                                'bouncy',
-                                {
-                                  y: { delay: i * 60 },
-                                },
-                              ]}
-                              enterStyle={{ y: 6 }}
-                            >
-                              <EventCard event={event} />
-                            </View>
-                          ))}
-                        </YStack>
+                    <Timeline.Content>
+                      <Timeline.Dot />
+                      <View mb="$3">
+                        <SizableText size="$2" color="$color11">
+                          {dateUtils.formatRelativeDate(events[0]?.startDate)}
+                        </SizableText>
+                        <SizableText size="$2">
+                          {dateUtils.getDayOfWeek(events[0]?.startDate)}
+                        </SizableText>
                       </View>
-                    </View>
-                  </View>
+                      <YStack gap="$2">
+                        {events.map((event, i) => (
+                          <View
+                            key={event._id}
+                            animation={[
+                              'bouncy',
+                              {
+                                y: { delay: i * 60 },
+                              },
+                            ]}
+                            enterStyle={{ y: 6 }}
+                          >
+                            <EventCard event={event} />
+                          </View>
+                        ))}
+                      </YStack>
+                    </Timeline.Content>
+                  </Timeline>
                 ))}
             </ScrollView>
           ) : pastEvents.length <= 0 ? (
-            <YStack
-              flex={1}
-              height="100%"
-              justifyContent="center"
-              alignItems="center"
-              gap="$4"
-              padding="$4"
-            >
+            <Container center gap="$4" padding="$4">
               <Authenticated>
                 <YStack gap="$2.5" alignItems="center" justifyContent="center">
                   <History size="$8" color="$gray8" />
@@ -294,7 +253,7 @@ export const MyEventsScreen = () => {
                   />
                 </YStack>
               </Unauthenticated>
-            </YStack>
+            </Container>
           ) : (
             <YStack>
               <CardSkeleton />
@@ -305,6 +264,6 @@ export const MyEventsScreen = () => {
           )}
         </Tabs.Content>
       </Tabs>
-    </YStack>
+    </Container>
   );
 };
