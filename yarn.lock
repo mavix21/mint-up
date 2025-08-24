@@ -4580,6 +4580,7 @@ __metadata:
   resolution: "@my/backend@workspace:packages/backend"
   dependencies:
     "@neynar/nodejs-sdk": "npm:^3.34.0"
+    "@types/node": "npm:^24.1.0"
     convex: "npm:^1.26.1"
     convex-helpers: "npm:^0.1.104"
     typescript: "npm:~5.8.3"
