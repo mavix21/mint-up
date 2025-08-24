@@ -338,7 +338,7 @@ export const ProfileScreen = ({ id }: { id: string }) => {
                               onPress={handleSyncWithFarcaster}
                               disabled={
                                 (linkedAccount.account.lastSyncedAt !== undefined &&
-                                  linkedAccount.account.lastSyncedAt <
+                                  linkedAccount.account.lastSyncedAt >
                                     Date.now() - 1000 * 60 * 60 * 1) ||
                                 isSyncing
                               }
