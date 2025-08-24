@@ -12,9 +12,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@neynar/nodejs-sdk": "^3.34.0",
     "convex": "^1.26.1",
-    "convex-helpers": "^0.1.104",
-    "@neynar/nodejs-sdk": "^3.34.0"
+    "convex-helpers": "^0.1.104"
   },
   "devDependencies": {
     "typescript": "~5.8.3"
