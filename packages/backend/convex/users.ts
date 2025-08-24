@@ -1,7 +1,15 @@
 import { omit } from 'convex-helpers';
-import { internalQuery, mutation, query } from './_generated/server';
+import {
+  internalAction,
+  internalMutation,
+  internalQuery,
+  mutation,
+  query,
+} from './_generated/server';
+import { internal } from './_generated/api';
 import { vv } from './schema';
 import { ConvexError, v } from 'convex/values';
+import { getNeynarUser } from '@my/backend/neynar';
 
 export const insertUserByFid = mutation({
   args: {
@@ -119,6 +127,10 @@ export const updateUserProfile = mutation({
   args: {
     userId: v.id('users'),
     bio: v.optional(v.string()),
+    displayName: v.optional(v.string()),
+    username: v.optional(v.string()),
+    pfpUrl: v.optional(v.string()),
+    currentWalletAddress: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
     const { userId, ...updateFields } = args;
@@ -189,5 +201,83 @@ export const updateUserSocials = mutation({
     }
 
     await ctx.db.patch(userId, { socials });
+  },
+});
+
+/**
+ * Internal mutation to update user profile with Neynar data
+ * This is specifically for syncing user information from Farcaster/Neynar
+ */
+export const updateUserProfileInternal = internalMutation({
+  args: {
+    userId: v.id('users'),
+    bio: v.optional(v.string()),
+    displayName: v.optional(v.string()),
+    username: v.optional(v.string()),
+    pfpUrl: v.optional(v.string()),
+  },
+  handler: async (ctx, args) => {
+    const { userId, ...updateFields } = args;
+
+    // Check if user exists
+    const existingUser = await ctx.db.get(userId);
+    if (!existingUser) {
+      throw new ConvexError({
+        message: 'User not found',
+        code: 'USER_NOT_FOUND',
+      });
+    }
+
+    // Filter out undefined values to avoid removing fields unintentionally
+    const fieldsToUpdate = Object.fromEntries(
+      Object.entries(updateFields).filter(([_, value]) => value !== undefined)
+    );
+
+    // Only proceed if there are fields to update
+    if (Object.keys(fieldsToUpdate).length === 0) {
+      console.warn(`No fields provided for update for user ${userId}`);
+      return;
+    }
+
+    await ctx.db.patch(userId, fieldsToUpdate);
+  },
+});
+
+export const syncUserInformationWithFarcaster = internalAction({
+  args: {
+    userId: v.id('users'),
+    fid: v.number(),
+  },
+  handler: async (ctx, args) => {
+    if (!process.env.NEYNAR_API_KEY) {
+      throw new Error('Missing required environment variables for Neynar interaction.');
+    }
+
+    try {
+      const neynarUser = await getNeynarUser(args.fid);
+      if (!neynarUser) {
+        console.warn(`No Neynar user found for FID ${args.fid}`);
+        return;
+      }
+
+      // Extract user data from neynarUser response
+      const updateData = {
+        userId: args.userId,
+        username: neynarUser.username || undefined,
+        pfpUrl: neynarUser.pfp_url || undefined,
+        displayName: neynarUser.display_name || undefined,
+        bio: neynarUser.profile?.bio?.text || undefined,
+      };
+
+      // Use internal mutation to update user profile since this is an internalAction
+      await ctx.runMutation(internal.users.updateUserProfileInternal, updateData);
+
+      console.log(
+        `Successfully synced user ${args.userId} with Farcaster data for FID ${args.fid}`
+      );
+    } catch (error) {
+      console.error('Error syncing user information with Farcaster:', error);
+      throw new Error('Failed to sync user information with Farcaster.');
+    }
   },
 });
