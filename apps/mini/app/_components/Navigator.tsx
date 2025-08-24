@@ -1,6 +1,5 @@
 'use client';
 
-import { usePrimaryButton } from '@coinbase/onchainkit/minikit';
 import { FullscreenSpinner, YStack } from '@my/ui';
 import { useSignIn } from 'app/shared/lib/hooks/use-sign-in';
 import { useState } from 'react';
@@ -16,15 +15,6 @@ export function Navigator({ children }: { children: React.ReactNode }) {
   const { isFrameReady } = useMiniApp();
   const [open, setOpen] = useState(false);
   const [showSignInPrompt, setShowSignInPrompt] = useState(false);
-
-  usePrimaryButton(
-    {
-      text: 'Connect Wallet',
-    },
-    () => {
-      console.log('connect wallet');
-    }
-  );
 
   const { isSignedIn, isLoading } = useSignIn();
 
