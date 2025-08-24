@@ -8,7 +8,6 @@ import {
   XStack,
   Avatar,
   H2,
-  H4,
   Paragraph,
   Button,
   Text,
@@ -23,6 +22,7 @@ import {
   View,
   Container,
   H5,
+  Input,
 } from '@my/ui';
 import {
   Edit3,
@@ -69,6 +69,8 @@ export const ProfileScreen = ({ id }: { id: string }) => {
   const form = useAppForm({
     defaultValues: {
       bio: profile?.bio ?? 'Hi, there!',
+      displayName: profile?.displayName ?? 'Anonymous',
+      username: profile?.username ?? 'anonymous',
     },
     onSubmit: async ({ value }) => {
       try {
@@ -95,6 +97,14 @@ export const ProfileScreen = ({ id }: { id: string }) => {
       }
     },
   });
+
+  if (profile === null) {
+    return (
+      <Container center size="wide" gap="$4" px="$4" py="$4">
+        <SizableText>No profile found!</SizableText>
+      </Container>
+    );
+  }
 
   const handleCancel = () => {
     form.reset();
@@ -162,10 +172,9 @@ export const ProfileScreen = ({ id }: { id: string }) => {
         onValueChange={setActiveTab}
         flexDirection="column"
         height="100%"
-        flex={1}
         size="$3"
       >
-        <Tabs.List mb="$4" borderWidth={1} borderColor="$borderColor" width="100%">
+        <Tabs.List mb="$4" borderWidth={1} borderColor="$borderColor">
           <Tabs.Tab value="profile" $sm={{ flexBasis: '50%' }}>
             <XStack gap="$2" alignItems="center">
               <User size={16} />
@@ -202,16 +211,68 @@ export const ProfileScreen = ({ id }: { id: string }) => {
 
           <ScrollView flex={1} contentContainerStyle={{ paddingBottom: 24 }}>
             <YStack gap="$4" width="100%">
-              <Card backgroundColor="$background" borderRadius="$4" padding="$4">
+              <Card backgroundColor="$color2" borderRadius="$4" padding="$4">
                 <YStack gap="$4">
-                  {/* Bio */}
                   <form.AppForm>
                     <Form
                       onSubmit={() => {
                         console.log('form state', { formState: form.state });
                         form.handleSubmit();
                       }}
+                      gap="$3"
                     >
+                      {/* Username */}
+                      <form.Field
+                        name="username"
+                        children={(field) => (
+                          <YStack alignItems="flex-start" gap="$2">
+                            <XStack alignItems="center" gap="$2">
+                              <User size={15} color="$color10" />
+                              <SizableText size="$3" color="$gray10">
+                                Username
+                              </SizableText>
+                            </XStack>
+                            <YStack flex={1} width="100%">
+                              <SizableText size="$4" color="$color12">
+                                @{field.state.value}
+                              </SizableText>
+                            </YStack>
+                          </YStack>
+                        )}
+                      />
+
+                      <Separator />
+
+                      {/* Display Name */}
+                      <form.Field
+                        name="displayName"
+                        children={(field) => (
+                          <YStack alignItems="flex-start" gap="$2">
+                            <XStack alignItems="center" gap="$2">
+                              <User size={15} color="$color10" />
+                              <SizableText size="$3" color="$gray10">
+                                Display Name
+                              </SizableText>
+                            </XStack>
+                            <YStack flex={1} width="100%">
+                              {/* <Input
+                                flex={1}
+                                value={field.state.value || ''}
+                                onChangeText={field.handleChange}
+                                onBlur={field.handleBlur}
+                                placeholder="Enter your display name"
+                              /> */}
+                              <SizableText size="$4" color="$color12">
+                                {field.state.value}
+                              </SizableText>
+                            </YStack>
+                          </YStack>
+                        )}
+                      />
+
+                      <Separator />
+
+                      {/* Bio */}
                       <form.Field
                         name="bio"
                         validators={{
@@ -222,12 +283,12 @@ export const ProfileScreen = ({ id }: { id: string }) => {
                           },
                         }}
                         children={(field) => (
-                          <YStack alignItems="flex-start" gap="$3">
+                          <YStack alignItems="flex-start" gap="$2">
                             <XStack alignItems="center" gap="$2">
                               <Mail size={15} color="$color10" />
-                              <Text fontSize="$3" color="$gray10">
+                              <SizableText size="$3" color="$gray10">
                                 Bio
-                              </Text>
+                              </SizableText>
                             </XStack>
                             <YStack flex={1} width="100%">
                               {isEditing ? (
@@ -292,8 +353,6 @@ export const ProfileScreen = ({ id }: { id: string }) => {
                       )}
                     </Form>
                   </form.AppForm>
-
-                  <Separator />
                 </YStack>
               </Card>
             </YStack>
