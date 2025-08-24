@@ -28,6 +28,8 @@ const plugins = [
         return true;
       }
     },
+    disableThemesBundleOptimize: true,
+    excludeReactNativeWebExports: ['Switch', 'ProgressBar', 'Picker', 'CheckBox', 'Touchable'],
   }),
   (nextConfig) => {
     return {
@@ -78,13 +80,7 @@ module.exports = () => {
       'react-native-gesture-handler',
       'react-native-reanimated',
     ],
-    /*
-       A few notes before enabling app directory:
 
-       - Usage of app directory for production apps is discouraged.
-       - Solito doesn't support app dir at the moment - You'll have to remove Solito.
-       - The `/app` in this starter has the same routes as the `/pages` directory. You should probably remove `/pages` after enabling this.
-      */
     experimental: {
       scrollRestoration: true,
       viewTransition: true,
