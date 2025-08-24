@@ -108,9 +108,10 @@ export const ProfileScreen = ({ id }: { id: string }) => {
         userId: id as Id<'users'>,
       });
 
-      toast.show('Successfully synced with Farcaster!', {
+      toast.show('Sync requested!', {
         type: 'success',
         preset: 'success',
+        message: 'This may take a few seconds to complete.',
       });
     } catch (error) {
       console.error('Error syncing with Farcaster:', error);
