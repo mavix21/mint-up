@@ -341,7 +341,7 @@ export const ProfileScreen = ({ id }: { id: string }) => {
                             <Button
                               onPress={handleSyncWithFarcaster}
                               disabled={!canSync || isSyncing}
-                              opacity={!canSync || isSyncing ? 1 : 0.5}
+                              opacity={!canSync || isSyncing ? 0.5 : 1}
                             >
                               {isSyncing ? 'Syncing...' : 'Sync using Farcaster'}
                             </Button>
