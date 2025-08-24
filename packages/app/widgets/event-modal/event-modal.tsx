@@ -15,7 +15,6 @@ import {
   Chip,
   Theme,
   Separator,
-  LoadingButton,
   LiveIndicator,
   ScrollView,
 } from '@my/ui';
@@ -40,6 +39,7 @@ import { EventSettingsDropdown } from './EventSettingsDropdown';
 import TicketViewSheet from './ticket-view-sheet';
 import TicketsEventSheet from './tickets-event-sheet';
 import { ConvexEventWithExtras } from '../../entities/event.model';
+import { ConnectButton } from '../auth';
 
 export function EventModal({
   toggleEvent,
@@ -50,7 +50,7 @@ export function EventModal({
   setToggleEvent: Dispatch<SetStateAction<boolean>>;
   eventData: ConvexEventWithExtras;
 }) {
-  const { signIn, session, isLoading: signInLoading, isSignedIn } = useSignIn();
+  const { session, isSignedIn } = useSignIn();
 
   // Check if event is currently live using the shared utility
   const eventIsLive = isEventLive(eventData.startDate, eventData.endDate);
@@ -288,15 +288,9 @@ Check it out 👇`,
 
                 {/* Action Buttons - Only show if user is not host and not already registered */}
                 {(canRegister || needsSignIn) && (
-                  <XStack gap="$3" justifyContent="space-between" alignItems="stretch">
+                  <XStack gap="$3" justifyContent="center" alignItems="center">
                     {needsSignIn ? (
-                      <LoadingButton
-                        flex={1}
-                        label="Sign In to Register"
-                        isLoading={signInLoading}
-                        onPress={signIn}
-                        themeInverse
-                      />
+                      <ConnectButton label="Sign In to Register" flex={1} />
                     ) : (
                       <Button
                         flex={1}
@@ -481,7 +475,6 @@ Check it out 👇`,
                             </SizableText>
                           </YStack>
                         )}
-                        {/* <SizableText color="$color8" size="$2" /> */}
                       </YStack>
                     </XStack>
                   </YStack>
@@ -541,13 +534,7 @@ Check it out 👇`,
             {(canRegister || needsSignIn) && (
               <View padding="$4" borderTopWidth={1} borderColor="$borderColor">
                 {needsSignIn ? (
-                  <LoadingButton
-                    width="100%"
-                    label="Sign In to Register"
-                    isLoading={signInLoading}
-                    onPress={signIn}
-                    themeInverse
-                  />
+                  <ConnectButton label="Sign In to Register" flex={1} />
                 ) : (
                   <Button
                     width="100%"

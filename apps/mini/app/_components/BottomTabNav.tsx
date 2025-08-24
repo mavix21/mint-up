@@ -22,7 +22,6 @@ export function BottomTabNav({ mainButtonAction: openCreateEventFormSheet }: Bot
         <BottomTab type="main" mainButtonAction={openCreateEventFormSheet} Icon={Plus} />
         <BottomTab type="link" href="/communities" Icon={Users} />
         <BottomTab
-          disabled={!session?.user.id}
           type="profile"
           avatarUrl={context?.user.pfpUrl ?? session?.user.image}
           href={`/profile/${session?.user.id}`}

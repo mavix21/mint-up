@@ -6,15 +6,15 @@ import { useState } from 'react';
 
 import { BottomTabNav } from './BottomTabNav';
 import { CreateEventSheetWrapper } from './CreateEventSheetWrapper';
-import { SignInPromptModal } from './SignInPromptModal';
 import { Topbar } from './Topbar';
+import { useAuthGateDialog } from './auth/auth-gate-dialog.context';
 
 import { useMiniApp } from '@/contexts/mini-app.context';
 
 export function Navigator({ children }: { children: React.ReactNode }) {
   const { isFrameReady } = useMiniApp();
-  const [open, setOpen] = useState(false);
-  const [showSignInPrompt, setShowSignInPrompt] = useState(false);
+  const [openCreateEvent, setOpenCreateEvent] = useState(false);
+  const { open } = useAuthGateDialog();
 
   const { isSignedIn, isLoading } = useSignIn();
 
@@ -29,11 +29,10 @@ export function Navigator({ children }: { children: React.ReactNode }) {
     }
 
     if (!isSignedIn) {
-      setShowSignInPrompt(true);
-
+      open({ key: 'createEvent' });
       return;
     }
-    setOpen(true);
+    setOpenCreateEvent(true);
   };
 
   return (
@@ -46,8 +45,7 @@ export function Navigator({ children }: { children: React.ReactNode }) {
         </YStack>
         <BottomTabNav mainButtonAction={openCreateEventFormSheet} />
       </PageContainer>
-      <CreateEventSheetWrapper open={open} setOpen={setOpen} />
-      <SignInPromptModal open={showSignInPrompt} onOpenChange={setShowSignInPrompt} />
+      <CreateEventSheetWrapper open={openCreateEvent} setOpen={setOpenCreateEvent} />
     </>
   );
 }

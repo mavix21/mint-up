@@ -8,5 +8,5 @@ const config = {
 };
 
 export function AuthKitProvider({ children }: { children: React.ReactNode }) {
-  return <AuthKitProviderBase config={{}}>{children}</AuthKitProviderBase>;
+  return <AuthKitProviderBase config={config}>{children}</AuthKitProviderBase>;
 }

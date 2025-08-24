@@ -1,6 +1,9 @@
 import { Authenticated, Unauthenticated } from '@my/backend/react';
 import { Button, YStack, Link, Avatar } from '@my/ui';
+import { User2 } from '@tamagui/lucide-icons';
 import { usePathname } from 'app/utils';
+
+import { useAuthGateDialog } from './auth/auth-gate-dialog.context';
 
 interface MainButtonTabProps {
   type: 'main';
@@ -18,12 +21,12 @@ interface ProfileTabProps {
   type: 'profile';
   avatarUrl: string | undefined;
   href: string;
-  disabled?: boolean;
 }
 
 type BottomTabProps = MainButtonTabProps | LinkTabProps | ProfileTabProps;
 
 export const BottomTab = (props: BottomTabProps) => {
+  const { open } = useAuthGateDialog();
   const pathname = usePathname();
 
   // Determine if the route is active based on pathname matching
@@ -53,7 +56,7 @@ export const BottomTab = (props: BottomTabProps) => {
       ) : props.type === 'profile' ? (
         <>
           <Authenticated>
-            <Link asChild href={props.href} disabled={props.disabled}>
+            <Link asChild href={props.href}>
               <Avatar
                 outlineStyle={isActive ? 'solid' : 'none'}
                 outlineColor="green"
@@ -68,14 +71,23 @@ export const BottomTab = (props: BottomTabProps) => {
             </Link>
           </Authenticated>
           <Unauthenticated>
-            <Avatar
-              outlineStyle={isActive ? 'solid' : 'none'}
-              outlineColor="green"
+            <Button
+              onPress={() => open({ key: 'profile' })}
+              opacity={0.5}
+              chromeless
               circular
-              size="$3"
+              size="$4"
+              pressStyle={{ elevation: 2, scale: 0.97 }}
+              icon={<User2 />}
+              scaleIcon={1.5}
             >
-              <Avatar.Fallback bc="$color10" />
-            </Avatar>
+              {props.avatarUrl && (
+                <Avatar circular size="$3" animation="100ms">
+                  <Avatar.Image src={props.avatarUrl} />
+                  <Avatar.Fallback bc="$color10" />
+                </Avatar>
+              )}
+            </Button>
           </Unauthenticated>
         </>
       ) : (

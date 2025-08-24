@@ -2,7 +2,6 @@
 
 import { api } from '@my/backend/_generated/api';
 import {
-  LoadingButton,
   FullscreenSpinner,
   H3,
   Paragraph,
@@ -16,7 +15,7 @@ import {
 } from '@my/ui';
 import { CalendarPlus, History, LogIn } from '@tamagui/lucide-icons';
 import { dateUtils } from 'app/shared/lib/date';
-import { useSignIn } from 'app/shared/lib/hooks/use-sign-in';
+import { ConnectButton } from 'app/widgets/auth';
 import { Authenticated, Unauthenticated, useQuery } from 'convex/react';
 import React, { useMemo } from 'react';
 
@@ -24,7 +23,6 @@ import { EventCard } from './ui/event-card';
 import { CardSkeleton } from '../../shared/ui/CardSkeleton';
 
 export const MyEventsScreen = () => {
-  const { signIn, isLoading } = useSignIn();
   const allUserEvents = useQuery(api.events.getUserEvents);
   const [activeTab, setActiveTab] = React.useState('upcoming');
 
@@ -151,15 +149,7 @@ export const MyEventsScreen = () => {
                   <SizableText size="$4" color="$color9" textAlign="center" maxWidth={300}>
                     Join our community to create events and build your collection.
                   </SizableText>
-                  <LoadingButton
-                    theme="green"
-                    isLoading={isLoading}
-                    themeInverse
-                    size="$4"
-                    onPress={signIn}
-                    mt="$2"
-                    label="Sign In"
-                  />
+                  <ConnectButton />
                 </YStack>
               </Unauthenticated>
             </Container>
@@ -242,15 +232,7 @@ export const MyEventsScreen = () => {
                   <SizableText size="$4" color="$color9" textAlign="center" maxWidth={300}>
                     Sign in to view your past events and track your journey.
                   </SizableText>
-                  <LoadingButton
-                    theme="green"
-                    isLoading={isLoading}
-                    themeInverse
-                    size="$4"
-                    onPress={signIn}
-                    mt="$2"
-                    label="Sign In"
-                  />
+                  <ConnectButton />
                 </YStack>
               </Unauthenticated>
             </Container>

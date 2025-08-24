@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import { headers } from 'next/headers';
 
+import { AuthGateDialogProvider } from '../_components/auth/auth-gate-dialog.context';
+
 import { getSession } from '@/auth';
 import { Providers } from '@/providers';
 
@@ -63,7 +65,7 @@ export default async function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body>
         <Providers session={session} cookie={cookie}>
-          {children}
+          <AuthGateDialogProvider>{children}</AuthGateDialogProvider>
         </Providers>
       </body>
     </html>
