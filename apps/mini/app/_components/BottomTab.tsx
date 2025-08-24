@@ -52,7 +52,6 @@ export const BottomTab = (props: BottomTabProps) => {
       ) : props.type === 'profile' ? (
         <Link asChild href={props.href} disabled={props.disabled}>
           <Avatar
-            outlineOffset={1}
             outlineStyle={isActive ? 'solid' : 'none'}
             outlineColor="green"
             circular

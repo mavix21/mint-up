@@ -15,7 +15,7 @@ export function BottomTabNav({ mainButtonAction: openCreateEventFormSheet }: Bot
   const { data: session } = useSession();
 
   return (
-    <YStack bg="$color2" borderTopWidth={1} borderColor="$borderColor" py="$3">
+    <YStack bg="$color2" py="$3" borderTopWidth={1} borderColor="$borderColor">
       <XStack alignItems="center">
         <BottomTab type="link" href="/my-events" Icon={Calendar} />
         <BottomTab type="link" href="/explore-events" Icon={Search} />

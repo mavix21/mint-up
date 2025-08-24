@@ -20,6 +20,9 @@ import {
   TextArea,
   Tabs,
   SizableText,
+  View,
+  Container,
+  H5,
 } from '@my/ui';
 import {
   Edit3,
@@ -54,7 +57,7 @@ export const ProfileScreen = ({ id }: { id: string }) => {
   });
 
   const updateUserProfile = useMutation(api.users.updateUserProfile);
-  const syncWithFarcaster = useMutation(api.users.syncWithFarcaster);
+  const syncWithFarcaster = useMutation(api.farcaster.syncWithFarcaster);
 
   const toast = useToastController();
 
@@ -121,7 +124,7 @@ export const ProfileScreen = ({ id }: { id: string }) => {
   };
 
   return (
-    <YStack width="100%" maxWidth={800} marginInline="auto" height="100%" gap="$4" px="$4" py="$4">
+    <Container size="wide" gap="$4" px="$4" py="$4">
       {/* Avatar Section - Fixed */}
       <YStack alignItems="center" gap="$2">
         <Avatar size="$12" circular>
@@ -178,21 +181,21 @@ export const ProfileScreen = ({ id }: { id: string }) => {
 
         {/* Profile Tab Content */}
         <Tabs.Content value="profile" flex={1}>
-          <XStack alignItems="center" justifyContent="space-between" mb="$3">
-            <H4 fontSize="$6" fontWeight="600" color="$gray12">
-              Information
-            </H4>
-            {!isEditing && (
-              <Button
-                size="$3"
-                circular
-                borderWidth={0}
-                chromeless
-                onPress={() => setIsEditing(true)}
-              >
-                <Edit3 size={20} />
-              </Button>
-            )}
+          <XStack alignItems="center" justifyContent="space-between" mb="$2">
+            <H5 color="$color12">Information</H5>
+            <View height="$3">
+              {!isEditing && (
+                <Button
+                  size="$3"
+                  circular
+                  borderWidth={0}
+                  chromeless
+                  onPress={() => setIsEditing(true)}
+                >
+                  <Edit3 size={20} />
+                </Button>
+              )}
+            </View>
             {isEditing && <YStack width={40} />}
           </XStack>
 
@@ -218,15 +221,18 @@ export const ProfileScreen = ({ id }: { id: string }) => {
                           },
                         }}
                         children={(field) => (
-                          <XStack alignItems="flex-start" gap="$3" paddingVertical="$2">
-                            <Mail size={15} color="$color10" mt="$1.5" />
-                            <YStack flex={1}>
-                              <Text fontSize="$3" color="$gray10" marginBottom="$1">
+                          <YStack alignItems="flex-start" gap="$3">
+                            <XStack alignItems="center" gap="$2">
+                              <Mail size={15} color="$color10" />
+                              <Text fontSize="$3" color="$gray10">
                                 Bio
                               </Text>
+                            </XStack>
+                            <YStack flex={1} width="100%">
                               {isEditing ? (
-                                <YStack>
+                                <YStack flex={1}>
                                   <TextArea
+                                    flex={1}
                                     value={field.state.value || ''}
                                     onChangeText={field.handleChange}
                                     onBlur={field.handleBlur}
@@ -236,7 +242,7 @@ export const ProfileScreen = ({ id }: { id: string }) => {
                                     borderColor={
                                       field.state.meta.errors.length > 0 ? '$red8' : '$color9'
                                     }
-                                    minHeight={80}
+                                    minHeight={120}
                                   />
                                   {field.state.meta.errors.length > 0 && (
                                     <Text fontSize="$2" color="$red10" marginTop="$1">
@@ -250,29 +256,35 @@ export const ProfileScreen = ({ id }: { id: string }) => {
                                 </Text>
                               )}
                             </YStack>
-                          </XStack>
+                          </YStack>
                         )}
                       />
 
                       {isEditing && (
-                        <XStack gap="$2" alignItems="center" justifyContent="space-between" mt="$4">
+                        <XStack
+                          gap="$2"
+                          alignItems="center"
+                          flex={1}
+                          justifyContent="space-between"
+                          mt="$4"
+                        >
                           <Button
+                            flex={1}
+                            theme="red"
                             fontWeight="600"
                             icon={X}
-                            variant="outlined"
                             onPress={handleCancel}
-                            width="48%"
                           >
                             Cancel
                           </Button>
                           <Form.Trigger asChild>
                             <form.SubmitButton
+                              flex={1}
                               fontWeight="600"
                               borderRadius="$4"
                               icon={Save}
                               themeInverse
                               label="Save"
-                              width="48%"
                             />
                           </Form.Trigger>
                         </XStack>
@@ -289,9 +301,10 @@ export const ProfileScreen = ({ id }: { id: string }) => {
 
         {/* Linked Accounts Tab Content */}
         <Tabs.Content value="linked-accounts" flex={1}>
-          <H4 fontSize="$6" fontWeight="600" color="$gray12" mb="$3">
-            Linked Accounts
-          </H4>
+          <XStack alignItems="center" justifyContent="space-between" mb="$2">
+            <H5 color="$color12">Linked Accounts</H5>
+            <View height="$3" />
+          </XStack>
 
           <ScrollView flex={1} contentContainerStyle={{ paddingBottom: 24 }}>
             <YStack gap="$4" width="100%">
@@ -300,88 +313,94 @@ export const ProfileScreen = ({ id }: { id: string }) => {
                   {linkedAccounts?.map((linkedAccount) => {
                     if (linkedAccount.account.protocol === 'farcaster') {
                       return (
-                        <XStack
-                          alignItems="flex-start"
-                          gap="$3"
-                          paddingVertical="$2"
-                          key={linkedAccount._id}
-                        >
-                          <IdCard size={15} color="$color10" mt="$1.5" />
-                          <YStack flex={1}>
-                            <Text fontSize="$3" color="$color10" marginBottom="$1">
-                              {linkedAccount.account.protocol}
-                            </Text>
-                            <Text fontSize="$4" color="$color12">
-                              @{linkedAccount.account.username}
-                            </Text>
-                          </YStack>
-                          <YStack justifyContent="center" themeInverse>
-                            <Button
-                              size="$3"
-                              onPress={handleSyncWithFarcaster}
-                              disabled={isSyncing}
-                            >
+                        <YStack alignItems="flex-start" gap="$3" key={linkedAccount._id}>
+                          <XStack alignItems="center" gap="$2">
+                            <IdCard size={15} color="$color10" />
+                            <SizableText size="$3" color="$color10">
+                              Farcaster
+                            </SizableText>
+                          </XStack>
+                          <XStack
+                            width="100%"
+                            flex={1}
+                            alignItems="center"
+                            jc="space-between"
+                            ai="center"
+                            gap="$2"
+                          >
+                            <YStack flex={1}>
+                              <SizableText size="$4" color="$color12">
+                                @{linkedAccount.account.username}
+                              </SizableText>
+                            </YStack>
+                            <Button onPress={handleSyncWithFarcaster} disabled={isSyncing}>
                               {isSyncing ? 'Syncing...' : 'Sync using Farcaster'}
                             </Button>
-                          </YStack>
-                        </XStack>
+                          </XStack>
+                        </YStack>
                       );
                     } else if (linkedAccount.account.protocol === 'wallet') {
                       return (
-                        <XStack
+                        <YStack
                           alignItems="flex-start"
                           gap="$3"
                           paddingVertical="$2"
                           key={linkedAccount._id}
                         >
-                          <WalletMinimal size={15} color="$color10" mt="$1.5" />
+                          <XStack alignItems="center" gap="$2">
+                            <WalletMinimal size={15} color="$color10" />
+                            <SizableText size="$3" color="$color10">
+                              Wallet
+                            </SizableText>
+                          </XStack>
                           <YStack flex={1}>
-                            <Text fontSize="$3" color="$color10" marginBottom="$1">
-                              {linkedAccount.account.protocol}
-                            </Text>
-                            <Text fontSize="$4" color="$color12">
+                            <SizableText size="$4" color="$color12">
                               @{linkedAccount.account.address}
-                            </Text>
+                            </SizableText>
                           </YStack>
-                        </XStack>
+                        </YStack>
                       );
                     } else if (linkedAccount.account.protocol === 'email') {
                       return (
-                        <XStack
+                        <YStack
                           alignItems="flex-start"
                           gap="$3"
                           paddingVertical="$2"
                           key={linkedAccount._id}
                         >
-                          <Mail size={15} color="$color10" mt="$1.5" />
+                          <XStack alignItems="center" gap="$2">
+                            <Mail size={15} color="$color10" />
+                            <SizableText size="$3" color="$color10">
+                              Email
+                            </SizableText>
+                          </XStack>
                           <YStack flex={1}>
-                            <Text fontSize="$3" color="$color10" marginBottom="$1">
-                              {linkedAccount.account.protocol}
-                            </Text>
-                            <Text fontSize="$4" color="$color12">
+                            <SizableText size="$4" color="$color12">
                               {linkedAccount.account.email}
-                            </Text>
+                            </SizableText>
                           </YStack>
-                        </XStack>
+                        </YStack>
                       );
                     } else if (linkedAccount.account.protocol === 'phone') {
                       return (
-                        <XStack
+                        <YStack
                           alignItems="flex-start"
                           gap="$3"
                           paddingVertical="$2"
                           key={linkedAccount._id}
                         >
-                          <Phone size={15} color="$color10" mt="$1.5" />
+                          <XStack alignItems="center" gap="$2">
+                            <Phone size={15} color="$color10" />
+                            <SizableText size="$3" color="$color10">
+                              Phone
+                            </SizableText>
+                          </XStack>
                           <YStack flex={1}>
-                            <Text fontSize="$3" color="$color10" marginBottom="$1">
-                              {linkedAccount.account.protocol}
-                            </Text>
-                            <Text fontSize="$4" color="$color12">
+                            <SizableText size="$4" color="$color12">
                               {linkedAccount.account.phone}
-                            </Text>
+                            </SizableText>
                           </YStack>
-                        </XStack>
+                        </YStack>
                       );
                     } else {
                       return (
@@ -389,14 +408,12 @@ export const ProfileScreen = ({ id }: { id: string }) => {
                       );
                     }
                   })}
-
-                  <Separator />
                 </YStack>
               </Card>
             </YStack>
           </ScrollView>
         </Tabs.Content>
       </Tabs>
-    </YStack>
+    </Container>
   );
 };

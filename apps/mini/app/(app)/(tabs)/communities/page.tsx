@@ -111,7 +111,7 @@ export default function CommunitiesPage() {
       <ScrollView flex={1} contentContainerStyle={{ paddingBottom: 24 }}>
         <XStack flexWrap="wrap" gap="$3">
           {communityListData.map((c) => (
-            <View key={c.id} flex={1} $gtSm={{ flexBasis: '0%' }}>
+            <View key={c.id} flex={1}>
               <CommunityCard community={c} />
             </View>
           ))}
