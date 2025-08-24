@@ -10,10 +10,11 @@ import {
   Tabs,
   FullscreenSpinner,
   Separator,
-  View,
   Theme,
   ThemeName,
   ScrollView,
+  PageContainer,
+  Container,
 } from '@my/ui';
 import { ArrowLeft, BarChart3, Users, Eye } from '@tamagui/lucide-icons';
 import { useRouter } from 'next/navigation';
@@ -36,21 +37,8 @@ export const ManageEventScreen = ({ id }: { id: string }) => {
 
   return (
     <Theme name={event.theme as ThemeName}>
-      <View
-        width="100%"
-        height={'100vh' as any}
-        backgroundColor="$background"
-        flex={1}
-        marginInline="auto"
-      >
-        <YStack
-          height="100%"
-          overflowBlock="hidden"
-          flex={1}
-          maxWidth={800}
-          marginInline="auto"
-          width="100%"
-        >
+      <PageContainer>
+        <Container size="wide">
           {/* Header */}
           <YStack padding="$4" gap="$3" borderColor="$borderColor">
             {/* Back Link */}
@@ -80,16 +68,14 @@ export const ManageEventScreen = ({ id }: { id: string }) => {
             defaultValue="overview"
             flex={1}
             flexDirection="column"
-            backgroundColor="$background"
             size="$4"
             height="100%"
             overflowBlock="hidden"
           >
-            <Tabs.List backgroundColor="$background" paddingHorizontal="$4" paddingVertical="$2">
+            <Tabs.List paddingInline="$4">
               <Tabs.Tab
                 value="overview"
                 flex={1}
-                backgroundColor="transparent"
                 borderWidth={0}
                 paddingVertical="$3"
                 paddingHorizontal="$4"
@@ -104,7 +90,6 @@ export const ManageEventScreen = ({ id }: { id: string }) => {
               <Tabs.Tab
                 value="holder-hub"
                 flex={1}
-                backgroundColor="transparent"
                 borderWidth={0}
                 paddingVertical="$3"
                 paddingHorizontal="$4"
@@ -119,7 +104,6 @@ export const ManageEventScreen = ({ id }: { id: string }) => {
               <Tabs.Tab
                 value="insights"
                 flex={1}
-                backgroundColor="transparent"
                 borderWidth={0}
                 paddingVertical="$3"
                 paddingHorizontal="$4"
@@ -151,8 +135,8 @@ export const ManageEventScreen = ({ id }: { id: string }) => {
               </ScrollView>
             </Tabs.Content>
           </Tabs>
-        </YStack>
-      </View>
+        </Container>
+      </PageContainer>
     </Theme>
   );
 };
