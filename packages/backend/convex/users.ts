@@ -211,7 +211,7 @@ export const updateUserProfileInternalWithFarcaster = internalMutation({
     linkedAccountId: v.id('linkedAccounts'),
   },
   handler: async (ctx, args) => {
-    const { userId, linkedAccountId, ...updateFields } = args;
+    const { userId, linkedAccountId, fid, ...updateFields } = args;
 
     // Filter out undefined values to avoid removing fields unintentionally
     const fieldsToUpdate = Object.fromEntries(
@@ -227,7 +227,7 @@ export const updateUserProfileInternalWithFarcaster = internalMutation({
     await ctx.db.patch(linkedAccountId, {
       account: {
         protocol: 'farcaster',
-        fid: args.fid,
+        fid,
         ...fieldsToUpdate,
         lastSyncedAt: Date.now(),
       },

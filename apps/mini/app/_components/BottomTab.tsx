@@ -1,3 +1,4 @@
+import { Authenticated, Unauthenticated } from '@my/backend/react';
 import { Button, YStack, Link, Avatar } from '@my/ui';
 import { usePathname } from 'app/utils';
 
@@ -50,19 +51,33 @@ export const BottomTab = (props: BottomTabProps) => {
           />
         </YStack>
       ) : props.type === 'profile' ? (
-        <Link asChild href={props.href} disabled={props.disabled}>
-          <Avatar
-            outlineStyle={isActive ? 'solid' : 'none'}
-            outlineColor="green"
-            circular
-            size="$3"
-            pressStyle={{ elevation: 2, scale: 0.97 }}
-            animation="100ms"
-          >
-            <Avatar.Image src={props.avatarUrl} />
-            <Avatar.Fallback bc="$color10" />
-          </Avatar>
-        </Link>
+        <>
+          <Authenticated>
+            <Link asChild href={props.href} disabled={props.disabled}>
+              <Avatar
+                outlineStyle={isActive ? 'solid' : 'none'}
+                outlineColor="green"
+                circular
+                size="$3"
+                pressStyle={{ elevation: 2, scale: 0.97 }}
+                animation="100ms"
+              >
+                <Avatar.Image src={props.avatarUrl} />
+                <Avatar.Fallback bc="$color10" />
+              </Avatar>
+            </Link>
+          </Authenticated>
+          <Unauthenticated>
+            <Avatar
+              outlineStyle={isActive ? 'solid' : 'none'}
+              outlineColor="green"
+              circular
+              size="$3"
+            >
+              <Avatar.Fallback bc="$color10" />
+            </Avatar>
+          </Unauthenticated>
+        </>
       ) : (
         // Regular tabs
         <Link asChild href={props.href}>
