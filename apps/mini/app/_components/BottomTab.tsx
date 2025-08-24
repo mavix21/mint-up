@@ -17,6 +17,7 @@ interface ProfileTabProps {
   type: 'profile';
   avatarUrl: string | undefined;
   href: string;
+  disabled?: boolean;
 }
 
 type BottomTabProps = MainButtonTabProps | LinkTabProps | ProfileTabProps;
@@ -49,7 +50,7 @@ export const BottomTab = (props: BottomTabProps) => {
           />
         </YStack>
       ) : props.type === 'profile' ? (
-        <Link asChild href={props.href}>
+        <Link asChild href={props.href} disabled={props.disabled}>
           <Avatar
             outlineOffset={1}
             outlineStyle={isActive ? 'solid' : 'none'}
