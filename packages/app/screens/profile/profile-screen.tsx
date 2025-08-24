@@ -313,6 +313,10 @@ export const ProfileScreen = ({ id }: { id: string }) => {
                 <YStack gap="$4">
                   {linkedAccounts?.map((linkedAccount) => {
                     if (linkedAccount.account.protocol === 'farcaster') {
+                      const canSync =
+                        linkedAccount.account.lastSyncedAt === undefined ||
+                        linkedAccount.account.lastSyncedAt < Date.now() - 1000 * 60 * 60 * 1;
+
                       return (
                         <YStack alignItems="flex-start" gap="$3" key={linkedAccount._id}>
                           <XStack alignItems="center" gap="$2">
@@ -336,12 +340,8 @@ export const ProfileScreen = ({ id }: { id: string }) => {
                             </YStack>
                             <Button
                               onPress={handleSyncWithFarcaster}
-                              disabled={
-                                (linkedAccount.account.lastSyncedAt !== undefined &&
-                                  linkedAccount.account.lastSyncedAt >
-                                    Date.now() - 1000 * 60 * 60 * 1) ||
-                                isSyncing
-                              }
+                              disabled={!canSync || isSyncing}
+                              opacity={!canSync || isSyncing ? 1 : 0.5}
                             >
                               {isSyncing ? 'Syncing...' : 'Sync using Farcaster'}
                             </Button>
