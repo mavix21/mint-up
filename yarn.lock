@@ -1814,7 +1814,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@coinbase/onchainkit@npm:^0.38.18":
+"@coinbase/onchainkit@npm:^0.38.19":
   version: 0.38.19
   resolution: "@coinbase/onchainkit@npm:0.38.19"
   dependencies:
@@ -4579,8 +4579,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@my/backend@workspace:packages/backend"
   dependencies:
-    convex: "npm:^1.25.4"
-    convex-helpers: "npm:^0.1.99"
+    convex: "npm:^1.26.1"
+    convex-helpers: "npm:^0.1.104"
     typescript: "npm:~5.8.3"
   languageName: unknown
   linkType: soft
@@ -4844,7 +4844,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@neynar/nodejs-sdk@npm:^3.27.0":
+"@neynar/nodejs-sdk@npm:^3.34.0":
   version: 3.34.0
   resolution: "@neynar/nodejs-sdk@npm:3.34.0"
   dependencies:
@@ -10408,6 +10408,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@tanstack/query-core@npm:5.85.5":
+  version: 5.85.5
+  resolution: "@tanstack/query-core@npm:5.85.5"
+  checksum: 10/fcce94550f0de4f9a623a818d99b529389f074d505322d229f2933ae85f25ea6177a1d5e4bc067ad0d52441cb6189554532a1043c345faf395769e7268529536
+  languageName: node
+  linkType: hard
+
 "@tanstack/react-form@npm:^1.19.1":
   version: 1.19.2
   resolution: "@tanstack/react-form@npm:1.19.2"
@@ -10434,6 +10441,17 @@ __metadata:
   peerDependencies:
     react: ^18 || ^19
   checksum: 10/b0d195df16d61acddf6bc5ef7acc34a335adcb9658f1f24a229965a7d8ca50fc60040a1dfb871e6f625004ffae26fa16a293d12fb30d9286e5ba35b2fb56ec05
+  languageName: node
+  linkType: hard
+
+"@tanstack/react-query@npm:5.85.5":
+  version: 5.85.5
+  resolution: "@tanstack/react-query@npm:5.85.5"
+  dependencies:
+    "@tanstack/query-core": "npm:5.85.5"
+  peerDependencies:
+    react: ^18 || ^19
+  checksum: 10/3d77a928fb75cd3263e699633a62c17a3e9da675dab0a92cff6bc3e7530ad67f47e1d8e64cc6451e96436664cfb77a517ea4dbee2a0441049565f6969f10eff4
   languageName: node
   linkType: hard
 
@@ -15193,7 +15211,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"convex-helpers@npm:^0.1.99":
+"convex-helpers@npm:^0.1.104":
   version: 0.1.104
   resolution: "convex-helpers@npm:0.1.104"
   peerDependencies:
@@ -15220,13 +15238,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"convex@npm:^1.25.4":
-  version: 1.25.4
-  resolution: "convex@npm:1.25.4"
+"convex@npm:^1.26.1":
+  version: 1.26.1
+  resolution: "convex@npm:1.26.1"
   dependencies:
     esbuild: "npm:0.25.4"
     jwt-decode: "npm:^4.0.0"
-    prettier: "npm:3.5.3"
+    prettier: "npm:^3.0.0"
   peerDependencies:
     "@auth0/auth0-react": ^2.0.1
     "@clerk/clerk-react": ^4.12.8 || ^5.0.0
@@ -15240,7 +15258,7 @@ __metadata:
       optional: true
   bin:
     convex: bin/main.js
-  checksum: 10/2d7564963352e8b39f457a85ca55a66bf4cbae58823495f6770fe6db601f9cc6665aee095cd5f02d1baa1196e9d4f447b4e92af48d4148c059d317d666cb4df1
+  checksum: 10/a055f6656dbbf7dcf48ded62c2f04838a51c74f926cc0e4b9aa6b2d1ebe4dff50b7e74987898c0ef2b760401d5a596a655c309a6b28f8cf6deb46f8be30b84c0
   languageName: node
   linkType: hard
 
@@ -22870,18 +22888,18 @@ __metadata:
   resolution: "mini@workspace:apps/mini"
   dependencies:
     "@auth/core": "npm:^0.34.2"
-    "@coinbase/onchainkit": "npm:^0.38.18"
+    "@coinbase/onchainkit": "npm:^0.38.19"
     "@farcaster/auth-client": "npm:0.7.0"
     "@farcaster/auth-kit": "npm:^0.8.1"
     "@my/backend": "npm:*"
     "@my/ui": "npm:*"
     "@next/bundle-analyzer": "npm:15.3.2"
     "@next/eslint-plugin-next": "npm:15.3.2"
-    "@neynar/nodejs-sdk": "npm:^3.27.0"
+    "@neynar/nodejs-sdk": "npm:^3.34.0"
     "@tamagui/next-plugin": "npm:^1.132.20"
     "@tamagui/next-theme": "npm:^1.132.20"
     "@tamagui/react-native-svg": "npm:^1.132.20"
-    "@tanstack/react-query": "npm:5.84.1"
+    "@tanstack/react-query": "npm:5.85.5"
     "@trpc/server": "npm:^10.45.2"
     "@types/node": "npm:^24.1.0"
     "@vercel/og": "npm:^0.8.5"
@@ -25323,21 +25341,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier@npm:3.5.3":
-  version: 3.5.3
-  resolution: "prettier@npm:3.5.3"
-  bin:
-    prettier: bin/prettier.cjs
-  checksum: 10/7050c08f674d9e49fbd9a4c008291d0715471f64e94cc5e4b01729affce221dfc6875c8de7e66b728c64abc9352eefb7eaae071b5f79d30081be207b53774b78
-  languageName: node
-  linkType: hard
-
 "prettier@npm:^2.4.1, prettier@npm:^2.7.1, prettier@npm:^2.8.0, prettier@npm:^2.8.7":
   version: 2.8.8
   resolution: "prettier@npm:2.8.8"
   bin:
     prettier: bin-prettier.js
   checksum: 10/00cdb6ab0281f98306cd1847425c24cbaaa48a5ff03633945ab4c701901b8e96ad558eb0777364ffc312f437af9b5a07d0f45346266e8245beaf6247b9c62b24
+  languageName: node
+  linkType: hard
+
+"prettier@npm:^3.0.0":
+  version: 3.6.2
+  resolution: "prettier@npm:3.6.2"
+  bin:
+    prettier: bin/prettier.cjs
+  checksum: 10/1213691706bcef1371d16ef72773c8111106c3533b660b1cc8ec158bd109cdf1462804125f87f981f23c4a3dba053b6efafda30ab0114cc5b4a725606bb9ff26
   languageName: node
   linkType: hard
 
