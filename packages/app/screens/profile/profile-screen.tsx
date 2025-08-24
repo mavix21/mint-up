@@ -135,7 +135,7 @@ export const ProfileScreen = ({ id }: { id: string }) => {
   };
 
   return (
-    <Container size="wide" gap="$4" px="$4" py="$4">
+    <Container size="wide" gap="$4" px="$4" py="$4" overflow="hidden">
       {/* Avatar Section - Fixed */}
       <YStack alignItems="center" gap="$2">
         <Avatar size="$12" circular>
@@ -171,6 +171,7 @@ export const ProfileScreen = ({ id }: { id: string }) => {
         value={activeTab}
         onValueChange={setActiveTab}
         flexDirection="column"
+        overflowBlock="hidden"
         height="100%"
         size="$3"
       >
@@ -190,7 +191,7 @@ export const ProfileScreen = ({ id }: { id: string }) => {
         </Tabs.List>
 
         {/* Profile Tab Content */}
-        <Tabs.Content value="profile" flex={1}>
+        <Tabs.Content value="profile" flex={1} overflowBlock="hidden" height="100%">
           <XStack alignItems="center" justifyContent="space-between" mb="$2">
             <H5 color="$color12">Information</H5>
             <View height="$3">
@@ -209,7 +210,7 @@ export const ProfileScreen = ({ id }: { id: string }) => {
             {isEditing && <YStack width={40} />}
           </XStack>
 
-          <ScrollView flex={1} contentContainerStyle={{ paddingBottom: 24 }}>
+          <ScrollView flex={1} paddingBottom="$4">
             <YStack gap="$4" width="100%">
               <Card backgroundColor="$color2" borderRadius="$4" padding="$4">
                 <YStack gap="$4">
