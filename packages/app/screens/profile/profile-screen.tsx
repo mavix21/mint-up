@@ -21,7 +21,18 @@ import {
   Tabs,
   SizableText,
 } from '@my/ui';
-import { Edit3, Mail, Users, Save, Settings, User, Link2 } from '@tamagui/lucide-icons';
+import {
+  Edit3,
+  Mail,
+  Users,
+  Save,
+  Settings,
+  User,
+  Link2,
+  IdCard,
+  WalletMinimal,
+  Phone,
+} from '@tamagui/lucide-icons';
 import { useAppForm } from 'app/shared/lib/form';
 import { SkeletonLine } from 'app/shared/ui/SkeletonLine';
 import { useState } from 'react';
@@ -37,6 +48,9 @@ const getErrorMessage = (error: unknown): string => {
 
 export const ProfileScreen = ({ id }: { id: string }) => {
   const profile = useQuery(api.users.getUserById, {
+    userId: id as Id<'users'>,
+  });
+  const linkedAccounts = useQuery(api.linkedAccounts.getLinkedAccountsByUserId, {
     userId: id as Id<'users'>,
   });
 
@@ -258,47 +272,92 @@ export const ProfileScreen = ({ id }: { id: string }) => {
                   <Card backgroundColor="$background" borderRadius="$4" padding="$4">
                     <YStack gap="$4">
                       {/* Privacy Settings */}
-                      <XStack alignItems="flex-start" gap="$3" paddingVertical="$2">
-                        <Users size={15} color="$color10" mt="$1.5" />
-                        <YStack flex={1}>
-                          <Text fontSize="$3" color="$gray10" marginBottom="$1">
-                            Privacy
-                          </Text>
-                          <Text fontSize="$4" color="$gray12">
-                            Make my profile public
-                          </Text>
-                        </YStack>
-                      </XStack>
+                      {linkedAccounts?.map((linkedAccount) => {
+                        if (linkedAccount.account.protocol === 'farcaster') {
+                          return (
+                            <XStack
+                              alignItems="flex-start"
+                              gap="$3"
+                              paddingVertical="$2"
+                              key={linkedAccount._id}
+                            >
+                              <IdCard size={15} color="$color10" mt="$1.5" />
+                              <YStack flex={1}>
+                                <Text fontSize="$3" color="$color10" marginBottom="$1">
+                                  {linkedAccount.account.protocol}
+                                </Text>
+                                <Text fontSize="$4" color="$color12">
+                                  @{linkedAccount.account.username}
+                                </Text>
+                              </YStack>
+                              <YStack height="100%" justifyContent="center" themeInverse>
+                                <Button size="$3">Sync using Farcaster</Button>
+                              </YStack>
+                            </XStack>
+                          );
+                        } else if (linkedAccount.account.protocol === 'wallet') {
+                          return (
+                            <XStack
+                              alignItems="flex-start"
+                              gap="$3"
+                              paddingVertical="$2"
+                              key={linkedAccount._id}
+                            >
+                              <WalletMinimal size={15} color="$color10" mt="$1.5" />
+                              <YStack flex={1}>
+                                <Text fontSize="$3" color="$color10" marginBottom="$1">
+                                  {linkedAccount.account.protocol}
+                                </Text>
+                                <Text fontSize="$4" color="$color12">
+                                  @{linkedAccount.account.address}
+                                </Text>
+                              </YStack>
+                            </XStack>
+                          );
+                        } else if (linkedAccount.account.protocol === 'email') {
+                          return (
+                            <XStack
+                              alignItems="flex-start"
+                              gap="$3"
+                              paddingVertical="$2"
+                              key={linkedAccount._id}
+                            >
+                              <Mail size={15} color="$color10" mt="$1.5" />
+                              <YStack flex={1}>
+                                <Text fontSize="$3" color="$color10" marginBottom="$1">
+                                  {linkedAccount.account.protocol}
+                                </Text>
+                                <Text fontSize="$4" color="$color12">
+                                  {linkedAccount.account.email}
+                                </Text>
+                              </YStack>
+                            </XStack>
+                          );
+                        } else if (linkedAccount.account.protocol === 'phone') {
+                          return (
+                            <XStack
+                              alignItems="flex-start"
+                              gap="$3"
+                              paddingVertical="$2"
+                              key={linkedAccount._id}
+                            >
+                              <Phone size={15} color="$color10" mt="$1.5" />
+                              <YStack flex={1}>
+                                <Text fontSize="$3" color="$color10" marginBottom="$1">
+                                  {linkedAccount.account.protocol}
+                                </Text>
+                                <Text fontSize="$4" color="$color12">
+                                  {linkedAccount.account.phone}
+                                </Text>
+                              </YStack>
+                            </XStack>
+                          );
+                        } else {
+                          return <SizableText>Unknown account type</SizableText>;
+                        }
+                      })}
 
                       <Separator />
-
-                      {/* Notification Settings */}
-                      <XStack alignItems="flex-start" gap="$3" paddingVertical="$2">
-                        <Mail size={15} color="$color10" mt="$1.5" />
-                        <YStack flex={1}>
-                          <Text fontSize="$3" color="$gray10" marginBottom="$1">
-                            Notifications
-                          </Text>
-                          <Text fontSize="$4" color="$gray12">
-                            Email notifications enabled
-                          </Text>
-                        </YStack>
-                      </XStack>
-
-                      <Separator />
-
-                      {/* Language Settings */}
-                      <XStack alignItems="flex-start" gap="$3" paddingVertical="$2">
-                        <Settings size={15} color="$color10" mt="$1.5" />
-                        <YStack flex={1}>
-                          <Text fontSize="$3" color="$gray10" marginBottom="$1">
-                            Language
-                          </Text>
-                          <Text fontSize="$4" color="$gray12">
-                            Español
-                          </Text>
-                        </YStack>
-                      </XStack>
                     </YStack>
                   </Card>
                 </YStack>
