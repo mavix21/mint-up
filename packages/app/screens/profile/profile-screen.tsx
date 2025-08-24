@@ -339,6 +339,7 @@ export const ProfileScreen = ({ id }: { id: string }) => {
                               </SizableText>
                             </YStack>
                             <Button
+                              theme="purple"
                               onPress={handleSyncWithFarcaster}
                               disabled={!canSync || isSyncing}
                               opacity={!canSync || isSyncing ? 0.5 : 1}
