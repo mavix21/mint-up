@@ -24,14 +24,13 @@ import {
 import {
   Edit3,
   Mail,
-  Users,
   Save,
-  Settings,
   User,
   Link2,
   IdCard,
   WalletMinimal,
   Phone,
+  X,
 } from '@tamagui/lucide-icons';
 import { useAppForm } from 'app/shared/lib/form';
 import { SkeletonLine } from 'app/shared/ui/SkeletonLine';
@@ -91,6 +90,11 @@ export const ProfileScreen = ({ id }: { id: string }) => {
       }
     },
   });
+
+  const handleCancel = () => {
+    form.reset();
+    setIsEditing(false);
+  };
 
   return (
     <form.AppForm>
@@ -247,18 +251,28 @@ export const ProfileScreen = ({ id }: { id: string }) => {
                       </YStack>
                     </Card>
 
-                    {/* Save Button (only visible when editing) */}
                     {isEditing && (
-                      <Form.Trigger asChild>
-                        <form.SubmitButton
-                          size="$4"
+                      <XStack gap="$2" alignItems="center" justifyContent="space-between">
+                        <Button
                           fontWeight="600"
-                          borderRadius="$4"
-                          icon={Save}
-                          themeInverse
-                          label="Guardar"
-                        />
-                      </Form.Trigger>
+                          icon={X}
+                          variant="outlined"
+                          onPress={handleCancel}
+                          width="48%"
+                        >
+                          Cancel
+                        </Button>
+                        <Form.Trigger asChild>
+                          <form.SubmitButton
+                            fontWeight="600"
+                            borderRadius="$4"
+                            icon={Save}
+                            themeInverse
+                            label="Save"
+                            width="48%"
+                          />
+                        </Form.Trigger>
+                      </XStack>
                     )}
                   </YStack>
                 </ScrollView>
