@@ -56,7 +56,7 @@ export async function generateMetadata({
         version: 'next',
         imageUrl: event?.imageUrl ?? defaultImageUrl,
         button: {
-          title: 'Mint your ticket',
+          title: 'Get your ticket',
           action: {
             type: 'launch_frame',
             name: 'Event Invite',
