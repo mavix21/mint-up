@@ -24,7 +24,6 @@ export async function GET() {
       subtitle: process.env.NEXT_PUBLIC_APP_SUBTITLE,
       description: process.env.NEXT_PUBLIC_APP_DESCRIPTION,
       screenshotUrls: [
-        `${URL}/screenshots/shot-03.png`,
         `${URL}/screenshots/shot-04.png`,
         `${URL}/screenshots/shot-05.png`,
         `${URL}/screenshots/shot-06.png`,
