@@ -1,529 +1,262 @@
-# Tamagui's Takeout Starter
+# Mint Up
 
-A good but long tutorial showing building a real app using Tamagui Takeout can be seen on the [notjust.dev YouTube stream](https://www.youtube.com/watch?v=XbKkKXH-dfc).
+Onchain event tooling for communities and curators. Mint Up combines a Farcaster mini-app, multi-platform React clients, a Convex backend, and Base network smart contracts to create, distribute, and mint NFT tickets with wallet-native UX.
 
-For a more edited, paid (but cheap) course covering all the basics of Tamagui, a few Tamagui users have said they found [this course by Simon very helpful](https://galaxies.dev/course/react-native-tamagui/1-1).
+## Table of Contents
 
-## Getting Started
+- [Overview](#overview)
+- [Architecture](#architecture)
+- [Key Capabilities](#key-capabilities)
+- [Tech Stack](#tech-stack)
+- [Prerequisites](#prerequisites)
+- [Initial Setup](#initial-setup)
+- [Environment Variables](#environment-variables)
+- [Running the Project](#running-the-project)
+- [Domain Model](#domain-model)
+- [Smart Contracts](#smart-contracts)
+- [Notifications and Background Jobs](#notifications-and-background-jobs)
+- [Testing and Quality](#testing-and-quality)
+- [Deployment Notes](#deployment-notes)
+- [Troubleshooting](#troubleshooting)
+- [Additional Resources](#additional-resources)
 
-If you want to clone this starter, you can run
+## Overview
+
+Mint Up is an event discovery and ticketing platform that leans into Farcaster distribution and the Base L2. Organizers create events that can be promoted through a Farcaster mini-app, users register or mint onchain tickets priced in USDC, and hosts manage attendee flows from the same stack. Convex handles data storage and access control, while shared Tamagui components keep the native and web experiences aligned.
+
+## Architecture
+
+Mint Up is maintained as a Yarn 4 workspaces monorepo.
+
+```
+apps/
+  expo/          # Expo + React Native app
+  mini/          # Next.js Farcaster mini-app
+  storybook/     # Web Storybook instance for shared UI
+  storybook-rn/  # Native Storybook for device testing
+packages/
+  app/           # Shared screens, widgets, domain models
+  backend/       # Convex backend (schema + functions)
+  smart-contracts/ # Hardhat project for MintUpFactory
+  ui/            # Tamagui design system and tokens
+scripts/         # Tooling helpers
+```
+
+- Shared UI and feature logic lives in `packages/app`; both Expo and the mini-app import from here.
+- Convex functions in `packages/backend/convex` expose queries and mutations to all clients.
+- `packages/smart-contracts` contains the MintUpFactory ERC-1155 contract and deployment utilities.
+- Automation tasks (Open Graph images, Farcaster notifications) are implemented in `apps/mini` API routes.
+
+## Key Capabilities
+
+- **Event lifecycle management**: create events, configure ticket templates (free, paid, approval flows), and update schedules or locations.
+- **Hybrid ticketing**: support off-chain RSVPs and onchain ERC-1155 tickets with USDC payments on Base/Base Sepolia.
+- **Farcaster-native growth**: users authenticate with Farcaster, frames auto-register, and mini-app embeds integrate with Neynar and OnchainKit.
+- **Attendee experience**: search, filter, and timeline views for upcoming events; personalized status, host tools, and shareable ticket art.
+- **Notifications**: store frame push tokens, send targeted updates, and optionally use Upstash Redis for rate-limit friendly delivery.
+- **Media automation**: dynamic Open Graph ticket images rendered via `@vercel/og` for registrations and shareable pages.
+- **Cross-platform UI**: Tamagui-powered components shared across web, mini-app, and native clients with Storybook coverage.
+- **Smart contract tooling**: Hardhat setup for MintUpFactory deployment, ABI publishing, and chain alignment with backend services.
+
+## Tech Stack
+
+- **Frontend**: Next.js 15 (App Router), Expo SDK 52, React 19, Tamagui, Wagmi/Viem, Coinbase OnchainKit, NextAuth.
+- **Backend**: Convex (functions, storage, scheduled actions), Neynar API, Upstash Redis (optional).
+- **Blockchain**: Base L2 (and Base Sepolia for dev), ERC-1155 `MintUpFactory`, USDC integration, Pinata/IPFS for metadata.
+- **Tooling**: Yarn 4 workspaces, Turbo, TypeScript 5.8, Hardhat 3, Storybook, EAS for native builds, Chromatic for visual diffing.
+
+## Prerequisites
+
+- Node.js 20.11+ (Next.js 15 and Expo SDK 52 both target Node 20 LTS).
+- Yarn 4 (`corepack enable` recommended).
+- Convex CLI (`npm install -g convex`), authenticated with your Convex project.
+- Hardhat CLI (installed via `yarn` in `packages/smart-contracts`).
+- Xcode 16.2+ and CocoaPods 1.14.x for iOS builds; Android Studio Hedgehog or newer for Android builds.
+- `gh` CLI if you plan to use GitHub release tooling (optional).
+
+## Initial Setup
+
+1. Clone the repository and install dependencies:
+   ```bash
+   yarn install
+   ```
+2. Copy environment templates and fill in secrets:
+   ```bash
+   cp .env.example .env
+   cp apps/mini/.env apps/mini/.env.local   # keep secrets out of version control
+   ```
+3. Authenticate tooling:
+   - `convex dev` will prompt you to log in the first time.
+   - `npx hardhat` inside `packages/smart-contracts` ensures node modules build.
+   - Log into Expo and EAS if you plan to run native builds.
+4. Deploy contracts (dev): use Base Sepolia RPC and deploy MintUpFactory, capture the contract address, and update backend env vars.
+5. Seed initial data (optional): use Convex dashboard or write scripts against `packages/backend/convex` mutations.
+
+## Environment Variables
+
+The project relies on a single `.env` at the repo root. Per-app overrides can live in `apps/*/.env.local`.
+
+### Core
+
+| Name                   | Description                                                                                      |
+| ---------------------- | ------------------------------------------------------------------------------------------------ |
+| `NEXT_PUBLIC_URL`      | Public base URL for the mini-app and notifications (e.g. `http://localhost:3000`).               |
+| `EXPO_PUBLIC_URL`      | Base URL used by the Expo client to talk to the Next.js API (set to your LAN IP in simulators).  |
+| `ENV`                  | `development` (Base Sepolia) or `production` (Base mainnet); drives blockchain client selection. |
+| `NEXT_PUBLIC_APP_ICON` | Absolute URL to the app icon used in frame metadata and minted tickets.                          |
+
+### Convex Backend
+
+| Name                         | Description                                                                |
+| ---------------------------- | -------------------------------------------------------------------------- |
+| `CONVEX_SITE_URL`            | Convex deployment site URL (`https://<deployment>.convex.site`).           |
+| `CONVEX_AUTH_PRIVATE_KEY`    | PEM private key used to mint Convex access tokens for the mini-app.        |
+| `CONVEX_AUTH_ADAPTER_SECRET` | Shared secret for the Convex auth adapter route.                           |
+| `JWKS`                       | JSON Web Key Set served by Convex for JWT validation (paste literal JSON). |
+| `NEYNAR_API_KEY`             | Neynar key used to hydrate Farcaster profiles server-side.                 |
+
+### Next.js Mini-App & Frames
+
+| Name                                                             | Description                                                                                  |
+| ---------------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
+| `NEXT_PUBLIC_CONVEX_URL`                                         | Convex deployment URL consumed by the Convex React client.                                   |
+| `NEXTAUTH_URL`                                                   | Absolute URL where NextAuth is reachable (must include protocol).                            |
+| `NEXTAUTH_SECRET`                                                | Secret for JWT session encryption.                                                           |
+| `NEXT_PUBLIC_ONCHAINKIT_PROJECT_NAME`                            | Project identifier for Coinbase OnchainKit Mini integration.                                 |
+| `NEXT_PUBLIC_ONCHAINKIT_API_KEY`                                 | API key for OnchainKit frame actions.                                                        |
+| `PINATA_JWT`                                                     | Pinata JWT for uploading ticket metadata.                                                    |
+| `NEXT_PUBLIC_GATEWAY_URL`                                        | IPFS gateway hostname (no protocol) used when serving metadata.                              |
+| `REDIS_URL` / `REDIS_TOKEN`                                      | Upstash Redis credentials for notification token storage (optional; fallbacks to in-memory). |
+| `FARCASTER_HEADER` / `FARCASTER_PAYLOAD` / `FARCASTER_SIGNATURE` | Optional pre-baked frame payloads when testing locally.                                      |
+
+### Blockchain Integration
+
+| Name                              | Description                                                               |
+| --------------------------------- | ------------------------------------------------------------------------- |
+| `BASE_RPC_URL`                    | HTTPS RPC endpoint for Base (or Base Sepolia).                            |
+| `BACKEND_SIGNER_PRIVATE_KEY`      | Server-side wallet used to orchestrate onchain ticket deployments.        |
+| `MINTUP_FACTORY_CONTRACT_ADDRESS` | Deployed MintUpFactory address (must align with chain selected by `ENV`). |
+
+### Expo App
+
+| Name                 | Description                                                                       |
+| -------------------- | --------------------------------------------------------------------------------- |
+| `GOOGLE_*` variables | Google OAuth credentials for native sign-in flows (optional if not using Google). |
+
+### Optional Metadata Fields
+
+`NEXT_PUBLIC_APP_SUBTITLE`, `NEXT_PUBLIC_APP_DESCRIPTION`, `NEXT_PUBLIC_APP_SPLASH_IMAGE`, `NEXT_PUBLIC_APP_PRIMARY_CATEGORY`, `NEXT_PUBLIC_APP_TAGLINE`, `NEXT_PUBLIC_APP_OG_*` let you tune frame cards without touching code.
+
+The root `environment.d.ts` file tracks expected variables; update it if you introduce new ones so TypeScript surfaces missing configuration early.
+
+## Running the Project
+
+Run services in separate terminals for the best DX.
+
+### Convex backend
 
 ```bash
-yarn create tamagui --template takeout-starter
+cd packages/backend
+yarn dev
 ```
 
-the `yarn create tamagui --template takeout-starter` command has a requirement on `gh`
+This starts Convex local dev (hot reload). The CLI outputs the local deployment URL; ensure `NEXT_PUBLIC_CONVEX_URL` matches.
 
-`gh` setup:
-
-1. [gh install](https://cli.github.com/)
-1. `gh auth login`
-1. select ` https` from the menu
-1. authenticate
-
-Otherwise, ignore this section. If you're getting authentication issues with `yarn create tamagui`, clone the template (using `gh` or just `git`), cd into the project and run `yarn install`, and then `yarn setup`.
-
-To rename the project recommended way is to change the `yourprojectsname` in `apps/expo/app.config.js`. This will update the name in the Expo app and when building the native apps.
-
-If you're getting issues with the /android or /ios directories when setting up the starter, you can safely remove them and re-generate them using `yarn ios` and `yarn android`.
-
-In the expo folder, You can also run the `yarn start:dev-client` command which will start the dev client for you with a pre-built step that will re generate the native apps (recreate the ios and android folders) on the fly.
-
-## Environment
-
-### Supported Platforms and Versions
-
-We don't provide priority support for Windows, and lesser to Linux, but we do aim to solve issues with them if you report them.
-
-The following are the tested and supported versions of packages:
-
-- Node.js: 18.17.0
-- Yarn: 4.1.0
-- npm: 9.6.7
-- TypeScript: 5.3.3
-
-- React Native: 0.76.5
-- Next.js: 14.2.23
-- Expo SDK: 52.0.23
-
-- Xcode: 16.2
-- iOS SDK: 18.2
-- Android Studio: 2024.3
-- Android SDK: API Level 35
-- CocoaPods: 1.14.3 (avoid 1.15 due to known issues)
-
-- Supabase: Latest version
-- PostgreSQL: 14.15
-- Docker: 28.2.2
-
-- macOS: 15.5 (Sequoia)
-- iOS: 18.2
-- Android: API Level 35
-
-- Git: 2.46.2
-- Java: 23.0.2 (for Android development)
-- Ruby: 3.2.2 (for iOS development with CocoaPods)
-
-### `.env`
-
-Setup your environment variables in the `.env` file. See [`env.example`](.env.example) for the full list of environment variables.
+### Farcaster mini-app (Next.js)
 
 ```bash
-# -- NEXT --
-NEXT_PUBLIC_URL=http://localhost:3000
-# Use NEXT_PUBLIC_URL=https://localhost:3000 if you're running next with --experimental-https
-NEXT_PUBLIC_SUPABASE_URL=http://localhost:54321
-NEXT_PUBLIC_SUPABASE_ANON_KEY=OBFUSCATED_KEY
-NEXT_PUBLIC_PROJECT_ID=OBFUSCATED_PROJECT_ID
-
-# -- EXPO --
-# @see https://docs.expo.dev/guides/environment-variables/
-EXPO_PUBLIC_URL=http://localhost:3000
-# Use NEXT_PUBLIC_URL=https://localhost:3000 if you're running next with --experimental-https
-EXPO_PUBLIC_SUPABASE_URL=http://localhost:54321
-EXPO_PUBLIC_SUPABASE_ANON_KEY=OBFUSCATED_KEY
-
-# IMPORTANT: JWT Secret must be at least 32 characters long
-SUPABASE_AUTH_JWT_SECRET=super-secret-jwt-token-with-at-least-32-characters-long
-
-# -- GOOGLE SIGN IN --
-# Documentation: https://react-native-google-signin.github.io/docs/setting-up/expo
-GOOGLE_IOS_SCHEME=this-is-the-ios-scheme
-GOOGLE_IOS_CLIENT_ID=this-is-the-ios-client-id
-# Note: This is the web client ID for
-GOOGLE_WEB_CLIENT_ID=this-is-the-web-client-id
-# Android
-GOOGLE_SECRET=this-is-the-secret
+cd apps/mini
+yarn dev
 ```
 
-### Setting up iOS
+- Requires Convex dev server.
+- If you are testing in the Farcaster client, expose the dev server with `ngrok` or `cloudflared` and update `NEXTAUTH_URL`/`NEXT_PUBLIC_URL`.
 
-Note that Cocoapods 1.15 has a [breaking bug](https://github.com/CocoaPods/CocoaPods/issues/12226). We recommend using version 1.14.3.
-
-You'll need to ensure you have the right NODE_BINARY environment variable set. 
-
-We like `fnm` to manage node, and then ensure your `apps/expo/ios/.xcode.env` has the contents of `which node`. With `fnm` it looks like:
+### Expo app
 
 ```bash
-NODE_BINARY=/Users/n8/Library/Caches/fnm_multishells/69747_1653603955297/bin/node
+yarn native
 ```
 
-You may need to run `yarn ios` once to have it generate the env file, and then re-run it once you set the NODE_BINARY properly.
+- Pick the platform in Expo CLI (`i` for iOS simulator, `a` for Android).
+- Ensure `EXPO_PUBLIC_URL` points to your machine IP so the native app can reach Next.js or Convex endpoints.
 
-## Included packages
+### Storybook
 
-- [Tamagui](https://tamagui.dev)
-- [solito](https://solito.dev)
-- [Expo SDK](https://expo.dev)
-- [Next.js](https://nextjs.org)
-- [Expo Router](https://docs.expo.dev/router/introduction/)
-- [Supabase](https://supabase.com)
+- Web: `yarn storybook:web`
+- Native: `yarn storybook:native`
 
-## First-time Configuration
+Both commands build the shared packages before launching the Storybook instance.
 
-Note that you don't need to do this if you've already cloned this using `create tamagui`.
-
-To configure the project, `cd` into the root of the project and run `yarn setup`.
-
-## Supabase Authentication and Database
-
-Takeout is designed for and works best with Supabase.
-
-We use Supabase Auth, Storage, Database, and Client Libraries.
-
-If you don't have one already, create an account with [Supabase](https://supabase.com).
-If you're using Supabase, you can skip to the next section.
-
-### Supabase Setup
-
-Create a new Supabase project by following the [Supabase Project](https://supabase.com/docs/guides/project) guide.
-
-Once you have a project, click "Connect" and select App Frameworks.
-
-#### Supabase Auth
-
-We use Supabase Auth for user authentication.
-
-You can create a new Supabase Auth setup by following the [Supabase Auth](https://supabase.com/docs/guides/auth) guide.
-
-If you'd like to add OAuth like Google Sign In, you can follow the [Supabase Auth OAuth](https://supabase.com/docs/guides/auth/social-login/auth-google) guide.
-
-#### Supabase Storage
-
-We use Supabase Storage for storing user avatars.
-
-You can create a new Supabase Storage by following the [Supabase Storage](https://supabase.com/docs/guides/storage) guide.
-
-#### Supabase Database
-
-We use Supabase Database for storing user data.
-
-You can create a new Supabase database by following the [Supabase Database](https://supabase.com/docs/guides/database) guide.
-
-### Development with Supabase
-
-It is possible to develop locally with Supabase. This is useful for development and testing.
-
-<details>
-  <summary>Self-hosting Supabase</summary>
-
-[Docker](https://www.docker.com) based workflow is recommended if your takeout project is using Supabase as a dependency.
-
-Please reference [Supabase's documentation](https://supabase.com/docs/guides/self-hosting/docker) for docker configuration instructions.
-
-## </details>
-
----
-
-> Note: If you don't want to setup locally - some users have a second Supabase project that they use for development.
-
-## Development of your Takeout App
-
-### Development scripts
-
-- Web: `yarn web`
-- iOS: `yarn ios`
-- Android: `yarn android`
-
-NOTE: When using tRPC, even if you just want to develop on native, you need to have the web server running to be able to make tRPC requests.
-
-The iOS simulator will not make requests to localhost, you will need to run the next.js server based on your local IP address.
+### Smart contracts
 
 ```bash
-yarn web -H $(yarn get-local-ip-mac | head -n 1)
+cd packages/smart-contracts
+yarn compile
+yarn test
 ```
 
-### EAS dev builds
+Use `yarn deploy --network baseSepolia` (configure `hardhat.config.ts`) to push to your dev network. Export the resulting address into `.env`.
 
-> [!IMPORTANT]  
-> You need to update your `owner` inside `apps/expo/app.config.js` to your own username, along with your env variables for each EAS build environment.
+### Turbo pipelines
 
-```json
-{
-  "expo": {
-    "owner": "your-username"
-  }
-  "build": {
-    "development": {
-      "developmentClient": true,
-      "distribution": "internal"
-      "env": {
-        "APP_ENV": "development",
-        "EXPO_PUBLIC_URL": "[YOUR_LOCAL_NEXTJS_URL]",
-        "EXPO_PUBLIC_SUPABASE_URL": "https://[YOUR-PROJECT-ID].supabase.co",
-        "EXPO_PUBLIC_SUPABASE_ANON_KEY": "[YOUR-ANON-KEY]"
-      }
-    },
-    "preview": {
-      "distribution": "internal",
-      "env": {
-        "APP_ENV": "development",
-        "EXPO_PUBLIC_URL": "[YOUR-PUBLIC_APP_URL]",
-        "EXPO_PUBLIC_SUPABASE_URL": "https://[YOUR-PROJECT-ID].supabase.co",
-        "EXPO_PUBLIC_SUPABASE_ANON_KEY": "[YOUR-ANON-KEY]"
-      }
-    },
-    "production": {
-      "distribution": "store",
-      "env": {
-        "APP_ENV": "development",
-        "EXPO_PUBLIC_URL": "[YOUR-PUBLIC_APP_URL]",
-        "EXPO_PUBLIC_SUPABASE_URL": "https://[YOUR-PROJECT-ID].supabase.co",
-        "EXPO_PUBLIC_SUPABASE_ANON_KEY": "[YOUR-ANON-KEY]"
-      }
-    }
-  }
-}
-```
+The root `yarn watch` runs type and package builds in parallel, useful when iterating on shared components.
 
-In the `apps/expo` folder you can use EAS and a few helpful scripts:
+## Domain Model
 
-- `yarn eas:build:dev:simulator:android` for android
-- `yarn eas:build:dev:simulator:ios` for ios
+Convex tables and key relationships:
 
-Add `--local` to build locally.
+- `users`: Farcaster-linked identities, wallet addresses, and profile metadata.
+- `linkedAccounts`: external account links (Farcaster FID, wallets) for identity resolution.
+- `events`: core event data (host, schedule, visibility, theme, storage-backed image).
+- `ticketTemplates`: definitions for each ticket tier, including onchain/offchain properties.
+- `registrations`: attendee records with status (`pending`, `minted`, `rejected`).
+- `notificationTokens`: Farcaster mini-app frame tokens for push notifications.
+- `eventCommunications` / `organizations`: scaffolding for organizer tooling.
+- `_storage`: files uploaded via Convex storage (images, attachments).
 
-### Storybook scripts
+See `packages/backend/convex/schema.ts` and the `tables/` directory for field-level definitions and indexes.
 
-- Storybook Web: `yarn storybook:web`
-- Storybook iOS: `yarn storybook:ios`
-- Storybook Android: `yarn storybook:android`
-- Publish to Chromatic: `yarn chromatic` (Need to set your token first in `apps/storybook/package.json -> scripts -> chromatic`)
+## Smart Contracts
 
-### Code generation script
+- `MintUpFactoryV1` (ERC-1155) mints ticket collections per event. Token IDs encode event ID (upper 128 bits) and ticket tier (lower 128 bits).
+- Prices are denominated in USDC (6 decimals). `SafeERC20` handles transfers to organizers.
+- `createEventWithTickets` is called from Convex to register new ticket templates; `mintTicket` is available to buyers.
+- `packages/app/shared/lib/abi.ts` exposes the ABI for front-end clients, while Convex orchestrates wallet actions through Viem.
+- Update `packages/app/shared/lib/constants.ts` if you change contract addresses for dev/prod or support additional chains.
 
-- Component: `yarn gen component`
-- Screen: `yarn gen screen`
-- tRPC Router: `yarn gen router`
+## Notifications and Background Jobs
 
-### Signup Flow
+- `apps/mini/contexts/mini-app.context.tsx` leverages Coinbase OnchainKit to request frame permissions and stores notification tokens via Convex.
+- `apps/mini/lib/notification-client.ts` posts MiniApp notifications. Provide `REDIS_URL`/`REDIS_TOKEN` (Upstash) to persist tokens across deploys; otherwise tokens exist only in Convex.
+- Convex scheduled functions in `events.ts` can push updates to attendees (e.g., minted status) and ping registered tokens.
 
-Supabase PKCE flow requires email confirmation on sign up. You fill in the sign up form with email and password. Local setup will let you confirm the email by:
+## Testing and Quality
 
-1. Navigating to `http://localhost:54324`
-2. Filling in the email on the top right corner
-3. Clicking email
-4. Clicking 'confirm your email address' link
+- Type checking: `yarn check:type` (root) or `yarn workspace mini run check:type`.
+- Linting: `yarn lint` (runs Turbo across workspaces), `yarn lint:fix` for autofix.
+- Storybook visual coverage: `yarn chromatic` after setting your Chromatic project token.
+- Contract tests: `yarn workspace smart-contracts test` (Hardhat + Forge assertions).
+- CI builds: `yarn build:ci` focuses on the mini-app for deployment pipelines.
 
-![local development email confirmation](https://i.imgur.com/3r7TGfu.png)
+## Deployment Notes
 
-## Folder layout
-
-The main apps are:
-
-- `apps`
-  - `expo` (Native)
-  - `next` (Web)
-  - `storybook` (Web Storybook)
-  - `storybook-rn` (Native Storybook)
-- `packages` Shared packages across apps
-  - `ui` Includes your custom UI kit that will be optimized by Tamagui
-  - `app` You'll be importing most files from `app/`
-    - `features` Where most of your code lives.
-    - `provider` All providers that wrap the app, sometimes forked by platform.
-- `supabase` Supabase files, migrations, types, etc. + [scripts](/supabase/README.md)
-
-Note that the main entry point for the Expo app is at `apps/expo/app/(tabs)/index.tsx`. This is because folders in parenthesis are flattened and Expo Router finds the first index.tsx file. For more on how Expo Router works, [check out their docs](https://docs.expo.dev/router/create-pages/).
-
-## Layouts
-
-### Web
-
-We've decided not to move to app dir just yet, but since layouts are crucial to most apps, we use [per-page layouts](https://nextjs.org/docs/pages/building-your-application/routing/pages-and-layouts#per-page-layouts).
-
-You can define these layouts anywhere but we've been keeping them in `layout.web.tsx` files in the `features` directory as needed. You can then use them like so:
-
-```tsx
-import { CreateScreen } from 'app/features/myfeat/screen'
-import { MyLayout } from 'app/features/myfeat/layout.web'
-import Head from 'next/head'
-import { NextPageWithLayout } from './_app'
-
-export const Page: NextPageWithLayout = () => {
-  return (
-    <>
-      <Head>
-        <title>My Page</title>
-      </Head>
-      <MyPageScreen />
-    </>
-  )
-}
-
-// add the layout
-Page.getLayout = (page) => <MyLayout>{page}</MyLayout>
-
-export default Page
-```
-
-### Native
-
-#### React Native Setup Expo
-
-The simplest way to run a native project. A iOS or Android physical device is needed
-
-- [Expo CLI Setup](https://docs.expo.dev/get-started/installation/)
-
-#### Emulator Setup Expo
-
-- [Android](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS](https://docs.expo.dev/workflow/ios-simulator/)
-
-#### First-time Takeout Setup
-
-- run a build for either native platform `yarn ios` or `yarn android`
-
-To run an expo app on your machine locally:
-
-- `yarn native` from the root of the project
-- select `development` from the cli menu
-
-## Native Builds
-
-Native builds are needed if you're using custom native code in your project.
-
-More documentation on adding your own native code can be found here in Expo's docs: [Adding Custom Native Code](https://docs.expo.dev/workflow/customizing/#adding-custom-native-code-with-development-builds)
-
-To run a [native build](https://docs.expo.dev/develop/development-builds/introduction) of your application, which we recommend:
-
-- `npx expo install expo-dev-client`
-- in `apps/expo/package.json` update script `"start": "TAMAGUI_ENV=dev expo start --dev-client"`
-- `yarn ios` or `yarn android`
-
-## Expo Go
-
-Expo Go works in Takeout, but you may need to replace the imports from `@tamagui/animations-moti` to `@tamagui/animations-react-native`.
-
-## Expo EAS Update
-
-[EAS update](https://docs.expo.dev/eas-update/getting-started) makes updating and publishing your app's runtime js easy.
-
-We use `expo-router` for the native side, so simply create `_layout.tsx` files inside `apps/expo` like you would normally do with an `expo-router` project.
-
-- create an expo account and create an expo project.
-
-- add your project id to `apps/expo/app.config.js` where it says `your-project-id`
-
-- ensure that the `projectId`, `slug`, and `owner` values in `apps/expo/app.config.js` all have the same value as the name of your project, ie the name in `apps/expo/package.json`
-
-![expo project id](https://github.com/tamagui/unistack/assets/2502947/8a4d3663-9eb2-4cb1-926f-0476a00ab078)
-
-## How Authentication is Handled
-
-Authentication is handled by Supabase Auth. Email and password auth is included in the starter but you can get OAuth to work too.
-
-Check emails that are sent to you locally like the auth confirmation using InBucket at http://localhost:54324 once your Supabase is running `yarn supa start` from the root of the project.
-
-Redirect URL for email signup needs to be configured in Supabase Auth dashboard on production located in sidebar `authentication / URL Configuration` `Redirect URLs` option.
-
-Getting OAuth to work on web is as easy as it gets but on native, you will need to manually get the OAuth credentials, and then feed them to the Supabase session. See [this article](https://dev.to/fedorish/google-sign-in-using-supabase-and-react-native-expo-14jf) for more info on how to handle native OAuth with Supabase.
-
-For a detailed guide about Supabase on Takeout and all available script commands see [Supabase README](/supabase/README.md)
-
-### Protecting Pages on Web
-
-We use middlewares to protect routes on the web. See `apps/next/middleware.ts`.
-
-### Protecting Screens on Native
-
-We use a hook to check for auth and then redirect the user to auth pages, and also not let the authenticated users see auth pages. See `apps/expo/app/provider/auth/AuthProvider.native.ts`.
-
-### Apple Sign In
-
-You can use Sign in with Apple on native for iOS. Configuration on the Supabase side is straightforward as long as you have an Apple Developer account and an app ID. See this [article](https://supabase.com/docs/guides/auth/social-login/auth-apple#configuration-native-app) for more info. If you plan to use Sign in with Apple on the web, there are a few more steps which are explained in the article.
-
-### Google Sign In
-
-Sign in with Google is supported on iOS and Android native with via [react-native-google-signin](https://react-native-google-signin.github.io/docs/setting-up/expo)
-See [supabase article](https://supabase.com/docs/guides/auth/social-login/auth-google#configuration-native-app) for more info.
-
-**Note**
-In [`env.example`](.env.example) I am putting the gcloud keys so you can test as quickly as possible.
-In fact, use your Google Cloud.
-
-```
-GOOGLE_IOS_SCHEME=YOUR_IOS_SCHEME
-GOOGLE_IOS_CLIENT_ID=YOUR_IOS_CLIENT_ID
-GOOGLE_WEB_CLIENT_ID=YOUR_WEB_CLIENT_ID #Note: This is the web client ID for Android
-GOOGLE_SECRET=YOUR_SECRET
-```
-
-#### Troubleshooting
-
-**Android**
-
-`[com.google.android.gms.common.api.ApiException: DEVELOPER_ERROR]`
-Read this [StackOverflow](https://stackoverflow.com/a/67705721/9891069) for more info.
-
-## How Authorization is Handled
-
-You can use Supabase's [Row-Level Security (RLS)](https://supabase.com/docs/guides/auth/row-level-security) to handle authorization of users.
-
-## Environment Convention
-
-For simplicities sake we recommend one `.env` file on your local machine for your entire project, in the root directory.
-
-Each app in `apps` can use `with-env` to load the `.env` file.
-
-You can `cp .env.example .env` to get started.
-
-## Installing icons and fonts
-
-To add an icon or font, use:
-
-```sh
-yarn add:font
-yarn add:icon
-```
-
-The package is included in the `packages` workspace in this repo. You can tweak and adjust the icon and font usage and logic to your linking.
-
-## Sync With The Starter
-
-We actively maintain the starter and add new features and updates to it.
-
-## UI Kit
-
-Note we're following the [design systems guide](https://tamagui.dev/docs/guides/design-systems) and creating our own package for components.
-
-See `packages/ui` named `@my/ui` for how this works.
-
-## Adding new dependencies
-
-### Pure JS dependencies
-
-If you're installing a JavaScript-only dependency that will be used across platforms, install it in `packages/app`:
-
-```sh
-cd packages/app
-yarn add date-fns
-cd ../..
-yarn
-```
-
-### Native dependencies
-
-If you're installing a library with any native code, you must install it in `expo`:
-
-```sh
-cd apps/expo
-yarn add react-native-reanimated
-cd ..
-yarn
-```
-
-You can also install the native library inside of `packages/app` if you want to get autoimport for that package inside of the `app` folder. However, you need to be careful and install the _exact_ same version in both packages. If the versions mismatch at all, you'll potentially get terrible bugs. This is a classic monorepo issue. I use `lerna-update-wizard` to help with this (you don't need to use Lerna to use that lib).
-
-You may potentially want to have the native module transpiled for the next app. If you get error messages with `Cannot use import statement outside a module`, you may need to use `transpilePackages` in your `next.config.js` and add the module to the array there.
-
-## Deploying to Vercel
-
-- Root: `apps/next`
-- Build command: leave default setting
-- Output dir: leave default setting
-
-## Using With Expo Application Services (EAS)
-
-EAS has already been configured for you, but you still need to do the following:
-
-- `npm install --global eas-cli`
-- `cd apps/expo`
-- `eas build` - This will also add your EAS project ID to app.config.js
-
-### Initial EAS Setup
-
-1. edit `apps/expo/app.config.js` and update:
-   1. `owner`
-   1. `projectId`
-
-## FAQ
-
-- I get the error `network request failed` when trying to signin or signup for the app
-
-This error is likely caused my not having Supabase setup correctly and running in docker.
-
-- Where is the initial page that gets rendered on the Expo app?
-
-We recommend you familiarize yourself with how Expo Router handles routing on [their docs](https://docs.expo.dev/router/introduction/). In a fresh Takeout project, the initial page would be on `apps/expo/app/(tabs)/index.tsx`.
+- **Mini-app (Next.js)**: Deploy `apps/mini` to Vercel or a Node host. Configure environment variables in the hosting platform and add your production URL to Farcaster frame settings. Make sure `NEXTAUTH_URL` matches the deployed domain.
+- **Convex**: `yarn deploy` inside `packages/backend` pushes schema and functions to your Convex production deployment. Update `NEXT_PUBLIC_CONVEX_URL`/`CONVEX_SITE_URL` to the production endpoints.
+- **Expo**: Use EAS builds (`apps/expo/eas.json` already scaffolds env slots). Update `owner`, `projectId`, and verify any API endpoints point to production services.
+- **Smart contracts**: Deploy MintUpFactory to Base mainnet (or the chain of choice). Update `.env` with the new address and redeploy backend so contract interactions point to the correct chain.
 
 ## Troubleshooting
 
-### Xcode cannot find 'node'
+- **Frames returning 401**: Verify `NEXTAUTH_SECRET`, `NEXTAUTH_URL`, and Farcaster signer payloads. Re-run Convex dev after updating envs.
+- **Onchain creation stuck at pending**: ensure `BACKEND_SIGNER_PRIVATE_KEY`, `BASE_RPC_URL`, and `MINTUP_FACTORY_CONTRACT_ADDRESS` are set. Check Convex logs for `events.createEventOnchain`.
+- **Mini-app cannot fetch Convex**: `NEXT_PUBLIC_CONVEX_URL` must match the deployment you started. Local dev uses the CLI-provided URL (usually `https://<id>.convex.cloud`).
+- **Expo network errors**: set `EXPO_PUBLIC_URL` to your LAN IP (run `yarn get-local-ip-mac`) so the device can reach the Next.js server.
 
-If building with xcode, or running `yarn ios/android` and you receive a wall of red errors - you may need to remove `.xcode.env.local` from the root of the project.
+## Additional Resources
 
-Alternative fix from [lerisse](https://github.com/lerisse):
-
-> A more permanent solution I’ve found for node error would be to replace the temp path created in Xcode.env.local to your local node install path. Usually for Mac that would be defaulted to /usr/local/bin/node
-
-Running `pod install` inside a yarn alias can create this broken file.
-
-https://github.com/facebook/react-native/issues/43285
-
-### App requests hanging when querying Next.js API
-
-iOS simulator will not make requests to localhost, you will need to run the next.js server based on your local IP address.
-
-```bash
-yarn web -H $(yarn get-local-ip-mac)
-```
+- Convex docs: https://docs.convex.dev
+- Coinbase OnchainKit Mini: https://onchainkit.xyz/docs/mini-apps
+- Farcaster Neynar API: https://docs.neynar.com
+- Base network developer portal: https://docs.base.org
+- Tamagui design system: https://tamagui.dev
