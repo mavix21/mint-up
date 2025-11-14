@@ -21,6 +21,7 @@ import type * as http from "../http.js";
 import type * as linkedAccounts from "../linkedAccounts.js";
 import type * as nextjs from "../nextjs.js";
 import type * as notificationTokens from "../notificationTokens.js";
+import type * as organizations from "../organizations.js";
 import type * as react from "../react.js";
 import type * as registrations from "../registrations.js";
 import type * as server from "../server.js";
@@ -57,6 +58,7 @@ declare const fullApi: ApiFromModules<{
   linkedAccounts: typeof linkedAccounts;
   nextjs: typeof nextjs;
   notificationTokens: typeof notificationTokens;
+  organizations: typeof organizations;
   react: typeof react;
   registrations: typeof registrations;
   server: typeof server;

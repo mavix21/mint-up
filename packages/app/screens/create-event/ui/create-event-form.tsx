@@ -9,6 +9,7 @@ import {
   LocationAndDescriptionFields,
   NameField,
 } from 'app/widgets/event-form';
+import { EventOwnershipSelector } from 'app/widgets/event-ownership';
 import { useState } from 'react';
 
 import { EventImage, ThemeSelector, EventTicketingSheet, TicketingButton } from './index';
@@ -180,6 +181,38 @@ export function CreateEventForm({ onSubmit, onThemeChange }: CreateEventFormProp
               );
             }}
           </form.Subscribe>
+
+          {/* Event Ownership Selector - FINAL STEP */}
+          <form.Field
+            name="ownershipType"
+            children={(ownershipField) => (
+              <form.Field
+                name="organizationId"
+                children={(orgField) => (
+                  <YStack gap="$2">
+                    <SizableText fontWeight="600" size="$5">
+                      Create event as
+                    </SizableText>
+                    <EventOwnershipSelector
+                      ownershipType={ownershipField.state.value}
+                      selectedOrganizationId={orgField.state.value}
+                      onOwnershipTypeChange={(type) => {
+                        ownershipField.handleChange(type);
+                        if (type === 'individual') {
+                          orgField.handleChange(null);
+                        }
+                      }}
+                      onOrganizationChange={(orgId) => orgField.handleChange(orgId)}
+                    >
+                      <EventOwnershipSelector.TypeSelector />
+                      <EventOwnershipSelector.CommunityDropdown />
+                    </EventOwnershipSelector>
+                  </YStack>
+                )}
+              />
+            )}
+          />
+
           {/* Submit Button */}
           <YStack borderColor="$color3">
             <Form.Trigger asChild>

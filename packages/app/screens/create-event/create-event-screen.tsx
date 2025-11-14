@@ -35,6 +35,7 @@ export function CreateEventScreen({ closeSheet }: { closeSheet: () => void }) {
           automatedFlows: [],
           hosts: [],
           theme: data.theme,
+          organizationId: data.organizationId ?? undefined,
         },
         tickets: data.tickets.map((ticket) => ({
           name: ticket.name,
