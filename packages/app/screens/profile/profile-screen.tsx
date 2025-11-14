@@ -22,7 +22,6 @@ import {
   View,
   Container,
   H5,
-  Input,
 } from '@my/ui';
 import {
   Edit3,
@@ -34,10 +33,19 @@ import {
   WalletMinimal,
   Phone,
   X,
+  BriefcaseBusiness,
 } from '@tamagui/lucide-icons';
 import { useAppForm } from 'app/shared/lib/form';
 import { SkeletonLine } from 'app/shared/ui/SkeletonLine';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+
+import {
+  PROFESSIONAL_PROFILE_ROLES,
+  emptyProfessionalProfileFormValues,
+  mapProfessionalProfileToFormValues,
+  professionalProfileFormSchema,
+} from './model/professional-profile-form';
+import { ProfessionalProfileSection } from './ui/ProfessionalProfileSection';
 
 // Helper function to safely get error message
 const getErrorMessage = (error: unknown): string => {
@@ -64,6 +72,7 @@ export const ProfileScreen = ({ id }: { id: string }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [activeTab, setActiveTab] = useState('profile');
   const [isSyncing, setIsSyncing] = useState(false);
+  const [isProfessionalEditing, setIsProfessionalEditing] = useState(false);
 
   // Initialize form with default values from profile or defaults
   const form = useAppForm({
@@ -97,6 +106,73 @@ export const ProfileScreen = ({ id }: { id: string }) => {
       }
     },
   });
+
+  const professionalProfileForm = useAppForm({
+    defaultValues: emptyProfessionalProfileFormValues,
+    onSubmit: async ({ value }) => {
+      try {
+        const parsed = professionalProfileFormSchema.parse(value);
+        const sanitizedWorksAt = parsed.worksAt.trim();
+        const sanitizedLink = parsed.professionalLink.trim();
+
+        await updateUserProfile({
+          userId: id as Id<'users'>,
+          professionalProfile: {
+            worksAt: sanitizedWorksAt.length > 0 ? sanitizedWorksAt : undefined,
+            roles: parsed.roles,
+            professionalLink: sanitizedLink.length > 0 ? sanitizedLink : undefined,
+          },
+        });
+
+        professionalProfileForm.reset({
+          worksAt: sanitizedWorksAt,
+          roles: parsed.roles,
+          professionalLink: sanitizedLink,
+        });
+
+        toast.show('Professional profile updated!', {
+          type: 'success',
+          preset: 'success',
+        });
+
+        setIsProfessionalEditing(false);
+      } catch (error) {
+        console.error('Error updating professional profile:', error);
+        toast.show('Failed to update professional profile', {
+          type: 'error',
+          preset: 'error',
+        });
+        throw error;
+      }
+    },
+  });
+
+  const syncProfessionalProfileForm = () =>
+    mapProfessionalProfileToFormValues(profile?.professionalProfile);
+
+  const handleProfessionalEdit = () => {
+    professionalProfileForm.reset(syncProfessionalProfileForm());
+    setIsProfessionalEditing(true);
+  };
+
+  const handleProfessionalCancel = () => {
+    professionalProfileForm.reset(syncProfessionalProfileForm());
+    setIsProfessionalEditing(false);
+  };
+
+  useEffect(() => {
+    if (!profile || isProfessionalEditing) {
+      return;
+    }
+
+    professionalProfileForm.reset(syncProfessionalProfileForm());
+  }, [
+    profile?.professionalProfile?.worksAt,
+    profile?.professionalProfile?.professionalLink,
+    profile?.professionalProfile?.roles?.join('|'),
+    isProfessionalEditing,
+    professionalProfileForm,
+  ]);
 
   if (profile === null) {
     return (
@@ -177,13 +253,19 @@ export const ProfileScreen = ({ id }: { id: string }) => {
         size="$3"
       >
         <Tabs.List mb="$4" borderWidth={1} borderColor="$borderColor">
-          <Tabs.Tab value="profile" $sm={{ flexBasis: '50%' }}>
+          <Tabs.Tab value="profile" $sm={{ flexBasis: '33.33%' }}>
             <XStack gap="$2" alignItems="center">
               <User size={16} />
               <SizableText>Profile</SizableText>
             </XStack>
           </Tabs.Tab>
-          <Tabs.Tab value="linked-accounts" $sm={{ flexBasis: '50%' }}>
+          <Tabs.Tab value="professional" $sm={{ flexBasis: '33.33%' }}>
+            <XStack gap="$2" alignItems="center">
+              <BriefcaseBusiness size={16} />
+              <SizableText>Professional</SizableText>
+            </XStack>
+          </Tabs.Tab>
+          <Tabs.Tab value="linked-accounts" $sm={{ flexBasis: '33.33%' }}>
             <XStack gap="$2" alignItems="center">
               <Link2 size={16} />
               <SizableText>Linked accounts</SizableText>
@@ -357,6 +439,27 @@ export const ProfileScreen = ({ id }: { id: string }) => {
                   </form.AppForm>
                 </YStack>
               </Card>
+            </YStack>
+          </ScrollView>
+        </Tabs.Content>
+
+        {/* Professional Tab Content */}
+        <Tabs.Content value="professional" flex={1} overflowBlock="hidden" height="100%">
+          <XStack alignItems="center" justifyContent="space-between" mb="$2">
+            <H5 color="$color12">Professional Profile</H5>
+            <View height="$3" />
+          </XStack>
+
+          <ScrollView flex={1} paddingBottom="$4">
+            <YStack gap="$4" width="100%">
+              <ProfessionalProfileSection
+                form={professionalProfileForm}
+                isEditing={isProfessionalEditing}
+                onEdit={handleProfessionalEdit}
+                onCancel={handleProfessionalCancel}
+                roles={PROFESSIONAL_PROFILE_ROLES}
+                viewModel={profile?.professionalProfile ?? {}}
+              />
             </YStack>
           </ScrollView>
         </Tabs.Content>

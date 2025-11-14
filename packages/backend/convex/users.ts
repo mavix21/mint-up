@@ -3,6 +3,10 @@ import { internalMutation, internalQuery, mutation, query } from './_generated/s
 import { vv } from './schema';
 import { ConvexError, v } from 'convex/values';
 
+import { PROFESSIONAL_PROFILE_ROLES } from './constants/professionalProfile';
+import type { ProfessionalProfileRole } from './constants/professionalProfile';
+import type { Doc } from './_generated/dataModel';
+
 export const insertUserByFid = mutation({
   args: {
     ...omit(vv.doc('users').fields, ['_id', '_creationTime']),
@@ -123,9 +127,16 @@ export const updateUserProfile = mutation({
     username: v.optional(v.string()),
     pfpUrl: v.optional(v.string()),
     currentWalletAddress: v.optional(v.string()),
+    professionalProfile: v.optional(
+      v.object({
+        worksAt: v.optional(v.string()),
+        roles: v.optional(v.array(v.string())),
+        professionalLink: v.optional(v.string()),
+      })
+    ),
   },
   handler: async (ctx, args) => {
-    const { userId, ...updateFields } = args;
+    const { userId, professionalProfile, ...updateFields } = args;
 
     // Check if user exists
     const existingUser = await ctx.db.get(userId);
@@ -136,10 +147,35 @@ export const updateUserProfile = mutation({
       });
     }
 
-    // Filter out undefined values to avoid removing fields unintentionally
-    const fieldsToUpdate = Object.fromEntries(
-      Object.entries(updateFields).filter(([_, value]) => value !== undefined)
-    );
+    const fieldsToUpdate: Partial<Doc<'users'>> = {};
+
+    if (updateFields.bio !== undefined) {
+      fieldsToUpdate.bio = updateFields.bio;
+    }
+
+    if (updateFields.displayName !== undefined) {
+      fieldsToUpdate.displayName = updateFields.displayName;
+    }
+
+    if (updateFields.username !== undefined) {
+      fieldsToUpdate.username = updateFields.username;
+    }
+
+    if (updateFields.pfpUrl !== undefined) {
+      fieldsToUpdate.pfpUrl = updateFields.pfpUrl;
+    }
+
+    if (updateFields.currentWalletAddress !== undefined) {
+      fieldsToUpdate.currentWalletAddress = updateFields.currentWalletAddress;
+    }
+
+    if (professionalProfile !== undefined) {
+      const sanitizedProfessionalProfile = sanitizeProfessionalProfile(professionalProfile);
+
+      if (sanitizedProfessionalProfile !== null) {
+        fieldsToUpdate.professionalProfile = sanitizedProfessionalProfile;
+      }
+    }
 
     // Only proceed if there are fields to update
     if (Object.keys(fieldsToUpdate).length === 0) {
@@ -152,6 +188,82 @@ export const updateUserProfile = mutation({
     await ctx.db.patch(userId, fieldsToUpdate);
   },
 });
+
+const PROFESSIONAL_PROFILE_ROLE_SET = new Set<ProfessionalProfileRole>(PROFESSIONAL_PROFILE_ROLES);
+
+const isValidProfessionalRole = (role: string): role is ProfessionalProfileRole =>
+  PROFESSIONAL_PROFILE_ROLE_SET.has(role as ProfessionalProfileRole);
+
+type ProfessionalProfileInput = {
+  worksAt?: string;
+  roles?: string[];
+  professionalLink?: string;
+};
+
+type SanitizedProfessionalProfile = {
+  worksAt?: string;
+  roles?: ProfessionalProfileRole[];
+  professionalLink?: string;
+};
+
+const sanitizeProfessionalProfile = (
+  profile: ProfessionalProfileInput
+): SanitizedProfessionalProfile | null => {
+  const sanitized: SanitizedProfessionalProfile = {};
+
+  if (profile.worksAt !== undefined) {
+    const trimmed = profile.worksAt.trim();
+
+    if (trimmed.length > 100) {
+      throw new ConvexError({
+        message: 'Company or protocol name must be less than 100 characters',
+        code: 'INVALID_PROFESSIONAL_PROFILE',
+      });
+    }
+
+    sanitized.worksAt = trimmed.length === 0 ? undefined : trimmed;
+  }
+
+  if (profile.roles !== undefined) {
+    const uniqueRoles = Array.from(new Set(profile.roles));
+    const typedRoles = uniqueRoles.filter(isValidProfessionalRole);
+
+    if (typedRoles.length !== uniqueRoles.length) {
+      throw new ConvexError({
+        message: 'One or more roles are not supported',
+        code: 'INVALID_PROFESSIONAL_PROFILE',
+      });
+    }
+
+    sanitized.roles = typedRoles;
+  }
+
+  if (profile.professionalLink !== undefined) {
+    const trimmed = profile.professionalLink.trim();
+
+    if (trimmed.length === 0) {
+      sanitized.professionalLink = undefined;
+    } else {
+      if (trimmed.length > 2048) {
+        throw new ConvexError({
+          message: 'Professional link is too long',
+          code: 'INVALID_PROFESSIONAL_PROFILE',
+        });
+      }
+
+      if (!/^https?:\/\//i.test(trimmed)) {
+        throw new ConvexError({
+          message: 'Professional link must start with http or https',
+          code: 'INVALID_PROFESSIONAL_PROFILE',
+        });
+      }
+
+      sanitized.professionalLink = trimmed;
+    }
+  }
+
+  return Object.keys(sanitized).length === 0 ? null : sanitized;
+};
 
 /**
  * Updates user social media links
