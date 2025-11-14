@@ -253,22 +253,28 @@ export const ProfileScreen = ({ id }: { id: string }) => {
         size="$3"
       >
         <Tabs.List mb="$4" borderWidth={1} borderColor="$borderColor">
-          <Tabs.Tab value="profile" $sm={{ flexBasis: '33.33%' }}>
-            <XStack gap="$2" alignItems="center">
+          <Tabs.Tab value="profile" flex={1}>
+            <XStack gap="$1" alignItems="center">
               <User size={16} />
-              <SizableText>Profile</SizableText>
+              <SizableText fontSize="$2" $sm={{ fontSize: '$3' }}>
+                Profile
+              </SizableText>
             </XStack>
           </Tabs.Tab>
-          <Tabs.Tab value="professional" $sm={{ flexBasis: '33.33%' }}>
-            <XStack gap="$2" alignItems="center">
+          <Tabs.Tab value="professional" flex={1}>
+            <XStack gap="$1" alignItems="center">
               <BriefcaseBusiness size={16} />
-              <SizableText>Professional</SizableText>
+              <SizableText fontSize="$2" $sm={{ fontSize: '$3' }}>
+                Professional
+              </SizableText>
             </XStack>
           </Tabs.Tab>
-          <Tabs.Tab value="linked-accounts" $sm={{ flexBasis: '33.33%' }}>
-            <XStack gap="$2" alignItems="center">
+          <Tabs.Tab value="linked-accounts" flex={1}>
+            <XStack gap="$1" alignItems="center">
               <Link2 size={16} />
-              <SizableText>Linked accounts</SizableText>
+              <SizableText fontSize="$2" $sm={{ fontSize: '$3' }}>
+                Accounts
+              </SizableText>
             </XStack>
           </Tabs.Tab>
         </Tabs.List>

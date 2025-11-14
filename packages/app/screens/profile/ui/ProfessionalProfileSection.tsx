@@ -268,7 +268,7 @@ interface ReadonlyValueProps {
 
 function ReadonlyValue({ value, emptyMessage }: ReadonlyValueProps) {
   return (
-    <Text fontSize="$4" color={value ? '$gray12' : '$color9'}>
+    <Text fontSize="$3" color={value ? '$gray12' : '$color9'}>
       {value ?? emptyMessage}
     </Text>
   );

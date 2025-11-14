@@ -132,6 +132,17 @@ export const createRegistration = mutation({
   args: {
     eventId: v.id('events'),
     ticketTemplateId: v.id('ticketTemplates'),
+    eventIntentions: v.optional(
+      v.array(
+        v.union(
+          v.literal('Networking'),
+          v.literal('Hiring Talent'),
+          v.literal('Seeking Investment'),
+          v.literal('Exploring Opportunities'),
+          v.literal('Learning')
+        )
+      )
+    ),
     transactionReceipt: v.optional(
       v.object({
         walletAddress: v.string(),
@@ -181,6 +192,7 @@ export const createRegistration = mutation({
       userId,
       eventId: args.eventId,
       ticketTemplateId: args.ticketTemplateId,
+      eventIntentions: args.eventIntentions,
       status: ticketTemplate.isApprovalRequired
         ? { type: 'pending' }
         : args.transactionReceipt
@@ -478,5 +490,81 @@ export const rejectRegistration = mutation({
     }
 
     await ctx.db.patch(args.registrationId, { status: { type: 'rejected' } });
+  },
+});
+
+/**
+ * Update event intentions for a specific registration
+ * Allows users to set or modify their goals for attending an event
+ */
+export const updateRegistrationIntentions = mutation({
+  args: {
+    eventId: v.id('events'),
+    eventIntentions: v.array(
+      v.union(
+        v.literal('Networking'),
+        v.literal('Hiring Talent'),
+        v.literal('Seeking Investment'),
+        v.literal('Exploring Opportunities'),
+        v.literal('Learning')
+      )
+    ),
+  },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) {
+      throw new Error('Unauthorized');
+    }
+
+    const userId = identity.subject as Id<'users'>;
+
+    // Find the user's registration for this event
+    const registration = await ctx.db
+      .query('registrations')
+      .withIndex('by_user_and_event', (q) => q.eq('userId', userId).eq('eventId', args.eventId))
+      .first();
+
+    if (!registration) {
+      throw new Error('Registration not found for this event');
+    }
+
+    // Update the registration with new intentions
+    await ctx.db.patch(registration._id, {
+      eventIntentions: args.eventIntentions,
+    });
+
+    return registration._id;
+  },
+});
+
+/**
+ * Get a user's event intentions for a specific event
+ */
+export const getUserEventIntentions = query({
+  args: {
+    eventId: v.id('events'),
+  },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) {
+      return null;
+    }
+
+    const userId = identity.subject as Id<'users'>;
+
+    const registration = await ctx.db
+      .query('registrations')
+      .withIndex('by_user_and_event', (q) => q.eq('userId', userId).eq('eventId', args.eventId))
+      .first();
+
+    if (!registration) {
+      return null;
+    }
+
+    return {
+      registrationId: registration._id,
+      eventIntentions: registration.eventIntentions ?? [],
+      hasSetIntentions: !!registration.eventIntentions && registration.eventIntentions.length > 0,
+    };
   },
 });

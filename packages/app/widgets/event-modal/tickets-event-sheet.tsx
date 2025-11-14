@@ -4,6 +4,7 @@ import { Doc, Id } from '@my/backend/_generated/dataModel';
 import { useMutation } from '@my/backend/react';
 import { Sheet, YStack, H4, View, RadioGroup, Button, useToastController } from '@my/ui';
 import { abi } from 'app/shared/lib/abi';
+import { EventIntentionsSheet } from 'app/widgets/event-intentions';
 import React, { memo, useCallback } from 'react';
 import { parseEventLogs } from 'viem';
 
@@ -24,6 +25,7 @@ const TicketsEventSheet = ({ open, onOpenChange, eventId, ticketList }: TicketsE
   const toast = useToastController();
   const [selectedTicketId, setSelectedTicketId] = React.useState<string | null>(null);
   const [isProcessing, setIsProcessing] = React.useState(false);
+  const [showIntentionsSheet, setShowIntentionsSheet] = React.useState(false);
 
   console.log('selectedTicketId', selectedTicketId);
   // Initialize hooks
@@ -46,6 +48,14 @@ const TicketsEventSheet = ({ open, onOpenChange, eventId, ticketList }: TicketsE
     setSelectedTicketId(ticketId);
   };
 
+  const handleRegistrationSuccess = () => {
+    onOpenChange(false);
+    // Show intentions sheet after a brief delay for better UX
+    setTimeout(() => {
+      setShowIntentionsSheet(true);
+    }, 300);
+  };
+
   const handleRegister = useCallback(async () => {
     if (!selectedTicket) {
       return;
@@ -56,11 +66,11 @@ const TicketsEventSheet = ({ open, onOpenChange, eventId, ticketList }: TicketsE
         eventId,
         ticketTemplateId: selectedTicket._id,
       });
-      onOpenChange(false);
       toast.show('Registration successful!', {
         type: 'success',
         preset: 'done',
       });
+      handleRegistrationSuccess();
     } catch (err) {
       console.error(err);
       toast.show('Registration failed. Please try again.', {
@@ -68,7 +78,7 @@ const TicketsEventSheet = ({ open, onOpenChange, eventId, ticketList }: TicketsE
         preset: 'error',
       });
     }
-  }, [selectedTicket, eventId, createRegistration, onOpenChange, toast]);
+  }, [selectedTicket, eventId, createRegistration, toast]);
 
   const handleOnStatus = useCallback(
     async (status: LifecycleStatus) => {
@@ -112,6 +122,8 @@ const TicketsEventSheet = ({ open, onOpenChange, eventId, ticketList }: TicketsE
                     type: 'success',
                     preset: 'done',
                   });
+
+                  handleRegistrationSuccess();
                 } catch (error) {
                   console.error('Failed to register in Convex:', error);
 
@@ -215,83 +227,92 @@ const TicketsEventSheet = ({ open, onOpenChange, eventId, ticketList }: TicketsE
   };
 
   return (
-    <Sheet
-      open={open}
-      forceRemoveScrollEnabled={open}
-      onOpenChange={handleOpenChange}
-      snapPoints={[90]}
-      zIndex={200_000}
-      modal
-      dismissOnOverlayPress
-      dismissOnSnapToBottom
-    >
-      <Sheet.Overlay
-        animation="lazy"
-        backgroundColor="$shadowColor"
-        enterStyle={{ opacity: 0 }}
-        exitStyle={{ opacity: 0 }}
-      />
-      <Sheet.Handle />
-      <Sheet.Frame flex={1} width="100%" gap="$5">
-        <Sheet.ScrollView>
-          <YStack padding="$4" gap="$8" flex={1}>
-            <H4>Choose the tickets you prefer</H4>
+    <>
+      <Sheet
+        open={open}
+        forceRemoveScrollEnabled={open}
+        onOpenChange={handleOpenChange}
+        snapPoints={[90]}
+        zIndex={200_000}
+        modal
+        dismissOnOverlayPress
+        dismissOnSnapToBottom
+      >
+        <Sheet.Overlay
+          animation="lazy"
+          backgroundColor="$shadowColor"
+          enterStyle={{ opacity: 0 }}
+          exitStyle={{ opacity: 0 }}
+        />
+        <Sheet.Handle />
+        <Sheet.Frame flex={1} width="100%" gap="$5">
+          <Sheet.ScrollView>
+            <YStack padding="$4" gap="$8" flex={1}>
+              <H4>Choose the tickets you prefer</H4>
 
-            <View flex={1}>
-              <RadioGroup
-                flex={1}
-                value={selectedTicketId || ''}
-                onValueChange={handleTicketSelect}
-                disabled={isProcessing}
-              >
-                <View flexDirection="column" flex={1} flexWrap="wrap" gap="$2">
-                  {ticketList.map((ticket) => {
-                    const isSelected = selectedTicketId === ticket._id;
+              <View flex={1}>
+                <RadioGroup
+                  flex={1}
+                  value={selectedTicketId || ''}
+                  onValueChange={handleTicketSelect}
+                  disabled={isProcessing}
+                >
+                  <View flexDirection="column" flex={1} flexWrap="wrap" gap="$2">
+                    {ticketList.map((ticket) => {
+                      const isSelected = selectedTicketId === ticket._id;
 
-                    if (isTicketFree(ticket)) {
-                      return (
-                        <FreeTicketCard
-                          key={ticket._id}
-                          ticket={ticket}
-                          selected={isSelected}
-                          onSelect={handleTicketSelect}
-                          disabled={isProcessing}
-                        />
-                      );
-                    }
+                      if (isTicketFree(ticket)) {
+                        return (
+                          <FreeTicketCard
+                            key={ticket._id}
+                            ticket={ticket}
+                            selected={isSelected}
+                            onSelect={handleTicketSelect}
+                            disabled={isProcessing}
+                          />
+                        );
+                      }
 
-                    if (isTicketPaid(ticket)) {
-                      return (
-                        <PaidTicketCard
-                          key={ticket._id}
-                          ticket={ticket}
-                          selected={isSelected}
-                          onSelect={handleTicketSelect}
-                          disabled={isProcessing}
-                          isTransactionPending={isProcessing}
-                        />
-                      );
-                    }
+                      if (isTicketPaid(ticket)) {
+                        return (
+                          <PaidTicketCard
+                            key={ticket._id}
+                            ticket={ticket}
+                            selected={isSelected}
+                            onSelect={handleTicketSelect}
+                            disabled={isProcessing}
+                            isTransactionPending={isProcessing}
+                          />
+                        );
+                      }
 
-                    return null;
-                  })}
-                </View>
-              </RadioGroup>
-            </View>
+                      return null;
+                    })}
+                  </View>
+                </RadioGroup>
+              </View>
+            </YStack>
+          </Sheet.ScrollView>
+
+          {/* Fixed button at bottom */}
+          <YStack
+            padding="$5"
+            backgroundColor="$background"
+            borderTopWidth={1}
+            borderTopColor="$borderColor"
+          >
+            {getButtonType()}
           </YStack>
-        </Sheet.ScrollView>
+        </Sheet.Frame>
+      </Sheet>
 
-        {/* Fixed button at bottom */}
-        <YStack
-          padding="$5"
-          backgroundColor="$background"
-          borderTopWidth={1}
-          borderTopColor="$borderColor"
-        >
-          {getButtonType()}
-        </YStack>
-      </Sheet.Frame>
-    </Sheet>
+      {/* Event Intentions Sheet - shown after successful registration */}
+      <EventIntentionsSheet
+        open={showIntentionsSheet}
+        onOpenChange={setShowIntentionsSheet}
+        eventId={eventId}
+      />
+    </>
   );
 };
 

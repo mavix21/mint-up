@@ -17,6 +17,17 @@ export const registrationsTable = defineTable({
       mintedAt: v.number(),
     })
   ),
+  eventIntentions: v.optional(
+    v.array(
+      v.union(
+        v.literal('Networking'),
+        v.literal('Hiring Talent'),
+        v.literal('Seeking Investment'),
+        v.literal('Exploring Opportunities'),
+        v.literal('Learning')
+      )
+    )
+  ),
   checkIn: v.optional(
     v.object({
       checkedInAt: v.number(),
