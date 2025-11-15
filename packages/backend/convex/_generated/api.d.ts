@@ -14,6 +14,7 @@ import type {
   FunctionReference,
 } from "convex/server";
 import type * as authAdapter from "../authAdapter.js";
+import type * as communities from "../communities.js";
 import type * as constants_professionalProfile from "../constants/professionalProfile.js";
 import type * as events from "../events.js";
 import type * as farcaster from "../farcaster.js";
@@ -51,6 +52,7 @@ import type * as users from "../users.js";
  */
 declare const fullApi: ApiFromModules<{
   authAdapter: typeof authAdapter;
+  communities: typeof communities;
   "constants/professionalProfile": typeof constants_professionalProfile;
   events: typeof events;
   farcaster: typeof farcaster;

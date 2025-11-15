@@ -9,7 +9,7 @@ export type CommunityListItem = {
 
 export const communityListData: CommunityListItem[] = [
   {
-    id: 'community-1',
+    id: 'jn7amt2t8hakqdx0c8pb2ygh857vf2sk',
     name: 'Dev3Pack',
     logoUrl: 'url_to_logo_1.png',
     memberCount: 150,
@@ -17,7 +17,7 @@ export const communityListData: CommunityListItem[] = [
     description: 'A community for the next generation of onchain builders.',
   },
   {
-    id: 'community-2',
+    id: 'kq2b8rm7s4y1m3o5p9x2u7w0',
     name: 'Ethereum Lima',
     logoUrl: 'url_to_logo_2.png',
     memberCount: 500,
@@ -25,7 +25,7 @@ export const communityListData: CommunityListItem[] = [
     description: 'Connecting the Ethereum ecosystem in Peru.',
   },
   {
-    id: 'community-3',
+    id: 'mp3c9sn6t5z2n4p7r0y3v8x1',
     name: 'Odisea Labs',
     logoUrl: 'url_to_logo_3.png',
     memberCount: 250,
@@ -55,7 +55,7 @@ export type CommunityProfile = {
 };
 
 export const communityProfileData: CommunityProfile = {
-  id: 'community-1',
+  id: 'jx7a9qm8r5z3k2n4p6w1t8v0',
   name: 'Dev3Pack',
   bannerUrl: 'url_to_banner.png',
   logoUrl: 'url_to_logo_1.png',

@@ -1,6 +1,6 @@
 import { useComposeCast } from '@coinbase/onchainkit/minikit';
 import { api } from '@my/backend/_generated/api';
-import { useMutation } from '@my/backend/react';
+import { useMutation, useQuery } from '@my/backend/react';
 import {
   View,
   SizableText,
@@ -17,6 +17,7 @@ import {
   Separator,
   LiveIndicator,
   ScrollView,
+  Tabs,
 } from '@my/ui';
 import {
   MapPin,
@@ -40,6 +41,8 @@ import TicketViewSheet from './ticket-view-sheet';
 import TicketsEventSheet from './tickets-event-sheet';
 import { ConvexEventWithExtras } from '../../entities/event.model';
 import { ConnectButton } from '../auth';
+import { AttendeeDirectory } from '../attendee-directory';
+import { EventIntentionsSheet } from '../event-intentions/EventIntentionsSheet';
 
 export function EventModal({
   toggleEvent,
@@ -61,9 +64,16 @@ export function EventModal({
 
   const [showTicketsSheet, setShowTicketsSheet] = React.useState(false);
   const [showTicketViewSheet, setShowTicketViewSheet] = React.useState(false);
+  const [showIntentionsSheet, setShowIntentionsSheet] = React.useState(false);
   const [triggerOpen, setTriggerOpen] = React.useState(false);
+  const [currentTab, setCurrentTab] = React.useState('about');
   const visualViewportHeight = useVisualViewportHeight();
   const tickets = eventData.tickets;
+
+  // Fetch attendee directory data
+  const attendeeData = useQuery(api.registrations.getEventAttendeesWithIntentions, {
+    eventId: eventData._id,
+  });
 
   const allFree = tickets.every((ticket) => ticket.ticketType.type === 'offchain');
 
@@ -359,174 +369,192 @@ Check it out 👇`,
                   </XStack>
                 )}
 
-                {/* Location Section */}
-                {hasLocation && (
-                  <YStack gap="$3">
-                    <YStack gap="$2">
-                      <XStack alignItems="center" justifyContent="space-between">
-                        <SizableText size="$4" fontWeight="600">
-                          Location
-                        </SizableText>
-                      </XStack>
-                      <Separator />
-                    </YStack>
-                    <XStack alignItems="flex-start" gap="$3">
-                      {isOnline ? (
-                        <Globe size={18} marginTop="$0.5" />
-                      ) : (
-                        <MapPin size={18} marginTop="$0.5" />
-                      )}
-                      <YStack flex={1} gap="$1">
-                        {isOnline ? (
-                          <>
-                            <SizableText size="$3" fontWeight="600">
-                              {eventData.location &&
-                              typeof eventData.location === 'object' &&
-                              'url' in eventData.location
-                                ? eventData.location.url
-                                : 'Link TBD'}
-                            </SizableText>
-                            <SizableText size="$2">Online Event</SizableText>
-                          </>
-                        ) : (
-                          <>
-                            <SizableText size="$4" fontWeight="600">
-                              {typeof eventData.location === 'string'
-                                ? eventData.location
-                                : eventData.location &&
-                                  typeof eventData.location === 'object' &&
-                                  'address' in eventData.location
-                                ? eventData.location.address
-                                : 'Location TBD'}
-                            </SizableText>
-                            <SizableText size="$1">
-                              {typeof eventData.location === 'string'
-                                ? 'In-person Event'
-                                : eventData.location &&
-                                  typeof eventData.location === 'object' &&
-                                  'city' in eventData.location &&
-                                  'country' in eventData.location
-                                ? `${eventData.location.city}, ${eventData.location.country}`
-                                : 'In-person Event'}
-                            </SizableText>
-                          </>
-                        )}
-                      </YStack>
-                      {isOnline && (
-                        <Button
-                          size="$2"
-                          backgroundColor="transparent"
-                          icon={<ExternalLink size={14} />}
-                        />
-                      )}
-                    </XStack>
+                {/* Tabs for event content */}
+                <Tabs
+                  value={currentTab}
+                  onValueChange={setCurrentTab}
+                  flexDirection="column"
+                  flex={1}
+                >
+                  <Tabs.List disablePassBorderRadius>
+                    <Tabs.Tab value="about" flex={1}>
+                      <SizableText>About</SizableText>
+                    </Tabs.Tab>
+                    <Tabs.Tab value="attendees" flex={1}>
+                      <SizableText>Attendees</SizableText>
+                    </Tabs.Tab>
+                  </Tabs.List>
 
-                    {/* Map Placeholder for In-person Events */}
-                    {/* {!isOnline && (
-                      <View
-                        height={120}
-                        backgroundColor="$color5"
-                        borderRadius="$2"
-                        alignItems="center"
-                        justifyContent="center"
-                        marginTop="$2"
-                      >
-                        <SizableText size="$2" color="$color11">
-                          Map View
-                        </SizableText>
-                      </View>
-                    )} */}
-                  </YStack>
-                )}
-
-                {/* Hosts Section */}
-                <YStack gap="$3">
-                  <YStack gap="$2">
-                    <XStack alignItems="center" justifyContent="space-between">
-                      <SizableText size="$4" fontWeight="600">
-                        Host
-                      </SizableText>
-                    </XStack>
-                    <Separator />
-                  </YStack>
-                  <YStack gap="$3">
-                    {/* Host information - Show user not found indication if needed */}
-                    <XStack alignItems="center" gap="$3">
-                      {eventData.creator.imageUrl ? (
-                        <Avatar circular size="$4">
-                          <Avatar.Image source={{ uri: eventData.creator.imageUrl }} />
-                          <Avatar.Fallback backgroundColor="$color8" />
-                        </Avatar>
-                      ) : (
-                        <User size={16} color="$color" />
-                      )}
-                      <YStack flex={1}>
-                        {eventData.creator.name ? (
-                          <SizableText size="$3" fontWeight="600">
-                            {eventData.creator.name}
-                          </SizableText>
-                        ) : (
-                          <YStack gap="$1">
-                            <SizableText size="$3" fontWeight="600" color="$color11">
-                              User Not Found
-                            </SizableText>
-                            <SizableText size="$2" color="$color10">
-                              This user&apos;s profile is no longer available
-                            </SizableText>
+                  <Tabs.Content value="about" flex={1} p="$0" mt="$4">
+                    <YStack gap="$4">
+                      {/* Location Section */}
+                      {hasLocation && (
+                        <YStack gap="$3">
+                          <YStack gap="$2">
+                            <XStack alignItems="center" justifyContent="space-between">
+                              <SizableText size="$4" fontWeight="600">
+                                Location
+                              </SizableText>
+                            </XStack>
+                            <Separator />
                           </YStack>
-                        )}
-                      </YStack>
-                    </XStack>
-                  </YStack>
-                </YStack>
-
-                {/* Attendees Section */}
-                {eventData.registrationCount === 0 ? (
-                  <YStack gap="$3">
-                    <YStack gap="$2">
-                      <SizableText size="$4" fontWeight="600">
-                        Attendees
-                      </SizableText>
-                      <Separator />
-                    </YStack>
-
-                    <View>
-                      {isUserHost ? (
-                        <SizableText size="$1">
-                          Your event is live – start inviting attendees today.
-                        </SizableText>
-                      ) : (
-                        <SizableText size="$1">Be the first to join this event.</SizableText>
+                          <XStack alignItems="flex-start" gap="$3">
+                            {isOnline ? (
+                              <Globe size={18} marginTop="$0.5" />
+                            ) : (
+                              <MapPin size={18} marginTop="$0.5" />
+                            )}
+                            <YStack flex={1} gap="$1">
+                              {isOnline ? (
+                                <>
+                                  <SizableText size="$3" fontWeight="600">
+                                    {eventData.location &&
+                                    typeof eventData.location === 'object' &&
+                                    'url' in eventData.location
+                                      ? eventData.location.url
+                                      : 'Link TBD'}
+                                  </SizableText>
+                                  <SizableText size="$2">Online Event</SizableText>
+                                </>
+                              ) : (
+                                <>
+                                  <SizableText size="$4" fontWeight="600">
+                                    {typeof eventData.location === 'string'
+                                      ? eventData.location
+                                      : eventData.location &&
+                                        typeof eventData.location === 'object' &&
+                                        'address' in eventData.location
+                                      ? eventData.location.address
+                                      : 'Location TBD'}
+                                  </SizableText>
+                                  <SizableText size="$1">
+                                    {typeof eventData.location === 'string'
+                                      ? 'In-person Event'
+                                      : eventData.location &&
+                                        typeof eventData.location === 'object' &&
+                                        'city' in eventData.location &&
+                                        'country' in eventData.location
+                                      ? `${eventData.location.city}, ${eventData.location.country}`
+                                      : 'In-person Event'}
+                                  </SizableText>
+                                </>
+                              )}
+                            </YStack>
+                            {isOnline && (
+                              <Button
+                                size="$2"
+                                backgroundColor="transparent"
+                                icon={<ExternalLink size={14} />}
+                              />
+                            )}
+                          </XStack>
+                        </YStack>
                       )}
-                    </View>
-                  </YStack>
-                ) : (
-                  <YStack gap="$3">
-                    <YStack gap="$2">
-                      <SizableText size="$4" fontWeight="600">
-                        {eventData.registrationCount}{' '}
-                        {eventData.registrationCount === 1 ? 'attendee' : 'attendees'}
-                      </SizableText>
-                      <Separator />
-                    </YStack>
-                    <View>
-                      <RegistersAvatar event={eventData} />
-                    </View>
-                  </YStack>
-                )}
 
-                {/* About Event Section */}
-                <YStack gap="$3">
-                  <YStack gap="$2">
-                    <SizableText size="$4" fontWeight="600">
-                      About event
-                    </SizableText>
-                    <Separator />
-                  </YStack>
-                  <SizableText size="$3" lineHeight="$4">
-                    {eventData.description || 'No description available for this event.'}
-                  </SizableText>
-                </YStack>
+                      {/* Hosts Section */}
+                      <YStack gap="$3">
+                        <YStack gap="$2">
+                          <XStack alignItems="center" justifyContent="space-between">
+                            <SizableText size="$4" fontWeight="600">
+                              Host
+                            </SizableText>
+                          </XStack>
+                          <Separator />
+                        </YStack>
+                        <YStack gap="$3">
+                          {/* Host information - Show user not found indication if needed */}
+                          <XStack alignItems="center" gap="$3">
+                            {eventData.creator.imageUrl ? (
+                              <Avatar circular size="$4">
+                                <Avatar.Image source={{ uri: eventData.creator.imageUrl }} />
+                                <Avatar.Fallback backgroundColor="$color8" />
+                              </Avatar>
+                            ) : (
+                              <User size={16} color="$color" />
+                            )}
+                            <YStack flex={1}>
+                              {eventData.creator.name ? (
+                                <SizableText size="$3" fontWeight="600">
+                                  {eventData.creator.name}
+                                </SizableText>
+                              ) : (
+                                <YStack gap="$1">
+                                  <SizableText size="$3" fontWeight="600" color="$color11">
+                                    User Not Found
+                                  </SizableText>
+                                  <SizableText size="$2" color="$color10">
+                                    This user&apos;s profile is no longer available
+                                  </SizableText>
+                                </YStack>
+                              )}
+                            </YStack>
+                          </XStack>
+                        </YStack>
+                      </YStack>
+
+                      {/* Registration Count Section */}
+                      {eventData.registrationCount === 0 ? (
+                        <YStack gap="$3">
+                          <YStack gap="$2">
+                            <SizableText size="$4" fontWeight="600">
+                              Attendees
+                            </SizableText>
+                            <Separator />
+                          </YStack>
+
+                          <View>
+                            {isUserHost ? (
+                              <SizableText size="$1">
+                                Your event is live – start inviting attendees today.
+                              </SizableText>
+                            ) : (
+                              <SizableText size="$1">Be the first to join this event.</SizableText>
+                            )}
+                          </View>
+                        </YStack>
+                      ) : (
+                        <YStack gap="$3">
+                          <YStack gap="$2">
+                            <SizableText size="$4" fontWeight="600">
+                              {eventData.registrationCount}{' '}
+                              {eventData.registrationCount === 1 ? 'attendee' : 'attendees'}
+                            </SizableText>
+                            <Separator />
+                          </YStack>
+                          <View>
+                            <RegistersAvatar event={eventData} />
+                          </View>
+                        </YStack>
+                      )}
+
+                      {/* About Event Section */}
+                      <YStack gap="$3">
+                        <YStack gap="$2">
+                          <SizableText size="$4" fontWeight="600">
+                            About event
+                          </SizableText>
+                          <Separator />
+                        </YStack>
+                        <SizableText size="$3" lineHeight="$4">
+                          {eventData.description || 'No description available for this event.'}
+                        </SizableText>
+                      </YStack>
+                    </YStack>
+                  </Tabs.Content>
+
+                  <Tabs.Content value="attendees" flex={1} p="$0" mt="$4">
+                    <AttendeeDirectory.Root
+                      data={attendeeData ?? null}
+                      isLoading={attendeeData === undefined}
+                      onAddIntentions={() => setShowIntentionsSheet(true)}
+                    >
+                      <AttendeeDirectory.LockedView />
+                      <AttendeeDirectory.UnlockedView>
+                        <AttendeeDirectory.AttendeeList />
+                      </AttendeeDirectory.UnlockedView>
+                    </AttendeeDirectory.Root>
+                  </Tabs.Content>
+                </Tabs>
               </YStack>
             </ScrollView>
 
@@ -565,6 +593,17 @@ Check it out 👇`,
           onOpenChange={setShowTicketViewSheet}
           eventId={eventData._id}
           userId={session.user.id}
+        />
+      ) : null}
+      {isUserRegistered ? (
+        <EventIntentionsSheet
+          open={showIntentionsSheet}
+          onOpenChange={setShowIntentionsSheet}
+          eventId={eventData._id}
+          onComplete={() => {
+            setShowIntentionsSheet(false);
+            setCurrentTab('attendees');
+          }}
         />
       ) : null}
     </>

@@ -22,26 +22,38 @@ export const EVENT_INTENTION_METADATA: Record<
   {
     label: string;
     description: string;
+    icon: string;
+    color: string;
   }
 > = {
   Networking: {
     label: 'Networking',
     description: 'Connect with like-minded professionals',
+    icon: '🤝',
+    color: '$blue3',
   },
   'Hiring Talent': {
     label: 'Hiring Talent',
     description: 'Looking to build your team',
+    icon: '💼',
+    color: '$purple3',
   },
   'Seeking Investment': {
     label: 'Seeking Investment',
     description: 'Exploring funding opportunities',
+    icon: '💰',
+    color: '$green3',
   },
   'Exploring Opportunities': {
     label: 'Exploring Opportunities',
     description: 'Open to new partnerships and collaborations',
+    icon: '🔍',
+    color: '$orange3',
   },
   Learning: {
     label: 'Learning',
     description: 'Here to learn and grow',
+    icon: '📚',
+    color: '$yellow3',
   },
 };

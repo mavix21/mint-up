@@ -1,5 +1,6 @@
 'use client';
 
+import { api } from '@my/backend/_generated/api';
 import {
   Avatar,
   Button,
@@ -15,18 +16,27 @@ import {
   YStack,
   Link,
   Container,
+  Spinner,
 } from '@my/ui';
 import { Filter } from '@tamagui/lucide-icons';
+import { useQuery } from 'convex/react';
 
-import { communityListData, type CommunityListItem } from '@/app/(app)/(tabs)/communities/data';
+type Community = {
+  _id: string;
+  name: string;
+  description?: string;
+  logoUrl: string | null;
+  memberCount: number;
+  eventCount: number;
+};
 
-function CommunityCard({ community }: { community: CommunityListItem }) {
+function CommunityCard({ community }: { community: Community }) {
   return (
     <Card bordered p="$4" width="100%">
       <YStack gap="$3">
         <XStack alignItems="center" gap="$3">
           <Avatar circular size="$4">
-            <Avatar.Image src={community.logoUrl} alt={community.name} />
+            <Avatar.Image src={community.logoUrl || undefined} alt={community.name} />
             <Avatar.Fallback width="100%" height="100%" jc="center" ai="center" asChild>
               <View>
                 <SizableText>{community.name[0]}</SizableText>
@@ -67,7 +77,7 @@ function CommunityCard({ community }: { community: CommunityListItem }) {
             </YStack>
           </XStack>
 
-          <Link href={`/communities/${community.id}`} asChild>
+          <Link href={`/communities/${community._id}`} asChild>
             <Button size="$3">View</Button>
           </Link>
         </XStack>
@@ -77,6 +87,8 @@ function CommunityCard({ community }: { community: CommunityListItem }) {
 }
 
 export default function CommunitiesPage() {
+  const communities = useQuery(api.communities.getAllCommunities);
+
   return (
     <Container size="wide" gap="$4" px="$4" py="$4">
       <YStack gap="$1">
@@ -109,13 +121,25 @@ export default function CommunitiesPage() {
       </XStack>
 
       <ScrollView flex={1} contentContainerStyle={{ paddingBottom: 24 }}>
-        <XStack flexWrap="wrap" gap="$3">
-          {communityListData.map((c) => (
-            <View key={c.id} flex={1}>
-              <CommunityCard community={c} />
-            </View>
-          ))}
-        </XStack>
+        {communities === undefined ? (
+          <YStack flex={1} alignItems="center" justifyContent="center" paddingVertical="$10">
+            <Spinner size="large" />
+          </YStack>
+        ) : communities.length === 0 ? (
+          <YStack flex={1} alignItems="center" justifyContent="center" paddingVertical="$10">
+            <SizableText size="$5" theme="alt1">
+              No communities found
+            </SizableText>
+          </YStack>
+        ) : (
+          <XStack flexWrap="wrap" gap="$3">
+            {communities.map((c) => (
+              <View key={c._id} flex={1}>
+                <CommunityCard community={c} />
+              </View>
+            ))}
+          </XStack>
+        )}
       </ScrollView>
     </Container>
   );

@@ -568,3 +568,70 @@ export const getUserEventIntentions = query({
     };
   },
 });
+
+// Get attendees with intentions and professional profiles for an event
+export const getEventAttendeesWithIntentions = query({
+  args: {
+    eventId: v.id('events'),
+  },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) {
+      return { attendees: [], totalCount: 0, userHasIntentions: false };
+    }
+
+    const userId = identity.subject as Id<'users'>;
+
+    // Check if current user has set intentions
+    const userRegistration = await ctx.db
+      .query('registrations')
+      .withIndex('by_user_and_event', (q) => q.eq('userId', userId).eq('eventId', args.eventId))
+      .first();
+
+    const userHasIntentions =
+      !!userRegistration?.eventIntentions && userRegistration.eventIntentions.length > 0;
+
+    // If user hasn't set intentions, return locked state
+    if (!userHasIntentions) {
+      return { attendees: [], totalCount: 0, userHasIntentions: false };
+    }
+
+    // Fetch all registrations with intentions
+    const registrations = await ctx.db
+      .query('registrations')
+      .withIndex('by_event', (q) => q.eq('eventId', args.eventId))
+      .collect();
+
+    // Filter registrations that have intentions
+    const registrationsWithIntentions = registrations.filter(
+      (reg) => reg.eventIntentions && reg.eventIntentions.length > 0
+    );
+
+    // Fetch user profiles
+    const attendees = await Promise.all(
+      registrationsWithIntentions.map(async (registration) => {
+        const user = await ctx.db.get(registration.userId);
+        if (!user) return null;
+
+        return {
+          userId: user._id,
+          name: user.name ?? 'Anonymous',
+          avatar: user.profileImage,
+          walletAddress: user.walletAddress,
+          worksAt: user.worksAt,
+          role: user.role,
+          intentions: registration.eventIntentions,
+        };
+      })
+    );
+
+    // Filter out null values
+    const validAttendees = attendees.filter((a) => a !== null);
+
+    return {
+      attendees: validAttendees,
+      totalCount: validAttendees.length,
+      userHasIntentions: true,
+    };
+  },
+});
