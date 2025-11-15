@@ -156,12 +156,10 @@ export const getCommunityProfile = query({
         const user = await ctx.db.get(membership.userId);
         if (!user) return null;
 
-        const profilePicUrl = user.pfpUrl ? await ctx.storage.getUrl(user.pfpUrl) : null;
-
         return {
           _id: user._id,
           name: user.displayName,
-          imageUrl: profilePicUrl,
+          imageUrl: user.pfpUrl,
           role: membership.role,
         };
       })
