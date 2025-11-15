@@ -21,6 +21,11 @@ export const eventLocationSchema = z.discriminatedUnion('type', [
   inPersonLocationSchema,
 ]);
 
+const organizationIdSchema = z.custom<Id<'organizations'> | null>((value) => {
+  if (value === null) return true;
+  return typeof value === 'string';
+});
+
 // Base schemas for ticket types
 const freeTicketSchema = z.object({
   type: z.literal('free'),
@@ -119,7 +124,7 @@ export const createEventFormSchema = z
       .max(10, 'Maximum 10 ticket types allowed'),
 
     ownershipType: z.enum(['individual', 'community']),
-    organizationId: z.string().nullable() as z.ZodType<Id<'organizations'> | null>,
+    organizationId: organizationIdSchema,
   })
   .refine(
     (data) => {

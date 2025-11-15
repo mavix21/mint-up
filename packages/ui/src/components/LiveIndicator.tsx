@@ -8,7 +8,7 @@ const PulsingDot = styled(View, {
   borderRadius: 3,
   backgroundColor: 'white',
   // Use a simple opacity animation that should work across platforms
-  animation: 'fade 2s ease-in-out infinite',
+  animation: 'fade 2s ease-in-out infinite' as any,
 });
 
 export interface LiveIndicatorProps {
@@ -43,7 +43,7 @@ export const LiveIndicator: React.FC<LiveIndicatorProps> = ({
     >
       <PulsingDot />
       <SizableText
-        size={sizeValue}
+        size={sizeValue as any}
         color="white"
         fontWeight="600"
         textTransform="uppercase"
