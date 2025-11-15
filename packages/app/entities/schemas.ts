@@ -1,3 +1,4 @@
+import type { Id } from '@my/backend/_generated/dataModel';
 import { z } from 'zod';
 
 export const validCurrencies = ['USDC'] as const;
@@ -116,6 +117,9 @@ export const createEventFormSchema = z
       .array(ticketTypeSchema)
       .min(1, 'At least one ticket type is required')
       .max(10, 'Maximum 10 ticket types allowed'),
+
+    ownershipType: z.enum(['individual', 'community']),
+    organizationId: z.string().nullable() as z.ZodType<Id<'organizations'> | null>,
   })
   .refine(
     (data) => {

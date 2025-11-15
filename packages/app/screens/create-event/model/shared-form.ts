@@ -1,7 +1,7 @@
-import { formOptions } from '@tanstack/react-form';
 import type { Id } from '@my/backend/_generated/dataModel';
-import { EventCategory, EventLocation, TicketType } from 'app/entities/schemas';
+import { formOptions } from '@tanstack/react-form';
 import type { EventOwnershipType } from 'app/entities/event-ownership';
+import { EventCategory, EventLocation, TicketType } from 'app/entities/schemas';
 
 export const createEventFormOpts = formOptions({
   defaultValues: {

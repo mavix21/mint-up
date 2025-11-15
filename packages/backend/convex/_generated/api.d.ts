@@ -15,6 +15,7 @@ import type {
 } from "convex/server";
 import type * as authAdapter from "../authAdapter.js";
 import type * as communities from "../communities.js";
+import type * as connections from "../connections.js";
 import type * as constants_professionalProfile from "../constants/professionalProfile.js";
 import type * as events from "../events.js";
 import type * as farcaster from "../farcaster.js";
@@ -28,6 +29,7 @@ import type * as registrations from "../registrations.js";
 import type * as server from "../server.js";
 import type * as storage from "../storage.js";
 import type * as tables_authTables from "../tables/authTables.js";
+import type * as tables_connections from "../tables/connections.js";
 import type * as tables_eventCommunications from "../tables/eventCommunications.js";
 import type * as tables_events from "../tables/events.js";
 import type * as tables_linkedAccounts from "../tables/linkedAccounts.js";
@@ -53,6 +55,7 @@ import type * as users from "../users.js";
 declare const fullApi: ApiFromModules<{
   authAdapter: typeof authAdapter;
   communities: typeof communities;
+  connections: typeof connections;
   "constants/professionalProfile": typeof constants_professionalProfile;
   events: typeof events;
   farcaster: typeof farcaster;
@@ -66,6 +69,7 @@ declare const fullApi: ApiFromModules<{
   server: typeof server;
   storage: typeof storage;
   "tables/authTables": typeof tables_authTables;
+  "tables/connections": typeof tables_connections;
   "tables/eventCommunications": typeof tables_eventCommunications;
   "tables/events": typeof tables_events;
   "tables/linkedAccounts": typeof tables_linkedAccounts;

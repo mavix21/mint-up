@@ -40,8 +40,8 @@ import { EventSettingsDropdown } from './EventSettingsDropdown';
 import TicketViewSheet from './ticket-view-sheet';
 import TicketsEventSheet from './tickets-event-sheet';
 import { ConvexEventWithExtras } from '../../entities/event.model';
-import { ConnectButton } from '../auth';
 import { AttendeeDirectory } from '../attendee-directory';
+import { ConnectButton } from '../auth';
 import { EventIntentionsSheet } from '../event-intentions/EventIntentionsSheet';
 
 export function EventModal({
@@ -547,6 +547,7 @@ Check it out 👇`,
                       data={attendeeData ?? null}
                       isLoading={attendeeData === undefined}
                       onAddIntentions={() => setShowIntentionsSheet(true)}
+                      eventId={eventData._id}
                     >
                       <AttendeeDirectory.LockedView />
                       <AttendeeDirectory.UnlockedView>

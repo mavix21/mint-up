@@ -10,6 +10,7 @@ import { ticketTemplatesTable } from './tables/ticketTemplates';
 import { registrationsTable } from './tables/registrations';
 import { poapTemplatesTable } from './tables/poapTemplates';
 import { notificationTokensTable } from './tables/notificationTokens';
+import { connectionsTable } from './tables/connections';
 import { typedV } from 'convex-helpers/validators';
 import { authTables } from './tables/authTables';
 
@@ -24,6 +25,7 @@ const schema = defineSchema({
   poapTemplates: poapTemplatesTable,
   registrations: registrationsTable,
   notificationTokens: notificationTokensTable,
+  connections: connectionsTable,
   ...authTables,
 });
 

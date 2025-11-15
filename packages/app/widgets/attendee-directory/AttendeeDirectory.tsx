@@ -1,3 +1,4 @@
+import type { Id } from '@my/backend/_generated/dataModel';
 import {
   Button,
   H4,
@@ -15,11 +16,13 @@ import React, { createContext, useContext } from 'react';
 import type { AttendeeDirectoryData, AttendeeProfile } from '../../entities/attendee-directory';
 import { ATTENDEE_DIRECTORY_MESSAGES } from '../../entities/attendee-directory';
 import { EVENT_INTENTION_METADATA } from '../../entities/event-intentions';
+import { ConnectionButton } from '../connection';
 
 interface AttendeeDirectoryContextValue {
   data: AttendeeDirectoryData | null;
   isLoading: boolean;
   onAddIntentions?: () => void;
+  eventId?: Id<'events'>;
 }
 
 const AttendeeDirectoryContext = createContext<AttendeeDirectoryContextValue | null>(null);
@@ -38,12 +41,13 @@ interface RootProps {
   data: AttendeeDirectoryData | null;
   isLoading?: boolean;
   onAddIntentions?: () => void;
+  eventId?: Id<'events'>;
   children: React.ReactNode;
 }
 
-function Root({ data, isLoading = false, onAddIntentions, children }: RootProps) {
+function Root({ data, isLoading = false, onAddIntentions, eventId, children }: RootProps) {
   return (
-    <AttendeeDirectoryContext.Provider value={{ data, isLoading, onAddIntentions }}>
+    <AttendeeDirectoryContext.Provider value={{ data, isLoading, onAddIntentions, eventId }}>
       <YStack flex={1} w="100%">
         {children}
       </YStack>
@@ -122,6 +126,8 @@ interface AttendeeCardProps {
 }
 
 function AttendeeCard({ attendee }: AttendeeCardProps) {
+  const { eventId } = useAttendeeDirectory();
+
   return (
     <YStack
       backgroundColor="$background"
@@ -160,6 +166,15 @@ function AttendeeCard({ attendee }: AttendeeCardProps) {
             </XStack>
           )}
         </YStack>
+
+        {/* Connection Button */}
+        {eventId && (
+          <ConnectionButton
+            eventId={eventId}
+            targetUserId={attendee.userId as Id<'users'>}
+            targetUserName={attendee.name}
+          />
+        )}
       </XStack>
 
       {/* Role tags */}
