@@ -17,6 +17,7 @@ import { EventLocation } from 'app/entities/schemas';
 import { withForm } from 'app/shared/lib/form';
 import { useState, useRef } from 'react';
 
+import { CREATE_EVENT_SHEET_Z_INDEX } from './constants';
 import { createEventFormOpts } from '../model/shared-form';
 
 export interface EventLocationSheetProps {
@@ -76,6 +77,7 @@ export const EventLocationSheet = withForm({
         modal
         dismissOnOverlayPress
         dismissOnSnapToBottom
+        zIndex={CREATE_EVENT_SHEET_Z_INDEX}
       >
         <Sheet.Overlay
           animation="lazy"
@@ -88,6 +90,7 @@ export const EventLocationSheet = withForm({
           backgroundColor="$color2"
           key={visualViewportHeight}
           style={{ height: visualViewportHeight }}
+          zIndex={CREATE_EVENT_SHEET_Z_INDEX}
         >
           <YStack gap="$4" width="100%" flex={1} maxWidth={496} marginInline="auto">
             {/* Event Type Selection */}

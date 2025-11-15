@@ -24,6 +24,7 @@ import { FieldInfo } from 'app/shared/ui/FieldInfo';
 import { useState } from 'react';
 import { StyleProp, TextStyle } from 'react-native';
 
+import { CREATE_EVENT_SHEET_Z_INDEX } from './constants';
 import { createEventFormOpts } from '../model/shared-form';
 
 export interface EventTicketingSheetProps {
@@ -135,6 +136,7 @@ export const EventTicketingSheet = withForm({
         disableDrag
         dismissOnOverlayPress={false}
         dismissOnSnapToBottom={false}
+        zIndex={CREATE_EVENT_SHEET_Z_INDEX}
       >
         <Sheet.Overlay
           animation="lazy"
@@ -147,6 +149,7 @@ export const EventTicketingSheet = withForm({
           backgroundColor="$color2"
           key={visualViewportHeight}
           style={{ height: visualViewportHeight }}
+          zIndex={CREATE_EVENT_SHEET_Z_INDEX}
         >
           <YStack flex={1} width="100%" maxWidth={496} marginHorizontal="auto">
             {/* Header */}

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Button, XStack, Stack, Sheet, ToggleGroup, Text as TamaguiText } from 'tamagui';
 
+import { CREATE_EVENT_SHEET_Z_INDEX } from './constants';
 import { getThemeOptions, getThemeColor } from '../../../utils';
 
 export interface ThemeSelectorProps {
@@ -52,6 +53,7 @@ export function ThemeSelector({
         snapPoints={[15]}
         defaultPosition={0}
         modal
+        zIndex={CREATE_EVENT_SHEET_Z_INDEX}
       >
         <Sheet.Overlay
           animation="lazy"
@@ -60,7 +62,12 @@ export function ThemeSelector({
           exitStyle={{ opacity: 0 }}
         />
         <Sheet.Handle backgroundColor="$color3" />
-        <Sheet.Frame padding="$4" alignItems="center" backgroundColor="$color3">
+        <Sheet.Frame
+          padding="$4"
+          alignItems="center"
+          backgroundColor="$color3"
+          zIndex={CREATE_EVENT_SHEET_Z_INDEX}
+        >
           <ToggleGroup
             type="single"
             value={theme}

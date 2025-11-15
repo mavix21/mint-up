@@ -4,6 +4,7 @@ import ReactCrop from 'react-image-crop';
 import type { Crop, PixelCrop } from 'react-image-crop';
 
 import 'react-image-crop/dist/ReactCrop.css';
+import { CREATE_EVENT_SHEET_Z_INDEX } from './constants';
 
 interface ImageCropSheetProps {
   isOpen: boolean;
@@ -97,7 +98,7 @@ const ImageCropSheet = ({ isOpen, onClose, imageSrc, onCropComplete }: ImageCrop
       forceRemoveScrollEnabled={isOpen}
       modal
       onOpenChange={onClose}
-      zIndex={200_000}
+      zIndex={CREATE_EVENT_SHEET_Z_INDEX}
       snapPoints={[100]}
       snapPointsMode="percent"
       animation="medium"
@@ -108,7 +109,13 @@ const ImageCropSheet = ({ isOpen, onClose, imageSrc, onCropComplete }: ImageCrop
         enterStyle={{ opacity: 0 }}
         exitStyle={{ opacity: 0 }}
       />
-      <Sheet.Frame flex={1} width="100%" alignItems="center" justifyContent="center">
+      <Sheet.Frame
+        flex={1}
+        width="100%"
+        alignItems="center"
+        justifyContent="center"
+        zIndex={CREATE_EVENT_SHEET_Z_INDEX}
+      >
         <YStack gap="$4" p="$4" width="100%">
           <YStack gap="$2">
             <View flex={1}>

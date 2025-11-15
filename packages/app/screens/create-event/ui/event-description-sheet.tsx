@@ -3,6 +3,7 @@ import { withForm } from 'app/shared/lib/form';
 import { useState, useRef } from 'react';
 import { Sheet, Button, XStack, YStack, TextArea } from 'tamagui';
 
+import { CREATE_EVENT_SHEET_Z_INDEX } from './constants';
 import { createEventFormOpts } from '../model/shared-form';
 
 export interface EventDescriptionSheetProps {
@@ -53,6 +54,7 @@ export const EventDescriptionSheet = withForm({
         disableDrag
         dismissOnOverlayPress={false}
         dismissOnSnapToBottom={false}
+        zIndex={CREATE_EVENT_SHEET_Z_INDEX}
       >
         <Sheet.Overlay
           animation="lazy"
@@ -65,6 +67,7 @@ export const EventDescriptionSheet = withForm({
           backgroundColor="$color2"
           key={visualViewportHeight}
           style={{ height: visualViewportHeight }}
+          zIndex={CREATE_EVENT_SHEET_Z_INDEX}
         >
           <YStack flex={1} width="100%" maxWidth={496} marginHorizontal="auto">
             {/* TextArea - Takes up most of the space */}

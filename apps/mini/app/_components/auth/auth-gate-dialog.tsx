@@ -2,6 +2,7 @@ import { Button, Dialog, Theme, YStack } from '@my/ui';
 import { X } from '@tamagui/lucide-icons';
 import { useSignIn } from 'app/shared/lib/hooks/use-sign-in';
 import { ConnectButton } from 'app/widgets/auth';
+import { useEffect, useState } from 'react';
 
 interface AuthGateDialogProps {
   open: boolean;
@@ -12,10 +13,21 @@ interface AuthGateDialogProps {
 
 export function AuthGateDialog({ open, onOpenChange, title, description }: AuthGateDialogProps) {
   const { isSignedIn, isLoading } = useSignIn();
+  const [isMounted, setIsMounted] = useState(false);
 
-  // Close modal when user is signed in
-  if (isSignedIn && open) {
-    onOpenChange(false);
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (isSignedIn && open) {
+      onOpenChange(false);
+    }
+  }, [isSignedIn, open, onOpenChange]);
+
+  if (!isMounted) {
+    // Avoid rendering portaled dialog markup until after client hydration completes.
+    return null;
   }
 
   return (
