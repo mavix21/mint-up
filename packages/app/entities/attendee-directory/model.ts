@@ -7,6 +7,7 @@ export interface AttendeeProfile {
   walletAddress?: string;
   worksAt?: string;
   role?: string[];
+  professionalLink?: string;
   intentions?: EventIntention[];
 }
 

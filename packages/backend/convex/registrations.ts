@@ -613,20 +613,23 @@ export const getEventAttendeesWithIntentions = query({
         const user = await ctx.db.get(registration.userId);
         if (!user) return null;
 
+        const professionalProfile = user.professionalProfile;
+
         return {
           userId: user._id,
-          name: user.name ?? 'Anonymous',
-          avatar: user.profileImage,
-          walletAddress: user.walletAddress,
-          worksAt: user.worksAt,
-          role: user.role,
+          name: user.displayName ?? user.username ?? 'Anonymous',
+          avatar: user.pfpUrl ?? undefined,
+          walletAddress: user.currentWalletAddress,
+          worksAt: professionalProfile?.worksAt,
+          role: professionalProfile?.roles,
+          professionalLink: professionalProfile?.professionalLink,
           intentions: registration.eventIntentions,
         };
       })
     );
 
     // Filter out null values
-    const validAttendees = attendees.filter((a) => a !== null);
+    const validAttendees = attendees.filter((a): a is NonNullable<typeof a> => a !== null);
 
     return {
       attendees: validAttendees,
