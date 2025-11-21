@@ -3,7 +3,6 @@ import { api } from '@my/backend/_generated/api';
 import { Id } from '@my/backend/_generated/dataModel';
 import { useQuery } from '@my/backend/react';
 import { FullscreenSpinner, Sheet, Button, YStack } from '@my/ui';
-import { dateUtils } from 'app/shared/lib/date';
 import dynamic from 'next/dynamic';
 import { memo } from 'react';
 
@@ -77,7 +76,7 @@ const TicketViewSheet = ({ open, onOpenChange, eventId, userId }: TicketViewShee
           <NftTicket
             eventName={registration.eventName}
             eventImageUrl={registration.eventImageUrl}
-            startDate={new Date(dateUtils.formatRelativeDate(registration.startDate))}
+            startDate={new Date(registration.startDate)}
             ticketName={registration.ticketName}
             location={registration.location}
             locationDetails={registration.locationDetails}

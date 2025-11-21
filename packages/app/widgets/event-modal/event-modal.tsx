@@ -157,8 +157,8 @@ Check it out 👇`,
     });
   };
 
-  const startDate = new Date(eventData.startDate);
-  const endDate = new Date(eventData.endDate);
+  const startDate = new Date(eventData.startDate || Date.now());
+  const endDate = new Date(eventData.endDate || Date.now());
   const isSameDate = startDate.toDateString() === endDate.toDateString();
 
   return (
@@ -256,23 +256,25 @@ Check it out 👇`,
                   </H2>
 
                   <SizableText size="$2" color="$color11">
-                    {isSameDate
-                      ? `${dateUtils.formatDateWithLogicYear(
-                          dateUtils.formatRelativeDateFromMilliseconds(eventData.startDate)
-                        )}, ${dateUtils.formatDateTime(
-                          dateUtils.formatRelativeDateFromMilliseconds(eventData.startDate)
-                        )} - ${dateUtils.formatDateTime(
-                          dateUtils.formatRelativeDateFromMilliseconds(eventData.endDate)
-                        )}`
-                      : `${dateUtils.formatDateWithLogicYear(
-                          dateUtils.formatRelativeDateFromMilliseconds(eventData.startDate)
-                        )}, ${dateUtils.formatDateTime(
-                          dateUtils.formatRelativeDateFromMilliseconds(eventData.startDate)
-                        )} - ${dateUtils.formatDateWithLogicYear(
-                          dateUtils.formatRelativeDateFromMilliseconds(eventData.endDate)
-                        )}, ${dateUtils.formatDateTime(
-                          dateUtils.formatRelativeDateFromMilliseconds(eventData.endDate)
-                        )}`}
+                    {eventData.startDate && eventData.endDate
+                      ? isSameDate
+                        ? `${dateUtils.formatDateWithLogicYear(
+                            dateUtils.formatRelativeDateFromMilliseconds(eventData.startDate)
+                          )}, ${dateUtils.formatDateTime(
+                            dateUtils.formatRelativeDateFromMilliseconds(eventData.startDate)
+                          )} - ${dateUtils.formatDateTime(
+                            dateUtils.formatRelativeDateFromMilliseconds(eventData.endDate)
+                          )}`
+                        : `${dateUtils.formatDateWithLogicYear(
+                            dateUtils.formatRelativeDateFromMilliseconds(eventData.startDate)
+                          )}, ${dateUtils.formatDateTime(
+                            dateUtils.formatRelativeDateFromMilliseconds(eventData.startDate)
+                          )} - ${dateUtils.formatDateWithLogicYear(
+                            dateUtils.formatRelativeDateFromMilliseconds(eventData.endDate)
+                          )}, ${dateUtils.formatDateTime(
+                            dateUtils.formatRelativeDateFromMilliseconds(eventData.endDate)
+                          )}`
+                      : 'Date TBD'}
                   </SizableText>
                 </YStack>
 
@@ -464,7 +466,7 @@ Check it out 👇`,
                         <YStack gap="$3">
                           {/* Host information - Show user not found indication if needed */}
                           <XStack alignItems="center" gap="$3">
-                            {eventData.creator.imageUrl ? (
+                            {eventData.creator?.imageUrl ? (
                               <Avatar circular size="$4">
                                 <Avatar.Image source={{ uri: eventData.creator.imageUrl }} />
                                 <Avatar.Fallback backgroundColor="$color8" />
@@ -473,7 +475,7 @@ Check it out 👇`,
                               <User size={16} color="$color" />
                             )}
                             <YStack flex={1}>
-                              {eventData.creator.name ? (
+                              {eventData.creator?.name ? (
                                 <SizableText size="$3" fontWeight="600">
                                   {eventData.creator.name}
                                 </SizableText>
@@ -588,7 +590,7 @@ Check it out 👇`,
           ticketList={tickets}
         />
       ) : null}
-      {canViewTicket ? (
+      {canViewTicket && session?.user?.id ? (
         <TicketViewSheet
           open={showTicketViewSheet}
           onOpenChange={setShowTicketViewSheet}
