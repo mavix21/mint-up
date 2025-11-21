@@ -1,6 +1,7 @@
 import { v } from 'convex/values';
 import { query } from './_generated/server';
-import type { Id } from './_generated/dataModel';
+import type { Doc, Id } from './_generated/dataModel';
+import { buildCommunityLeaderboard } from './lib/communityLeaderboard';
 
 /**
  * Get all communities with basic stats
@@ -72,6 +73,7 @@ export const getCommunityProfile = query({
       stats: v.object({
         members: v.number(),
         events: v.number(),
+        activeStreak: v.number(),
       }),
       events: v.array(
         v.object({
@@ -93,6 +95,26 @@ export const getCommunityProfile = query({
           role: v.union(v.literal('admin'), v.literal('member')),
         })
       ),
+      leaderboard: v.object({
+        topAttendees: v.array(
+          v.object({
+            userId: v.id('users'),
+            name: v.optional(v.string()),
+            imageUrl: v.union(v.string(), v.null()),
+            rank: v.number(),
+            totalEventsAttended: v.number(),
+          })
+        ),
+        attendanceStreak: v.array(
+          v.object({
+            userId: v.id('users'),
+            name: v.optional(v.string()),
+            imageUrl: v.union(v.string(), v.null()),
+            rank: v.number(),
+            streak: v.number(),
+          })
+        ),
+      }),
     })
   ),
   handler: async (ctx, args) => {
@@ -119,15 +141,22 @@ export const getCommunityProfile = query({
       )
       .collect();
 
+    const registrationsByEvent = new Map<Id<'events'>, Doc<'registrations'>[]>();
+
     // Get event details with additional info
     const eventsWithDetails = await Promise.all(
       events.map(async (event) => {
         const imageUrl = event.image ? await ctx.storage.getUrl(event.image) : null;
-        const registrationsCount = await ctx.db
+        const eventRegistrations = await ctx.db
           .query('registrations')
           .withIndex('by_event', (q) => q.eq('eventId', event._id))
-          .filter((q) => q.neq(q.field('status.type'), 'rejected'))
           .collect();
+
+        registrationsByEvent.set(event._id, eventRegistrations);
+
+        const registrationCount = eventRegistrations.filter(
+          (registration) => registration.status.type !== 'rejected'
+        ).length;
 
         return {
           _id: event._id,
@@ -137,7 +166,7 @@ export const getCommunityProfile = query({
           endDate: event.endDate,
           location: event.location,
           imageUrl,
-          registrationCount: registrationsCount.length,
+          registrationCount,
         };
       })
     );
@@ -159,11 +188,21 @@ export const getCommunityProfile = query({
         return {
           _id: user._id,
           name: user.displayName,
-          imageUrl: user.pfpUrl,
+          imageUrl: user.pfpUrl ?? null,
           role: membership.role,
         };
       })
     );
+
+    const memberProfiles = members.filter(
+      (member): member is NonNullable<typeof member> => member !== null
+    );
+
+    const leaderboard = buildCommunityLeaderboard({
+      events: eventsWithDetails.map((event) => ({ _id: event._id, startDate: event.startDate })),
+      registrationsByEvent,
+      members: memberProfiles.map(({ _id, name, imageUrl }) => ({ _id, name, imageUrl })),
+    });
 
     // Get community logo URL
     const logoUrl = community.logoUrl ? await ctx.storage.getUrl(community.logoUrl) : null;
@@ -179,11 +218,13 @@ export const getCommunityProfile = query({
         name: creator?.displayName,
       },
       stats: {
-        members: memberships.length,
+        members: memberProfiles.length,
         events: events.length,
+        activeStreak: leaderboard.attendanceStreak[0]?.streak ?? 0,
       },
       events: eventsWithDetails,
-      members: members.filter((m) => m !== null),
+      members: memberProfiles,
+      leaderboard,
     };
   },
 });

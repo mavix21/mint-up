@@ -21,6 +21,8 @@ import { MapPin, Globe, Calendar } from '@tamagui/lucide-icons';
 import { useQuery } from 'convex/react';
 import { useParams } from 'next/navigation';
 
+import { Leaderboard } from '../_components/Leaderboard';
+
 export default function CommunityProfilePage() {
   const params = useParams();
   const id = Array.isArray(params?.id) ? params?.id[0] : (params?.id as string | undefined);
@@ -116,6 +118,9 @@ export default function CommunityProfilePage() {
           </Tabs.Tab>
           <Tabs.Tab value="members">
             <SizableText>Members</SizableText>
+          </Tabs.Tab>
+          <Tabs.Tab value="leaderboard">
+            <SizableText>Leaderboard</SizableText>
           </Tabs.Tab>
         </Tabs.List>
 
@@ -229,6 +234,38 @@ export default function CommunityProfilePage() {
               </XStack>
             </ScrollView>
           )}
+        </Tabs.Content>
+
+        <Tabs.Content value="leaderboard">
+          <ScrollView contentContainerStyle={{ paddingBottom: 24 }}>
+            <YStack gap="$6">
+              <YStack gap="$3">
+                <SizableText size="$5" fontWeight="bold">
+                  Top Attendees
+                </SizableText>
+                <Leaderboard.List
+                  type="attendees"
+                  entries={profile.leaderboard.topAttendees.map((e) => ({
+                    ...e,
+                    value: e.totalEventsAttended,
+                  }))}
+                />
+              </YStack>
+
+              <YStack gap="$3">
+                <SizableText size="$5" fontWeight="bold">
+                  Attendance Streak
+                </SizableText>
+                <Leaderboard.List
+                  type="streak"
+                  entries={profile.leaderboard.attendanceStreak.map((e) => ({
+                    ...e,
+                    value: e.streak,
+                  }))}
+                />
+              </YStack>
+            </YStack>
+          </ScrollView>
         </Tabs.Content>
       </Tabs>
     </YStack>

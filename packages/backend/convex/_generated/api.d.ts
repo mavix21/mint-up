@@ -20,6 +20,7 @@ import type * as constants_professionalProfile from "../constants/professionalPr
 import type * as events from "../events.js";
 import type * as farcaster from "../farcaster.js";
 import type * as http from "../http.js";
+import type * as lib_communityLeaderboard from "../lib/communityLeaderboard.js";
 import type * as linkedAccounts from "../linkedAccounts.js";
 import type * as nextjs from "../nextjs.js";
 import type * as notificationTokens from "../notificationTokens.js";
@@ -60,6 +61,7 @@ declare const fullApi: ApiFromModules<{
   events: typeof events;
   farcaster: typeof farcaster;
   http: typeof http;
+  "lib/communityLeaderboard": typeof lib_communityLeaderboard;
   linkedAccounts: typeof linkedAccounts;
   nextjs: typeof nextjs;
   notificationTokens: typeof notificationTokens;
